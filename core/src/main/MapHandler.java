@@ -55,15 +55,14 @@ public class MapHandler {
 			if (shouldUpdate) en.update(rectangleList, activeRoom.getEntityList(), DowntiltEngine.getDeltaTime()); 
 			Rectangle boundary = new Rectangle(0, 0, mapWidth, mapHeight);
 			Rectangle cameraBoundary = GraphicsHandler.getCameraBoundary();
-			boolean toRemove = en.toRemove() || en.isOOB(boundary);
-			if (DowntiltEngine.getChallenge().isInCombat()) toRemove = toRemove || (en instanceof Fighter && en.isOOB(cameraBoundary));
+			boolean toRemove = en.toRemove() || en.isOOB(boundary) || (en instanceof Fighter && en.isOOB(cameraBoundary));
 			if (toRemove) {
 				if (en instanceof Fighter){
 					Fighter fi = ((Fighter) en);
 					if (kill(fi)) {
 						if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) activeRoom.addEntity(
 								new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
-						if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getChallenge().score(20);
+						if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getChallenge().addScore(20);
 						entityIter.remove();
 					}
 				}

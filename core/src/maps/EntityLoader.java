@@ -16,9 +16,9 @@ public class EntityLoader {
 		case "trash": return new TrashCan(x, y);
 		case "treasure": return new TreasureChest(x, y);
 		case "spikes": return new Hazard.Spikes(x, y);
-		case "combatstarter": return new CombatStarter(x, y);
+		case "bounceleft": return new Bounce.BounceLeft(x, y);
+		case "bounceright": return new Bounce.BounceRight(x, y);
 		case "breakblock": return new BreakableBlock(x, y);
-		case "endcombatstarter": return new CombatStarter.EndCombatStarter(x, y);
 		default: {
 			return new TrashCan(x, y);
 		}

@@ -16,7 +16,7 @@ import entities.Fighter;
 
 public class InputHandlerController extends InputHandlerPlayer implements ControllerListener {
 
-	Controller control;
+	Controller control = null;
 	private float currShoulder, prevShoulder;
 	
 	private final float depressed = 0.1f;
@@ -31,6 +31,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public static final int AXIS_SHOULDER = 4;
 	int prevButton = commandNone;
 	Timer pauseSelectBuffer = new Timer(10);
+	ControllerType controllerType;
 
 	public InputHandlerController(Fighter player) {
 		super(player);
@@ -38,12 +39,29 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	}
 
 	public boolean setupController(int index){
+		writeControllersToConsole();
 		if (Controllers.getControllers().size <= index) return false;
-		control = Controllers.getControllers().get(index);
-		if (!(control.getName().toLowerCase().contains("xbox") &&
-                control.getName().contains("360"))) return false;
+		for (Controller c: Controllers.getControllers()){
+			if ((c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"))) {
+				controllerType = ControllerType.XBOX360;
+				control = c;
+			}
+			if ((c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"))) {
+				controllerType = ControllerType.PS3;
+				control = c;
+			}
+		}
+		if (null == control) return false;
 		Controllers.addListener(this);
 		return true;
+	}
+	
+	private void writeControllersToConsole(){
+		if (Controllers.getControllers().size > 0){
+			System.out.println(Controllers.getControllers().size + " controller(s found:");
+			for (Controller c: Controllers.getControllers()) System.out.println("- " + c.getName());
+		}
+		else System.out.println("No controllers found");
 	}
 
 	private final float pushed = 0.85f;
@@ -184,6 +202,10 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 		boolean flick(int flickTo){
 			return Math.abs(curr - prev) > flick && Math.signum(curr) == flickTo;
 		}
+	}
+	
+	private enum ControllerType{
+		XBOX360, PS3, OTHER
 	}
 
 }

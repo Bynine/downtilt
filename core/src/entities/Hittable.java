@@ -28,7 +28,7 @@ public abstract class Hittable extends Entity {
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	
 	protected float baseHurtleBK = 4;
-	protected float baseHitSpeed = 0.6f;
+	protected float baseHitSpeed = 0.75f;
 	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 1, armor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
 	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 8f;
@@ -70,6 +70,9 @@ public abstract class Hittable extends Entity {
 		if (e instanceof Hittable){
 			checkPushAway((Hittable) e);
 			checkHitByHurtlingObject((Hittable) e);
+		}
+		if (e instanceof Bounce){
+			((Bounce)e).bounce(this);
 		}
 	}
 	

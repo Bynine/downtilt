@@ -387,7 +387,7 @@ public abstract class Fighter extends Hittable{
 		tumbling = false;
 	}
 
-	private void doubleJump(){
+	protected void doubleJump(){
 		getVelocity().y = getDoubleJumpStrength();
 		MapHandler.addEntity(new Graphic.DoubleJumpRing(position.x, getCenter().y));
 		if (prevStickX < -unregisteredInputMax && velocity.x > 0) velocity.x = 0; 
@@ -690,10 +690,10 @@ public abstract class Fighter extends Hittable{
 		else return activeMoveIsCharge() && getInputHandler().isCharging();
 	}
 	public boolean inputQueueTimeUp(){ return inputQueueTimer.timeUp(); }
-	public boolean noGroundBelow(){
-		Rectangle r = new Rectangle (getCenter().x, position.y, 1, 1234);
-		for (Rectangle tr: tempRectangleList) if (r.overlaps(tr)) return false;
-		return true;
+	public boolean groundBelow(){
+		Rectangle r = new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 16);
+		for (Rectangle tr: tempRectangleList) if (r.overlaps(tr)) return true;
+		return false;
 	}
 	public void restartInputQueue() { inputQueueTimer.restart(); }
 	public boolean attackTimeUp(){ return attackTimer.timeUp(); }

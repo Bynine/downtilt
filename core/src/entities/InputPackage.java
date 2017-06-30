@@ -27,13 +27,13 @@ public class InputPackage {
 	InputPackage(Fighter fighter){
 		Fighter target = getTarget(fighter);
 		state = fighter.state;
-		isOffStage = (!fighter.isGrounded() && fighter.noGroundBelow());
-		isBelowStage = fighter.position.y < DowntiltEngine.getChallenge().getCombatPosition().y;
+		isOffStage = (!fighter.isGrounded() && !fighter.groundBelow());
+		isBelowStage = fighter.position.y < DowntiltEngine.getChallenge().getCenterPosition().y;
 		hasDoubleJumped = fighter.doubleJumped;
 		isGrounded = fighter.isGrounded();
 		isRunning = fighter.isRunning();
 		awayFromWall = distanceFromEdges(-48, fighter);
-		distanceFromCenter = DowntiltEngine.getChallenge().getCombatPosition().x - fighter.position.x;
+		distanceFromCenter = DowntiltEngine.getChallenge().getCenterPosition().x - fighter.position.x;
 		distanceXFromPlayer = target.position.x - fighter.position.x;
 		distanceYFromPlayer = target.position.y - (fighter.position.y + fighter.getHurtBox().height/2);
 		direct = fighter.direct();

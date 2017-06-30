@@ -38,7 +38,7 @@ public abstract class Hazard extends Entity {
 		public Spikes(float posX, float posY) { 
 			super(posX, posY); 
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/spikes.png"))));
-			h1 = new HazardHitbox(this, 6.0f, 3.0f, 20, Hitbox.REVERSE, 0, 0, 24, new SFX.SharpHit());
+			h1 = new HazardHitbox(this, 6.0f, 3.0f, 20, 270, 0, 0, 24, new SFX.SharpHit());
 			h1.setRefresh(20);
 			for (ActionCircle ac: getActionCircles()) MapHandler.addActionCircle(ac);
 			gravity = 0;

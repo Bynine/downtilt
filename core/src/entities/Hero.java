@@ -34,17 +34,17 @@ public class Hero extends Fighter {
 	public Hero(float posX, float posY, int team) {
 		super(posX, posY, team);
 		baseWeight = 100;
-		runAcc = 2.1f;
-		runSpeed = 6.5f;
+		runAcc = 2.0f;
+		runSpeed = 5.8f;
 		walkAcc = 0.8f;
-		walkSpeed = 3.3f;
+		walkSpeed = 3.1f;
 		airSpeed = 3.2f;
 		airAcc = 0.24f;
 		friction = 0.85f;
 		gravity = -0.52f;
-		jumpAcc = 1.00f;
+		jumpAcc = 0.92f;
 		dashStrength = 0f;
-		doubleJumpStrength = 10.5f;
+		doubleJumpStrength = 9.7f;
 		wallJumpStrengthX = 6.5f;
 		wallJumpStrengthY = 8.4f;
 		fallSpeed = -6.7f;

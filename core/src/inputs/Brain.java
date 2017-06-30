@@ -190,4 +190,31 @@ public abstract class Brain{
 		}
 
 	}
+	
+	public static class FlierBrain extends Brain{
+
+		public FlierBrain(InputHandlerCPU body) {
+			super(body);
+		}
+
+		void update(InputPackage pack){
+			super.update(pack);
+			body.yInput = 0;
+			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 25 ) headTowardPlayer(changeDirection);
+			if (!performJump.timeUp()) performJump(performJump);
+			if (shouldGetUp(0.02)) getUp();
+			else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
+			else if (inVerticalAttackRange()) chooseAttack();
+			else if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			if (Math.random() < 0.02 && pack.distanceYFromPlayer > -60) body.handleCommand(InputHandler.commandJump);
+		}
+		
+		void chooseAttack(){
+			if		(shouldAttack(0.04, 70,  true))		performJump(performJump);
+			if 		(shouldAttack(0.22, 25, false))		attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.08, 30,  true))		attackPlayer(InputHandler.commandSpecial);
+			else if (shouldAttack(0.04, 40, 70, false)) attackPlayer(InputHandler.commandCharge);
+		}
+
+	}
 }

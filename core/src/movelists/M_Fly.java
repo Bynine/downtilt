@@ -12,9 +12,9 @@ import moves.Effect.Charge;
 import entities.Basic;
 import entities.Fighter;
 
-public class M_Basic extends MoveList {
+public class M_Fly extends MoveList {
 
-	public M_Basic(Fighter user) {
+	public M_Fly(Fighter user) {
 		super(user);
 	}
 
@@ -60,7 +60,7 @@ public class M_Basic extends MoveList {
 		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 6, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addVelocityChange(user, 8, Action.ChangeVelocity.noChange, 1);
+		m.eventList.addVelocityChange(user, 8, Action.ChangeVelocity.noChange, -1);
 		m.eventList.addActionCircle(early, 8, 13);
 		m.eventList.addActionCircle(late, 14, 22);
 		return m;

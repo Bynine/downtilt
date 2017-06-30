@@ -79,15 +79,9 @@ public class GraphicsHandler {
 		float centerY = 0;
 		float yDisplacement = GlobalRepo.TILE * 1;
 
-		if (DowntiltEngine.getChallenge().isInCombat()){
-			Vector2 combatPosition = DowntiltEngine.getChallenge().getCombatPosition();
-			centerX = combatPosition.x;
-			centerY = combatPosition.y + yDisplacement * 2;
-		}
-		else{
-			centerX = DowntiltEngine.getPlayers().get(0).getPosition().x;
-			centerY = DowntiltEngine.getPlayers().get(0).getPosition().y + yDisplacement;
-		}
+		Vector2 combatPosition = DowntiltEngine.getChallenge().getCenterPosition();
+		centerX = combatPosition.x;
+		centerY = combatPosition.y + yDisplacement * 2;
 
 		cam.position.x = (cam.position.x*(camAdjustmentLimiter-1) + centerX)/camAdjustmentLimiter;
 		cam.position.y = (cam.position.y*(camAdjustmentLimiter-1) + yDisplacement + centerY)/camAdjustmentLimiter;
@@ -121,12 +115,12 @@ public class GraphicsHandler {
 
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
-		
+
 		batch.begin();  // render bg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.BACKGROUND) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
-		
+
 		arr = new int[]{1};  // render back
 		renderer.render(arr);
 
@@ -161,14 +155,14 @@ public class GraphicsHandler {
 			drawFighterPercentage(fi);
 			if (isOffScreen(fi) && !fi.isInHitstun()) drawFighterIcon(fi);
 			if (DowntiltEngine.debugToggle) drawState(e);
-			
+
 			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
 			if (fi.isInvincible()) 
 				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g * 2, batch.getColor().g * 2, 1);
 			else if (fi.isCharging()) 
 				batch.setColor(batch.getColor().r + 0.1f, batch.getColor().g + 0.1f, batch.getColor().g + 0.1f, 1);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
-			
+
 			if (!fi.powerTimer.timeUp()) drawAfterImage(fi, batch.getColor(), batch.getShader(), powerShader);
 			if (!fi.defenseTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), defenseShader);
 			if (!fi.airTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), airShader);
@@ -182,7 +176,7 @@ public class GraphicsHandler {
 		batch.setColor(1, 1, 1, 1);
 		batch.setShader(null);
 	}
-	
+
 	private static void drawAfterImage(Fighter fi, Color c, ShaderProgram origSG, ShaderProgram newSG){
 		batch.setShader(newSG);
 		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);

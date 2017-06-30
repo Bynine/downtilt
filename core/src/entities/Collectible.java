@@ -32,7 +32,7 @@ public abstract class Collectible extends Entity {
 	
 	protected void collect(Fighter fi){
 		new SFX.Collect().play();
-		DowntiltEngine.getChallenge().score(bonus);
+		DowntiltEngine.getChallenge().addScore(bonus);
 		setRemove();
 		collectHelper(fi);
 	}

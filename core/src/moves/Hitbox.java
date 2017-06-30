@@ -76,7 +76,6 @@ public class Hitbox extends ActionCircle{
 		if (null != user) {
 			if (user instanceof Fighter) staleness = getStaleness((Fighter)user);
 			DAM *= user.getPower();
-			BKB *= user.getPower();
 			KBG *= user.getPower();
 		}
 		Vector2 knockback = new Vector2();

@@ -27,7 +27,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
-	private static Challenge challenge, defaultChallenge;
+	private static ChallengeProgression challengeProgression;
 	private static GameState gameState = GameState.MENU;
 	private static InputHandlerPlayer primaryInputHandler = null;
 
@@ -49,9 +49,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		Menu.begin();
 		DebugMenu.begin();
 		MainMenu.begin();
-		
-		challenge = new ChallengeEndless(WaveGenerator.DIFF_EASY);
-		defaultChallenge = new ChallengeEndless(WaveGenerator.DIFF_TEST);
+		challengeProgression = new ChallengeProgression();
 
 		if (p2Toggle){
 			Fighter player2 = new Hero(MapHandler.activeRoom.getStartPosition().x, MapHandler.activeRoom.getStartPosition().y, 0);
@@ -93,7 +91,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	
 	private void updateGame(){
-		challenge.update();
+		challengeProgression.update();
 		if (waitTimer.timeUp()) MapHandler.updateInputs();
 		if (!paused){
 			MapHandler.activeRoom.update(deltaTime);
@@ -150,7 +148,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		}
 		GraphicsHandler.begin();
 		MapHandler.begin();
-		challenge = new ChallengeEndless(difficulty);
 	}
 	
 	public static void startDebugMenu(){
@@ -162,8 +159,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	
 	public static Challenge getChallenge(){
-		if (challenge == null) return defaultChallenge;
-		else return challenge;
+		return challengeProgression.getActiveChallenge();
 	}
 	
 	public enum GameState{

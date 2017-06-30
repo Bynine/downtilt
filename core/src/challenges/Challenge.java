@@ -1,48 +1,62 @@
 package challenges;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 
-import entities.CombatStarter;
 import entities.Fighter;
 import entities.TreasureChest;
 import main.GlobalRepo;
 import main.MapHandler;
-import main.SFX;
 import main.DowntiltEngine;
 import maps.*;
 
 public abstract class Challenge {
 
-	protected final List<Stage> stageList = new ArrayList<Stage>();
-	protected final List<Wave> prevWaves = new ArrayList<Wave>();
+	protected final List<Wave> waves;
 	protected Wave activeWave = null;
-	protected CombatStarter activeCombatStarter = null;
-	protected int place = 0;
+	protected final Stage stage;
 	protected long score = 0;
 	protected int numLives = 5;
-	protected Mode mode = Mode.ADVENTURE;
-	protected final Vector2 combatPosition = new Vector2(0, 0);
-	private boolean combatNotEnded = false;
-	final int difficulty;
+	protected final Vector2 centerPosition = new Vector2(0, 0);
+	protected boolean finished = false, started = false;
 
-	Challenge(int difficulty){
-		this.difficulty = difficulty;
+	Challenge(Stage stage, List<Wave> waves){
+		this.waves = waves;
+		this.stage = stage;
 	}
 
-	int waitBetween = 60;
+	/**
+	 * Called when a challenge begins.
+	 */
 	protected void begin(){
 		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
 			player.setLives(numLives);
 		}
-		startStage();
+		activeWave = waves.remove(0);
+		DowntiltEngine.changeRoom(stage);
+		centerPosition.set(stage.getStartPosition());
+		
+		if (!DowntiltEngine.debugToggle){
+			int waitBetween = 60;
+			ChallengeGraphicsHandler.readyGo();
+			DowntiltEngine.wait(waitBetween);
+		}
+		
+		for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
+		started = true;
 	}
 
 	public void update(){
-		if (isInCombat()) activeWave.update(DowntiltEngine.getDeltaTime());
-		if (activeWave.getNumEnemies() == 0 && combatNotEnded) endCombat();
+		activeWave.update(DowntiltEngine.getDeltaTime());
+		if (activeWave.getNumEnemies() == 0) {
+			if (waves.size() > 0) nextWave();
+			else finished = true;
+		}
+		checkIfAllPlayersDead();
+	}
+	
+	private void checkIfAllPlayersDead(){
 		boolean shouldRestart = true;
 		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
 			if (player.getLives() > 0) shouldRestart = false;
@@ -50,86 +64,16 @@ public abstract class Challenge {
 		if (shouldRestart) restart();
 	}
 
-	public void goToNextStage(){
-//		place++;
-//		if (place >= stageList.size()) win();
-//		else startStage();
+	private void nextWave(){
+		MapHandler.addEntity(new TreasureChest(centerPosition.x, centerPosition.y + GlobalRepo.TILE));
+		activeWave = waves.remove(0);
 	}
 
-	protected void startStage(){
-		DowntiltEngine.changeRoom(stageList.get(place));
-		activeWave = WaveGenerator.generate(difficulty);
-		if (!DowntiltEngine.debugToggle){
-			ChallengeGraphicsHandler.readyGo();
-			DowntiltEngine.wait(waitBetween);
-		}
-		for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
-		MapHandler.addEntity(new TreasureChest(combatPosition.x, combatPosition.y + GlobalRepo.TILE));
-	}
-
-	void win(){
-		new SFX.Victory().play();
-		DowntiltEngine.returnToMenu();
-		restart();
-	}
-
-	public Wave getActiveCombat(){
-		return activeWave;
-	}
-
-	public boolean isInCombat(){
-		return mode == Mode.COMBAT;
-	}
-
-	public Vector2 getCombatPosition(){
-		return combatPosition;
-	}
-
-	public void startCombat(CombatStarter cs, Vector2 position) {
-		startCombatHelper(cs, position);
-		Vector2 spawnPoint = new Vector2(position.x, position.y + GlobalRepo.TILE * 2);
-		for (Fighter player: DowntiltEngine.getPlayers()) player.setRespawnPoint(spawnPoint);
-		if (DowntiltEngine.getPlayers().size() > 1){
-			for (Fighter player: DowntiltEngine.getPlayers().subList(1,  DowntiltEngine.getPlayers().size())){
-				player.refresh();
-			}
-		}
-		if (cs instanceof CombatStarter.EndCombatStarter){
-			activeWave = WaveGenerator.generate(difficulty + 1);
-		}
-		else activeWave = WaveGenerator.generate(difficulty);
-		prevWaves.add(activeWave);
-	}
-
-	protected void startCombatHelper(CombatStarter cs, Vector2 position){
-		activeCombatStarter = cs;
-		combatPosition.set(position);
-		mode = Mode.COMBAT;
-		combatNotEnded = true;
-	}
-
-	int inc = 0;
-	private void endCombat(){
-		MapHandler.addEntity(new TreasureChest(combatPosition.x, combatPosition.y + GlobalRepo.TILE));
-		if (difficulty != WaveGenerator.DIFF_ZEN){
-			inc++;
-			activeWave = WaveGenerator.generate(difficulty + inc);
-			prevWaves.add(activeWave);
-		}
-		else if (difficulty == WaveGenerator.DIFF_ZEN){
-			activeWave = WaveGenerator.generate(difficulty);
-			prevWaves.add(activeWave);
-		}
-		//combatNotEnded = false;
-	}
-
+	/**
+	 * Called if all players die
+	 */
 	public void restart(){
 		DowntiltEngine.returnToMenu();
-//		prevWaves.clear();
-//		for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
-//		place = 0;
-//		MapHandler.resetRoom();
-//		begin();
 	}
 
 	protected Stage getRoomByRound(int position){
@@ -139,13 +83,25 @@ public abstract class Challenge {
 	public long getScore(){
 		return score;
 	}
-
-	protected static enum Mode{
-		COMBAT, ADVENTURE
+	
+	public boolean started() {
+		return started;
+	}
+	
+	public boolean finished() {
+		return finished;
 	}
 
-	public void score(int i) {
+	public void addScore(int i) {
 		score += i;
+	}
+	
+	public Wave getActiveWave(){
+		return activeWave;
+	}
+
+	public Vector2 getCenterPosition(){
+		return centerPosition;
 	}
 	
 	public abstract String getEnemyCounter();
