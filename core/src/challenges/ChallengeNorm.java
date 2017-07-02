@@ -18,7 +18,7 @@ public class ChallengeNorm extends Challenge {
 	
 	@Override
 	public String getEnemyCounter() {
-		return "WAVES LEFT: " + waves.size() + 1;
+		return "WAVES LEFT: " + (waves.size() + 1);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package moves;
 
 import entities.Basic;
+import entities.Entity;
 import entities.Fighter;
 import entities.Projectile;
 import main.MapHandler;
@@ -127,6 +128,26 @@ public abstract class Action {
 
 		void performAction() {
 			((Basic.Bomb)user).setBomb(time);
+		}
+	}
+	
+	public static class AddEntity extends Action {
+		final Entity en;
+		final float velX, velY;
+		
+		public AddEntity(Entity en, float velX, float velY){
+			this.en = en;
+			this.velX = velX;
+			this.velY = velY;
+		}
+
+		void performAction() {
+			en.getVelocity().x = velX;
+			en.getVelocity().y = velY;
+			// TODO: dejankify this
+			en.getHitstunTimer().setEndTime(60);
+			en.getHitstunTimer().restart();
+			MapHandler.addEntity(en);
 		}
 	}
 	

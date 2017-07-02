@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import entities.ChangeBlock;
 import entities.Entity;
 import entities.Fighter;
 
@@ -60,7 +61,6 @@ public abstract class Stage {
 			entityList.add(player);
 		}
 		for (MapObject m: mapEntities) entityList.add(new EntityLoader().loadEntity(m));
-		if (DowntiltEngine.musicToggle) roomMusic.play();
 	}
 
 	public void addEntity(Entity e){
@@ -76,6 +76,7 @@ public abstract class Stage {
 		for (Entity e: newEntityList) entityList.add(e);
 		newEntityList.clear();
 		for (ActionCircle ac: actionCircleList) ac.update(deltaTime);
+		for (Entity en: entityList) if (en instanceof ChangeBlock) ((ChangeBlock)en).update(entityList);
 	}
 
 	void clearOut(){
@@ -107,7 +108,6 @@ public abstract class Stage {
 	public List<Rectangle> getRectangleList(){ return rectangleList; }
 	public List<Entity> getEntityList(){ return entityList; }
 	public List<ActionCircle> getActionCircleList() { return actionCircleList; }
-	public void stopMusic(){ roomMusic.stop(); }
 	public Music getMusic(){ return roomMusic; }
 	public float getR(){ return r; }
 	public float getB(){ return b; }

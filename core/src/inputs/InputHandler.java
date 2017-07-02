@@ -26,6 +26,7 @@ public abstract class InputHandler {
 	public static final int commandCStickRight	=32;
 	public static final int commandCStickDown	=33;
 	public static final int commandTaunt 		=40;
+	public static final int commandBlock		=50;
 
 	Fighter fighter;
 	public InputHandler(Fighter fighter){
@@ -82,6 +83,7 @@ public abstract class InputHandler {
 
 	private boolean handleCanAttackActions(int command){
 		switch (command){
+		case commandBlock:			return fighter.tryBlock();
 		case commandAttack:			return fighter.tryNormal();
 		case commandSpecial:		return fighter.trySpecial();
 		case commandGrab:	 		return fighter.tryGrab();

@@ -51,6 +51,7 @@ public class Hero extends Fighter {
 		jumpSquatTimer.setEndTime(3);
 		footStoolDuration = 25;
 		dashTimer.setEndTime(20);
+		baseHitstun = GlobalRepo.HEROHITSTUNMOD;
 		moveList = new M_Hero(this);
 		defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
 	}

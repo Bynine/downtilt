@@ -29,7 +29,7 @@ public class Move {
 
 	public void update(){
 		duration.countUp();
-		eventList.update(duration.getCounter(), user.isInHitstun());
+		eventList.update(duration.getCounter(), user.inHitstun());
 		for (ActionCircle ac: eventList.acList){
 			if (ac.hitFighterList.size() > 0) connected = true;
 		}

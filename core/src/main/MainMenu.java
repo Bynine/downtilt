@@ -21,17 +21,13 @@ class MainMenu extends Menu {
 	private static MenuOption<Integer> players = new MenuOption<Integer>(Arrays.asList(
 			1, 2
 			));
-	private static MenuOption<String> difficulty = new MenuOption<String>(Arrays.asList(
-			"ZEN", "EASY", "MIDDLE", "HARD", "NIGHTMARE"
-			));
-	private static MenuOption<String> choices = new MenuOption<String>(Arrays.asList("DIFFICULTY", "P1CHAR", "P2CHAR", "PLAYERS"));
-	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, difficulty, p1Char, p2Char, players));
+	private static MenuOption<String> choices = new MenuOption<String>(Arrays.asList("P1CHAR", "P2CHAR", "PLAYERS"));
+	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, p1Char, p2Char, players));
 	
 	private static TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
 	
 	public static void begin(){
 		Menu.begin();
-		difficulty.setCursor(1);
 	}
 
 	enum MenuChoice{
@@ -59,7 +55,6 @@ class MainMenu extends Menu {
 		batch.begin();
 
 		font.draw(batch, startStr,									posX, startY);
-		font.draw(batch, "DIFFICULTY: " + difficulty.selected(),	posX, startY -= dec);
 		font.draw(batch, "P1 CHAR: " + p1Char.selected().name,		posX, startY -= dec);
 		
 		if (players.selected() == 1) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
@@ -74,7 +69,7 @@ class MainMenu extends Menu {
 
 	private static void start(){
 		ArrayList<PlayerType> newPlayers = new ArrayList<PlayerType>(Arrays.asList(p1Char.selected(), p2Char.selected()));
-		DowntiltEngine.startNewChallenge(makePlayers(players.selected(), newPlayers), difficulty.cursorPos());
+		DowntiltEngine.startNewChallenge(makePlayers(players.selected(), newPlayers), 0);
 	}
 
 

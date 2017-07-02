@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Dungeon extends Stage {
 
 	public Stage_Dungeon(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/sand.mp3"));
 		setup();
 		name = "STANDARD";
 	}
@@ -19,7 +19,7 @@ public class Stage_Dungeon extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
 	}
 
 }

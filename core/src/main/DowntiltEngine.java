@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import maps.Stage;
-import moves.Equipment;
 import timers.Timer;
 import entities.*;
 import challenges.*;
@@ -86,8 +85,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		case MENU:	MainMenu.update();	break;
 		}
 		
-//		if (gameState != GameState.GAME) MapHandler.stopMusic();
-//		else MapHandler.playMusic();
 	}
 	
 	private void updateGame(){
@@ -130,13 +127,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.updateRoomGraphics(getPlayers().get(0));
 	}
 	
-	public static void startDebugChallenge(List<Fighter> newPlayers, Equipment equipment, int difficulty, Stage stage, boolean debug){
-		startNewChallenge(newPlayers, difficulty);
-		changeRoom(stage);
+	public static void startDebugChallenge(List<Fighter> newPlayers, int startChallenge, boolean debug){
+		startNewChallenge(newPlayers, startChallenge);
 		debugToggle = debug;
 	}
 	
-	public static void startNewChallenge(List<Fighter> newPlayers, int difficulty){
+	public static void startNewChallenge(List<Fighter> newPlayers, int startChallenge){
+		challengeProgression = new ChallengeProgression(startChallenge);
 		gameState = GameState.GAME;
 		playerList.clear();
 		paused = false;

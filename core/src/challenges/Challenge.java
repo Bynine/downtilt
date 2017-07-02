@@ -106,4 +106,8 @@ public abstract class Challenge {
 	
 	public abstract String getEnemyCounter();
 
+	public Stage getStage() {
+		return stage;
+	}
+
 }

@@ -27,6 +27,7 @@ public abstract class Entity {
 	Direction direction = Direction.RIGHT;
 	Layer layer = Layer.FOREGROUND;
 	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/dummy.png"))));
+	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 
 	protected float gravity = -0.35f, friction = 0.85f, airFriction = 0.95f, fallSpeed = -7f;
@@ -34,11 +35,9 @@ public abstract class Entity {
 
 	boolean toRemove = false;
 	protected final List<Rectangle> tempRectangleList = new ArrayList<Rectangle>();
-	public final Timer hitstunTimer = new Timer(10);
-	final Timer jumpTimer = new Timer(8);
-	final Timer inActionTimer = new Timer(0);
-	final Timer jumpSquatTimer = new Timer(4);
-	final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer));
+	final Timer jumpTimer = new Timer(8), inActionTimer = new Timer(0);
+	final Timer jumpSquatTimer = new Timer(4), bounceTimer = new Timer(20);
+	final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer, bounceTimer));
 
 	public Entity(float posX, float posY){
 		image = defaultSprite;
@@ -62,7 +61,7 @@ public abstract class Entity {
 			else MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
 		}
 		int knockbackPower = (int) (Math.abs(velocity.x) + Math.abs(velocity.y));
-		if (!hitstunTimer.timeUp() && deltaTime % 3 == 0 && knockbackPower > tumbleBK) {
+		if (inHitstun() && deltaTime % 3 == 0 && knockbackPower > tumbleBK) {
 			MapHandler.addEntity(new Graphic.SmokeTrail(this, knockbackPower));
 		}
 	}
@@ -84,7 +83,10 @@ public abstract class Entity {
 	}
 
 	void handleTouchHelper(Entity e){
-		/* */
+		if (isTouching(e, 0) && e instanceof Bounce && bounceTimer.timeUp()){
+			((Bounce)e).bounce(this);
+			bounceTimer.restart();
+		}
 	}
 
 	void updatePosition(){
@@ -124,14 +126,14 @@ public abstract class Entity {
 	}
 
 	void handleFriction(){
-		if (!isGrounded() && !hitstunTimer.timeUp() || state == State.JUMPSQUAT) {}
+		if (!isGrounded() && inHitstun() || state == State.JUMPSQUAT) {}
 		else if (!isGrounded()) velocity.x *= getAirFriction();
 		else velocity.x *= getFriction();
 	}
 
 	void limitSpeeds(){
 		float gravFallSpeed = getFallSpeed() * MapHandler.getRoomGravity();
-		if (hitstunTimer.timeUp() && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
+		if (!inHitstun() && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
 	}
 
 	void setupRectangles(List<Rectangle> mapRectangleList, List<Entity> entityList){
@@ -147,7 +149,7 @@ public abstract class Entity {
 	void checkWalls(){
 		for (int i = 0; i < collisionCheck; ++i)
 			if (doesCollide(position.x + velocity.x, position.y)) {
-				if (!hitstunTimer.timeUp()) {
+				if (inHitstun()) {
 					bounceOffWall();
 					return;
 				}
@@ -181,7 +183,7 @@ public abstract class Entity {
 	void checkFloor(){
 		for (int i = 0; i < collisionCheck; ++i)
 			if (doesCollide(position.x, position.y + velocity.y)) {
-				if (!hitstunTimer.timeUp() && velocity.y > 0) {
+				if (inHitstun() && velocity.y > 0) {
 					bounceOffCeiling();
 					return;
 				}
@@ -280,6 +282,11 @@ public abstract class Entity {
 	public boolean toRemove() { 
 		return toRemove; 
 	} 
+	
+	public boolean inHitstun(){
+		return !hitstunTimer.timeUp();
+	}
+	
 	private final int OOBGrace = 4;
 	public boolean isOOB(Rectangle boundary) {
 		
@@ -293,7 +300,7 @@ public abstract class Entity {
 		return false;
 	}
 	public boolean isOffTop(Rectangle boundary){
-		return (position.y > (boundary.y + boundary.height + image.getHeight()*OOBGrace)) && !hitstunTimer.timeUp();
+		return (position.y > (boundary.y + boundary.height + image.getHeight()*OOBGrace)) && inHitstun();
 	}
 	public Vector2 getPosition() { return position; }
 	public Vector2 getVelocity() { return velocity; }
@@ -331,5 +338,6 @@ public abstract class Entity {
 	public float getFallSpeed() { return fallSpeed; }
 	public float getFriction() { return friction; }
 	public float getAirFriction() { return airFriction; }
+	public Timer getHitstunTimer() { return hitstunTimer; }
 
 }

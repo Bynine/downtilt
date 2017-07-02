@@ -142,6 +142,18 @@ public abstract class Collectible extends Entity {
 			fi.addAir(add);
 		}
 	}
+	public static class BoostAll extends StatBooster {
+		public BoostAll(float posX, float posY) {
+			super(posX, posY);
+			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_all.png"))));
+		}
+		void addStat(float add, Fighter fi){
+			fi.addPower(add);
+			fi.addDefense(add);
+			fi.addSpeed(add);
+			fi.addAir(add);
+		}
+	}
 
 
 

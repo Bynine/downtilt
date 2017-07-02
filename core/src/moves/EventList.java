@@ -7,6 +7,7 @@ import main.SFX;
 import moves.Effect.Charge;
 import moves.Effect.GraphicEffect;
 import entities.Basic;
+import entities.Entity;
 import entities.Fighter;
 import entities.Graphic;
 import entities.Projectile;
@@ -72,6 +73,11 @@ public class EventList {
 	public void addExplosion(Basic.Bomb user, int time) {
 		actionList.add(new Action.Explode(user, time));
 		actionStartTimes.add(0);
+	}
+
+	public void addNewEntity(int start, Entity en, float velX, float velY) {
+		actionList.add(new Action.AddEntity(en, velX, velY));
+		actionStartTimes.add(start);
 	}
 	
 	/* effects */

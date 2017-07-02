@@ -11,5 +11,17 @@ public class ActionCircleGroup {
 		connectedCircles.addAll(list);
 		for (ActionCircle ac: connectedCircles) ac.group = this;
 	}
+
+	public ActionCircleGroup() {
+	}
+	
+	public void addActionCircle(ActionCircle ac){
+		connectedCircles.add(ac);
+		for (ActionCircle acc: connectedCircles) acc.group = this;
+	}
+	
+	public List<ActionCircle> getConnectedCircles(){
+		return connectedCircles;
+	}
 	
 }

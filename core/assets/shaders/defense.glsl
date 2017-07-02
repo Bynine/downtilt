@@ -12,5 +12,5 @@ void main() {
 		color.r = 0;
 		color.g = 0;
 		color.b = 1;
-        gl_FragColor = vec4(color, texture2D(u_texture, v_texCoords).a * 0.5);
+        gl_FragColor = vec4(color, texture2D(u_texture, v_texCoords).a * 0.15);
 }

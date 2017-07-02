@@ -13,12 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 
-import entities.Basic;
-import entities.Entity;
-import entities.FallingEnemy;
-import entities.Fighter;
-import entities.Graphic;
-import entities.Hittable;
+import entities.*;
 
 public class MapHandler {
 
@@ -27,13 +22,12 @@ public class MapHandler {
 	private static final List<Rectangle> rectangleList = new ArrayList<>();
 	static int mapWidth;
 	static int mapHeight; 
-	private static final float musicVolume = 0; //0.25f;
-
+	
 	static void begin(){
 		activeRoom = new Stage_Standard();
 		activeMap = activeRoom.getMap();
 		DowntiltEngine.changeRoom(activeRoom);
-		activeRoom.getMusic().setVolume(DowntiltEngine.getVolume()/15.0f);
+		activeRoom.getMusic().setVolume(DowntiltEngine.getVolume() / 6.0f);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 
@@ -47,7 +41,6 @@ public class MapHandler {
 	}
 
 	static void updateEntities(){
-		activeRoom.getMusic().setVolume(musicVolume);
 		Iterator<Entity> entityIter = activeRoom.getEntityList().iterator();
 		while (entityIter.hasNext()) {
 			Entity en = entityIter.next();
@@ -71,7 +64,7 @@ public class MapHandler {
 		}
 	}
 
-	private static boolean kill(Fighter fi){
+	public static boolean kill(Fighter fi){
 		drawDieGraphic(fi);
 		new SFX.Die().play();
 		if (fi.getLives() > 1) {
@@ -132,7 +125,6 @@ public class MapHandler {
 	}
 
 	public static void updateRoomMap(Stage room) {
-		activeRoom.getMusic().stop();
 		activeRoom = room;
 		activeMap = activeRoom.getMap();
 		activeRoom.initEntities();
@@ -171,15 +163,15 @@ public class MapHandler {
 		if (activeRoom == null) return new ArrayList<ActionCircle>();
 		else return activeRoom.getActionCircleList();
 	}
-
-	public static void playMusic() {
-		//System.out.println("Playing music");
-		if (null != activeRoom) activeRoom.getMusic().setVolume(DowntiltEngine.getVolume());
-	}
-	
-	public static void stopMusic() {
-		//System.out.println("Stopping music");
-		if (null != activeRoom) activeRoom.getMusic().setVolume(0);
-	}
+//
+//	public static void playMusic() {
+//		//System.out.println("Playing music");
+//		if (null != activeRoom) activeRoom.getMusic().setVolume(DowntiltEngine.getVolume());
+//	}
+//	
+//	public static void stopMusic() {
+//		//System.out.println("Stopping music");
+//		if (null != activeRoom) activeRoom.getMusic().setVolume(0);
+//	}
 
 }

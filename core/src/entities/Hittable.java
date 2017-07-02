@@ -26,6 +26,7 @@ public abstract class Hittable extends Entity {
 	public final Timer powerTimer = new Timer(1800), speedTimer = new Timer(1800), defenseTimer = new Timer(1800), airTimer = new Timer(1800);
 	private float initialHitAngle = 0;
 	protected HitstunType hitstunType = HitstunType.NORMAL;
+	protected int team = GlobalRepo.BADTEAM;
 	
 	protected float baseHurtleBK = 4;
 	protected float baseHitSpeed = 0.75f;
@@ -43,7 +44,9 @@ public abstract class Hittable extends Entity {
 	public Hittable(float posX, float posY) {
 		super(posX, posY);
 		image = new Sprite(defaultTexture);
-		timerList.addAll(Arrays.asList(caughtTimer, knockIntoTimer, stunTimer, powerTimer, speedTimer, defenseTimer, airTimer));
+		timerList.addAll(Arrays.asList(
+				caughtTimer, knockIntoTimer, stunTimer,
+				powerTimer, speedTimer, defenseTimer, airTimer));
 	}
 	
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
@@ -52,14 +55,14 @@ public abstract class Hittable extends Entity {
 	}
 	
 	void updateImage(float deltaTime){
-		if (!hitstunTimer.timeUp()) setImage(getTumbleFrame(deltaTime));
+		if (inHitstun()) setImage(getTumbleFrame(deltaTime));
 		else setImage(getStandFrame(deltaTime));
 	}
 	
 	void limitSpeeds(){
 		boolean notAMeteor = initialHitAngle > 0 && initialHitAngle < 180;
 		float gravFallSpeed = getFallSpeed() * MapHandler.getRoomGravity();
-		if ( (hitstunTimer.timeUp() || notAMeteor) && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
+		if ( (!inHitstun() || notAMeteor) && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
 	}
 	
 	void updatePosition(){
@@ -67,12 +70,10 @@ public abstract class Hittable extends Entity {
 	}
 	
 	void handleTouchHelper(Entity e){
+		super.handleTouchHelper(e);
 		if (e instanceof Hittable){
 			checkPushAway((Hittable) e);
 			checkHitByHurtlingObject((Hittable) e);
-		}
-		if (e instanceof Bounce){
-			((Bounce)e).bounce(this);
 		}
 	}
 	
@@ -93,7 +94,8 @@ public abstract class Hittable extends Entity {
 	private void checkHitByHurtlingObject(Hittable hi){
 		boolean fighterGoingFastEnough = knockbackIntensity(hi.velocity) > baseHurtleBK;
 		if (hi.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
-		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && getTeam() == hi.getTeam() && !hi.hitstunTimer.timeUp();
+		boolean correctTeam = getTeam() == hi.getTeam();
+		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hi.inHitstun();
 		if (knockInto && isTouching(hi, 8) && knockbackIntensity(hi.velocity) > knockbackIntensity(velocity)) getHitByHurtlingObject(hi);
 	}
 
@@ -247,7 +249,7 @@ public abstract class Hittable extends Entity {
 	}
 	
 	public int getTeam() {
-		return GlobalRepo.BADTEAM; 
+		return team; 
 	}
 	
 	public boolean canMove(){

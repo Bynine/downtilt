@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 
 import entities.*;
+import entities.Hurlable;
 
 public class EntityLoader {
 
@@ -13,14 +14,16 @@ public class EntityLoader {
 		float y = mp.get("y", Float.class);
 
 		switch(m.getName().toLowerCase()){
-		case "trash": return new TrashCan(x, y);
+		case "trash": return new Hurlable.TrashCan(x, y);
 		case "treasure": return new TreasureChest(x, y);
 		case "spikes": return new Hazard.Spikes(x, y);
 		case "bounceleft": return new Bounce.BounceLeft(x, y);
 		case "bounceright": return new Bounce.BounceRight(x, y);
-		case "breakblock": return new BreakableBlock(x, y);
+		case "changea": return new ChangeBlock.BlockA(x, y);
+		case "changeb": return new ChangeBlock.BlockB(x, y);
+		case "changec": return new ChangeBlock.BlockC(x, y);
 		default: {
-			return new TrashCan(x, y);
+			return new Hurlable.TrashCan(x, y);
 		}
 		}
 	}

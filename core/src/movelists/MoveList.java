@@ -26,6 +26,7 @@ public abstract class MoveList {
 	public abstract Move land();
 	public abstract Move skid();
 	public abstract Move taunt();
+	public abstract Move block();
 	public Move getUpAttack(){
 		return dodge();
 	}
@@ -71,7 +72,7 @@ public abstract class MoveList {
 	}
 
 	public IDMove selectBlock() {
-		return new IDMove(null, noMove);
+		return new IDMove(block(), noStaleMove);
 	}
 
 	public IDMove selectTaunt() {

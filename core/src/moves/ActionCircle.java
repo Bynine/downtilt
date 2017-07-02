@@ -96,7 +96,7 @@ public abstract class ActionCircle {
 		boolean teamCheck = true;
 		boolean attackTimeUp = true;
 		if (null != user) {
-			teamCheck = user.getTeam() != target.getTeam();
+			teamCheck = user.getTeam() != target.getTeam() || !(target instanceof Fighter);
 			if (user instanceof Fighter) attackTimeUp = !((Fighter)user).attackTimeUp();
 		}
 		return 
@@ -118,5 +118,6 @@ public abstract class ActionCircle {
 	public void setReflects() { reflects = true; }
 	public void setMovesAheadMod(float mod) { movesAheadMod = mod; }
 	public void setNoReverse() { reverse = false; }
+	public void remove() { duration.end(); }
 
 }

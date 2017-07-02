@@ -165,5 +165,12 @@ public class M_Basic extends MoveList {
 	public Move taunt() {
 		return new Move(user, 60);
 	}
+	
+	public Move block(){
+		Move m = new Move(user, 60);
+		m.setAnimation("sprites/fighters/basic/block.png", 1, 1);
+		m.eventList.addArmor(m, 0, 60, 8);
+		return m;
+	}
 
 }

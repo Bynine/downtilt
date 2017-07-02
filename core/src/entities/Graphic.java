@@ -1,5 +1,7 @@
 package entities;
 
+import main.SFX;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import timers.DurationTimer;
 
 public abstract class Graphic extends Entity{
+
 
 	final DurationTimer duration;
 	int dur;
@@ -155,6 +158,22 @@ public abstract class Graphic extends Entity{
 			if (duration.timeUp()) setRemove();
 			if (duration.getCounter() > dur/2) setSmall(small);
 		}
+	}
+	
+
+	public static class Sparks extends Graphic {
+		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/sparks.png")));
+		public Sparks(float posX, float posY, int dur) {
+			super(posX, posY, dur);
+			new SFX.Sparks().play();
+			image = new Sprite(tex);
+			updatePosition();
+		}
+		
+		void updatePosition(){
+			if (duration.timeUp()) setRemove();
+		}
+
 	}
 
 }

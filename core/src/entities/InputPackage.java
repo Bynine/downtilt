@@ -12,7 +12,7 @@ import entities.Entity.State;
 public class InputPackage {
 
 	public final State state;
-	public final boolean isOffStage, isBelowStage, hasDoubleJumped, isGrounded, isRunning, awayFromWall;
+	public final boolean isOffStage, isBelowStage, hasDoubleJumped, isGrounded, isRunning, awayFromWall, playerAttacking;
 	public final float distanceFromCenter, distanceXFromPlayer, distanceYFromPlayer;
 	public final int direct;
 	public final Move activeMove;
@@ -32,7 +32,8 @@ public class InputPackage {
 		hasDoubleJumped = fighter.doubleJumped;
 		isGrounded = fighter.isGrounded();
 		isRunning = fighter.isRunning();
-		awayFromWall = distanceFromEdges(-48, fighter);
+		awayFromWall = false;
+		playerAttacking = isPlayerAttacking(target);
 		distanceFromCenter = DowntiltEngine.getChallenge().getCenterPosition().x - fighter.position.x;
 		distanceXFromPlayer = target.position.x - fighter.position.x;
 		distanceYFromPlayer = target.position.y - (fighter.position.y + fighter.getHurtBox().height/2);
@@ -43,8 +44,9 @@ public class InputPackage {
 		velocity = fighter.getVelocity();
 	}
 	
-	private boolean distanceFromEdges(float dist, Fighter fighter){
-		return false;
+	private boolean isPlayerAttacking(Fighter target){
+		if (null == target.getActiveMove()) return !target.attackTimer.timeUp();
+		else return !target.attackTimer.timeUp() && target.getActiveMove().id >= 1;
 	}
 	
 	private Fighter getTarget(Fighter fighter){

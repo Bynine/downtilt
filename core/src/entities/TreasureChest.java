@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
 
-public class TreasureChest extends Throwable {
+public class TreasureChest extends Hurlable {
 
 	private TextureRegion closed = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestclosed.png")));
 	private TextureRegion open = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestopen.png")));

@@ -101,7 +101,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/scharge.png", frames, frame);
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 30, 60));
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
-		Hitbox h1 = new Hitbox(user, 4.2f, 3.3f, 18, Hitbox.SAMURAI, 14, 0, 20, new SFX.MeatyHit(), c);
+		Hitbox h1 = new Hitbox(user, 4.2f, 3.3f, 18, Hitbox.SAMURAI, 24, 0, 20, new SFX.MeatyHit(), c);
 		m.eventList.addCharge(user, c);
 		m.eventList.addActionCircle(h1, frame * 2, frame * 3);
 		return m;
@@ -139,10 +139,10 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(GlobalRepo.makeHurtBox(user, 30, 30));
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
 		m.eventList.addCharge(user, c);
-		Hitbox inner1 = new Hitbox(user, 5.0f, 1.0f, 12, 80,  16,  -7, 14, new SFX.MidHit(),		c);
-		Hitbox inner2 = new Hitbox(user, 5.0f, 1.0f, 12, 80, -16,  -7, 14, new SFX.MidHit(),		c);
-		Hitbox foot1  = new Hitbox(user, 4.0f, 2.4f, 14, 22,  36, -10, 10, new SFX.HeavyHit(),  	c);
-		Hitbox foot2  = new Hitbox(user, 4.0f, 2.4f, 14, 22, -36, -10, 10, new SFX.HeavyHit(),  	c);
+		Hitbox inner1 = new Hitbox(user, 5.0f, 1.0f, 12, 80,  16,  -7, 16, new SFX.MidHit(),		c);
+		Hitbox inner2 = new Hitbox(user, 5.0f, 1.0f, 12, 80, -16,  -7, 16, new SFX.MidHit(),		c);
+		Hitbox foot1  = new Hitbox(user, 4.0f, 2.4f, 14, 22,  40, -10, 12, new SFX.HeavyHit(),  	c);
+		Hitbox foot2  = new Hitbox(user, 4.0f, 2.4f, 14, 22, -40, -10, 12, new SFX.HeavyHit(),  	c);
 		new ActionCircleGroup(Arrays.asList(inner1, foot1));
 		new ActionCircleGroup(Arrays.asList(inner2, foot2));
 		m.eventList.addActionCircle(foot1, frame, frame*2);
@@ -381,7 +381,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move dAirThrow(){
 		Move m = new Move(user, 16);
 		m.setAnimation("sprites/fighters/bomber/dthrow.png", 1, 1);
-		Hitbox down = new Hitbox(user, 3.2f, 2.8f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
+		Hitbox down = new Hitbox(user, 2.4f, 3.6f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
 		down.setNoReverse();
 		m.eventList.addActionCircle(down, 0, 4);
 		m.eventList.addVelocityChange(user, 0, Action.ChangeVelocity.noChange, 6);
@@ -502,6 +502,11 @@ public class M_Hero extends MoveList_Advanced{
 	public Move taunt(){
 		Move m = new Move(user, 56);
 		m.setAnimation("sprites/fighters/bomber/taunt.png", 2, 12);
+		return m;
+	}
+	
+	public Move block(){
+		Move m = new Move(user, 0);
 		return m;
 	}
 

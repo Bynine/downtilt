@@ -153,7 +153,7 @@ public class GraphicsHandler {
 		if (e instanceof Fighter) {
 			Fighter fi = (Fighter) e;
 			drawFighterPercentage(fi);
-			if (isOffScreen(fi) && !fi.isInHitstun()) drawFighterIcon(fi);
+			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
 			if (DowntiltEngine.debugToggle) drawState(e);
 
 			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
@@ -170,7 +170,7 @@ public class GraphicsHandler {
 		}
 		if (e instanceof Hittable){
 			Hittable h = (Hittable) e;
-			if (h.hitstunTimer.getCounter() < GlobalRepo.WHITEFREEZE) batch.setShader(hitstunShader);
+			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) batch.setShader(hitstunShader);
 		}
 		batch.draw(e.getImage(), e.getPosition().x, e.getPosition().y);
 		batch.setColor(1, 1, 1, 1);
@@ -180,7 +180,10 @@ public class GraphicsHandler {
 	private static void drawAfterImage(Fighter fi, Color c, ShaderProgram origSG, ShaderProgram newSG){
 		batch.setShader(newSG);
 		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
+		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
+		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
 		batch.setColor(new Color(c.r, c.b, c.g, c.a/2));
+		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4);
 		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4);
 		batch.setColor(new Color(c.r, c.b, c.g, c.a/2));
 		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*6, fi.getPosition().y - fi.getVelocity().y*6);

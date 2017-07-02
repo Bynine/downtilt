@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Columns extends Stage {
 
 	public Stage_Columns(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
 		name = "STANDARD";
 	}

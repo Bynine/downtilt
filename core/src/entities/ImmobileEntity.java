@@ -10,4 +10,8 @@ public abstract class ImmobileEntity extends Entity {
 		/* doesn't move */
 	}
 	
+	void handleTouchHelper(Entity e){
+		/**/
+	}
+	
 }

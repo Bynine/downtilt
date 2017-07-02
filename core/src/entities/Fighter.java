@@ -32,12 +32,12 @@ public abstract class Fighter extends Hittable{
 	public int queuedCommand = InputHandler.commandNone;
 	protected final Timer inputQueueTimer = new Timer(8), wallJumpTimer = new Timer(10), attackTimer = new Timer(0), grabbingTimer = new Timer(0), 
 			dashTimer = new Timer(20), invincibleTimer = new Timer(0), dodgeTimer = new Timer(1), footStoolTimer = new Timer(20), slowedTimer = new Timer(0),
-			doubleJumpTimer = new Timer (12);
+			doubleJumpTimer = new Timer (12), blockTimer = new Timer(0), respawnTimer = new Timer(3);
 	protected float prevStickX = 0, stickX = 0, stickY = 0;
 
 	private ShaderProgram palette = null;
 	private final Vector2 spawnPoint;
-	private int team = 0, lives = 1;
+	private int lives = 1;
 
 	public static final int SPECIALMETERMAX = 16;
 	private float specialMeter = SPECIALMETERMAX;
@@ -64,7 +64,7 @@ public abstract class Fighter extends Hittable{
 		spawnPoint = new Vector2(posX, posY);
 		this.setInputHandler(inputHandler);
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
-				dodgeTimer, footStoolTimer, slowedTimer, doubleJumpTimer));
+				dodgeTimer, footStoolTimer, slowedTimer, doubleJumpTimer, respawnTimer));
 		state = State.STAND;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
@@ -228,6 +228,12 @@ public abstract class Fighter extends Hittable{
 		}
 		else return false;
 	}
+	
+	public boolean tryBlock(){
+		if (!isGrounded()) return false;
+		else startAttack(moveList.selectBlock());
+		return true;
+	}
 
 	public boolean tryStickForward(){
 		if (state == State.DODGE) {
@@ -270,8 +276,9 @@ public abstract class Fighter extends Hittable{
 	
 	private void fallThroughThinFloor(){
 		for (Rectangle r: tempRectangleList){
-			Rectangle checker = new Rectangle(getCenter().x, position.y - 1, 1, 1);
-			if (checker.overlaps(r) && r.getHeight() <= 1) {
+			Rectangle checker1 = new Rectangle(position.x, position.y - 1, 1, 1);
+			Rectangle checker2 = new Rectangle(position.x + image.getWidth(), position.y - 1, 1, 1);
+			if ((checker1.overlaps(r) || checker2.overlaps(r)) && r.getHeight() <= 1) {
 				endAttack();
 				position.y -= 2;
 				float faller = -2.0f;
@@ -407,7 +414,7 @@ public abstract class Fighter extends Hittable{
 		footStoolee.velocity.set(footStoolKB);
 		footStoolee.tumbling = true;
 		footStoolee.percentage += footStoolDamage;
-		if (footStoolee.hitstunTimer.timeUp()){
+		if (!footStoolee.inHitstun()){
 			footStoolee.hitstunTimer.setEndTime((int) (footStoolDuration * footStoolee.getHitstun()));
 			footStoolee.hitstunTimer.restart();
 		}
@@ -475,7 +482,7 @@ public abstract class Fighter extends Hittable{
 			setImage(getActiveMove().move.getAnimation().getKeyFrame(getActiveMove().move.getFrame()));
 		}
 		if (!caughtTimer.timeUp() || !stunTimer.timeUp()) setImage(getHitstunFrame(0));
-		if (!hitstunTimer.timeUp()) {
+		if (inHitstun()) {
 			if (hitstunType == HitstunType.SUPER || hitstunType == HitstunType.ULTRA) setImage(getTumbleFrame(deltaTime));
 			else setImage(getHitstunFrame(deltaTime));
 		}
@@ -524,7 +531,7 @@ public abstract class Fighter extends Hittable{
 		if (collision == Collision.GHOST) return false;
 		for (Rectangle r : tempRectangleList){
 			Rectangle thisR = getCollisionBox(x, y);
-			boolean fallThrough = stickY > 0.95f && null == getActiveMove() && !inGroundedState() && hitstunTimer.timeUp();
+			boolean fallThrough = stickY > 0.95f && null == getActiveMove() && !inGroundedState() && !inHitstun();
 			boolean upThroughThinPlatform = r.getHeight() <= 1 && (r.getY() - this.getPosition().y > 0 || fallThrough);
 			if (!upThroughThinPlatform && Intersector.overlaps(thisR, r) && thisR != r) return true;
 		}
@@ -603,7 +610,7 @@ public abstract class Fighter extends Hittable{
 
 	void handleMovement(){
 		boolean groundedAttacking = !attackTimer.timeUp() && isGrounded();
-		if (groundedAttacking || !canMove() || !hitstunTimer.timeUp() || state == State.DODGE) return;
+		if (groundedAttacking || !canMove() || inHitstun() || state == State.DODGE) return;
 		switch (state){
 		case WALK: addSpeed(getWalkSpeed(), getWalkAcc()); break;
 		case DASH:
@@ -649,8 +656,6 @@ public abstract class Fighter extends Hittable{
 
 	public void respawn() {
 		lives -= 1;
-		changeSpecial(SPECIALMETERMAX);
-		percentage = 0;
 		re();
 	}
 	
@@ -661,6 +666,8 @@ public abstract class Fighter extends Hittable{
 	
 	private void re(){
 		position.set(spawnPoint);
+		changeSpecial(SPECIALMETERMAX);
+		percentage = 0;
 		velocity.x = 0;
 		velocity.y = 0;
 		state = State.FALL;
@@ -668,61 +675,9 @@ public abstract class Fighter extends Hittable{
 		tumbling = false;
 		if (direction == Direction.LEFT) flip();
 		for (Timer t: timerList) t.end();
-		if (team == GlobalRepo.GOODTEAM) setInvincible(120);
+		endAttack();
 		staleMoveQueue.clear();
-	}
-
-	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }
-	public float getStickX() { return stickX; }
-	public float getStickY() { return stickY; }
-	public InputHandler getInputHandler() { return inputHandler; }
-	public boolean canAttack() { return canAttackDodge() && state != State.DODGE; }
-	public boolean canAttackDodge() { return canAct() && state != State.WALLSLIDE; }
-	public boolean canAct(){ 
-		return hitstunTimer.timeUp() && attackTimer.timeUp() && state != State.FALLEN && state != State.HELPLESS && canMove(); 
-	}
-	public boolean canMove(){ return super.canMove() && grabbingTimer.timeUp(); } 
-	public boolean isRunning() { return state == State.RUN || state == State.DASH; }
-	public boolean isInvincible(){ return hitstunTimer.getCounter() == 0 || !invincibleTimer.timeUp(); }
-	public boolean isInHitstun() { return !hitstunTimer.timeUp(); }
-	public boolean isCharging() {
-		if (null == getInputHandler()) return false;
-		else return activeMoveIsCharge() && getInputHandler().isCharging();
-	}
-	public boolean inputQueueTimeUp(){ return inputQueueTimer.timeUp(); }
-	public boolean groundBelow(){
-		Rectangle r = new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 16);
-		for (Rectangle tr: tempRectangleList) if (r.overlaps(tr)) return true;
-		return false;
-	}
-	public void restartInputQueue() { inputQueueTimer.restart(); }
-	public boolean attackTimeUp(){ return attackTimer.timeUp(); }
-	public void countDownAttackTimer(){ attackTimer.countDown(); }
-	public InputPackage getInputPackage() { return new InputPackage(this); }
-	public void setArmor(float armor) { this.armor = armor; }
-	public float getArmor() { 
-		float addedMoveArmor = 0;
-		if (null != getActiveMove()) addedMoveArmor = getActiveMove().move.getArmor();
-		return super.getArmor() + addedMoveArmor; 
-	}
-	public IDMove getActiveMove() { return activeMove; }
-	public void setActiveMove(IDMove activeMove) { this.activeMove = activeMove; }
-	public void setToFall() { state = State.FALL; }
-	public void setInputHandler(InputHandler inputHandler) { this.inputHandler = inputHandler; }
-	public int getTeam() { return team; }
-	public State getState() { return state; } 
-	protected TextureRegion getFrame(Animation anim, float deltaTime) { return anim.getKeyFrame(deltaTime + randomAnimationDisplacement); }
-	public int getLives() { return lives; }
-	public void setLives(int i) { lives = i; }
-	public List<IDMove> getMoveQueue() { return staleMoveQueue; }
-	public float getSpecialMeter() { return specialMeter; }
-	public ShaderProgram getPalette() { return palette; }
-	public void setPalette(ShaderProgram pal) { palette = pal; }
-	public TextureRegion getIcon(){ return defaultIcon; }
-	public void changeSpecial(float change) { specialMeter = MathUtils.clamp(specialMeter + change, 0, SPECIALMETERMAX); }
-	public void setInvincible(int i) { 
-		invincibleTimer.restart();
-		invincibleTimer.setEndTime(i);
+		if (team == GlobalRepo.GOODTEAM) setInvincible(120);
 	}
 
 	private final float minDirect = 0.85f;
@@ -730,6 +685,64 @@ public abstract class Fighter extends Hittable{
 	public boolean isHoldDown()		{ return stickY > minDirect; }
 	public boolean isHoldForward() 	{ return Math.signum(stickX) == direct() && Math.abs(stickX) > minDirect; }
 	public boolean isHoldBack() 	{ return Math.signum(stickX) != direct() && Math.abs(stickX) > minDirect; }
+	
+	public boolean canAttack() { return canAttackDodge() && state != State.DODGE; }
+	public boolean canAttackDodge() { return canAct() && state != State.WALLSLIDE; }
+	public boolean canAct() { return !inHitstun() && attackTimer.timeUp() && state != State.FALLEN && state != State.HELPLESS && canMove(); }
+	public boolean canMove(){ return super.canMove() && grabbingTimer.timeUp(); } 
+	public boolean isRunning() { return state == State.RUN || state == State.DASH; }
+	public boolean isInvincible(){ return hitstunTimer.getCounter() == 0 || !invincibleTimer.timeUp(); }
+	public boolean inputQueueTimeUp(){ return inputQueueTimer.timeUp(); }
+	public boolean attackTimeUp(){ return attackTimer.timeUp(); }
+	public boolean isCharging() {
+		if (null == getInputHandler()) return false;
+		else return activeMoveIsCharge() && getInputHandler().isCharging();
+	}
+	public boolean groundBelow(){
+		Rectangle r = new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 16);
+		for (Rectangle tr: tempRectangleList) if (r.overlaps(tr)) return true;
+		return false;
+	}
+	
+	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }
+	public void restartInputQueue() { inputQueueTimer.restart(); }
+	public void countDownAttackTimer(){ attackTimer.countDown(); }
+	public void setLives(int i) { lives = i; }
+	public void setArmor(float armor) { this.armor = armor; }
+	public void setActiveMove(IDMove activeMove) { this.activeMove = activeMove; }
+	public void setToFall() { state = State.FALL; }
+	public void setInputHandler(InputHandler inputHandler) { this.inputHandler = inputHandler; }
+	public void setPalette(ShaderProgram pal) { palette = pal; }
+	public void changeSpecial(float change) { specialMeter = MathUtils.clamp(specialMeter + change, 0, SPECIALMETERMAX); }
+	public void setRespawnTimer() { respawnTimer.restart(); }
+	public void setInvincible(int i) { 
+		invincibleTimer.restart();
+		invincibleTimer.setEndTime(i);
+	}
+	public void setBlock(int i) { 
+		blockTimer.restart();
+		blockTimer.setEndTime(i);
+	}
+	
+	public float getStickX() { return stickX; }
+	public float getStickY() { return stickY; }
+	public float getSpecialMeter() { return specialMeter; }
+	public float getArmor() { 
+		float addedMoveArmor = 0;
+		if (null != getActiveMove()) addedMoveArmor = getActiveMove().move.getArmor();
+		return super.getArmor() + addedMoveArmor; 
+	}
+	public int getTeam() { return team; }
+	public int getLives() { return lives; }
+	public InputHandler getInputHandler() { return inputHandler; }
+	public IDMove getActiveMove() { return activeMove; }
+	public State getState() { return state; } 
+	public List<IDMove> getMoveQueue() { return staleMoveQueue; }
+	public InputPackage getInputPackage() { return new InputPackage(this); }
+	public ShaderProgram getPalette() { return palette; }
+	public TextureRegion getIcon(){ return defaultIcon; }
+	protected TextureRegion getFrame(Animation anim, float deltaTime) { return anim.getKeyFrame(deltaTime + randomAnimationDisplacement); }
+	public Timer getRespawnTimer(){ return respawnTimer; }
 	
 	abstract TextureRegion getWalkFrame(float deltaTime);
 	abstract TextureRegion getRunFrame(float deltaTime);

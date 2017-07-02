@@ -111,7 +111,7 @@ public class Basic extends Fighter {
 
 		private final Timer kaboom = new DurationTimer(120);
 		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/bomb.glsl"));
-		private final static ShaderProgram flash = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/hit.glsl"));
+		private final static ShaderProgram flash = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/bombflash.glsl"));
 
 		public Bomb(float posX, float posY, int team) {
 			super(posX, posY, team);

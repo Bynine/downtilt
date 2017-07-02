@@ -165,5 +165,10 @@ public class M_Fly extends MoveList {
 	public Move taunt() {
 		return new Move(user, 60);
 	}
+	
+	public Move block(){
+		Move m = new Move(user, 0);
+		return m;
+	}
 
 }
