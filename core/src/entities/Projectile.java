@@ -226,13 +226,14 @@ public abstract class Projectile extends Entity{
 		void updateVelocity(List<Rectangle> rectangleList, List<Entity> entityList){
 			for (Entity en: entityList){
 				if (en instanceof Hittable && en != this && en != owner && life.getCounter() > 10){
-					if (Intersector.overlaps(owner.getImage().getBoundingRectangle(), en.getHurtBox()) && bounceTimer.timeUp() ) boing();
+					if (Intersector.overlaps(getImage().getBoundingRectangle(), en.getHurtBox()) && bounceTimer.timeUp() ) boing();
 				}
 			}
 			super.limitingForces(rectangleList, entityList);
 		}
 
 		void boing(){
+			System.out.println("Grenade boing!");
 			velocity.x *= 0.5;
 			velocity.y += 3;
 			if ((life.getEndTime() - life.getCounter()) > hitSetTimer) {

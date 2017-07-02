@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Bounce extends ImmobileEntity {
 
-	final float bounceStrength = 4.0f;
+	final float bounceStrength = 5.0f;
 	float bounceX = 0f, bounceY = bounceStrength;
 
 
@@ -47,8 +47,8 @@ public abstract class Bounce extends ImmobileEntity {
 	public void bounce(Entity entity) {
 		new SFX.FootStool().play();
 		if (entity.getVelocity().y > 0) entity.getVelocity().y = 0;
-		entity.getVelocity().x = -entity.getVelocity().x + getBounceX();
-		entity.getVelocity().y = -entity.getVelocity().y + getBounceY();
+		entity.getVelocity().x = -entity.getVelocity().x * 0.8f + getBounceX();
+		entity.getVelocity().y = -entity.getVelocity().y * 0.8f + getBounceY();
 	}
 
 }

@@ -3,6 +3,8 @@ package entities;
 import java.util.List;
 
 import main.DowntiltEngine;
+import main.SFX;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,13 +34,13 @@ public abstract class ChangeBlock extends ImmobileEntity {
 		case B: color = Color.C; break;
 		case C: color = Color.A; break;
 		}
-		if (fillUp()){
+		if (isFull()){
 			setImage(full);
 			collision = Collision.SOLID;
 			for (Entity en: entityList){
 				if (en instanceof Fighter && isTouching(en, 0)) {
-					en.position.x += 2;
-					en.position.y += 2;
+					new SFX.Tech().play();
+					((Fighter)en).reset();
 				}
 			}
 		}
@@ -48,7 +50,7 @@ public abstract class ChangeBlock extends ImmobileEntity {
 		}
 	}
 
-	boolean fillUp() {
+	boolean isFull() {
 		return color == correctColor();
 	}
 

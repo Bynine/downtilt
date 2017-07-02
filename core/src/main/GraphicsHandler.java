@@ -89,7 +89,12 @@ public class GraphicsHandler {
 		cam.position.x = MathUtils.round(MathUtils.clamp(cam.position.x, screenBoundary(SCREENWIDTH), MapHandler.mapWidth - screenBoundary(SCREENWIDTH)));
 		cam.position.y = MathUtils.round(MathUtils.clamp(cam.position.y, screenBoundary(SCREENHEIGHT), MapHandler.mapHeight - screenBoundary(SCREENHEIGHT)));
 
-		parallaxCam.position.x = cam.position.x/2 + SCREENWIDTH/4;
+		parallaxCam.position.x = cam.position.x;
+//		int parallax = 4;
+//		int updateSpeed = 32;
+//		parallaxCam.position.x = 
+//				(parallaxCam.position.x * (updateSpeed - 1) +
+//				( (cam.position.x * (parallax - 1)) + DowntiltEngine.getPlayers().get(0).getPosition().x)/parallax)/updateSpeed;
 		parallaxCam.position.y = cam.position.y;
 
 		if (!DowntiltEngine.outOfHitlag()) shakeScreen();

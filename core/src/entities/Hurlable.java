@@ -72,7 +72,7 @@ public abstract class Hurlable extends Hittable {
 	public static class Nut extends Hurlable {
 		
 		private final DurationTimer life = new DurationTimer(900);
-		private int health = 48;
+		private int health = 60;
 
 		public Nut(float posX, float posY) {
 			super(posX, posY);
@@ -82,7 +82,7 @@ public abstract class Hurlable extends Hittable {
 			baseKnockIntoDamage = 3f;
 			hitstunDealtBonus = 12;
 			airFriction = 0.992f;
-			baseWeight = 90;
+			baseWeight = 80;
 			timerList.add(life);
 		}
 		
@@ -113,11 +113,12 @@ public abstract class Hurlable extends Hittable {
 			super(posX, posY);
 			this.team = team;
 			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ball.png")));
-			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballspin.png", 2, 1, 8, PlayMode.LOOP);
+			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballspin.png", 4, 1, 6, PlayMode.LOOP);
 			image = new Sprite(normImage);
-			baseKnockIntoDamage = 3f;
-			hitstunDealtBonus = 12;
-			airFriction = 0.999f;
+			baseKnockIntoDamage = 4f;
+			hitstunDealtBonus = 8;
+			airFriction = 0.992f;
+			friction = 0.97f;
 			baseWeight = 90;
 		}
 		
@@ -137,12 +138,13 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		public Color getColor(){
-			if (team == GlobalRepo.GOODTEAM) return new Color(0, 0, 1, 1);
-			else return new Color(1, 0, 0, 1);
+			if (team == GlobalRepo.GOODTEAM) return new Color(1, 0, 0, 1);
+			if (team == GlobalRepo.BADTEAM) return new Color(0, 0, 1, 1);
+			else return new Color(0, 0, 0, 1);
 		}
 		
 		public boolean inHitstun(){
-			return knockbackIntensity(velocity) > 2;
+			return knockbackIntensity(getVelocity()) > 1;
 		}
 		
 	}

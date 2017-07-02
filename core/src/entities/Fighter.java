@@ -664,6 +664,11 @@ public abstract class Fighter extends Hittable{
 		inputHandler.refresh();
 	}
 	
+
+	public void reset() {
+		setPosition(spawnPoint);
+	}
+	
 	private void re(){
 		position.set(spawnPoint);
 		changeSpecial(SPECIALMETERMAX);

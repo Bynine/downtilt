@@ -43,13 +43,14 @@ public class M_Shoot extends MoveList {
 	@Override
 	public Move nAir() {
 		int frames = 1;
-		int frame = 60;
+		int frame = 40;
+		int start = 20;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addNewEntity(30,
-				(new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 4, 6
+		m.eventList.addVelocityChange(user, start, -4, 8);
+		m.eventList.addNewEntity(start, (new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * 3, -6
 				);
 		return m;
 	}
