@@ -66,9 +66,9 @@ public abstract class Collectible extends Entity {
 
 	}
 	
-	public static class Drink extends Collectible {
+	public static class Ammo extends Collectible {
 
-		public Drink(float posX, float posY) {
+		public Ammo(float posX, float posY) {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ammo.png"))));
 			bonus = 30;
@@ -152,6 +152,7 @@ public abstract class Collectible extends Entity {
 			fi.addDefense(add);
 			fi.addSpeed(add);
 			fi.addAir(add);
+			fi.takeDamage(50);
 		}
 	}
 

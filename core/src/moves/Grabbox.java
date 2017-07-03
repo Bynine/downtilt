@@ -18,10 +18,13 @@ public class Grabbox extends ActionCircle {
 		target.getGrabbed((Fighter)user, target, caughtTimeFormula(target));
 		remove = true;
 	}
-	
-	private final int minGrabTime = 20;
+
 	private int caughtTimeFormula(Hittable target){
-		return (int) (minGrabTime + target.getPercentage());
+		int minGrabTime = 15;
+		int maxGrabTime = 60;
+		int grabTime = (int) (minGrabTime + target.getPercentage()/3);
+		if (grabTime > maxGrabTime) grabTime = maxGrabTime;
+		return grabTime;
 	}
 
 	@Override

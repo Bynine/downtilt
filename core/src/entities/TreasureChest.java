@@ -51,7 +51,7 @@ public class TreasureChest extends Hurlable {
 	private Collectible spawnCollectible(){
 		List<Collectible> potentialCollectibles = new ArrayList<Collectible>();
 		potentialCollectibles.add(new Collectible.Food(position.x, position.y));
-		potentialCollectibles.add(new Collectible.Drink(position.x, position.y));
+		potentialCollectibles.add(new Collectible.Ammo(position.x, position.y));
 		return GlobalRepo.getRandomElementFromList(potentialCollectibles);
 	}
 	
@@ -61,6 +61,11 @@ public class TreasureChest extends Hurlable {
 		potentialCollectibles.add(new Collectible.BoostDefense(position.x, position.y));
 		potentialCollectibles.add(new Collectible.BoostSpeed(position.x, position.y));
 		potentialCollectibles.add(new Collectible.BoostAir(position.x, position.y));
+		potentialCollectibles.add(new Collectible.BoostPower(position.x, position.y));
+		potentialCollectibles.add(new Collectible.BoostDefense(position.x, position.y));
+		potentialCollectibles.add(new Collectible.BoostSpeed(position.x, position.y));
+		potentialCollectibles.add(new Collectible.BoostAir(position.x, position.y));
+		potentialCollectibles.add(new Collectible.BoostAll(position.x, position.y));
 		return GlobalRepo.getRandomElementFromList(potentialCollectibles);
 	}
 

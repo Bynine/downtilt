@@ -39,7 +39,7 @@ public abstract class Fighter extends Hittable{
 	private final Vector2 spawnPoint;
 	private int lives = 1;
 
-	public static final int SPECIALMETERMAX = 16;
+	public static final int SPECIALMETERMAX = 8;
 	private float specialMeter = SPECIALMETERMAX;
 
 	protected Vector2 footStoolKB = new Vector2(0, 0);
@@ -76,7 +76,8 @@ public abstract class Fighter extends Hittable{
 		stickX = getInputHandler().getXInput();
 		stickY = getInputHandler().getYInput();
 
-		if (!grabbingTimer.timeUp()) handleThrow();
+		if (grabbingTimer.timeJustUp()) dropTarget();
+		else if (!grabbingTimer.timeUp()) handleThrow();
 		if (null != getActiveMove()) {
 			if (getActiveMove().id != MoveList_Advanced.noStaleMove && getActiveMove().move.connected() && !staleMoveQueue.contains(getActiveMove())){
 				staleMoveQueue.add(getActiveMove());
@@ -93,16 +94,33 @@ public abstract class Fighter extends Hittable{
 		setActiveMove(moveList.selectThrow());
 		if (null != getActiveMove()) {
 			startAttack(getActiveMove());
-			dropTarget();
+			beginThrow();
 		}
 	}
 	
-	private void dropTarget(){
+	private void beginThrow(){
 		grabbingTimer.end();
+		releaseTarget();
+	}
+	
+	private void dropTarget(){
+		if (null == caughtFighter) return;
+		new SFX.LightHit().play();
+		release(this, -1);
+		releaseTarget();
+	}
+	
+	private void releaseTarget(){
+		release(caughtFighter, 1);
 		caughtFighter.caughtTimer.end();
-		caughtFighter.hitstunTimer.setEndTime(5);
-		caughtFighter.hitstunTimer.restart();
 		caughtFighter = null;
+	}
+	
+	private void release(Hittable fi, int direction){
+		fi.velocity.x = 3 * direction * direct();
+		fi.velocity.y = 2;
+		fi.hitstunTimer.restart();
+		fi.hitstunTimer.setEndTime(10);
 	}
 
 	private void handleMove(){
@@ -350,6 +368,11 @@ public abstract class Fighter extends Hittable{
 	public void endAttack(){
 		setActiveMove(null);
 		attackTimer.end();
+	}
+	
+	public void endSpecialAttack(){
+		endAttack();
+		new SFX.Error().play();
 	}
 
 	public void handleJumpHeld(boolean button) {
@@ -645,7 +668,7 @@ public abstract class Fighter extends Hittable{
 	
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
-		if (null != caughtFighter) dropTarget();
+		if (null != caughtFighter) beginThrow();
 	}
 	
 	public void isNowGrabbing(Hittable target, int caughtTime){

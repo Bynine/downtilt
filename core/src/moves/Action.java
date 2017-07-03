@@ -112,7 +112,7 @@ public abstract class Action {
 		}
 
 		void performAction() {
-			if (user.getSpecialMeter() <= 0) user.endAttack();
+			if (user.getSpecialMeter() <= 0) user.endSpecialAttack();
 			else user.changeSpecial(drain);
 		}
 	}

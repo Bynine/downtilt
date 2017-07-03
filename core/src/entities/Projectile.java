@@ -180,8 +180,8 @@ public abstract class Projectile extends Entity{
 			int facingOffset = 40 * ownerDirect;
 			position.x = rocket.position.x - displacement;
 			position.y = rocket.position.y - displacement;
-			ac = 		 new ProjectileHitbox(null,  10.0f, 3.5f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit(), this, lifeTime);
-			Hitbox ac2 = new ProjectileHitbox(null,  8.0f, 3.0f, 16, Hitbox.SAMURAI, facingOffset, 0, 60, new SFX.MidHit(), this, lifeTime);
+			ac = 		 new ProjectileHitbox(owner,  10.0f, 3.5f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit(), this, lifeTime);
+			Hitbox ac2 = new ProjectileHitbox(owner,  8.0f, 3.0f, 16, Hitbox.SAMURAI, facingOffset, 0, 60, new SFX.MidHit(), this, lifeTime);
 			Hitbox ac3 = new ProjectileHitbox(null,  6.0f, 0, 0,  Hitbox.SAMURAI, facingOffset * 2, 0, 80, new SFX.LightHit(), this, lifeTime);
 			ac.setRefresh(2);
 			ac2.setRefresh(4);
@@ -233,7 +233,6 @@ public abstract class Projectile extends Entity{
 		}
 
 		void boing(){
-			System.out.println("Grenade boing!");
 			velocity.x *= 0.5;
 			velocity.y += 3;
 			if ((life.getEndTime() - life.getCounter()) > hitSetTimer) {
@@ -304,10 +303,9 @@ public abstract class Projectile extends Entity{
 			position.x = grenade.position.x - displacement;
 			position.y = grenade.position.y - displacement;
 			setup("sprites/entities/grenadeexplosion.png", lifeTime, 0, 0);
-			ac =  new ProjectileHitbox(null, 8, 5, 8, 71, 0, 0, 36, new SFX.HeavyHit(), this, lifeTime);
+			ac =  new ProjectileHitbox(owner, 8, 5, 8, 71, 0, 0, 36, new SFX.HeavyHit(), this, lifeTime);
 			ac.setRefresh(1);
-			Hitbox 
-			ac2 = new ProjectileHitbox(null, 7, 4, 24, Hitbox.SAMURAI, 0, 0, 48, new SFX.HeavyHit(), this, lifeTime);
+			Hitbox ac2 = new ProjectileHitbox(owner, 7, 4, 24, Hitbox.SAMURAI, 0, 0, 48, new SFX.HeavyHit(), this, lifeTime);
 			new ActionCircleGroup(Arrays.asList(ac, ac2));
 			MapHandler.addActionCircle(ac);
 			MapHandler.addActionCircle(ac2);

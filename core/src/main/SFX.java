@@ -53,5 +53,6 @@ public abstract class SFX {
 	public static class Break extends SFX{ public Break(){ setSFX("/melee/bury.wav"); } }
 	public static class Sparks extends SFX{ public Sparks(){ setSFX("/lightningstart.mp3"); } }
 	public static class Lightning extends SFX{ public Lightning(){ setSFX("/lightningstrike.mp3"); } }
+	public static class Error extends SFX{ public Error(){ setSFX("/error.wav"); } }
 	
 }

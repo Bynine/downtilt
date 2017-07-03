@@ -23,7 +23,7 @@ public class GlobalRepo {
 	public static final int BADTEAM = 1;
 	public static final int NOTEAM = 2;
 	public static final float HEROHITSTUNMOD = 0.9f;
-	public static final float ENEMYHITSTUNMOD = 1.5f;
+	public static final float ENEMYHITSTUNMOD = 1.2f;
 	public static final int WHITEFREEZE = 1;
 	
 	/* GLOBAL METHODS */
