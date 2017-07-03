@@ -106,12 +106,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 	public static void causeHitlag(int length){
 		hitlagTimer.setEndTime(length);
-		hitlagTimer.restart();
+		hitlagTimer.start();
 	}
 	
 	public static void wait(int length){
 		waitTimer.setEndTime(length);
-		waitTimer.restart();
+		waitTimer.start();
 	}
 
 	public static void pauseGame() {

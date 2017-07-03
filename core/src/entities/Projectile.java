@@ -66,7 +66,7 @@ public abstract class Projectile extends Entity{
 		setImage(texture);
 		if (owner.direct() == -1) flip();
 		life.setEndTime(lifeTime);
-		life.restart();
+		life.start();
 		this.velX = owner.direct() * velX;
 		this.velY = velY;
 	}
@@ -95,7 +95,7 @@ public abstract class Projectile extends Entity{
 	public void reflect(Fighter reflector){
 		reverse();
 		if (null != owner) owner = reflector;
-		life.restart();
+		life.start();
 		velX *= 1.6f;
 	}
 
@@ -237,9 +237,9 @@ public abstract class Projectile extends Entity{
 			velocity.y += 3;
 			if ((life.getEndTime() - life.getCounter()) > hitSetTimer) {
 				life.setEndTime(hitSetTimer);
-				life.restart();
+				life.start();
 			}
-			bounceTimer.restart();
+			bounceTimer.start();
 		}
 
 		void checkWalls(){

@@ -30,7 +30,7 @@ public class ChallengeGraphicsHandler {
 	}
 	
 	static void readyGo(){
-		readyGoTimer.restart();
+		readyGoTimer.start();
 	}
 	
 	static void finish(){

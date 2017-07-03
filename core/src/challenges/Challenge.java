@@ -19,6 +19,7 @@ public abstract class Challenge {
 	protected long score = 0;
 	protected int numLives = 5;
 	protected final Vector2 centerPosition = new Vector2(0, 0);
+	protected final Vector2 startPosition = new Vector2(0, 0);
 	protected boolean finished = false, started = false;
 
 	Challenge(Stage stage, List<Wave> waves){
@@ -35,7 +36,8 @@ public abstract class Challenge {
 		}
 		activeWave = waves.remove(0);
 		DowntiltEngine.changeRoom(stage);
-		centerPosition.set(stage.getStartPosition());
+		centerPosition.set(stage.getCenterPosition());
+		startPosition.set(stage.getStartPosition());
 		
 		if (!DowntiltEngine.debugToggle){
 			int waitBetween = 60;
@@ -65,7 +67,7 @@ public abstract class Challenge {
 	}
 
 	private void nextWave(){
-		MapHandler.addEntity(new TreasureChest(centerPosition.x, centerPosition.y + GlobalRepo.TILE));
+		MapHandler.addEntity(new TreasureChest(startPosition.x, startPosition.y + GlobalRepo.TILE));
 		activeWave = waves.remove(0);
 	}
 
@@ -102,6 +104,10 @@ public abstract class Challenge {
 
 	public Vector2 getCenterPosition(){
 		return centerPosition;
+	}
+	
+	public Vector2 getStartPosition(){
+		return startPosition;
 	}
 	
 	public abstract String getEnemyCounter();

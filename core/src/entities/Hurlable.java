@@ -124,10 +124,17 @@ public abstract class Hurlable extends Hittable {
 		
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
 			super.takeDamagingKnockback(knockback, DAM, hitstun, hitboxhitstunType, user);
-			if (null != user) {
-				if (user.getTeam() == GlobalRepo.GOODTEAM) team = GlobalRepo.BADTEAM;
-				else if (user.getTeam() == GlobalRepo.BADTEAM) team = GlobalRepo.GOODTEAM;
-			}
+			if (null != user) switchTeam(user);
+		}
+		
+		public void getGrabbed(Fighter user, Hittable target, int caughtTime) {
+			super.getGrabbed(user, target, caughtTime);
+			switchTeam(user);
+		}
+		
+		private void switchTeam(Hittable user){
+			if (user.getTeam() == GlobalRepo.GOODTEAM) team = GlobalRepo.BADTEAM;
+			else if (user.getTeam() == GlobalRepo.BADTEAM) team = GlobalRepo.GOODTEAM;
 		}
 		
 		public void ground(){ 

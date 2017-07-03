@@ -8,11 +8,15 @@ public class EnemyRepo {
 	/**
 	 * Enemies for each wave.
 	 */
-	public static final Enemy zen = new Enemy(Basic.class, Brain.Recover.class);
-	public static final Enemy shoots = new Enemy(Shoot.class, Brain.ShootBrain.class);
-	public static final Enemy flies = new Enemy(Fly.class, Brain.FlyBrain.class);
-	public static final Enemy bad = new Enemy(Basic.Bad.class, Brain.MookBrain.class);
-	public static final Enemy basic = new Enemy(Basic.class, Brain.MookBrain.class);
-	public static final Enemy bombs = new Enemy(Basic.Bomb.class, Brain.MookBrain.class);
-	public static final Enemy beefy = new Enemy(Basic.Beefy.class, Brain.MookBrain.class);
+	public static final EnemyType zen = new EnemyType(Basic.class, Brain.Recover.class);
+	
+	public static final EnemyType basic = new EnemyType(Basic.class, Brain.MookBrain.class);
+	public static final EnemyType bombs = new EnemyType(Basic.Bomb.class, Brain.MookBrain.class);
+	public static final EnemyType beefy = new EnemyType(Basic.Beefy.class, Brain.MookBrain.class);
+	public static final EnemyType fatbasic = new EnemyType(Basic.class, Brain.MookBrain.class, EnemyType.PowerUp.ALL);
+	
+	public static final EnemyType shoots = new EnemyType(Shoot.class, Brain.ShootBrain.class);
+	
+	public static final EnemyType flies = new EnemyType(Fly.class, Brain.FlyBrain.class);
+
 }

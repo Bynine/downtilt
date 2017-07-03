@@ -85,7 +85,7 @@ public abstract class Entity {
 	void handleTouchHelper(Entity e){
 		if (isTouching(e, 0) && e instanceof Bounce && bounceTimer.timeUp()){
 			((Bounce)e).bounce(this);
-			bounceTimer.restart();
+			bounceTimer.start();
 		}
 	}
 
@@ -105,10 +105,10 @@ public abstract class Entity {
 
 	private final float lowerLimit = 0.01f;
 	void limitingForces(List<Rectangle> mapRectangleList, List<Entity> entityList){
-		handleWind();
 		handleGravity();
 		handleFriction();
 		limitSpeeds();
+		handleWind();
 
 		setupRectangles(mapRectangleList, entityList);
 		checkWalls();
@@ -210,7 +210,8 @@ public abstract class Entity {
 	}
 
 	public Rectangle getHurtBox(){
-		return GlobalRepo.makeRectangleFromRectangle(image.getBoundingRectangle());
+		return new Rectangle(position.x, position.y, 30, 30);
+//		return GlobalRepo.makeRectangleFromRectangle(image.getBoundingRectangle());
 	}
 
 	public void flip(){

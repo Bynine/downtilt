@@ -100,7 +100,7 @@ public abstract class Stage {
 
 	public abstract TiledMap getMap();
 	public abstract Vector2 getStartPosition();
-	public Vector2 getCamPosition(){
+	public Vector2 getCenterPosition(){
 		return getStartPosition();
 	}
 	

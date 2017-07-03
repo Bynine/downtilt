@@ -119,7 +119,7 @@ public abstract class Fighter extends Hittable{
 	private void release(Hittable fi, int direction){
 		fi.velocity.x = 3 * direction * direct();
 		fi.velocity.y = 2;
-		fi.hitstunTimer.restart();
+		fi.hitstunTimer.start();
 		fi.hitstunTimer.setEndTime(10);
 	}
 
@@ -191,13 +191,13 @@ public abstract class Fighter extends Hittable{
 	private void activateBlock(){
 		if (state != State.DODGE) {
 			state = State.DODGE;
-			dodgeTimer.restart();
+			dodgeTimer.start();
 		}
 	}
 
 	private boolean tryDash(){
 		if (!isGrounded() || !inGroundedState() || isRun()) return false;
-		dashTimer.restart();
+		dashTimer.start();
 		velocity.x = Math.signum(stickX) * getDashStrength();
 		state = State.DASH;
 		MapHandler.addEntity(new Graphic.DustCloud(this, position.x, position.y));
@@ -360,7 +360,7 @@ public abstract class Fighter extends Hittable{
 		Move m = im.move;
 		setActiveMove(im);
 		attackTimer.setEndTime(m.getDuration() + 1);
-		attackTimer.restart();
+		attackTimer.start();
 		tumbling = false;
 		if (isGrounded()) state = State.WALK;
 	}
@@ -376,7 +376,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public void handleJumpHeld(boolean button) {
-		if (isGrounded() && button && state != State.JUMPSQUAT && jumpSquatTimer.timeUp() && canAct()) jumpSquatTimer.restart();
+		if (isGrounded() && button && state != State.JUMPSQUAT && jumpSquatTimer.timeUp() && canAct()) jumpSquatTimer.start();
 		if (state == State.JUMP && !button) jumpTimer.end();
 	}
 
@@ -385,7 +385,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private void jump(){
-		jumpTimer.restart();
+		jumpTimer.start();
 		endAttack();
 		if (stickX < 0) MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + 8));
 		else MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
@@ -410,7 +410,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private void wallJump(){
-		wallJumpTimer.restart();
+		wallJumpTimer.start();
 		flip();
 		velocity.x = getWallJumpStrengthX() * direct();
 		velocity.y = getWallJumpStrengthY();
@@ -424,7 +424,7 @@ public abstract class Fighter extends Hittable{
 		if (prevStickX >  unregisteredInputMax && velocity.x < 0) velocity.x = 0; 
 		velocity.x += 1 * stickX;
 		doubleJumped = true;
-		doubleJumpTimer.restart();
+		doubleJumpTimer.start();
 		tumbling = false;
 	}
 
@@ -439,9 +439,9 @@ public abstract class Fighter extends Hittable{
 		footStoolee.percentage += footStoolDamage;
 		if (!footStoolee.inHitstun()){
 			footStoolee.hitstunTimer.setEndTime((int) (footStoolDuration * footStoolee.getHitstun()));
-			footStoolee.hitstunTimer.restart();
+			footStoolee.hitstunTimer.start();
 		}
-		footStoolTimer.restart();
+		footStoolTimer.start();
 	}
 
 	private Fighter isAboveEnemy(){
@@ -674,7 +674,7 @@ public abstract class Fighter extends Hittable{
 	public void isNowGrabbing(Hittable target, int caughtTime){
 		caughtFighter = target;
 		grabbingTimer.setEndTime(caughtTime);
-		grabbingTimer.restart();
+		grabbingTimer.start();
 	}
 
 	public void respawn() {
@@ -733,7 +733,7 @@ public abstract class Fighter extends Hittable{
 	}
 	
 	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }
-	public void restartInputQueue() { inputQueueTimer.restart(); }
+	public void restartInputQueue() { inputQueueTimer.start(); }
 	public void countDownAttackTimer(){ attackTimer.countDown(); }
 	public void setLives(int i) { lives = i; }
 	public void setArmor(float armor) { this.armor = armor; }
@@ -742,13 +742,13 @@ public abstract class Fighter extends Hittable{
 	public void setInputHandler(InputHandler inputHandler) { this.inputHandler = inputHandler; }
 	public void setPalette(ShaderProgram pal) { palette = pal; }
 	public void changeSpecial(float change) { specialMeter = MathUtils.clamp(specialMeter + change, 0, SPECIALMETERMAX); }
-	public void setRespawnTimer() { respawnTimer.restart(); }
+	public void setRespawnTimer() { respawnTimer.start(); }
 	public void setInvincible(int i) { 
-		invincibleTimer.restart();
+		invincibleTimer.start();
 		invincibleTimer.setEndTime(i);
 	}
 	public void setBlock(int i) { 
-		blockTimer.restart();
+		blockTimer.start();
 		blockTimer.setEndTime(i);
 	}
 	

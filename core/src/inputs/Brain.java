@@ -62,17 +62,17 @@ public abstract class Brain{
 			}
 			else if (!pack.hasDoubleJumped) {
 				body.handleCommand(InputHandler.commandJump);
-				waitToUseUpSpecial.restart();
+				waitToUseUpSpecial.start();
 			}
 			else if (waitToUseUpSpecial.timeUp()) body.handleCommand(InputHandler.commandSpecial);
 		}
 	}
 
 	void jumpAtPlayer(Timer tryJump, Timer performJump){
-		tryJump.restart();
+		tryJump.start();
 		if (performJump.timeUp() && Math.random() < (pack.distanceYFromPlayer * 0.02f) ) {
 			body.handleCommand(InputHandler.commandJump);
-			performJump.restart();
+			performJump.start();
 		}
 	}
 
@@ -99,14 +99,14 @@ public abstract class Brain{
 			else body.handleCommand(InputHandler.commandStickLeft);
 		}
 		else if (Math.random() < 0.1) body.xInput = 0;
-		changeDirection.restart();
+		changeDirection.start();
 	}
 
 	void changeUpDown(){
 		double ud = (1 - (2 * Math.random()) );
 		ud = Math.signum(ud) * Math.pow(Math.abs(ud), 0.7);
 		body.yInput = (float) MathUtils.clamp(ud, -1, 1);
-		changeUpDown.restart();
+		changeUpDown.start();
 	}
 
 	void crouchBeforeAttacking(){

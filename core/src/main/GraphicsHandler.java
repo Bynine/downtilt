@@ -90,8 +90,8 @@ public class GraphicsHandler {
 		cam.position.y = MathUtils.round(MathUtils.clamp(cam.position.y, screenBoundary(SCREENHEIGHT), MapHandler.mapHeight - screenBoundary(SCREENHEIGHT)));
 
 		parallaxCam.position.x = cam.position.x;
-		int parallax = 2;
-		int updateSpeed = 2;
+		int parallax = 4;
+		int updateSpeed = 12;
 		float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
 		parallaxCam.position.x = 
 				(parallaxCam.position.x * (updateSpeed - 1) +
@@ -131,7 +131,7 @@ public class GraphicsHandler {
 		renderer.render(arr);
 
 		renderer.setView(cam);
-		int numLayers = MapHandler.activeMap.getLayers().getCount() - 2;  // render tiles
+		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
 		arr = new int[numLayers];
 		for (int i = 0; i < arr.length; ++i) {
 			arr[i] = i + 2;
@@ -144,7 +144,7 @@ public class GraphicsHandler {
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
-		arr = new int[]{numLayers-1};  // render foreground
+		arr = new int[]{numLayers-2, numLayers-1};  // render foreground
 		renderer.render(arr);
 
 		if (DowntiltEngine.debugToggle) debugRender();

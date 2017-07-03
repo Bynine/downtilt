@@ -19,7 +19,7 @@ public abstract class Graphic extends Entity{
 		super(posX, posY);
 		this.dur = dur;
 		duration = new DurationTimer(dur);
-		duration.restart();
+		duration.start();
 		timerList.add(duration);
 		collision = Collision.GHOST;
 	}

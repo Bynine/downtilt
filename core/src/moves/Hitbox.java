@@ -71,7 +71,7 @@ public class Hitbox extends ActionCircle{
 	public void hitTarget(Hittable target){
 		if (!didHitTarget(target)) return;
 
-		refreshTimer.restart();
+		refreshTimer.start();
 		float staleness = 1;
 		if (null != user) {
 			if (user instanceof Fighter) staleness = getStaleness((Fighter)user);
@@ -189,7 +189,7 @@ public class Hitbox extends ActionCircle{
 		if (doesRefresh && refreshTimer.timeUp()){
 			reset();
 			if (group != null) for (ActionCircle ac: group.connectedCircles) ac.reset();
-			refreshTimer.restart();
+			refreshTimer.start();
 		}
 	}
 

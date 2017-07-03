@@ -38,7 +38,7 @@ public abstract class InputHandlerPlayer extends InputHandler {
 		fighter.handleJumpHeld(jumpHold());
 		fighter.handleBlockHeld(blockHold());
 		
-		if (dodge() && techTimer.timeUp()) techTimer.restart();
+		if (dodge() && techTimer.timeUp()) techTimer.start();
 		techTimer.countUp();
 	}
 
