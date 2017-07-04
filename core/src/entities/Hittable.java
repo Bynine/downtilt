@@ -22,7 +22,7 @@ public abstract class Hittable extends Entity {
 	protected TextureRegion defaultTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/dummy.png")));
 	protected float percentage = 0;
 	protected boolean tumbling = false, slowed = true;
-	protected final Timer caughtTimer = new Timer(0), knockIntoTimer = new Timer(20), stunTimer = new Timer(0);
+	protected final Timer caughtTimer = new Timer(0), knockIntoTimer = new Timer(20), stunTimer = new Timer(0), guardTimer = new Timer(0);
 	public final Timer powerTimer = new Timer(1800), speedTimer = new Timer(1800), defenseTimer = new Timer(1800), airTimer = new Timer(1800);
 	private float initialHitAngle = 0;
 	protected HitstunType hitstunType = HitstunType.NORMAL;
@@ -91,6 +91,7 @@ public abstract class Hittable extends Entity {
 		e.velocity.x += dirPush * pushForce;
 	}
 	
+	protected float touchRadius = 8;
 	private void checkHitByHurtlingObject(Hittable hi){
 		boolean fighterGoingFastEnough = knockbackIntensity(hi.velocity) > baseHurtleBK;
 		if (hi.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
@@ -166,9 +167,9 @@ public abstract class Hittable extends Entity {
 		if (state == State.HELPLESS) state = State.FALL;
 		hitstunTimer.setEndTime(hitstun);
 		hitstunTimer.start();
-		endAttack();
 		hitstunType = ht;
-		stunTimer.end();
+		guardTimer.end();
+		disrupt();
 	}
 
 	protected float directionalInfluenceAngle(Vector2 knockback){
@@ -184,6 +185,11 @@ public abstract class Hittable extends Entity {
 		else if (!doesCollide(position.x, newPosY)) position.set(position.x, newPosY);
 		caughtTimer.setEndTime(caughtTime);
 		caughtTimer.start();
+		disrupt();
+	}
+	
+	private void disrupt(){
+		stunTimer.end();
 		endAttack();
 	}
 	
@@ -255,6 +261,9 @@ public abstract class Hittable extends Entity {
 	public boolean canMove(){
 		return stunTimer.timeUp() && caughtTimer.timeUp();
 	}
+	
+	public boolean isGuarding() { return false; }
+	public boolean isPerfectGuarding() { return false; }
 	
 	public void setEquipment(Equipment e){
 		equipment = e;

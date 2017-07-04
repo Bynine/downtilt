@@ -2,7 +2,7 @@ package entities;
 
 import java.util.List;
 
-import main.DowntiltEngine;
+import main.GlobalRepo;
 import main.SFX;
 
 import com.badlogic.gdx.Gdx;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class ChangeBlock extends ImmobileEntity {
 
-	Color color = Color.A;
+	GlobalRepo.BlockColor color = GlobalRepo.getBlockColor();
 	protected TextureRegion empty;
 	protected TextureRegion full ;
 
@@ -19,28 +19,21 @@ public abstract class ChangeBlock extends ImmobileEntity {
 		super(posX, posY);
 	}
 
-	public enum Color{
-		A, B, C
+	public void update(List<Entity> entityList){
+		if (color != GlobalRepo.getBlockColor()) rotate(entityList);
 	}
 
-	public void update(List<Entity> entityList){
-		int updateCounter = 180;
-		if (DowntiltEngine.getDeltaTime() % updateCounter == (updateCounter-1) ) rotate(entityList);
-	}
-	
-	private void rotate(List<Entity> entityList){
-		switch(color){
-		case A: color = Color.B; break;
-		case B: color = Color.C; break;
-		case C: color = Color.A; break;
-		}
+	protected void rotate(List<Entity> entityList){
+		color = GlobalRepo.getBlockColor();
 		if (isFull()){
 			setImage(full);
 			collision = Collision.SOLID;
-			for (Entity en: entityList){
-				if (en instanceof Fighter && isTouching(en, 0)) {
-					new SFX.Tech().play();
-					((Fighter)en).reset();
+			if (null != entityList){
+				for (Entity en: entityList){
+					if (en instanceof Fighter && isTouching(en, 0)) {
+						new SFX.Tech().play();
+						((Fighter)en).reset();
+					}
 				}
 			}
 		}
@@ -49,24 +42,42 @@ public abstract class ChangeBlock extends ImmobileEntity {
 			collision = Collision.GHOST;
 		}
 	}
+	
+	protected void setup(String empty, String full){
+		this.empty = new TextureRegion(new Texture(Gdx.files.internal(empty)));
+		this.full  = new TextureRegion(new Texture(Gdx.files.internal(full)));
+		setImage(this.empty);
+		rotate(null);
+	}
 
 	boolean isFull() {
 		return color == correctColor();
 	}
 
-	abstract Color correctColor();
+	abstract GlobalRepo.BlockColor correctColor();
 
-	public static class BlockA extends ChangeBlock{
+	public static class BlockR extends ChangeBlock{
 
-		public BlockA(float posX, float posY) {
+		public BlockR(float posX, float posY) {
 			super(posX, posY);
-			empty = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockaempty.png")));
-			full  = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockafull.png")));
-			setImage(empty);
+			setup("sprites/entities/blockaempty.png", "sprites/entities/blockafull.png");
 		}
 
-		Color correctColor() {
-			return Color.A;
+		GlobalRepo.BlockColor correctColor() {
+			return GlobalRepo.BlockColor.R;
+		}
+
+	}
+
+	public static class BlockG extends ChangeBlock{
+
+		public BlockG(float posX, float posY) {
+			super(posX, posY);
+			setup("sprites/entities/blockbempty.png", "sprites/entities/blockbfull.png");
+		}
+
+		GlobalRepo.BlockColor correctColor() {
+			return GlobalRepo.BlockColor.G;
 		}
 
 	}
@@ -75,28 +86,11 @@ public abstract class ChangeBlock extends ImmobileEntity {
 
 		public BlockB(float posX, float posY) {
 			super(posX, posY);
-			empty = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockbempty.png")));
-			full  = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockbfull.png")));
-			setImage(empty);
+			setup("sprites/entities/blockcempty.png", "sprites/entities/blockcfull.png");
 		}
 
-		Color correctColor() {
-			return Color.B;
-		}
-
-	}
-
-	public static class BlockC extends ChangeBlock{
-
-		public BlockC(float posX, float posY) {
-			super(posX, posY);
-			empty = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockcempty.png")));
-			full  = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/blockcfull.png")));
-			setImage(empty);
-		}
-
-		Color correctColor() {
-			return Color.C;
+		GlobalRepo.BlockColor correctColor() {
+			return GlobalRepo.BlockColor.B;
 		}
 
 	}

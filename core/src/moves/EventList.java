@@ -80,6 +80,11 @@ public class EventList {
 		actionStartTimes.add(start);
 	}
 	
+	public void addGuard(Fighter user, int start, int time) {
+		actionList.add(new Action.ActivateGuard(user, time));
+		actionStartTimes.add(start);
+	}
+	
 	/* effects */
 
 	public void addConstantVelocity(Fighter user, int start, int end, float velX, float velY) {

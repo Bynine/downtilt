@@ -25,6 +25,7 @@ public class GlobalRepo {
 	public static final float HEROHITSTUNMOD = 0.9f;
 	public static final float ENEMYHITSTUNMOD = 1.2f;
 	public static final int WHITEFREEZE = 1;
+	private static BlockColor blockColor = BlockColor.R;
 	
 	/* GLOBAL METHODS */
 
@@ -96,6 +97,26 @@ public class GlobalRepo {
 	static final Hittable genericHittable = new Basic(0, 0, NOTEAM);
 	public static Hittable getGenericHittable(){
 		return genericHittable;
+	}
+	
+	/* MISC */
+	
+
+	public enum BlockColor{
+		R, G, B
+	}
+
+	public static void rotateBlocks() {
+		new SFX.Collect().play();
+		switch(blockColor){
+		case R: blockColor = GlobalRepo.BlockColor.G; break;
+		case G: blockColor = GlobalRepo.BlockColor.B; break;
+		case B: blockColor = GlobalRepo.BlockColor.R; break;
+		}
+	}
+	
+	public static BlockColor getBlockColor(){
+		return blockColor;
 	}
 	
 }

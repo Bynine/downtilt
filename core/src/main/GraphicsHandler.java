@@ -90,15 +90,15 @@ public class GraphicsHandler {
 		cam.position.y = MathUtils.round(MathUtils.clamp(cam.position.y, screenBoundary(SCREENHEIGHT), MapHandler.mapHeight - screenBoundary(SCREENHEIGHT)));
 
 		parallaxCam.position.x = cam.position.x;
-		int parallax = 4;
-		int updateSpeed = 12;
+		int parallax = 2;
+		int updateSpeed = 4;
 		float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
 		parallaxCam.position.x = 
 				(parallaxCam.position.x * (updateSpeed - 1) +
 				( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
 		parallaxCam.position.y = cam.position.y;
 
-		if (!DowntiltEngine.outOfHitlag()) shakeScreen();
+		if (!DowntiltEngine.outOfHitlag() && !DowntiltEngine.isPaused()) shakeScreen();
 		if (DowntiltEngine.justOutOfHitlag()) {
 			cam.position.x = origCamPosition.x;
 			cam.position.y = origCamPosition.y;
@@ -165,6 +165,8 @@ public class GraphicsHandler {
 			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
 			if (fi.isInvincible()) 
 				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g * 2, batch.getColor().g * 2, 1);
+			else if (fi.isGuarding()) 
+				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g + 0.1f, batch.getColor().g - 0.5f, 1);
 			else if (fi.isCharging()) 
 				batch.setColor(batch.getColor().r + 0.1f, batch.getColor().g + 0.1f, batch.getColor().g + 0.1f, 1);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
@@ -176,7 +178,10 @@ public class GraphicsHandler {
 		}
 		if (e instanceof Hittable){
 			Hittable h = (Hittable) e;
-			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) batch.setShader(hitstunShader);
+			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) {
+				if (h instanceof Fighter) ((Fighter)e).setHitstunImage();
+				batch.setShader(hitstunShader);
+			}
 		}
 		batch.draw(e.getImage(), e.getPosition().x, e.getPosition().y);
 		batch.setColor(1, 1, 1, 1);

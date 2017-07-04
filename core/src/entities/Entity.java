@@ -36,7 +36,7 @@ public abstract class Entity {
 	boolean toRemove = false;
 	protected final List<Rectangle> tempRectangleList = new ArrayList<Rectangle>();
 	final Timer jumpTimer = new Timer(8), inActionTimer = new Timer(0);
-	final Timer jumpSquatTimer = new Timer(4), bounceTimer = new Timer(20);
+	final Timer jumpSquatTimer = new Timer(4), bounceTimer = new Timer(10);
 	final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer, bounceTimer));
 
 	public Entity(float posX, float posY){
@@ -83,10 +83,12 @@ public abstract class Entity {
 	}
 
 	void handleTouchHelper(Entity e){
-		if (isTouching(e, 0) && e instanceof Bounce && bounceTimer.timeUp()){
-			((Bounce)e).bounce(this);
-			bounceTimer.start();
-		}
+		if (isTouching(e, 0) && e instanceof Bounce && bounceTimer.timeUp()) handleBounce(e);
+	}
+	
+	protected void handleBounce(Entity e){
+		((Bounce)e).bounce(this);
+		bounceTimer.start();
 	}
 
 	void updatePosition(){
@@ -210,8 +212,7 @@ public abstract class Entity {
 	}
 
 	public Rectangle getHurtBox(){
-		return new Rectangle(position.x, position.y, 30, 30);
-//		return GlobalRepo.makeRectangleFromRectangle(image.getBoundingRectangle());
+		return GlobalRepo.makeRectangleFromRectangle(image.getBoundingRectangle());
 	}
 
 	public void flip(){
@@ -283,14 +284,14 @@ public abstract class Entity {
 	public boolean toRemove() { 
 		return toRemove; 
 	} 
-	
+
 	public boolean inHitstun(){
 		return !hitstunTimer.timeUp();
 	}
-	
+
 	private final int OOBGrace = 4;
 	public boolean isOOB(Rectangle boundary) {
-		
+
 		if (
 				(position.x < (boundary.x - image.getWidth()*OOBGrace)) ||
 				(position.x > (boundary.x + boundary.width + image.getWidth()*OOBGrace))  ||
@@ -314,7 +315,7 @@ public abstract class Entity {
 			return defaultSprite;
 		}
 		return image; 
-		}
+	}
 	protected boolean inGroundedState() { return groundedStates.contains(state);}
 	protected boolean inGroundedState(State prevState) { return groundedStates.contains(prevState); }
 	public Vector2 getCenter() {
@@ -329,11 +330,11 @@ public abstract class Entity {
 	}
 	public Color getColor() { return new Color(1, 1, 1, 1); }
 	public Layer getLayer() { return layer; }
-	private final List<State> groundedStates = new ArrayList<State>(Arrays.asList(State.STAND, State.WALK, State.RUN, State.DASH, State.CROUCH, State.DODGE));
+	private final List<State> groundedStates = new ArrayList<State>(Arrays.asList(State.STAND, State.WALK, State.RUN, State.DASH, State.CROUCH, State.GUARD));
 
 	public static enum Direction{ LEFT, RIGHT }
 	public static enum Layer{ FOREGROUND, BACKGROUND }
-	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, DODGE, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
+	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, GUARD, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
 	public static enum Collision{ SOLID, CREATURE, GHOST }
 	public float getGravity() { return gravity; }
 	public float getFallSpeed() { return fallSpeed; }

@@ -151,4 +151,19 @@ public abstract class Action {
 		}
 	}
 	
+	public static class ActivateGuard extends Action {
+		final Fighter user;
+		final int time;
+		
+		public ActivateGuard(Fighter user, int time){
+			this.user = user;
+			this.time = time;
+		}
+
+		void performAction() {
+			user.setGuard(time);
+		}
+		
+	}
+	
 }

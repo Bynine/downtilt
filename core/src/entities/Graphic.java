@@ -53,6 +53,24 @@ public abstract class Graphic extends Entity{
 		}
 
 	}
+	
+	public static class HitGuardGraphic extends Graphic{
+		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguard.png")));
+		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguardsmall.png")));
+
+		public HitGuardGraphic(float posX, float posY, int dur){
+			super(posX, posY, dur);
+			image = new Sprite(fullSize);
+			position.x -= image.getWidth()/2;
+			position.y -= image.getHeight()/2;
+		}
+
+		void updatePosition(){
+			if (duration.getCounter() > dur/2) setSmall(halfSize);
+			if (duration.timeUp()) setRemove();
+		}
+
+	}
 
 	public static class SmokeTrail extends Graphic{
 		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/poff.png")));

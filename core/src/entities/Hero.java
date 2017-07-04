@@ -34,8 +34,8 @@ public class Hero extends Fighter {
 	public Hero(float posX, float posY, int team) {
 		super(posX, posY, team);
 		baseWeight = 100;
-		runAcc = 2.0f;
-		runSpeed = 5.8f;
+		runAcc = 1.8f;
+		runSpeed = 5.2f;
 		walkAcc = 0.8f;
 		walkSpeed = 3.1f;
 		airSpeed = 3.2f;
@@ -55,6 +55,14 @@ public class Hero extends Fighter {
 		moveList = new M_Hero(this);
 		defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
 	}
+	
+	public boolean isGuarding() { 
+		return state == State.GUARD; 
+		}
+	public boolean isPerfectGuarding() { 
+		int perfectGuard = 30;
+		return state == State.GUARD && guardTimer.getCounter() < perfectGuard; 
+		}
 	
 	public Rectangle getNormalHurtBox(){
 		return GlobalRepo.makeHurtBoxDynamic(this, 0.8f, 0.9f);

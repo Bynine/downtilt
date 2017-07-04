@@ -35,13 +35,16 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move uWeak() {
-		Move m = new Move(user, 20);
-		m.setAnimation("sprites/fighters/bomber/uweak.png", 3, 7);
+		int frame = 8;
+		int frames = 3;
+		
+		Move m = new Move(user, frame * frames);
+		m.setAnimation("sprites/fighters/bomber/uweak.png", frames, frame);
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 30, 60));
-		Hitbox swing = new Hitbox(user, 3.0f, 1.0f, 4, 95, 6, 8, 22, new SFX.LightHit());
-		Hitbox foot =  new Hitbox(user, 3.0f, 1.0f, 5, 85, 0, 34, 14, new SFX.MidHit());
-		m.eventList.addActionCircle(swing, 6, 12);
-		m.eventList.addActionCircle(foot, 8, 15);
+		Hitbox swing = new Hitbox(user, 4.0f, 0.2f, 4, 95, 6, 8, 22, new SFX.LightHit());
+		Hitbox punch = new Hitbox(user, 3.0f, 2.0f, 5, 85, 0, 34, 14, new SFX.MidHit());
+		m.eventList.addActionCircle(swing, frame, frame * 2);
+		m.eventList.addActionCircle(punch, frame + 2, frame * 2 + 2);
 		return m;
 	}
 
@@ -103,9 +106,12 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/scharge.png", frames, frame);
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 30, 60));
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
-		Hitbox h1 = new Hitbox(user, 4.2f, 3.3f, 18, Hitbox.SAMURAI, 18, 2, 22, new SFX.MeatyHit(), c);
+		Hitbox early = new Hitbox(user, 4.2f, 3.3f, 18, Hitbox.SAMURAI, 18, 2, 22, new SFX.MeatyHit(), c);
+		Hitbox late  = new Hitbox(user, 3.2f, 1.3f, 12, Hitbox.SAMURAI, 19, 2, 20, new SFX.MidHit(), c);
+		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
-		m.eventList.addActionCircle(h1, frame * 2, frame * 3);
+		m.eventList.addActionCircle(early, frame * 2, frame * 2 + (frame/2));
+		m.eventList.addActionCircle(late, frame * 2 + (frame/2), frame * 3);
 		return m;
 	}
 
@@ -159,10 +165,10 @@ public class M_Hero extends MoveList_Advanced{
 	public Move nAir() {
 		Move m = new Move(user, 27);
 		m.setAnimation("sprites/fighters/bomber/nair.png", 2, 14);
-		Hitbox earlyBody = new Hitbox(user, 4.0f, 1.3f, 10, 75, -10, 0, 16, new SFX.MidHit());
-		Hitbox earlyFoot = new Hitbox(user, 4.0f, 1.2f, 11, 90, 20, -6, 14, new SFX.MidHit());
-		Hitbox lateBody = new Hitbox(user,  2.0f, 1.0f, 7, 80, -10, 0, 12, new SFX.LightHit());
-		Hitbox lateFoot = new Hitbox(user,  2.0f, 1.0f, 8, 90, 20, -6, 10, new SFX.LightHit());
+		Hitbox earlyBody = new Hitbox(user, 4.0f, 1.3f, 10, 75, -10, 0, 17, new SFX.MidHit());
+		Hitbox earlyFoot = new Hitbox(user, 4.0f, 1.2f, 11, 90, 20, -6, 15, new SFX.MidHit());
+		Hitbox lateBody = new Hitbox(user,  2.0f, 1.0f, 7, 80, -10, 0, 13, new SFX.LightHit());
+		Hitbox lateFoot = new Hitbox(user,  2.0f, 1.0f, 8, 90, 20, -6, 11, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(earlyBody, earlyFoot, lateBody, lateFoot));
 		m.eventList.addActionCircle(earlyBody, 3, 8);
 		m.eventList.addActionCircle(earlyFoot, 3, 8);
@@ -191,20 +197,18 @@ public class M_Hero extends MoveList_Advanced{
 		int frames = 5;
 		int frame = 6;
 		int refresh = 4;
-		int damage = 3;
-		float bkb = 2.1f;
-		float kbg = 0.4f;
+		int damage = 2;
+		float kbg = 0.3f;
 
 		Move m = new Move(user, frames * frame);
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 24, 60));
 		m.setAnimation("sprites/fighters/bomber/dair.png", frames, frame);
-		Hitbox h1 =	new Hitbox(user, bkb, kbg, damage, 80, 0,	0, 	 20, new SFX.LightHit());
-		Hitbox h2 =	new Hitbox(user, bkb, kbg, damage, 80, 6, -12,   20, new SFX.LightHit());
-		new ActionCircleGroup(Arrays.asList(h1, h2));
-		h1.setRefresh(refresh);
-		h2.setRefresh(refresh);
-		m.eventList.addActionCircle(h1, frame, frame * frames);
-		m.eventList.addActionCircle(h2, frame, frame * frames);
+		Hitbox upper = new Hitbox(user, 0.5f, kbg, damage, 280, 0,	0, 20, new SFX.LightHit());
+		Hitbox lower = new Hitbox(user, 2.6f, kbg, damage, 80,  6,-12, 20, new SFX.LightHit());
+		upper.setRefresh(refresh);
+		lower.setRefresh(refresh);
+		m.eventList.addActionCircle(upper, frame, frame * frames);
+		m.eventList.addActionCircle(lower, frame, frame * frames);
 		return m;
 	}
 
@@ -212,14 +216,16 @@ public class M_Hero extends MoveList_Advanced{
 		int frame = 8;
 		int frames = 4;
 
-		Move m = new Move(user, 30);
+		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/fair.png", frames, frame);
-		Hitbox early = new Hitbox(user, 4.1f, 2.8f, 14,  48,  14, -8, 20, new SFX.MeatyHit());
-		Hitbox spike = new Hitbox(user, 4.1f, 3.5f, 16, 290, 20, -22,12, new SFX.HeavyHit());
-		Hitbox late =  new Hitbox(user, 2.1f, 1.0f,  8,  75,  18, -10, 15, new SFX.LightHit());
-		new ActionCircleGroup(Arrays.asList(early, spike, late));
+		Hitbox early1 = new Hitbox(user, 4.1f, 2.8f, 14,  48,  16,  -4, 14, new SFX.MeatyHit());
+		Hitbox early2 = new Hitbox(user, 4.1f, 2.8f, 14,  58,   3,  13, 12, new SFX.MeatyHit());
+		Hitbox spike = new Hitbox(user,  4.1f, 3.5f, 16, 290,  12, -22, 14, new SFX.HeavyHit());
+		Hitbox late =  new Hitbox(user,  2.1f, 1.0f,  8,  75,  18, -10, 15, new SFX.LightHit());
+		new ActionCircleGroup(Arrays.asList(early1, early2, spike, late));
 		spike.setProperty(Property.ELECTRIC);
-		m.eventList.addActionCircle(early, frame*2, frame*3);
+		m.eventList.addActionCircle(early1, frame*2, frame*3);
+		m.eventList.addActionCircle(early2, frame*2, frame*3);
 		m.eventList.addActionCircle(spike, frame*2, frame*2 + 4);
 		m.eventList.addActionCircle(late, frame*3, frame*4);
 		return m;
@@ -489,6 +495,17 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move land(){
 		Move m = new Move(user, 3);
+		if (null != user.getPrevMove()){
+			switch(user.getPrevMove().id){
+			case MoveList_Advanced.IDnair: m = new Move(user, 5); break;
+			case MoveList_Advanced.IDfair: m = new Move(user, 12); break;
+			case MoveList_Advanced.IDbair: m = new Move(user, 8); break;
+			case MoveList_Advanced.IDuair: m = new Move(user, 8); break;
+			case MoveList_Advanced.IDdair: m = new Move(user, 8); break;
+			default: break;
+			}
+		}
+		m.setStopsInAir();
 		m.dontTurn();
 		m.setAnimation("sprites/fighters/bomber/land.png", 1, 1);
 		return m;

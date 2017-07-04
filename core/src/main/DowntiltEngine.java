@@ -75,8 +75,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public void render () {
-		deltaTime++;
-		updateTimers();
+		if (!paused) {
+			deltaTime++;
+			updateTimers();
+		}
 		if (fpsLogToggle) fpsLogger.log();
 		
 		switch(gameState){

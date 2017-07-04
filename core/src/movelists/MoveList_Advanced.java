@@ -79,30 +79,30 @@ public abstract class MoveList_Advanced extends MoveList{
 
 	/* Move Selection */
 
-	private static final int IDslide = 0;
-	private static final int IDuweak = 1;
-	private static final int IDdweak = 2;
-	private static final int IDnweak = 3;
-	private static final int IDsweak = 4;
-	private static final int IDuspecial = 10;
-	private static final int IDdspecial = 11;
-	private static final int IDnspecial = 12;
-	private static final int IDuthrow = 20;
-	private static final int IDdthrow = 21;
-	private static final int IDfthrow = 22;
-	private static final int IDbthrow = 23;
-	private static final int IDuairthrow = 24;
-	private static final int IDdairthrow = 25;
-	private static final int IDfairthrow = 26;
-	private static final int IDbairthrow = 27;
-	private static final int IDucharge = 40;
-	private static final int IDdcharge = 41;
-	private static final int IDncharge = 42;
-	private static final int IDuair = 50;
-	private static final int IDdair = 51;
-	private static final int IDfair = 52;
-	private static final int IDbair = 53;
-	private static final int IDnair = 54;
+	static final int IDslide = 0;
+	static final int IDuweak = 1;
+	static final int IDdweak = 2;
+	static final int IDnweak = 3;
+	static final int IDsweak = 4;
+	static final int IDuspecial = 10;
+	static final int IDdspecial = 11;
+	static final int IDnspecial = 12;
+	static final int IDuthrow = 20;
+	static final int IDdthrow = 21;
+	static final int IDfthrow = 22;
+	static final int IDbthrow = 23;
+	static final int IDuairthrow = 24;
+	static final int IDdairthrow = 25;
+	static final int IDfairthrow = 26;
+	static final int IDbairthrow = 27;
+	static final int IDucharge = 40;
+	static final int IDdcharge = 41;
+	static final int IDncharge = 42;
+	static final int IDuair = 50;
+	static final int IDdair = 51;
+	static final int IDfair = 52;
+	static final int IDbair = 53;
+	static final int IDnair = 54;
 	public static int[] specialRange = {10, 19};
 	public static int[] chargeRange = {40, 49};
 

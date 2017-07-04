@@ -15,7 +15,7 @@ import entities.Hittable;
 public class Hitbox extends ActionCircle{
 	public static final int SAMURAI = 361;
 	public static final int REVERSE = -487;
-	
+
 	protected float BKB, KBG;
 	protected float DAM;
 	protected float ANG;
@@ -64,46 +64,78 @@ public class Hitbox extends ActionCircle{
 		this.charge = charge;
 	}
 
-	private final int meteorAngleSize = 50;
-	private final int downAngle = 270;
-	private final float meteorHitstunMod = 1.25f;
-	private final float meteorGroundMod = -0.75f;
-	public void hitTarget(Hittable target){
-		if (!didHitTarget(target)) return;
+	private boolean guarding = false;
+	private boolean perfectGuarding = false;
 
+	public void hitTarget(Hittable target){
+		final int meteorAngleSize = 50;
+		final int downAngle = 270;
+		final float meteorHitstunMod = 1.25f;
+		final float meteorGroundMod = -0.75f;
+
+		if (!didHitTarget(target)) return;
 		refreshTimer.start();
+		guarding = target.isGuarding();
+		perfectGuarding = target.isPerfectGuarding();
+
+		// Apply user modifications.
 		float staleness = 1;
 		if (null != user) {
-			if (user instanceof Fighter) staleness = getStaleness((Fighter)user);
+			if (user instanceof Fighter) {
+				Fighter fi = (Fighter)user;
+				staleness = getStaleness(fi);
+				if (perfectGuarding) fi.setStun((int)(DAM * 4));
+				else if (guarding) fi.setStun((int)(DAM * 2));
+			}
 			DAM *= user.getPower();
 			KBG *= user.getPower();
 		}
+
 		Vector2 knockback = new Vector2();
 		if (null != charge) heldCharge = charge.getHeldCharge();
+
 		knockback.set(knockbackFormula(target) * staleness, knockbackFormula(target) * staleness);
-				if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
+		if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
 		else 	if (ANG == REVERSE) setReverseAngle(target, knockback);
 		else 						knockback.setAngle(ANG);
+		if (perfectGuarding) knockback.set(0, 0);
+		else if (guarding) knockback.set(knockback.x/4, 0);
 		knockback.x *= applyReverseHitbox(target);
 		if (knockbackFormula(target) > 8 && null != user) user.takeRecoil(recoilFormula(knockback, target));
 		int hitstun = hitstunFormula( target, knockbackFormula(target) * staleness );
+
+		// Checks if the move hits downward and the target is on the ground.
 		boolean groundedMeteor = target.isGrounded() && ((downAngle + meteorAngleSize) > knockback.angle() && knockback.angle() > (downAngle - meteorAngleSize));
 		if (groundedMeteor){
 			knockback.y *= meteorGroundMod;
 			hitstun *= meteorHitstunMod;
 		}
-		target.takeDamagingKnockback(knockback, heldCharge * DAM * staleness, hitstun, hitstunType, user);
-		if (property == Property.STUN){
-			target.stun((int) (DAM * 6));
-		}
+
+		float finalDamage = heldCharge * DAM * staleness;
+		if (perfectGuarding) finalDamage = 0;
+		else if (guarding) finalDamage *= 0.5f;
+		target.takeDamagingKnockback(knockback, finalDamage, hitstun, hitstunType, user);
+		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
+		
 		startHitlag(target);
-		MapHandler.addEntity(new Graphic.HitGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+		if (perfectGuarding) {
+			sfx = new SFX.EmptyHit();
+			new SFX.Victory().play();
+			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+		}
+		else if (guarding) {
+			sfx = new SFX.EmptyHit();
+			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+		}
+		else{
+			MapHandler.addEntity(new Graphic.HitGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+		}
 		sfx.play();
 		hitFighterList.add(target);
 	}
-	
-	float staleMod = 0.94f;
+
 	private float getStaleness(Fighter user) {
+		float staleMod = 0.94f;
 		IDMove currMove = user.getActiveMove();
 		if (null == currMove) return 1;
 		float staleness = 1/staleMod;
@@ -137,7 +169,7 @@ public class Hitbox extends ActionCircle{
 		if (knockbackFormula(target) < minSamuraiKnockback && target.isGrounded()) knockback.setAngle(0);
 		else knockback.setAngle(samuraiKnockbackAngle);
 	}
-	
+
 	protected void setReverseAngle(Hittable target, Vector2 knockback){
 		knockback.setAngle(-target.getVelocity().angle());
 	}
@@ -154,7 +186,7 @@ public class Hitbox extends ActionCircle{
 		final int hitlagCap = 24;
 		final float hitlagRatio = 0.6f;
 		final float electricHitlagMultiplier = 1.5f;
-		
+
 		int hitlag = (int) (knockback * hitlagRatio);
 		if (hitlag > hitlagCap) hitlag = hitlagCap;
 		if (property == Property.ELECTRIC) hitlag *= electricHitlagMultiplier;
@@ -162,18 +194,22 @@ public class Hitbox extends ActionCircle{
 	}
 
 	public int hitstunFormula(Hittable target, float knockback){
-		final float hitstunRatio = 4f;
-		if (BKB + KBG == 0) return 0;
-		return  2 + (int) (knockback * hitstunRatio * target.getHitstun());
+		//final float hitstunRatio = 4f;
+		final float hitstunRatio = 5f;
+		if (BKB + KBG == 0 || perfectGuarding) return 0;
+		int hitstun = 2 + (int) (knockback * hitstunRatio * target.getHitstun());
+		if (guarding) hitstun = (int) (hitstun * 0.35);
+		return hitstun;
 	}
 
 	public float knockbackFormula(Hittable target){
 		final float crouchCancelMod = .75f;
-		final float kbgMod = 0.029f;
+		//final float kbgMod = 0.029f;
+		final float kbgMod = 0.023f;
 		final float weightMod = 0.01f;
 		final float minKnockback = 0.2f;
-		
-		if (BKB + KBG == 0) return 0;
+
+		if (BKB + KBG == 0 || perfectGuarding) return 0;
 		float knockback = heldCharge * (BKB + ( (KBG * target.getPercentage() * kbgMod) / (target.getWeight() * weightMod) ));
 		knockback -= target.getArmor();
 		if (target instanceof Fighter){
@@ -213,5 +249,5 @@ public class Hitbox extends ActionCircle{
 	public Color getColor() {
 		return new Color(1, 0.2f, 0.2f, 0.75f);
 	}
-	
+
 }

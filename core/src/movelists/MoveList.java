@@ -9,6 +9,7 @@ public abstract class MoveList {
 	protected final Fighter user;
 	public static final int noMove = -2;
 	public static final int noStaleMove = -1;
+	public static final int aerial = 1;
 
 	MoveList(Fighter user){
 		this.user = user;
@@ -34,7 +35,7 @@ public abstract class MoveList {
 	public IDMove selectNormalMove(){
 		if (user.isRunning()) return new IDMove(slide(), noStaleMove);
 		else if (user.isGrounded()) return new IDMove(nWeak(), noStaleMove);
-		else return new IDMove(nAir(), noStaleMove);
+		else return new IDMove(nAir(), aerial);
 	}
 
 	public IDMove selectSpecialMove(){
@@ -52,7 +53,7 @@ public abstract class MoveList {
 
 	public IDMove selectCharge() {
 		if (user.isGrounded()) return new IDMove(nCharge(), noStaleMove);
-		else return new IDMove(nAir(), noStaleMove);
+		else return new IDMove(nAir(), aerial);
 	}
 
 	public IDMove selectCStickUp() {

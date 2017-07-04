@@ -46,7 +46,7 @@ public class Move {
 	public boolean causesHelpless() { return helpless; }
 	public void setHelpless() { helpless = true; }
 	public void setStopsInAir() { stopsInAir = true;  }
-	public boolean stopsInAir() { return stopsInAir; }
+	public boolean doesStopInAir() { return stopsInAir; }
 	public boolean continuesOnLanding() { return continueOnLanding; }
 	public boolean isNoTurn() { return noTurn; }
 	public void dontTurn() { noTurn = true; }

@@ -19,9 +19,10 @@ public class EntityLoader {
 		case "spikes": return new Hazard.Spikes(x, y);
 		case "bounceleft": return new Bounce.BounceLeft(x, y);
 		case "bounceright": return new Bounce.BounceRight(x, y);
-		case "changea": return new ChangeBlock.BlockA(x, y);
-		case "changeb": return new ChangeBlock.BlockB(x, y);
-		case "changec": return new ChangeBlock.BlockC(x, y);
+		case "changea": return new ChangeBlock.BlockR(x, y);
+		case "changeb": return new ChangeBlock.BlockG(x, y);
+		case "changec": return new ChangeBlock.BlockB(x, y);
+		case "switchblock": return new SwitchBlock(x, y);
 		default: {
 			return new Hurlable.TrashCan(x, y);
 		}
