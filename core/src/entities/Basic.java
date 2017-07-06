@@ -171,7 +171,7 @@ public class Basic extends Fighter {
 			baseHitstun = 0.5f;
 			basePower = 2.1f;
 			baseWeight = 350;
-			powerTimer.start();
+			powerTimer.reset();
 		}
 
 

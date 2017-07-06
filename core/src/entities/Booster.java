@@ -18,7 +18,7 @@ public class Booster extends ImmobileEntity {
 		if (isTouching(e, 0) && wait.timeUp()){
 			e.velocity.x += boostX;
 			e.velocity.y += boostY;
-			wait.start();
+			wait.reset();
 		}
 	}
 

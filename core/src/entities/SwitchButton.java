@@ -31,7 +31,7 @@ public class SwitchButton extends Hittable {
 	}
 
 	private void changeBlocks(){
-		cantBeHit.start();
+		cantBeHit.reset();
 		GlobalRepo.rotateBlocks();
 	}
 

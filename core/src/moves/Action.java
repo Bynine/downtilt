@@ -146,7 +146,7 @@ public abstract class Action {
 			en.getVelocity().y = velY;
 			// TODO: dejankify this
 			en.getHitstunTimer().setEndTime(60);
-			en.getHitstunTimer().start();
+			en.getHitstunTimer().reset();
 			MapHandler.addEntity(en);
 		}
 	}

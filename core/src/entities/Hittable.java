@@ -127,8 +127,8 @@ public abstract class Hittable extends Entity {
 		}
 		SFX.proportionalHit(h.getDamage()).play();
 		takeKnockIntoKnockback(knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
-		hurtler.knockIntoTimer.start();
-		knockIntoTimer.start();
+		hurtler.knockIntoTimer.reset();
+		knockIntoTimer.reset();
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
 	
@@ -166,7 +166,7 @@ public abstract class Hittable extends Entity {
 		initialHitAngle = knockback.angle();
 		if (state == State.HELPLESS) state = State.FALL;
 		hitstunTimer.setEndTime(hitstun);
-		hitstunTimer.start();
+		hitstunTimer.reset();
 		hitstunType = ht;
 		guardTimer.end();
 		disrupt();
@@ -184,7 +184,7 @@ public abstract class Hittable extends Entity {
 		if (!doesCollide(newPosX, newPosY)) position.set(newPosX, newPosY);
 		else if (!doesCollide(position.x, newPosY)) position.set(position.x, newPosY);
 		caughtTimer.setEndTime(caughtTime);
-		caughtTimer.start();
+		caughtTimer.reset();
 		disrupt();
 	}
 	
@@ -195,7 +195,7 @@ public abstract class Hittable extends Entity {
 	
 	public void stun(int duration) {
 		stunTimer.setEndTime(duration);
-		stunTimer.start();
+		stunTimer.reset();
 	}
 	
 	public void endAttack(){
@@ -228,11 +228,11 @@ public abstract class Hittable extends Entity {
 	public float getWallJumpStrengthY() { return wallJumpStrengthY; }
 	public float getWallSlideSpeed() { return wallSlideSpeed * equipment.getWallSlideMod(); }
 	
-	public void addPower(float add){ powerTimer.start(); }
-	public void addDefense(float add){ defenseTimer.start(); }
+	public void addPower(float add){ powerTimer.reset(); }
+	public void addDefense(float add){ defenseTimer.reset(); }
 	//public void addArmor(float add){ armorAdd += add; }
-	public void addSpeed(float add){ speedTimer.start(); }
-	public void addAir(float add){ airTimer.start(); }
+	public void addSpeed(float add){ speedTimer.reset(); }
+	public void addAir(float add){ airTimer.reset(); }
 	
 	public float getSpeedMod(){ return checkTimerForBonus(speedTimer) * equipment.getSpeedMod(); }
 	public float getAirMod(){ return checkTimerForBonus(airTimer); }

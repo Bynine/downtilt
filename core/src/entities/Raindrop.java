@@ -1,5 +1,8 @@
 package entities;
 
+import java.util.List;
+
+import timers.DurationTimer;
 import main.MapHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -23,8 +26,8 @@ public class Raindrop extends Entity {
 		if (collision == Collision.GHOST) return false;
 		for (Rectangle r : tempRectangleList){
 			Rectangle thisR = getCollisionBox(x, y);
-			boolean upThroughThinPlatform = r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
-			if (!upThroughThinPlatform && Intersector.overlaps(thisR, r) && thisR != r && !toRemove) splish();
+			boolean thinPlatform = r.getHeight() <= 1;
+			if (!thinPlatform && Intersector.overlaps(thisR, r) && thisR != r && !toRemove) splish();
 		}
 		return false;
 	}
@@ -36,6 +39,8 @@ public class Raindrop extends Entity {
 	}
 	
 	private class Raindroplet extends Entity{
+		
+		DurationTimer life = new DurationTimer(12);
 
 		public Raindroplet(float posX, float posY) {
 			super(posX, posY);
@@ -45,14 +50,12 @@ public class Raindrop extends Entity {
 			velocity.y = (float) (Math.random() + 2);
 		}
 		
-		public boolean doesCollide(float x, float y){
-			if (collision == Collision.GHOST) return false;
-			for (Rectangle r : tempRectangleList){
-				Rectangle thisR = getCollisionBox(x, y);
-				boolean upThroughThinPlatform = r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
-				if (!upThroughThinPlatform && Intersector.overlaps(thisR, r) && thisR != r) setRemove();
-			}
-			return false;
+		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+			handleMovement();
+			limitingForces(rectangleList, entityList);
+			updatePosition();
+			life.countUp();
+			if (life.timeUp()) setRemove();
 		}
 		
 	}

@@ -69,11 +69,11 @@ public class ChallengeProgression {
 	 * List of challenges to be iterated through.
 	 */
 	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList(
-//			new  ChallengeNorm(new Stage_Sky(), waveStandard)
+//			new  ChallengeNorm(new Stage_Standard(), waveTest)
 //			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
-//			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
 //			,new ChallengeNorm(new Stage_Blocks(), waveBlocks)
-//			,new ChallengeNorm(new Stage_Dungeon(), waveFinal)
+//			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
+//			,new ChallengeNorm(new Stage_Sky(), waveFinal)
 
 			new  ChallengeNorm(new Stage_Standard(), waveStandard)
 			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)

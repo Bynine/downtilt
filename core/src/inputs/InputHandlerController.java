@@ -152,13 +152,13 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	
 	public boolean pause(){ 
 		boolean paused = pauseSelectBuffer.timeUp() && control.getButton(commandPause);
-		if (paused) pauseSelectBuffer.start();
+		if (paused) pauseSelectBuffer.reset();
 		return paused;
 	}
 	
 	public boolean select(){ 
 		boolean selected = pauseSelectBuffer.timeUp() && control.getButton(commandSelect);
-		if (selected) pauseSelectBuffer.start();
+		if (selected) pauseSelectBuffer.reset();
 		return selected;
 	}
 

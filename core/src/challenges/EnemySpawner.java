@@ -65,11 +65,11 @@ public class EnemySpawner {
 		}
 		enemy.setInputHandler(new InputHandlerCPU(enemy, enemyType.brain));
 		switch (enemyType.powerUp){
-		case POWER: enemy.powerTimer.start(); break;
-		case DEFENSE: enemy.defenseTimer.start(); break;
-		case SPEED: enemy.speedTimer.start(); break;
-		case AIR: enemy.airTimer.start(); break;
-		case ALL: enemy.powerTimer.start(); enemy.defenseTimer.start(); enemy.speedTimer.start(); enemy.airTimer.start(); break;
+		case POWER: enemy.powerTimer.reset(); break;
+		case DEFENSE: enemy.defenseTimer.reset(); break;
+		case SPEED: enemy.speedTimer.reset(); break;
+		case AIR: enemy.airTimer.reset(); break;
+		case ALL: enemy.powerTimer.reset(); enemy.defenseTimer.reset(); enemy.speedTimer.reset(); enemy.airTimer.reset(); break;
 		case NONE: break;
 		}
 		MapHandler.addEntity(enemy);

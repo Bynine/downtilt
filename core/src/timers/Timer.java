@@ -10,7 +10,7 @@ public class Timer {
 		counter = endTime + 1;
 	}
 	
-	public void start(){ counter = 0; }
+	public void reset(){ counter = 0; }
 	
 	public void countUp(){ counter++; }
 	

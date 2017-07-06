@@ -45,7 +45,7 @@ public class Stage_Rooftop extends Stage {
 		void update(){
 			lightningTimer.countUp();
 			if (lightningTimer.timeUp() && DowntiltEngine.getDeltaTime() % 30 == 0 && Math.random() < 0.07){
-				lightningTimer.start();
+				lightningTimer.reset();
 				lightningPos = makeNewLightningPos();
 				MapHandler.addEntity(new Graphic.Sparks(lightningPos.x, lightningPos.y, lightningTimer.getEndTime() ));
 			}

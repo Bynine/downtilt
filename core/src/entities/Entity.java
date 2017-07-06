@@ -88,7 +88,7 @@ public abstract class Entity {
 	
 	protected void handleBounce(Entity e){
 		((Bounce)e).bounce(this);
-		bounceTimer.start();
+		bounceTimer.reset();
 	}
 
 	void updatePosition(){
@@ -142,7 +142,7 @@ public abstract class Entity {
 		tempRectangleList.clear();
 		tempRectangleList.addAll(mapRectangleList);
 		for (Entity en: entityList){
-			if (en.getCollision() == Collision.SOLID) tempRectangleList.add(en.getImage().getBoundingRectangle());
+			if (en.getCollision() == Collision.SOLID) tempRectangleList.add(en.getCollisionBox(en.position.x, en.position.y));
 		}
 	}
 

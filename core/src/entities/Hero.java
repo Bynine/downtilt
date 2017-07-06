@@ -60,7 +60,7 @@ public class Hero extends Fighter {
 		return state == State.GUARD; 
 		}
 	public boolean isPerfectGuarding() { 
-		int perfectGuard = 30;
+		int perfectGuard = 10;
 		return state == State.GUARD && guardTimer.getCounter() < perfectGuard; 
 		}
 	

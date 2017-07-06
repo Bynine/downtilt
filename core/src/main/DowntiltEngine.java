@@ -34,7 +34,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static boolean 	fpsLogToggle 	= false;
 	public static boolean 	p2Toggle 		= false;
 	public static boolean 	debugToggle 	= false;
-	public static boolean	musicToggle		= true;
+	public static boolean	musicToggle		= false;
 	private static float	volume			= 1f;
 	private static ShaderProgram p2Palette;
 
@@ -108,12 +108,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 	public static void causeHitlag(int length){
 		hitlagTimer.setEndTime(length);
-		hitlagTimer.start();
+		hitlagTimer.reset();
 	}
 	
 	public static void wait(int length){
 		waitTimer.setEndTime(length);
-		waitTimer.start();
+		waitTimer.reset();
 	}
 
 	public static void pauseGame() {

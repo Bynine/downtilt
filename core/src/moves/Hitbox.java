@@ -75,7 +75,7 @@ public class Hitbox extends ActionCircle{
 		final float meteorGroundMod = -0.75f;
 
 		if (!didHitTarget(target)) return;
-		refreshTimer.start();
+		refreshTimer.reset();
 		guarding = target.isGuarding();
 		perfectGuarding = target.isPerfectGuarding();
 
@@ -229,7 +229,7 @@ public class Hitbox extends ActionCircle{
 		if (doesRefresh && refreshTimer.timeUp()){
 			reset();
 			if (group != null) for (ActionCircle ac: group.connectedCircles) ac.reset();
-			refreshTimer.start();
+			refreshTimer.reset();
 		}
 	}
 
