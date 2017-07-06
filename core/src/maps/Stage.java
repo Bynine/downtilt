@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.DowntiltEngine;
+import main.GlobalRepo;
+import main.MapHandler;
 import moves.ActionCircle;
 
 import com.badlogic.gdx.audio.Music;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import entities.ChangeBlock;
 import entities.Entity;
 import entities.Fighter;
+import entities.Raindrop;
 
 public abstract class Stage {
 	protected MapObjects mapCollision, mapEntities;
@@ -96,6 +99,15 @@ public abstract class Stage {
 	
 	public String getName(){
 		return name;
+	}
+	
+	protected void rain(){
+		float raindropY = 16f * GlobalRepo.TILE;
+		if (DowntiltEngine.getDeltaTime() % 6 == 0 || DowntiltEngine.getDeltaTime() % 5 == 3) MapHandler.addEntity(new Raindrop(getRaindropLocation(), raindropY));
+	}
+	
+	private float getRaindropLocation(){
+		return (float) ((10 * GlobalRepo.TILE) + (Math.random() * 24 * GlobalRepo.TILE));
 	}
 
 	public abstract TiledMap getMap();

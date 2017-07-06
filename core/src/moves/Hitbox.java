@@ -1,5 +1,6 @@
 package moves;
 
+import main.GlobalRepo;
 import main.MapHandler;
 import main.SFX;
 import main.DowntiltEngine;
@@ -128,7 +129,10 @@ public class Hitbox extends ActionCircle{
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
 		else{
-			MapHandler.addEntity(new Graphic.HitGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+			if (target.getTeam() == GlobalRepo.BADTEAM) 
+				MapHandler.addEntity(new Graphic.HitGoodGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+			if (target.getTeam() == GlobalRepo.GOODTEAM) 
+				MapHandler.addEntity(new Graphic.HitBadGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
 		sfx.play();
 		hitFighterList.add(target);

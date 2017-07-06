@@ -12,7 +12,7 @@ import entities.Hurlable;
 public class Stage_Mushroom extends Stage {
 
 	public Stage_Mushroom(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/heartbeat.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
 		name = "STANDARD";
 	}

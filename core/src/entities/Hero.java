@@ -43,7 +43,7 @@ public class Hero extends Fighter {
 		friction = 0.85f;
 		gravity = -0.52f;
 		jumpAcc = 0.92f;
-		dashStrength = 0f;
+		dashStrength = -2f;
 		doubleJumpStrength = 9.7f;
 		wallJumpStrengthX = 6.5f;
 		wallJumpStrengthY = 8.4f;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class SwitchBlock extends Hittable {
+public class SwitchButton extends Hittable {
 
 	static Timer cantBeHit = new Timer(30);
 	private TextureRegion green = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockgreen.png")));
@@ -16,11 +16,10 @@ public class SwitchBlock extends Hittable {
 	private TextureRegion blue = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockblue.png")));
 	private TextureRegion grey = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockgrey.png")));
 
-	public SwitchBlock(float posX, float posY) {
+	public SwitchButton(float posX, float posY) {
 		super(posX, posY);
-		collision = Collision.SOLID;
 		timerList.add(cantBeHit);
-		touchRadius = -8;
+		touchRadius = 0;
 	}
 
 	void updatePosition(){

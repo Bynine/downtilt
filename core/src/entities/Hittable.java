@@ -234,7 +234,8 @@ public abstract class Hittable extends Entity {
 	public void addSpeed(float add){ speedTimer.start(); }
 	public void addAir(float add){ airTimer.start(); }
 	
-	private float getSpeedMod(){ return checkTimerForBonus(speedTimer) * equipment.getSpeedMod(); }
+	public float getSpeedMod(){ return checkTimerForBonus(speedTimer) * equipment.getSpeedMod(); }
+	public float getAirMod(){ return checkTimerForBonus(airTimer); }
 	
 	public boolean isInvincible(){ return hitstunTimer.getCounter() == 0; }
 	

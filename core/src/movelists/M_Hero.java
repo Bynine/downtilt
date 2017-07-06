@@ -71,9 +71,10 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 18, 50));
 		Hitbox inner =	new Hitbox(user, 2.0f, 2.8f,  9, 60,  3, 0, 10, new SFX.MidHit());
 		Hitbox outer =	new Hitbox(user, 2.2f, 2.8f, 10, 60, 10, 0, 10, new SFX.MidHit());
-		Hitbox fire =	new Hitbox(user, 2.0f, 2.6f,  9, 70, 21, 0, 12, new SFX.MidHit());
+		Hitbox fire =	new Hitbox(user, 2.0f, 2.6f,  3, 80, 22, 0, 13, new SFX.SharpHit());
 		Hitbox inner2 = new Hitbox(user, 1.8f, 1.0f,  5, 60,  6, 0, 10, new SFX.LightHit());
 		Hitbox outer2 = new Hitbox(user, 2.0f, 1.0f,  6, 60, 14, 0, 10, new SFX.LightHit());
+		fire.setRefresh(3);
 		new ActionCircleGroup(Arrays.asList(inner, outer, fire, inner2, outer2));
 		m.eventList.addActionCircle(inner, frame, frame * 2);
 		m.eventList.addActionCircle(outer, frame, frame * 2);
@@ -90,7 +91,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox early = new Hitbox(user, 4.0f, 2.4f, 10, 65, 12, -4, 12, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 3.0f, 1.0f, 07, 90, 16, -4,  8, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addConstantVelocity(user, 4, 16, 9, Action.ChangeVelocity.noChange);
+		m.eventList.addConstantVelocity(user, 4, 16, user.getSpeedMod() * 9, Action.ChangeVelocity.noChange);
 		m.eventList.addActionCircle(early, 3, 10);
 		m.eventList.addActionCircle(late, 11, 20);
 		return m;
@@ -99,8 +100,8 @@ public class M_Hero extends MoveList_Advanced{
 	/* CHARGE ATTACKS */
 
 	public Move nCharge() {
-		int frame = 10;
-		int frames = 4;
+		int frame = 9;
+		int frames = 6;
 
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/scharge.png", frames, frame);
@@ -108,10 +109,12 @@ public class M_Hero extends MoveList_Advanced{
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
 		Hitbox early = new Hitbox(user, 4.2f, 3.3f, 18, Hitbox.SAMURAI, 18, 2, 22, new SFX.MeatyHit(), c);
 		Hitbox late  = new Hitbox(user, 3.2f, 1.3f, 12, Hitbox.SAMURAI, 19, 2, 20, new SFX.MidHit(), c);
+		m.setStopsInAir();
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
-		m.eventList.addActionCircle(early, frame * 2, frame * 2 + (frame/2));
-		m.eventList.addActionCircle(late, frame * 2 + (frame/2), frame * 3);
+		m.eventList.addConstantVelocity(user, frame * 2, frame * 3, user.getSpeedMod() * 8, 0);
+		m.eventList.addActionCircle(early, frame * 2, frame * 3);
+		m.eventList.addActionCircle(late, frame * 3, frame * 4);
 		return m;
 	}
 
@@ -261,7 +264,7 @@ public class M_Hero extends MoveList_Advanced{
 		h1.setMovesAheadMod(2);
 		m.eventList.addConstantVelocity(user, 0, start, ConstantVelocity.noChange, 0);
 		m.eventList.addUseSpecial(user, start - 1, -1);
-		m.eventList.addConstantAngledVelocity(user, start, end, 11);
+		m.eventList.addConstantAngledVelocity(user, start, end, 11 * user.getAirMod());
 		m.eventList.addActionCircle(h1, start, end);
 		m.eventList.addVelocityChange(user, end, 0, 0);
 		m.setHelpless();

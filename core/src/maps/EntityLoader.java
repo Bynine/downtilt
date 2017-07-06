@@ -22,7 +22,7 @@ public class EntityLoader {
 		case "changea": return new ChangeBlock.BlockR(x, y);
 		case "changeb": return new ChangeBlock.BlockG(x, y);
 		case "changec": return new ChangeBlock.BlockB(x, y);
-		case "switchblock": return new SwitchBlock(x, y);
+		case "switchblock": return new SwitchButton(x, y);
 		default: {
 			return new Hurlable.TrashCan(x, y);
 		}

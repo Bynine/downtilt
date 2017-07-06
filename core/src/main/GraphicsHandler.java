@@ -131,7 +131,7 @@ public class GraphicsHandler {
 		renderer.render(arr);
 
 		renderer.setView(cam);
-		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
+		int numLayers = MapHandler.activeMap.getLayers().getCount() - 2;  // render tiles
 		arr = new int[numLayers];
 		for (int i = 0; i < arr.length; ++i) {
 			arr[i] = i + 2;
@@ -144,8 +144,20 @@ public class GraphicsHandler {
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
-		arr = new int[]{numLayers-2, numLayers-1};  // render foreground
+//		batch.begin(); 
+//		arr = new int[]{numLayers-2};  // render middle
+//		renderer.render(arr);
+//		batch.end();
+//		
+		batch.begin(); 
+		arr = new int[]{numLayers-1};  // render front
 		renderer.render(arr);
+		batch.end();
+		
+		batch.begin();  // render fg entities
+		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.FRONT) renderEntity(e);
+		batch.end();
+		font.setColor(1, 1, 1, 1);
 
 		if (DowntiltEngine.debugToggle) debugRender();
 

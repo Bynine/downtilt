@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Blocks extends Stage {
 
 	public Stage_Blocks(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/heartbeat.mp3"));
 		setup();
 	}
 

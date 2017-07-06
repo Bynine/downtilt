@@ -35,39 +35,58 @@ public abstract class Graphic extends Entity{
 		position.x -= image.getWidth()/2;
 		position.y -= image.getHeight()/2;
 	}
-
-	public static class HitGraphic extends Graphic{
-		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit.png")));
-		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitsmall.png")));
+	
+	private static abstract class HitGraphic extends Graphic{
+		private TextureRegion halfSize;
 
 		public HitGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			image = new Sprite(fullSize);
+		}
+		
+		protected void setup(TextureRegion fullSize, TextureRegion halfSize){
+			this.halfSize = halfSize;
+			if (duration.getEndTime() < 4) image = new Sprite(halfSize);
+			else image = new Sprite(fullSize);
 			position.x -= image.getWidth()/2;
 			position.y -= image.getHeight()/2;
 		}
 
 		void updatePosition(){
-			if (duration.getCounter() > dur/2) setSmall(halfSize);
+			if (duration.getCounter() > 4) setSmall(halfSize);
 			if (duration.timeUp()) setRemove();
+		}
+		
+	}
+
+	public static class HitGoodGraphic extends HitGraphic{
+		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit.png")));
+		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitsmall.png")));
+
+		public HitGoodGraphic(float posX, float posY, int dur){
+			super(posX, posY, dur);
+			setup(fullSize, halfSize);
 		}
 
 	}
 	
-	public static class HitGuardGraphic extends Graphic{
+	public static class HitBadGraphic extends HitGraphic{
+		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit2.png")));
+		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit2small.png")));
+
+		public HitBadGraphic(float posX, float posY, int dur){
+			super(posX, posY, dur);
+			setup(fullSize, halfSize);
+		}
+
+	}
+	
+	public static class HitGuardGraphic extends HitGraphic{
 		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguard.png")));
 		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguardsmall.png")));
 
 		public HitGuardGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			image = new Sprite(fullSize);
-			position.x -= image.getWidth()/2;
-			position.y -= image.getHeight()/2;
-		}
-
-		void updatePosition(){
-			if (duration.getCounter() > dur/2) setSmall(halfSize);
-			if (duration.timeUp()) setRemove();
+			setup(fullSize, halfSize);
 		}
 
 	}

@@ -20,7 +20,7 @@ public abstract class Collectible extends Entity {
 	public Collectible(float posX, float posY) {
 		super(posX, posY);
 		timerList.add(noTouchie);
-		airFriction = 0.99f;
+		airFriction = 0.94f;
 	}
 
 	void handleTouchHelper(Entity e){
