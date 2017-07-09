@@ -11,12 +11,13 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Randall extends Entity {
 	
-	Timer changeDirection = new Timer(285);
+	Timer changeDirection = new Timer(305);
 
 	public Randall(float posX, float posY) {
 		super(posX, posY);
 		setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/randall.png"))));
 		collision = Collision.SOLID;
+		layer = Layer.BACKGROUND;
 		timerList.add(changeDirection);
 		velocity.x = -2;
 	}
@@ -33,7 +34,8 @@ public class Randall extends Entity {
 	
 	Rectangle getCollisionBox(float x, float y){
 		Rectangle r = image.getBoundingRectangle();
-		r.setX(x); r.setY(y + r.getHeight() - 1); r.setHeight(1);
+		int widthReduction = 8;
+		r.setX(x + widthReduction/2); r.setY(y + r.getHeight() - 1); r.setHeight(1); r.setWidth(r.getWidth() - widthReduction);
 		return r;
 	}
 

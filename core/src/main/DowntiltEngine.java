@@ -32,7 +32,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 	/* DEBUG */
 	public static boolean 	fpsLogToggle 	= false;
-	public static boolean 	p2Toggle 		= false;
 	public static boolean 	debugToggle 	= false;
 	public static boolean	musicToggle		= false;
 	private static float	volume			= 1f;
@@ -49,12 +48,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		DebugMenu.begin();
 		MainMenu.begin();
 		challengeProgression = new ChallengeProgression();
-
-		if (p2Toggle){
-			Fighter player2 = new Hero(MapHandler.activeRoom.getStartPosition().x, MapHandler.activeRoom.getStartPosition().y, 0);
-			beginFighter(player2, 1);
-			MapHandler.addEntity(player2);
-		}
 
 	}
 	
@@ -143,6 +136,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		for (Fighter player: newPlayers) {
 			beginFighter(player, i);
 			if (i >= 1) player.setPalette(p2Palette);
+			System.out.println(player.getInputHandler().getControllerName());
 			i++;
 		}
 		GraphicsHandler.begin();
@@ -172,6 +166,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static boolean outOfHitlag(){ return hitlagTimer.timeUp(); }
 	public static boolean justOutOfHitlag() { return hitlagTimer.timeJustUp(); }
 	public static GameState getGameState() { return gameState; }
-	public static InputHandlerPlayer getPrimaryInputHandler() { return primaryInputHandler; }
+	public static InputHandlerPlayer getPrimaryInputHandler() { 
+		return primaryInputHandler; 
+		}
 
 }

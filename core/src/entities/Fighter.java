@@ -733,9 +733,14 @@ public abstract class Fighter extends Hittable{
 		else return activeMoveIsCharge() && getInputHandler().isCharging();
 	}
 	public boolean groundBelow(){
-		Rectangle r = new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 16);
-		for (Rectangle tr: tempRectangleList) if (r.overlaps(tr)) return true;
+		Rectangle r = groundBelowRect();
+		for (Rectangle tr: tempRectangleList) {
+			if (Intersector.overlaps(r, tr)) return true;
+		}
 		return false;
+	}
+	public Rectangle groundBelowRect(){
+		return new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 32);
 	}
 	
 	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }

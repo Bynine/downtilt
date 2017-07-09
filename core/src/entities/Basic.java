@@ -37,7 +37,6 @@ public class Basic extends Fighter {
 		super(posX, posY, team);
 		setInputHandler(new InputHandlerCPU(this, MookBrain.class));
 		image = new Sprite(standImage.getKeyFrame(0));
-		//gravity = -0.3f;
 		gravity = -0.45f;
 		baseWeight = 90;
 		jumpAcc = 0.49f;

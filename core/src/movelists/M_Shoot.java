@@ -11,74 +11,90 @@ public class M_Shoot extends MoveList {
 	public M_Shoot(Fighter user) {
 		super(user);
 	}
+	private float xGenericSpeed = 7;
+	private float yGenericSpeed = 4;
+	private int genericFrameLength = 30;
 
 	@Override
 	public Move nWeak() {
-		int frames = 1;
-		int frame = 60;
+		int frames = 2;
+		int frame = genericFrameLength;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addNewEntity(30,
-				(new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 2, 12
+		m.eventList.addNewEntity(frame,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * xGenericSpeed, yGenericSpeed
 				);
 		return m;
 	}
 
 	@Override
 	public Move slide() {
-		int frames = 1;
-		int frame = 60;
+		int frames = 2;
+		int frame = genericFrameLength;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addNewEntity(30,
-				(new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 8, 3
+		m.eventList.addNewEntity(frame,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * xGenericSpeed, yGenericSpeed
 				);
 		return m;
 	}
 
 	@Override
 	public Move nAir() {
-		int frames = 1;
-		int frame = 40;
-		int start = 20;
+		int frames = 2;
+		int frame = 20;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addVelocityChange(user, start, -4, 8);
-		m.eventList.addNewEntity(start, (new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+		m.eventList.addVelocityChange(user, frame, -4, 8);
+		m.eventList.addNewEntity(frame, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 3, -6
 				);
 		return m;
 	}
 
 	@Override
+	/**
+	 * Fires multiple balls
+	 */
 	public Move nCharge() {
-		int frames = 1;
-		int frame = 60;
+		int frames = 4;
+		int frame = 25;
 
 		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addNewEntity(30,
-				(new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 4, 9
+		m.setAnimation("sprites/fighters/shoot/ncharge.png", frames, frame);
+		m.eventList.addNewEntity(frame * 2,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * xGenericSpeed, yGenericSpeed
+				);
+		m.eventList.addNewEntity(frame * 2 + 10,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * xGenericSpeed, yGenericSpeed
+				);
+		m.eventList.addNewEntity(frame * 2 + 20,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * xGenericSpeed, yGenericSpeed
 				);
 		return m;
 	}
 
 	@Override
+	/**
+	 * Fires a ball upward
+	 */
 	public Move nSpecial() {
-		int frames = 1;
-		int frame = 60;
+		int frames = 2;
+		int frame = genericFrameLength;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.eventList.addNewEntity(30,
-				(new Hurlable.ShootBall(GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 4, 6
+		m.eventList.addNewEntity(frame,
+				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * 3, 10
 				);
 		return m;
 	}
@@ -107,7 +123,7 @@ public class M_Shoot extends MoveList {
 		Move m = new Move(user, 48);
 		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/shoot/sgetup.png", 2, 16);
-		m.eventList.addConstantVelocity(user, 2, 20, -3, Action.ChangeVelocity.noChange);
+		m.eventList.addConstantVelocity(user, 2, 30, -2, Action.ChangeVelocity.noChange);
 		return m;
 	}
 
@@ -120,14 +136,14 @@ public class M_Shoot extends MoveList {
 
 	@Override
 	public Move land() {
-		Move m = new Move(user, 10);
+		Move m = new Move(user, 8);
 		m.setAnimation("sprites/fighters/shoot/crouch.png", 1, 1);
 		return m;
 	}
 
 	@Override
 	public Move skid() {
-		Move m = new Move(user, 12);
+		Move m = new Move(user, 16);
 		m.setAnimation("sprites/fighters/shoot/crouch.png", 1, 1);
 		return m;
 	}

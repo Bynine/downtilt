@@ -3,6 +3,7 @@ package entities;
 import java.util.List;
 
 import timers.DurationTimer;
+import main.DowntiltEngine;
 import main.GlobalRepo;
 import main.SFX;
 
@@ -69,10 +70,37 @@ public abstract class Hurlable extends Hittable {
 
 	}
 	
-	public static class Nut extends Hurlable {
+	private static abstract class Breakable extends Hurlable {
 		
-		private final DurationTimer life = new DurationTimer(900);
-		private int health = 60;
+		protected final DurationTimer life = new DurationTimer(400);
+		
+		public Breakable(float posX, float posY){
+			super(posX, posY);
+			timerList.add(life);
+		}
+		
+		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+			super.update(rectangleList, entityList, deltaTime);
+			if (life.timeUp()) shatter();
+		}
+		
+		private void shatter(){
+			new SFX.Break().play();
+			setRemove();
+		}
+		
+		protected void takeDamage(float DAM){
+			life.moveCounterForward((int) (DAM * 3) );
+		}
+		
+		public Color getColor(){
+			if ( (DowntiltEngine.getDeltaTime() % 20 < 10) && life.getCounter() > life.getEndTime() * (5.0/6.0)) return new Color(1, 1, 1, 0.5f);
+			else return super.getColor();
+		}
+		
+	}
+	
+	public static class Nut extends Breakable {
 
 		public Nut(float posX, float posY) {
 			super(posX, posY);
@@ -83,34 +111,16 @@ public abstract class Hurlable extends Hittable {
 			hitstunDealtBonus = 12;
 			airFriction = 0.992f;
 			baseWeight = 80;
-			timerList.add(life);
-		}
-		
-		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
-			super.update(rectangleList, entityList, deltaTime);
-			if (life.timeUp() || health <= 0) shatter();
-		}
-		
-		private void shatter(){
-			new SFX.Break().play();
-			setRemove();
-		}
-		
-		protected void takeDamage(float DAM){
-			health -= DAM;
-		}
-		
-		public Color getColor(){
-			if (life.getCounter() > life.getEndTime() * (5.0/6.0)) return new Color(1, 1, 1, 0.5f);
-			else return super.getColor();
 		}
 
 	}
 	
-	public static class ShootBall extends Hurlable {
+	public static class ShootBall extends Breakable {
 
-		public ShootBall(int team, float posX, float posY) {
+		public ShootBall(Fighter user, int team, float posX, float posY) {
 			super(posX, posY);
+			if (user.getDirection() == Direction.LEFT) posX += user.getImage().getWidth()/4;
+			else posX += 3 * user.getImage().getWidth()/4;
 			this.team = team;
 			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ball.png")));
 			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballspin.png", 4, 1, 6, PlayMode.LOOP);
@@ -120,6 +130,8 @@ public abstract class Hurlable extends Hittable {
 			airFriction = 0.992f;
 			friction = 0.97f;
 			baseWeight = 90;
+			baseHurtleBK = 1;
+			life.setEndTime(600);
 		}
 		
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
@@ -145,13 +157,13 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		public Color getColor(){
-			if (team == GlobalRepo.GOODTEAM) return new Color(1, 0, 0, 1);
-			if (team == GlobalRepo.BADTEAM) return new Color(0, 0, 1, 1);
-			else return new Color(0, 0, 0, 1);
+			if (team == GlobalRepo.GOODTEAM) return new Color(1, 0, 0, 1 * super.getColor().a);
+			if (team == GlobalRepo.BADTEAM) return new Color(0, 0, 1, 1 * super.getColor().a);
+			else return new Color(0, 0, 0, 1 * super.getColor().a);
 		}
 		
 		public boolean inHitstun(){
-			return knockbackIntensity(getVelocity()) > 1;
+			return knockbackIntensity(velocity) > 1;
 		}
 		
 	}

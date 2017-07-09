@@ -35,7 +35,7 @@ public class ChallengeProgression {
 	 * Selection of wave lists for each challenge.
 	 */
 	List<Wave> waveTest = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbasic), 3, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots), 3, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
 			));
 	
@@ -49,19 +49,19 @@ public class ChallengeProgression {
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies), 3, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.basic), 6, 3, 80))
 			));
+	private List<Wave> waveBlocks = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots, EnemyRepo.basic), 7, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.bombs), 8, 4, 120))
+			));
 	private List<Wave> waveForest = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.basic), 6, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots), 5, 2, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bombs), 20, 8, 20))
 			));
-	private List<Wave> waveBlocks = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots, EnemyRepo.basic), 7, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies), 8, 4, 120))
-			));
 	private List<Wave> waveFinal = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.shoots), 10, 4, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.bombs), 10, 10, 40))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.basic, EnemyRepo.shoots), 20, 4, 30))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies, EnemyRepo.basic, EnemyRepo.shoots, EnemyRepo.bombs), 20, 4, 30))
 			));
 
 

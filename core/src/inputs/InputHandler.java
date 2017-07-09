@@ -99,5 +99,9 @@ public abstract class InputHandler {
 	}
 
 	private final List<Integer> stickCommands = new ArrayList<Integer>(Arrays.asList(commandStickUp, commandStickRight, commandStickLeft, commandStickDown));
+	
+	public String getControllerName(){
+		return "No controller found";
+	}
 
 }

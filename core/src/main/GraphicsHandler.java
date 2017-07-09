@@ -41,7 +41,9 @@ public class GraphicsHandler {
 	private static final float screenAdjust = 2f;
 	private static final ShapeRenderer debugRenderer = new ShapeRenderer();
 	private static BitmapFont font = new BitmapFont();
-	private static TextureRegion guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png")));
+	private static TextureRegion 
+		guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
+		defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
 	private static ShaderProgram hitstunShader, airShader, defenseShader, powerShader, speedShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE));
@@ -122,13 +124,13 @@ public class GraphicsHandler {
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
 
+		arr = new int[]{1};  // render back
+		renderer.render(arr);
+		
 		batch.begin();  // render bg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.BACKGROUND) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
-
-		arr = new int[]{1};  // render back
-		renderer.render(arr);
 
 		renderer.setView(cam);
 		int numLayers = MapHandler.activeMap.getLayers().getCount() - 2;  // render tiles
@@ -167,6 +169,7 @@ public class GraphicsHandler {
 	}
 
 	private static void renderEntity(Entity e){
+		boolean drawShield = false;
 		batch.setColor(e.getColor());
 		if (e instanceof Fighter) {
 			Fighter fi = (Fighter) e;
@@ -176,9 +179,7 @@ public class GraphicsHandler {
 
 			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
 			if (fi.isInvincible()) 
-				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g * 2, batch.getColor().g * 2, 1);
-			else if (fi.isGuarding()) 
-				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g + 0.1f, batch.getColor().g - 0.5f, 1);
+				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g * 2, batch.getColor().b * 2, 1);
 			else if (fi.isCharging()) 
 				batch.setColor(batch.getColor().r + 0.1f, batch.getColor().g + 0.1f, batch.getColor().g + 0.1f, 1);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
@@ -187,6 +188,7 @@ public class GraphicsHandler {
 			if (!fi.defenseTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), defenseShader);
 			if (!fi.airTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), airShader);
 			if (!fi.speedTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), speedShader);
+			if (fi.isGuarding() || fi.isPerfectGuarding()) drawShield = true;
 		}
 		if (e instanceof Hittable){
 			Hittable h = (Hittable) e;
@@ -196,6 +198,7 @@ public class GraphicsHandler {
 			}
 		}
 		batch.draw(e.getImage(), e.getPosition().x, e.getPosition().y);
+		if (drawShield) batch.draw(defend, e.getCenter().x - 16, e.getCenter().y - 16);
 		batch.setColor(1, 1, 1, 1);
 		batch.setShader(null);
 	}
@@ -311,13 +314,28 @@ public class GraphicsHandler {
 			if (ac.toRemove()) debugRenderer.setColor(0.9f, 1, 1, 0.5f);
 			debugRenderer.circle(c.x, c.y, c.radius);
 		}
-		debugRenderer.setColor(0, 1, 0, 0.4f);
+
 		for (Entity e: MapHandler.activeRoom.getEntityList()){
 			Rectangle ell = e.getHurtBox();
 			if (e instanceof Hittable) {
+				debugRenderer.setColor(0, 1, 0, 0.4f);
 				debugRenderer.rect(ell.x, ell.y, ell.width, ell.height);
 			}
+			if (e instanceof Fighter){
+				Rectangle tr = ((Fighter) e).groundBelowRect();
+				debugRenderer.setColor(0, 0, 0.4f, 0.6f);
+				debugRenderer.rect(tr.x, tr.y, tr.width, tr.height);
+			}
 		}
+		debugRenderer.end();
+	}
+
+	public static void drawRectangle(Rectangle r) {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		debugRenderer.begin(ShapeType.Filled);
+		debugRenderer.setColor(new Color(1, 1, 1, 1));
+		debugRenderer.rect(r.x, r.y, r.width, r.height);
 		debugRenderer.end();
 	}
 

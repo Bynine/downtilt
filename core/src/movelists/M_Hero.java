@@ -183,7 +183,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move uAir() {
 		Move m = new Move(user, 27);
 		m.setAnimation("sprites/fighters/bomber/uair.png", 3, 8);
-		Hitbox h1top =	new Hitbox(user, 2.5f, 0.0f, 3, 90, 0, 20, 15, new SFX.LightHit());
+		Hitbox h1top =	new Hitbox(user, 0.5f, 0.0f, 3,270, 0, 20, 15, new SFX.LightHit());
 		Hitbox h1bott =	new Hitbox(user, 2.8f, 0.0f, 3, 90, 0,  0, 16, new SFX.LightHit());
 		Hitbox h2top = 	new Hitbox(user, 2.2f, 4.1f, 8, 90, 0, 24, 18, new SFX.MidHit());
 		Hitbox h2bott =	new Hitbox(user, 2.2f, 4.1f, 8, 90, 0,  4, 20, new SFX.MidHit());
@@ -359,11 +359,14 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move fAirThrow(){
 		Move m = new Move(user, 24);
-		m.setAnimation("sprites/fighters/bomber/fair.png", 4, 3);
-		Hitbox h1 = new Hitbox(user, 3, 2.8f, 14, 30, 16, 0, throwSize, new SFX.MidHit());
-		h1.setNoReverse();
-		h1.setHitstunType(Fighter.HitstunType.SUPER);
-		m.eventList.addActionCircle(h1, 0, 4);
+		m.setAnimation("sprites/fighters/bomber/fairthrow.png", 2, 8);
+		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 80, 14, 0, throwSize, new SFX.None());
+		Hitbox hit = new Hitbox(user, 3.0f, 2.8f, 14, 30, 18, 0, throwSize, new SFX.MidHit());
+		hit.setNoReverse();
+		hit.setHitstunType(Fighter.HitstunType.SUPER);
+		m.eventList.addConstantVelocity(user, 0, 8, Action.ChangeVelocity.noChange, 0);
+		m.eventList.addActionCircle(toss, 0,  8);
+		m.eventList.addActionCircle(hit,  8, 16);
 		return m;
 	}
 

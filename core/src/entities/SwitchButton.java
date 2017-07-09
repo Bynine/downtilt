@@ -20,6 +20,7 @@ public class SwitchButton extends Hittable {
 		super(posX, posY);
 		timerList.add(cantBeHit);
 		touchRadius = 0;
+		grabbable = false;
 	}
 
 	void updatePosition(){

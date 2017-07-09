@@ -55,7 +55,7 @@ public abstract class Brain{
 
 	void attemptRecovery(Timer waitToUseUpSpecial){
 		body.yInput = 1;
-		body.xInput = setInput(pack.distanceFromCenter);
+		//body.xInput = setInput(pack.distanceFromCenter);
 		if (pack.isBelowStage){
 			if (pack.state == State.WALLSLIDE) {
 				if (Math.random() < 0.1) body.handleCommand(InputHandler.commandJump);
@@ -204,7 +204,7 @@ public abstract class Brain{
 			body.yInput = 0;
 			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 25 ) headTowardPlayer(changeDirection);
 			if (!performJump.timeUp()) performJump(performJump);
-			if (shouldGetUp(0.02)) getUp();
+			if (shouldGetUp(0.03)) getUp();
 			else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
 			else if (inVerticalAttackRange()) chooseAttack();
 			if (Math.random() < 0.02 && pack.distanceYFromPlayer > -60) body.handleCommand(InputHandler.commandJump);
@@ -230,18 +230,26 @@ public abstract class Brain{
 		void update(InputPackage pack){
 			super.update(pack);
 			body.yInput = 0;
-			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 75 ) headTowardPlayer(changeDirection);
 			if (!performJump.timeUp()) performJump(performJump);
 			if (shouldGetUp(0.02)) getUp();
-			else if (inVerticalAttackRange()) chooseAttack();
-			else if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			else {
+				chooseAttack();
+				if (changeDirection.timeUp()) {
+					//facePlayer();
+					headTowardPlayer(changeDirection);
+				}
+			}
 		}
 		
 		void chooseAttack(){
-			if		(shouldAttack(0.01, 120,  true))		performJump(performJump);
-			if 		(shouldAttack(0.04, 250, false))		attackPlayer(InputHandler.commandAttack);
-			else if (shouldAttack(0.02, 300, 60,  true))		attackPlayer(InputHandler.commandSpecial);
-			else if (shouldAttack(0.01, 400, 80, false)) attackPlayer(InputHandler.commandCharge);
+			if		(shouldAttack(0.02, 250,  true))	performJump(performJump);
+			if 		(shouldAttack(0.02, 250, false))	attackPlayer(InputHandler.commandAttack);
+			else 
+				if (shouldAttack(0.02, 300, true)
+					&& pack.distanceYFromPlayer > 20)	attackPlayer(InputHandler.commandSpecial);
+			else 
+				if (shouldAttack(0.01, 300, false)) 	attackPlayer(InputHandler.commandCharge);
 		}
 
 	}

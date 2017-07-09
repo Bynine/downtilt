@@ -30,10 +30,10 @@ public class Shoot extends Fighter {
 		baseWeight = 90;
 		jumpAcc = 0.49f;
 		airSpeed = 1.8f;
-		walkAcc = 0.5f;
-		walkSpeed = 1.7f;
-		runAcc = 1.2f;
-		runSpeed = 2.5f;
+		walkAcc = 0.3f;
+		walkSpeed = 1.0f;
+		runAcc = 0.7f;
+		runSpeed = 1.5f;
 		friction = 0.96f;
 		doubleJumpStrength = 7.5f;
 		moveList = new M_Shoot(this);

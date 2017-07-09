@@ -169,7 +169,8 @@ public class M_Basic extends MoveList {
 	public Move block(){
 		Move m = new Move(user, 60);
 		m.setAnimation("sprites/fighters/basic/block.png", 1, 1);
-		m.eventList.addGuard(user, 5, 55);
+		m.setStopsInAir();
+		m.eventList.addGuard(user, 5, 45);
 		return m;
 	}
 

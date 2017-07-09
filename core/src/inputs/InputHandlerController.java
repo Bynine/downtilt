@@ -18,7 +18,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 
 	Controller control = null;
 	private float currShoulder, prevShoulder;
-	
+
 	private final float depressed = 0.1f;
 	float xInput = 0, yInput = 0;
 	public static final int AXIS_LEFT_Y = 0; //-1 is up | +1 is down
@@ -32,6 +32,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	int prevButton = commandNone;
 	Timer pauseSelectBuffer = new Timer(10);
 	ControllerType controllerType;
+	private static final List<String> usedControllers = new ArrayList<String>();
 
 	public InputHandlerController(Fighter player) {
 		super(player);
@@ -41,44 +42,61 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean setupController(int index){
 		writeControllersToConsole();
 		if (Controllers.getControllers().size <= index) return false;
+		int i = 0;
 		for (Controller c: Controllers.getControllers()){
-			if ((c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"))) {
-				controllerType = ControllerType.XBOX360;
-				control = c;
-			}
-			if ((c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"))) {
-				controllerType = ControllerType.PS3;
-				control = c;
-			}
+//			if (i < index){
+//				
+//			}
+			//else if (!usedControllers.contains(c.getName()) && null == control){
+				if ((c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"))) {
+					setController(c, ControllerType.XBOX360);
+				}
+				if ((c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"))) {
+					setController(c, ControllerType.PS3);
+				}
+				if (null != control){ // Ensures the same controller won't be used for 2 separate players
+					usedControllers.add(c.getName());
+				}
+//			}
+//			i++;
 		}
 		if (null == control) return false;
 		Controllers.addListener(this);
 		return true;
 	}
 	
+	private void setController(Controller c, ControllerType ct){
+		controllerType = ct;
+		control = c;
+	}
+
 	private void writeControllersToConsole(){
 		if (Controllers.getControllers().size > 0){
 			System.out.println(Controllers.getControllers().size + " controller(s found:");
-			for (Controller c: Controllers.getControllers()) System.out.println("- " + c.getName());
+			for (Controller c: Controllers.getControllers()) {
+				System.out.println("- " + c.getName());
+			}
 		}
 		else System.out.println("No controllers found");
 	}
 
 	private final float pushed = 0.85f;
 	public void update() {
+		//System.out.println("Controller is " + control.getName());
+		//for (String s: usedControllers) System.out.println(s);
 		pauseSelectBuffer.countUp();
 		currShoulder = control.getAxis(AXIS_SHOULDER);
 		super.update();
 		prevShoulder = currShoulder;
-		
+
 		xInput = control.getAxis(AXIS_LEFT_X);
 		yInput = control.getAxis(AXIS_LEFT_Y);
-		
+
 		for (StickDir sd: stickDirs) {
 			sd.update();
 		}
 	}
-	
+
 	public void refresh(){
 		xInput = 0;
 		yInput = 0;
@@ -133,7 +151,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean flickDown(){
 		return leftY.flick(1);
 	}
-	
+
 	public boolean flickCLeft(){
 		return rightX.flick(-1);
 	}
@@ -149,13 +167,13 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean flickCDown(){
 		return rightY.flick(1);
 	}
-	
+
 	public boolean pause(){ 
 		boolean paused = pauseSelectBuffer.timeUp() && control.getButton(commandPause);
 		if (paused) pauseSelectBuffer.reset();
 		return paused;
 	}
-	
+
 	public boolean select(){ 
 		boolean selected = pauseSelectBuffer.timeUp() && control.getButton(commandSelect);
 		if (selected) pauseSelectBuffer.reset();
@@ -180,30 +198,33 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) { return false; }
 	public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) { return false; }
 	public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) { return false; }
-	
+	public String getControllerName(){
+		return control.getName();
+	}
+
 	private class StickDir{
 		static final int lastSize = 2;
 		final List<Float> lastPositions = new ArrayList<Float>(lastSize);
-		private float curr = 0, prev = 0, flick = 0.9f;
+		private float curr = 0, prev = 0, flick = 0.85f;
 		final int axis;
-		
+
 		StickDir(int axis){
 			this.axis = axis;
 			for (int i = 0; i < lastSize; ++i) lastPositions.add((float) 0);
 		}
-		
+
 		void update(){
 			lastPositions.add(control.getAxis(axis));
 			prev = lastPositions.remove(0);
 			curr = lastPositions.get(lastSize - 1);
 			if (Math.abs(curr) < pushed) curr = 0;
 		}
-		
+
 		boolean flick(int flickTo){
 			return Math.abs(curr - prev) > flick && Math.signum(curr) == flickTo;
 		}
 	}
-	
+
 	private enum ControllerType{
 		XBOX360, PS3, OTHER
 	}

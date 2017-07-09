@@ -25,22 +25,10 @@ public class EntityLoader {
 		case "switchblock": return new SwitchButton(x, y);
 		case "randall": return new Randall(x, y);
 		default: {
+			System.out.println(m.getName() + " not found by Entity Loader");
 			return new Hurlable.TrashCan(x, y);
 		}
 		}
 	}
 
-//	private Fighter makeNewEnemy(Class <? extends Fighter> fiClass, Class <? extends Brain> brClass, float x, float y){
-//		Fighter enemy;
-//		try {
-//			enemy = fiClass.getDeclaredConstructor(float.class, float.class, int.class).newInstance(x, y, 1);
-//		} catch (InstantiationException | IllegalAccessException
-//				| IllegalArgumentException | InvocationTargetException
-//				| NoSuchMethodException | SecurityException e) {
-//			e.printStackTrace();
-//			enemy = new Mook(x, y, 1);
-//		}
-//		enemy.setInputHandler(new InputHandlerCPU(enemy, brClass));
-//		return enemy;
-//	}
 }

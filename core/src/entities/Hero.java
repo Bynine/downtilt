@@ -40,7 +40,7 @@ public class Hero extends Fighter {
 		walkSpeed = 3.1f;
 		airSpeed = 3.2f;
 		airAcc = 0.24f;
-		friction = 0.85f;
+		friction = 0.83f;
 		gravity = -0.52f;
 		jumpAcc = 0.92f;
 		dashStrength = -2f;
