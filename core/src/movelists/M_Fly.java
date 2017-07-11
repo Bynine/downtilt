@@ -9,7 +9,6 @@ import moves.Effect;
 import moves.Hitbox;
 import moves.Move;
 import moves.Effect.Charge;
-import entities.Basic;
 import entities.Fighter;
 
 public class M_Fly extends MoveList {
@@ -24,7 +23,7 @@ public class M_Fly extends MoveList {
 		int frame = length/3;
 
 		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/basic/nweak.png", 3, frame);
+		m.setAnimation("sprites/fighters/fly/nweak.png", 3, frame);
 		Hitbox h1 = new Hitbox(user, 1.6f, 1.4f, 6, Hitbox.SAMURAI, 26, 4, 12, new SFX.LightHit());
 		m.eventList.addActionCircle(h1, frame, frame + 4);
 		return m;
@@ -39,7 +38,7 @@ public class M_Fly extends MoveList {
 		Move m = new Move(user, length);
 		m.setContinueOnLanding();
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/basic/slide.png", frames, frame);
+		m.setAnimation("sprites/fighters/fly/slide.png", frames, frame);
 		Hitbox early = new Hitbox(user, 2.8f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 7, 40, 16, -12, 24, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
@@ -56,7 +55,7 @@ public class M_Fly extends MoveList {
 		int end = 32;
 		
 		Move m = new Move(user, end);
-		m.setAnimation("sprites/fighters/basic/nair.png", 6, 4);
+		m.setAnimation("sprites/fighters/fly/nair.png", 6, 4);
 		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 6, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
@@ -74,7 +73,7 @@ public class M_Fly extends MoveList {
 		float pushY = 4.0f;
 
 		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/basic/ncharge.png", frames, frame);
+		m.setAnimation("sprites/fighters/fly/ncharge.png", frames, frame);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
 		Hitbox early = new Hitbox(user, 3.2f, 3.1f, 13, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
 		Hitbox late  = new Hitbox(user, 2.5f, 2.5f,  9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
@@ -88,27 +87,7 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move nSpecial() {
-		int frames = 8;
-		int frame = 22;
-		if (user instanceof Basic.Bomb) {
-			frame = 30;
-		}
-		int length = frames * frame;
-		int hitboxSize = 26;
-
-		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/basic/nspecial.png", frames, frame);
-		Hitbox early = new Hitbox(user, 1.0f, 1.0f, 4, 60, 4, 0, hitboxSize, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 3.0f, 1.5f, 8, 70, 4, 0, hitboxSize, new SFX.LightHit());
-		early.setRefresh(4);
-		if (user instanceof Basic.Bomb) {
-			m.eventList.addExplosion((Basic.Bomb)user, frame * 2);
-		}
-		m.eventList.addArmor(m, frame * 2, frame * 4, 4);
-		if (!(user instanceof Basic.Bomb)){
-			m.eventList.addActionCircle(early, frame * 2, frame * 3);
-			m.eventList.addActionCircle(late, frame * 3, frame * 4);
-		}
+		Move m = new Move(user, 60);
 		return m;
 	}
 
@@ -116,7 +95,7 @@ public class M_Fly extends MoveList {
 	public Move uSpecial() {
 		Move m = new Move(user, 60);
 		m.setHelpless();
-		m.setAnimation("sprites/fighters/basic/uspecial.png", 1, 1);
+		m.setAnimation("sprites/fighters/fly/uspecial.png", 1, 1);
 		m.eventList.addConstantVelocity(user, 6, 70, Action.ChangeVelocity.noChange, 4);
 		return m;
 	}
@@ -135,7 +114,7 @@ public class M_Fly extends MoveList {
 	private Move roll(){
 		Move m = new Move(user, 48);
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/basic/sgetup.png", 2, 16);
+		m.setAnimation("sprites/fighters/fly/sgetup.png", 2, 16);
 		m.eventList.addConstantVelocity(user, 2, 20, -3, Action.ChangeVelocity.noChange);
 		return m;
 	}
@@ -143,21 +122,21 @@ public class M_Fly extends MoveList {
 	@Override
 	public Move dodge() {
 		Move m = new Move(user, 32);
-		m.setAnimation("sprites/fighters/basic/ngetup.png", 1, 1);
+		m.setAnimation("sprites/fighters/fly/ngetup.png", 1, 1);
 		return m;
 	}
 
 	@Override
 	public Move land() {
-		Move m = new Move(user, 10);
-		m.setAnimation("sprites/fighters/basic/crouch.png", 1, 1);
+		Move m = new Move(user, 6);
+		m.setAnimation("sprites/fighters/fly/crouch.png", 1, 1);
 		return m;
 	}
 
 	@Override
 	public Move skid() {
-		Move m = new Move(user, 12);
-		m.setAnimation("sprites/fighters/basic/crouch.png", 1, 1);
+		Move m = new Move(user, 6);
+		m.setAnimation("sprites/fighters/fly/crouch.png", 1, 1);
 		return m;
 	}
 
@@ -167,7 +146,14 @@ public class M_Fly extends MoveList {
 	}
 	
 	public Move block(){
-		Move m = new Move(user, 0);
+		int endMove = 24;
+		int length = 32;
+		
+		Move m = new Move(user, length);
+		m.setAnimation("sprites/fighters/fly/fall.png", 1, 1);
+		m.eventList.addConstantVelocity(user, 5, endMove, 6, 0);
+		m.eventList.addInvincible(user, 10, endMove);
+		m.eventList.addConstantVelocity(user, endMove, length, 0, 0);
 		return m;
 	}
 

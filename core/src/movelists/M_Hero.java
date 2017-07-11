@@ -393,12 +393,12 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move dAirThrow(){
-		Move m = new Move(user, 16);
+		Move m = new Move(user, 24);
 		m.setAnimation("sprites/fighters/bomber/dthrow.png", 1, 1);
 		Hitbox down = new Hitbox(user, 2.4f, 3.6f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
 		down.setNoReverse();
 		m.eventList.addActionCircle(down, 0, 4);
-		m.eventList.addVelocityChange(user, 0, Action.ChangeVelocity.noChange, 6);
+		m.eventList.addVelocityChange(user, 0, -4.0f, 5.0f);
 		return m;
 	}
 

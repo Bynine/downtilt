@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class Fly extends Fighter {
 
@@ -18,25 +17,22 @@ public class Fly extends Fighter {
 	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/fly/jump.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/fly/crouch.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/fly/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 1, 1, 8, PlayMode.LOOP);
 	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fall.png")));
 	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fallen.png")));
 	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/dash.png")));
-	
-	private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/baffle.glsl"));
 
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);
-		setPalette(norm);
 		baseWeight = 75;
-		runAcc = 1.0f;
-		runSpeed = 2.8f;
-		walkAcc = 0.8f;
-		walkSpeed = 1.1f;
+		runAcc = 0.2f;
+		runSpeed = 1f;
+		walkAcc = 0.2f;
+		walkSpeed = 1f;
 		airSpeed = 4.2f;
 		airAcc = 0.24f;
-		friction = 0.85f;
-		gravity = -0.09f;
+		friction = 0.95f;
+		gravity = -0.08f;
 		jumpStrength = 2f;
 		jumpAcc = 0.12f;
 		dashStrength = 0f;
@@ -55,6 +51,12 @@ public class Fly extends Fighter {
 	protected void doubleJump(){
 		super.doubleJump();
 		doubleJumped = false;
+	}
+	
+	public boolean tryBlock(){
+		if (isGrounded()) return false;
+		else startAttack(moveList.selectBlock());
+		return true;
 	}
 	
 	protected boolean isWallSliding(){

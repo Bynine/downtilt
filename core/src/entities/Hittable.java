@@ -29,7 +29,7 @@ public abstract class Hittable extends Entity {
 	protected int team = GlobalRepo.BADTEAM;
 	
 	protected float baseHurtleBK = 4;
-	protected float baseHitSpeed = 0.75f;
+	protected float baseHitSpeed = -0.6f;
 	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 1, armor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
 	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 8f;

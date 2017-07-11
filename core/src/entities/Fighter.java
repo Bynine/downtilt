@@ -359,7 +359,7 @@ public abstract class Fighter extends Hittable{
 		return true;
 	}
 
-	private void startAttack(IDMove im){
+	protected void startAttack(IDMove im){
 		if (im.id == MoveList_Advanced.noMove) return;
 		Move m = im.move;
 		setActiveMove(im);

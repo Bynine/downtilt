@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="44" height="22" tilewidth="32" tileheight="32" nextobjectid="140">
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="44" height="22" tilewidth="32" tileheight="32" nextobjectid="157">
  <tileset firstgid="1" name="town" tilewidth="32" tileheight="32" spacing="1" tilecount="32" columns="8">
   <image source="../sprites/tilesets/blocks.png" width="276" height="149"/>
  </tileset>
@@ -187,5 +187,14 @@
   <object id="137" name="changeb" gid="28" x="928" y="448" width="32" height="32"/>
   <object id="138" name="switchblock" gid="4" x="544" y="288" width="32" height="32"/>
   <object id="139" name="switchblock" gid="4" x="832" y="288" width="32" height="32"/>
+  <object id="140" name="changec" gid="17" x="544" y="480" width="32" height="32"/>
+  <object id="142" name="changec" gid="17" x="544" y="512" width="32" height="32"/>
+  <object id="144" name="changec" gid="17" x="864" y="480" width="32" height="32"/>
+  <object id="145" name="changec" gid="17" x="864" y="512" width="32" height="32"/>
+  <object id="150" name="changec" gid="17" x="864" y="512" width="32" height="32"/>
+  <object id="153" name="changec" gid="17" x="512" y="512" width="32" height="32"/>
+  <object id="154" name="changec" gid="17" x="512" y="480" width="32" height="32"/>
+  <object id="155" name="changec" gid="17" x="896" y="512" width="32" height="32"/>
+  <object id="156" name="changec" gid="17" x="896" y="480" width="32" height="32"/>
  </objectgroup>
 </map>
