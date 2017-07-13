@@ -59,6 +59,11 @@ public abstract class Projectile extends Entity{
 		velocity.x = velX;
 		velocity.y = velY;
 	}
+	
+	void updatePosition(){
+		position.x += velocity.x;
+		position.y += velocity.y;
+	}
 
 	/** texture string, lifetime, velocity x, velocity y **/
 	void setup(String texString, int lifeTime, float velX, float velY){

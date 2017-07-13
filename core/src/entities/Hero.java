@@ -43,7 +43,7 @@ public class Hero extends Fighter {
 		friction = 0.83f;
 		gravity = -0.52f;
 		jumpAcc = 0.92f;
-		dashStrength = -2f;
+		dashStrength = 0;
 		doubleJumpStrength = 9.7f;
 		wallJumpStrengthX = 6.5f;
 		wallJumpStrengthY = 8.4f;
@@ -69,7 +69,7 @@ public class Hero extends Fighter {
 	}
 	
 	TextureRegion getJumpFrame(float deltaTime){
-		if (!doubleJumpTimer.timeUp()) return dJumpImage;
+		if (!doubleJumpGraphicTimer.timeUp()) return dJumpImage;
 		else if (Math.abs(velocity.x) > 1 && Math.signum(velocity.x) != direct()) return bJumpImage; 
 		else if (Math.abs(velocity.x) > airSpeed) return fJumpImage;
 		else return nJumpImage;

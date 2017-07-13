@@ -21,9 +21,10 @@ public class M_Shoot extends MoveList {
 		int frame = genericFrameLength;
 
 		Move m = new Move(user, frames * frame);
+		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
 		m.eventList.addNewEntity(frame,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * xGenericSpeed, yGenericSpeed
 				);
 		return m;
@@ -36,8 +37,9 @@ public class M_Shoot extends MoveList {
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
+		m.setStopsInAir();
 		m.eventList.addNewEntity(frame,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * xGenericSpeed, yGenericSpeed
 				);
 		return m;
@@ -49,9 +51,9 @@ public class M_Shoot extends MoveList {
 		int frame = 20;
 
 		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
+		m.setAnimation("sprites/fighters/shoot/nair.png", frames, frame);
 		m.eventList.addVelocityChange(user, frame, -4, 8);
-		m.eventList.addNewEntity(frame, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+		m.eventList.addNewEntity(frame, user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 3, -6
 				);
 		return m;
@@ -63,21 +65,23 @@ public class M_Shoot extends MoveList {
 	 */
 	public Move nCharge() {
 		int frames = 4;
-		int frame = 25;
+		int frame = 40;
+		int betweenShot = 24;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/ncharge.png", frames, frame);
+		m.setStopsInAir();
 		m.eventList.addNewEntity(frame * 2,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * 2, 8
+				);
+		m.eventList.addNewEntity(frame * 2 + betweenShot,
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * xGenericSpeed, yGenericSpeed
 				);
-		m.eventList.addNewEntity(frame * 2 + 10,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * xGenericSpeed, yGenericSpeed
-				);
-		m.eventList.addNewEntity(frame * 2 + 20,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * xGenericSpeed, yGenericSpeed
+		m.eventList.addNewEntity(frame * 2 + betweenShot * 2,
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user.direct() * 6, 2
 				);
 		return m;
 	}
@@ -91,9 +95,10 @@ public class M_Shoot extends MoveList {
 		int frame = genericFrameLength;
 
 		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
+		m.setStopsInAir();
+		m.setAnimation("sprites/fighters/shoot/up.png", frames, frame);
 		m.eventList.addNewEntity(frame,
-				(new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
+				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 3, 10
 				);
 		return m;
@@ -103,7 +108,7 @@ public class M_Shoot extends MoveList {
 	public Move uSpecial() {
 		Move m = new Move(user, 120);
 		m.setHelpless();
-		m.setAnimation("sprites/fighters/shoot/uspecial.png", 1, 1);
+		m.setAnimation("sprites/fighters/shoot/uspecial.png", 2, 16);
 		m.eventList.addConstantVelocity(user, 0, 120, Action.ChangeVelocity.noChange, 2.6f);
 		return m;
 	}
@@ -154,7 +159,10 @@ public class M_Shoot extends MoveList {
 	}
 
 	public Move block(){
-		Move m = new Move(user, 0);
+		Move m = new Move(user, 60);
+		m.setAnimation("sprites/fighters/shoot/block.png", 1, 1);
+		m.setStopsInAir();
+		m.eventList.addGuard(user, 5, 45);
 		return m;
 	}
 

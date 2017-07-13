@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 	final Vector2 position = new Vector2();
 	final Vector2 velocity = new Vector2();
+	final Vector2 startPosition = new Vector2();
 	State state, prevState, preJumpSquatState;
 	Direction direction = Direction.RIGHT;
 	Layer layer = Layer.FOREGROUND;
@@ -43,6 +44,7 @@ public abstract class Entity {
 		image = defaultSprite;
 		position.x = posX;
 		position.y = posY;
+		startPosition.set(position);
 		prevState = state;
 	}
 
@@ -199,10 +201,13 @@ public abstract class Entity {
 		if (collision == Collision.GHOST) return false;
 		for (Rectangle r : tempRectangleList){
 			Rectangle thisR = getCollisionBox(x, y);
-			boolean upThroughThinPlatform = r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
-			if (!upThroughThinPlatform && Intersector.overlaps(thisR, r) && thisR != r) return true;
+			if (!upThroughThinPlatform(r) && Intersector.overlaps(thisR, r) && thisR != r) return true;
 		}
 		return false;
+	}
+	
+	protected boolean upThroughThinPlatform(Rectangle r){
+		return  r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
 	}
 
 	Rectangle getCollisionBox(float x, float y){
@@ -232,7 +237,7 @@ public abstract class Entity {
 	}
 
 	public boolean isTouching(Entity en, int decrement){
-		Rectangle hitboxRect = en.getImage().getBoundingRectangle();
+		Rectangle hitboxRect = en.getHurtBox();
 		hitboxRect.setWidth(hitboxRect.getWidth() - decrement);
 		hitboxRect.setHeight(hitboxRect.getHeight() - decrement);
 		hitboxRect.setX(hitboxRect.getX() + decrement/2);
@@ -291,7 +296,6 @@ public abstract class Entity {
 
 	private final int OOBGrace = 4;
 	public boolean isOOB(Rectangle boundary) {
-
 		if (
 				(position.x < (boundary.x - image.getWidth()*OOBGrace)) ||
 				(position.x > (boundary.x + boundary.width + image.getWidth()*OOBGrace))  ||
@@ -323,6 +327,9 @@ public abstract class Entity {
 		center.x = position.x +  image.getWidth()/2;
 		center.y = position.y + image.getHeight()/2;
 		return center;
+	}
+	public Vector2 getStartPosition() {
+		return startPosition;
 	}
 	public static float knockbackIntensity(Vector2 knockback) { 
 		float intensity = (float) Math.sqrt(Math.pow(Math.abs(knockback.x), 2) + Math.pow(Math.abs(knockback.y), 2)); 

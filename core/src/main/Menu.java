@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
-import entities.Dummy;
+import entities.Basic;
 import entities.Fighter;
 
 abstract class Menu {
@@ -41,7 +41,7 @@ abstract class Menu {
 	protected static List<Fighter> makePlayers(int num, ArrayList<PlayerType> newPlayers){
 		List<Fighter> playerList = new ArrayList<Fighter>();
 		for (int i = 0; i < num; ++i){
-			Fighter player = new Dummy(0, 0, 0);
+			Fighter player = new Basic(0, 0, 0);
 			try {
 				int j = i;
 				if (j >= newPlayers.size()) j = newPlayers.size() - 1;

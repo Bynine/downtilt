@@ -98,7 +98,7 @@ public class Hitbox extends ActionCircle{
 		knockback.set(knockbackFormula(target) * staleness, knockbackFormula(target) * staleness);
 		if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
 		else 	if (ANG == REVERSE) setReverseAngle(target, knockback);
-		else 						knockback.setAngle(ANG);
+		else 						knockback = setAngle(knockback);
 		if (perfectGuarding) knockback.set(0, 0);
 		else if (guarding) knockback.set(knockback.x/4, 0);
 		knockback.x *= applyReverseHitbox(target);
@@ -136,6 +136,10 @@ public class Hitbox extends ActionCircle{
 		}
 		sfx.play();
 		hitFighterList.add(target);
+	}
+	
+	protected Vector2 setAngle(Vector2 knockback){
+		return knockback.setAngle(ANG);
 	}
 
 	private float getStaleness(Fighter user) {
@@ -252,6 +256,18 @@ public class Hitbox extends ActionCircle{
 	public void setHitstunType(Fighter.HitstunType ht) { hitstunType = ht; }
 	public Color getColor() {
 		return new Color(1, 0.2f, 0.2f, 0.75f);
+	}
+	
+	public static class AngleHitbox extends Hitbox{
+
+		public AngleHitbox(Hittable user, float BKB, float KBG, float DAM, float dispX, float dispY, int size, SFX sfx) {
+			super(user, BKB, KBG, DAM, 0, dispX, dispY, size, sfx);
+		}
+		
+		protected Vector2 setAngle(Vector2 knockback){
+			return knockback.setAngle(user.getVelocity().angle());
+		}
+		
 	}
 
 }

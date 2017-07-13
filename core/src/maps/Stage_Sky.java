@@ -37,7 +37,7 @@ public class Stage_Sky extends Stage {
 	}
 
 	public float getWind(){
-		float windStrength = 0.14f;
+		float windStrength = 0.24f;
 		int directionTiming = 1200;
 		int windDuration = 240;
 		int wind1 = 400;

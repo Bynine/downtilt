@@ -12,27 +12,43 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 		super(player);
 	}
 	
+	private boolean pressLeft(){
+		return Gdx.input.isKeyPressed(Keys.D);
+	}
+	
+	private boolean pressRight(){
+		return Gdx.input.isKeyPressed(Keys.A);
+	}
+	
+	private boolean pressUp(){
+		return Gdx.input.isKeyPressed(Keys.W);
+	}
+	
+	private boolean pressDown(){
+		return Gdx.input.isKeyPressed(Keys.S);
+	}
+	
 	public float getXInput() {
-		if (Gdx.input.isKeyPressed(Keys.D)) return  1;
-		if (Gdx.input.isKeyPressed(Keys.A)) return -1;
+		if (pressLeft()) return  1;
+		if (pressRight()) return -1;
 		return 0;
 	}
 
 	public float getYInput() {
-		if (Gdx.input.isKeyPressed(Keys.S)) return  1;
-		if (Gdx.input.isKeyPressed(Keys.W)) return -1;
+		if (pressDown()) return  1;
+		if (pressUp()) return -1;
 		return 0;
 	}
 	
 	public boolean attack(){
-		return Gdx.input.isKeyJustPressed(Keys.M);
+		return Gdx.input.isKeyJustPressed(Keys.J);
 	}
 	
 	public boolean special(){
-		return Gdx.input.isKeyJustPressed(Keys.N);
+		return Gdx.input.isKeyJustPressed(Keys.K);
 	}
 	
-	private int chargeInput = Keys.K;
+	private int chargeInput = Keys.L;
 	public boolean charge(){
 		return Gdx.input.isKeyJustPressed(chargeInput);
 	}
@@ -41,7 +57,7 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 		return Gdx.input.isKeyPressed(chargeInput);
 	}
 	
-	private int jumpInput = Keys.J;
+	private int jumpInput = Keys.SPACE;
 	public boolean jump(){
 		return Gdx.input.isKeyJustPressed(jumpInput);
 	}
@@ -51,10 +67,10 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	
 	public boolean grab(){
-		return Gdx.input.isKeyJustPressed(Keys.I);
+		return Gdx.input.isKeyJustPressed(Keys.O);
 	}
 	
-	private int blockInput = Keys.O;
+	private int blockInput = Keys.I;
 	public boolean dodge(){
 		return Gdx.input.isKeyJustPressed(blockInput);
 	}
@@ -64,7 +80,7 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	
 	public boolean taunt(){
-		return Gdx.input.isKeyJustPressed(Keys.L);
+		return Gdx.input.isKeyJustPressed(Keys.U);
 	}
 	
 	public boolean flickLeft(){

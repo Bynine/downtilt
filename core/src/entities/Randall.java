@@ -32,6 +32,11 @@ public class Randall extends Entity {
 		updateImagePosition(deltaTime);
 	}
 	
+	void updatePosition(){
+		position.x += velocity.x;
+		position.y += velocity.y;
+	}
+	
 	Rectangle getCollisionBox(float x, float y){
 		Rectangle r = image.getBoundingRectangle();
 		int widthReduction = 8;

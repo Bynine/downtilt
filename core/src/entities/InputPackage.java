@@ -12,7 +12,7 @@ import entities.Entity.State;
 public class InputPackage {
 
 	public final State state;
-	public final boolean isOffStage, isBelowStage, hasDoubleJumped, isGrounded, isRunning, awayFromWall, playerAttacking;
+	public final boolean isOffStage, isBelowStage, outOfDoubleJumps, isGrounded, isRunning, awayFromWall, playerAttacking;
 	public final float distanceFromCenter, distanceXFromPlayer, distanceYFromPlayer;
 	public final int direct;
 	public final Move activeMove;
@@ -29,7 +29,7 @@ public class InputPackage {
 		state = fighter.state;
 		isOffStage = (!fighter.isGrounded() && !fighter.groundBelow());
 		isBelowStage = fighter.position.y < DowntiltEngine.getChallenge().getCenterPosition().y;
-		hasDoubleJumped = fighter.doubleJumped;
+		outOfDoubleJumps = fighter.doubleJumps < 1;
 		isGrounded = fighter.isGrounded();
 		isRunning = fighter.isRunning();
 		awayFromWall = false;

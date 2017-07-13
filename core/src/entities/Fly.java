@@ -2,12 +2,14 @@ package entities;
 
 import main.GlobalRepo;
 import movelists.M_Fly;
+import moves.IDMove;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Fly extends Fighter {
 
@@ -24,7 +26,7 @@ public class Fly extends Fighter {
 
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);
-		baseWeight = 75;
+		baseWeight = 54;
 		runAcc = 0.2f;
 		runSpeed = 1f;
 		walkAcc = 0.2f;
@@ -32,26 +34,23 @@ public class Fly extends Fighter {
 		airSpeed = 4.2f;
 		airAcc = 0.24f;
 		friction = 0.95f;
-		gravity = -0.08f;
-		jumpStrength = 2f;
-		jumpAcc = 0.12f;
+		gravity = -0.13f;
+		jumpStrength = 3f;
+		jumpAcc = 0.2f;
 		dashStrength = 0f;
-		doubleJumpStrength = 3.7f;
+		doubleJumpStrength = 4.5f;
 		fallSpeed = -6.7f;
 		jumpSquatTimer.setEndTime(8);
 		moveList = new M_Fly(this);
 		baseHitstun = GlobalRepo.ENEMYHITSTUNMOD;
+		doubleJumpMax = 4;
+		doubleJumps = doubleJumpMax;
 	}
 	
 	public float getGravity() { 
-		if (!hitstunTimer.timeUp()) return -0.36f;
+		if (!hitstunTimer.timeUp()) return -0.62f;
 		else return gravity; 
 		}
-	
-	protected void doubleJump(){
-		super.doubleJump();
-		doubleJumped = false;
-	}
 	
 	public boolean tryBlock(){
 		if (isGrounded()) return false;
@@ -59,7 +58,20 @@ public class Fly extends Fighter {
 		return true;
 	}
 	
+	public boolean tryCharge(){
+		startAttack(new IDMove(moveList.nCharge(), 0));
+		return true;
+	}
+	
 	protected boolean isWallSliding(){
+		return false;
+	}
+	
+	protected boolean canReverseInAir(){
+		return true;
+	}
+	
+	protected boolean upThroughThinPlatform(Rectangle r){
 		return false;
 	}
 

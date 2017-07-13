@@ -1,14 +1,10 @@
 package movelists;
 
-import java.util.Arrays;
-
 import main.SFX;
 import moves.Action;
-import moves.ActionCircleGroup;
-import moves.Effect;
 import moves.Hitbox;
 import moves.Move;
-import moves.Effect.Charge;
+import moves.Windbox;
 import entities.Fighter;
 
 public class M_Fly extends MoveList {
@@ -19,84 +15,68 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move nWeak() {
-		int length = 36;
-		int frame = length/3;
-
-		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/fly/nweak.png", 3, frame);
-		Hitbox h1 = new Hitbox(user, 1.6f, 1.4f, 6, Hitbox.SAMURAI, 26, 4, 12, new SFX.LightHit());
-		m.eventList.addActionCircle(h1, frame, frame + 4);
+		Move m = new Move(user, 10);
 		return m;
 	}
 
 	@Override
 	public Move slide() {
-		int frames = 4;
-		int frame = 15;
-		int length = frames * frame;
-
-		Move m = new Move(user, length);
-		m.setContinueOnLanding();
-		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/fly/slide.png", frames, frame);
-		Hitbox early = new Hitbox(user, 2.8f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 7, 40, 16, -12, 24, new SFX.MidHit());
-		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addConstantVelocity(user, 0, 14, 0, Action.ChangeVelocity.noChange);
-		m.eventList.addVelocityChange(user, 14, 5, Action.ChangeVelocity.noChange);
-		m.eventList.addConstantVelocity(user, 16, 30, 3, Action.ChangeVelocity.noChange);
-		m.eventList.addActionCircle(early, 16, 20);
-		m.eventList.addActionCircle(late, 21, 30);
+		Move m = new Move(user, 10);
 		return m;
 	}
 
 	@Override
 	public Move nAir() {
-		int end = 32;
+		int end = 54;
+		int startSwoop = 15;
+		int iter = 6;
+		int endSwoop = startSwoop + (iter * 4);
 		
 		Move m = new Move(user, end);
-		m.setAnimation("sprites/fighters/fly/nair.png", 6, 4);
-		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 6, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
-		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addVelocityChange(user, 8, Action.ChangeVelocity.noChange, -1);
-		m.eventList.addActionCircle(early, 8, 13);
-		m.eventList.addActionCircle(late, 14, 22);
+		m.setAnimation("sprites/fighters/fly/nair.png", 3, 20);
+		Hitbox hit = new Hitbox(user, 4.2f, 2.8f, 16, 80, 10, -10, 22, new SFX.MidHit());
+		hit.setMovesAheadMod(1);
+		m.eventList.addConstantVelocity(user, 0, startSwoop, -1, 1);
+		m.eventList.addConstantVelocity(user, startSwoop, startSwoop + iter, 7, -7);
+		m.eventList.addConstantVelocity(user, startSwoop + iter, startSwoop + iter * 2, 7, -4);
+		m.eventList.addConstantVelocity(user, startSwoop + iter * 2, startSwoop + iter * 3, 6, 0);
+		m.eventList.addConstantVelocity(user, startSwoop + iter * 3, startSwoop + iter * 4, 2, 3);
+		m.eventList.addActionCircle(hit, startSwoop, endSwoop);
 		return m;
 	}
 
 	@Override
 	public Move nCharge() {
-		int frames = 5;
-		int frame = 15;
-		float pushX = 6.5f;
-		float pushY = 4.0f;
-
-		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/fly/ncharge.png", frames, frame);
-		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
-		Hitbox early = new Hitbox(user, 3.2f, 3.1f, 13, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
-		Hitbox late  = new Hitbox(user, 2.5f, 2.5f,  9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
-		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addCharge(user, c);
-		m.eventList.addConstantVelocity(user, frame * 2, (frame * 2) + 2, pushX, pushY);
-		m.eventList.addActionCircle(early, frame * 2, frame * 3 );
-		m.eventList.addActionCircle(late,  frame * 3, frame * 4 );
+		int frame = 20;
+		int frames = 2;
+		
+		Move m = new Move(user, frame * 6);
+		m.setAnimation("sprites/fighters/fly/nSpecial.png", frames, frame);
+		Windbox wind1 = new Windbox(user, 0.9f, 0.3f, 60, 0, 30);
+		Windbox wind3 = new Windbox(user, 1.4f, 0.5f, 30, 0, 20);
+		Windbox wind2 = new Windbox(user, 0.7f, 0.2f, 40, 0, 40);
+		wind1.setRefresh(4);
+		wind2.setRefresh(4);
+		m.eventList.addConstantVelocity(user, 0, frame * 1, 0, 0);
+		m.eventList.addConstantVelocity(user, frame * 1, frame * 5, -1, 0);
+		m.eventList.addActionCircle(wind1, frame * 1, frame * 3);
+		m.eventList.addActionCircle(wind3, frame * 1, frame * 3);
+		m.eventList.addActionCircle(wind2, frame * 3, frame * 5);
 		return m;
 	}
 
 	@Override
 	public Move nSpecial() {
-		Move m = new Move(user, 60);
+		Move m = new Move(user, 10);
 		return m;
 	}
 
 	@Override
 	public Move uSpecial() {
-		Move m = new Move(user, 60);
+		Move m = new Move(user, 20);
 		m.setHelpless();
-		m.setAnimation("sprites/fighters/fly/uspecial.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 6, 70, Action.ChangeVelocity.noChange, 4);
+		m.setAnimation("sprites/fighters/fly/jump.png", 1, 1);
+		m.eventList.addVelocityChange(user, 5, Action.ChangeVelocity.noChange, 8);
 		return m;
 	}
 
@@ -111,18 +91,20 @@ public class M_Fly extends MoveList {
 		return roll();
 	}
 
+	private final float getUpYSpeed = 3.4f;
 	private Move roll(){
 		Move m = new Move(user, 48);
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/fly/sgetup.png", 2, 16);
-		m.eventList.addConstantVelocity(user, 2, 20, -3, Action.ChangeVelocity.noChange);
+		m.setAnimation("sprites/fighters/fly/jump.png", 2, 16);
+		m.eventList.addConstantVelocity(user, 2, 20, -4, getUpYSpeed);
 		return m;
 	}
 
 	@Override
 	public Move dodge() {
 		Move m = new Move(user, 32);
-		m.setAnimation("sprites/fighters/fly/ngetup.png", 1, 1);
+		m.setAnimation("sprites/fighters/fly/jump.png", 1, 1);
+		m.eventList.addConstantVelocity(user, 2, 20, 0, getUpYSpeed);
 		return m;
 	}
 
@@ -146,14 +128,14 @@ public class M_Fly extends MoveList {
 	}
 	
 	public Move block(){
-		int endMove = 24;
-		int length = 32;
+		int invinc = 24;
+		int length = 42;
 		
 		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/fly/fall.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 5, endMove, 6, 0);
-		m.eventList.addInvincible(user, 10, endMove);
-		m.eventList.addConstantVelocity(user, endMove, length, 0, 0);
+		m.setAnimation("sprites/fighters/fly/dash.png", 1, 1);
+		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
+		m.eventList.addInvincible(user, 10, invinc);
+		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);
 		return m;
 	}
 

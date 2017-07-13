@@ -29,11 +29,13 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Fighter extends Hittable{
 
 	protected final float unregisteredInputMax = 0.2f;
-	protected boolean doubleJumped, blockHeld;
+	protected boolean blockHeld;
+	protected int doubleJumpMax = 1;
+	int doubleJumps = doubleJumpMax;
 	public int queuedCommand = InputHandler.commandNone;
 	protected final Timer inputQueueTimer = new Timer(8), wallJumpTimer = new Timer(10), attackTimer = new Timer(0), grabbingTimer = new Timer(0), 
 			dashTimer = new Timer(20), invincibleTimer = new Timer(0), guardHoldTimer = new Timer(1), footStoolTimer = new Timer(20), slowedTimer = new Timer(0),
-			doubleJumpTimer = new Timer (12), respawnTimer = new Timer(3);
+			doubleJumpGraphicTimer = new Timer (12), doubleJumpUseTimer = new Timer (20), respawnTimer = new Timer(3);
 	protected float prevStickX = 0, stickX = 0, stickY = 0;
 
 	private ShaderProgram palette = null;
@@ -65,7 +67,7 @@ public abstract class Fighter extends Hittable{
 		spawnPoint = new Vector2(posX, posY);
 		this.setInputHandler(inputHandler);
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
-				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpTimer, guardTimer, respawnTimer));
+				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer));
 		state = State.STAND;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
@@ -219,7 +221,7 @@ public abstract class Fighter extends Hittable{
 		else if (getEnemyAbove() != null && footStoolTimer.timeUp()){
 			footStool(getEnemyAbove()); return true;
 		}
-		else if (!doubleJumped && state != State.JUMP){
+		else if (doubleJumps > 0 && doubleJumpUseTimer.timeUp() && state != State.JUMP){
 			doubleJump(); return true;
 		}
 		return false;
@@ -428,16 +430,20 @@ public abstract class Fighter extends Hittable{
 		if (prevStickX < -unregisteredInputMax && velocity.x > 0) velocity.x = 0; 
 		if (prevStickX >  unregisteredInputMax && velocity.x < 0) velocity.x = 0; 
 		velocity.x += 1 * stickX;
-		doubleJumped = true;
-		doubleJumpTimer.reset();
+		decrementDoubleJump();
+		doubleJumpUseTimer.reset();
 		tumbling = false;
+	}
+	
+	protected void decrementDoubleJump(){
+		doubleJumps--;
+		doubleJumpGraphicTimer.reset();
 	}
 
 	private void footStool(Fighter footStoolee){
-		boolean prevDJ = doubleJumped;
 		doubleJump();
-		doubleJumpTimer.end();
-		doubleJumped = prevDJ;
+		doubleJumps ++;
+		doubleJumpGraphicTimer.end();
 		new SFX.FootStool().play();
 		footStoolee.velocity.set(footStoolKB);
 		footStoolee.tumbling = true;
@@ -598,7 +604,11 @@ public abstract class Fighter extends Hittable{
 		if (velocity.y < 0 && getActiveMove() == null && state != State.FALLEN){
 			startAttack(new IDMove(moveList.land(), MoveList_Advanced.noStaleMove));
 		}
-		doubleJumped = false;
+		refreshDoubleJump();
+	}
+	
+	private void refreshDoubleJump(){
+		doubleJumps = doubleJumpMax;
 	}
 
 	void handleGravity(){
@@ -616,12 +626,16 @@ public abstract class Fighter extends Hittable{
 					&& getActiveMove().id >= MoveList_Advanced.specialRange[0] && getActiveMove().id <= MoveList_Advanced.specialRange[1];
 					if (!bReverse) return;
 		}
-		else if (!isGrounded()) return;
+		else if (!canReverseInAir()) return;
 		boolean turnLeft = stickX < -minTurn && (prevStickX > -minTurn) && getDirection() == Direction.RIGHT;
 		boolean turnRight = stickX > minTurn && (prevStickX < minTurn)  && getDirection() == Direction.LEFT;
 		if (turnLeft || turnRight) flip();
 	}
 	private final List<State> cantTurnStates = new ArrayList<State>(Arrays.asList(State.CROUCH, State.GUARD, State.JUMPSQUAT, State.FALLEN));
+	
+	protected boolean canReverseInAir(){
+		return isGrounded();
+	}
 
 	protected boolean activeMoveIsSpecial(){
 		return activeMoveIsWhatever(MoveList_Advanced.specialRange);
@@ -704,7 +718,7 @@ public abstract class Fighter extends Hittable{
 		velocity.x = 0;
 		velocity.y = 0;
 		state = State.FALL;
-		doubleJumped = false;
+		refreshDoubleJump();
 		tumbling = false;
 		if (direction == Direction.LEFT) flip();
 		for (Timer t: timerList) t.end();
@@ -740,7 +754,8 @@ public abstract class Fighter extends Hittable{
 		return false;
 	}
 	public Rectangle groundBelowRect(){
-		return new Rectangle (getCenter().x, position.y, 2, -GlobalRepo.TILE * 32);
+		int rectHeight = GlobalRepo.TILE * 16;
+		return new Rectangle (getCenter().x, position.y - rectHeight, 12, rectHeight);
 	}
 	
 	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }

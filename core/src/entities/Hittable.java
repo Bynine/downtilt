@@ -91,19 +91,19 @@ public abstract class Hittable extends Entity {
 		e.velocity.x += dirPush * pushForce;
 	}
 	
-	protected float touchRadius = 8;
+	protected int touchRadius = 8;
 	private void checkHitByHurtlingObject(Hittable hi){
 		boolean fighterGoingFastEnough = knockbackIntensity(hi.velocity) > hi.baseHurtleBK;
 		if (hi.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
 		boolean correctTeam = getTeam() == hi.getTeam();
 		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hi.inHitstun();
-		if (knockInto && isTouching(hi, 8) && knockbackIntensity(hi.velocity) > knockbackIntensity(velocity)) getHitByHurtlingObject(hi);
+		if (knockInto && isTouching(hi, touchRadius) && knockbackIntensity(hi.velocity) > knockbackIntensity(velocity)) getHitByHurtlingObject(hi);
 	}
 
 	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
 		float bkb = knockbackIntensity(knockIntoVector) * 0.8f;
-		float kbg = 1.5f;
+		float kbg = 2.0f;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
 		Hitbox h;
 		if (hurtler.hitstunType != HitstunType.NORMAL) {

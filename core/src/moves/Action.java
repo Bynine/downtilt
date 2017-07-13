@@ -132,21 +132,20 @@ public abstract class Action {
 	}
 	
 	public static class AddEntity extends Action {
-		final Entity en;
+		final Entity en, user;
 		final float velX, velY;
 		
-		public AddEntity(Entity en, float velX, float velY){
+		public AddEntity(Entity user, Entity en, float velX, float velY){
+			this.user = user;
 			this.en = en;
 			this.velX = velX;
 			this.velY = velY;
 		}
 
 		void performAction() {
+			en.setPosition(user.getPosition());
 			en.getVelocity().x = velX;
 			en.getVelocity().y = velY;
-			// TODO: dejankify this
-			en.getHitstunTimer().setEndTime(60);
-			en.getHitstunTimer().reset();
 			MapHandler.addEntity(en);
 		}
 	}

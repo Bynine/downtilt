@@ -33,7 +33,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/* DEBUG */
 	public static boolean 	fpsLogToggle 	= false;
 	public static boolean 	debugToggle 	= false;
-	public static boolean	musicToggle		= false;
+	public static boolean	musicToggle		= true;
 	private static float	volume			= 1f;
 	private static ShaderProgram p2Palette;
 

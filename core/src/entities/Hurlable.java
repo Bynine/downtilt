@@ -117,20 +117,22 @@ public abstract class Hurlable extends Hittable {
 	
 	public static class ShootBall extends Breakable {
 
+		private final float minSpeedForHit = 2.2f;
 		public ShootBall(Fighter user, int team, float posX, float posY) {
 			super(posX, posY);
 			if (user.getDirection() == Direction.LEFT) posX += user.getImage().getWidth()/4;
 			else posX += 3 * user.getImage().getWidth()/4;
 			this.team = team;
-			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ball.png")));
-			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballspin.png", 4, 1, 6, PlayMode.LOOP);
+			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
+			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
 			image = new Sprite(normImage);
 			baseKnockIntoDamage = 4f;
 			hitstunDealtBonus = 8;
 			airFriction = 0.992f;
 			friction = 0.97f;
 			baseWeight = 90;
-			baseHurtleBK = 1;
+			baseHurtleBK = minSpeedForHit;
+			touchRadius = 16;
 			life.setEndTime(600);
 		}
 		
@@ -145,8 +147,16 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		private void switchTeam(Hittable user){
-			if (user.getTeam() == GlobalRepo.GOODTEAM) team = GlobalRepo.BADTEAM;
-			else if (user.getTeam() == GlobalRepo.BADTEAM) team = GlobalRepo.GOODTEAM;
+			if (user.getTeam() == GlobalRepo.GOODTEAM) {
+				team = GlobalRepo.BADTEAM;
+				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
+				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 4, 1, 6, PlayMode.LOOP);
+			}
+			else if (user.getTeam() == GlobalRepo.BADTEAM) {
+				team = GlobalRepo.GOODTEAM;
+				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
+				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
+			}
 		}
 		
 		public void ground(){ 
@@ -156,14 +166,9 @@ public abstract class Hurlable extends Hittable {
 			super.ground();
 		}
 		
-		public Color getColor(){
-			if (team == GlobalRepo.GOODTEAM) return new Color(1, 0, 0, 1 * super.getColor().a);
-			if (team == GlobalRepo.BADTEAM) return new Color(0, 0, 1, 1 * super.getColor().a);
-			else return new Color(0, 0, 0, 1 * super.getColor().a);
-		}
-		
 		public boolean inHitstun(){
-			return knockbackIntensity(velocity) > 1;
+			if (life.getCounter() < 10) return false;
+			return knockbackIntensity(velocity) > minSpeedForHit;
 		}
 		
 	}

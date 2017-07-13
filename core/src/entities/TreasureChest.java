@@ -25,6 +25,7 @@ public class TreasureChest extends Hurlable {
 		super(posX, posY);
 		image = new Sprite(closed);
 		staticPercent = 40;
+		baseKnockIntoDamage = 4;
 	}
 
 	protected void knockbackHelper(Vector2 knockback, float DAM, int hitstun, boolean shouldChangeKnockback, HitstunType ht){

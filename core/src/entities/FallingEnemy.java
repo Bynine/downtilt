@@ -23,5 +23,10 @@ public class FallingEnemy extends Entity {
 		setImage(anim.getKeyFrame(deltaTime));
 		updatePosition();
 	}
+	
+	void updatePosition(){
+		position.x += velocity.x;
+		position.y += velocity.y;
+	}
 
 }

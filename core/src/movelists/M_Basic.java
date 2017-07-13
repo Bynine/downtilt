@@ -20,12 +20,12 @@ public class M_Basic extends MoveList {
 
 	@Override
 	public Move nWeak() {
-		int length = 36;
+		int length = 33;
 		int frame = length/3;
 
 		Move m = new Move(user, length);
 		m.setAnimation("sprites/fighters/basic/nweak.png", 3, frame);
-		Hitbox h1 = new Hitbox(user, 1.6f, 1.4f, 6, Hitbox.SAMURAI, 20, 4, 16, new SFX.LightHit());
+		Hitbox h1 = new Hitbox(user, 1.8f, 1.4f, 8, Hitbox.SAMURAI, 20, 4, 16, new SFX.LightHit());
 		m.eventList.addActionCircle(h1, frame, frame + 4);
 		return m;
 	}
@@ -33,14 +33,14 @@ public class M_Basic extends MoveList {
 	@Override
 	public Move slide() {
 		int frames = 4;
-		int frame = 15;
+		int frame = 14;
 		int length = frames * frame;
 
 		Move m = new Move(user, length);
 		m.setContinueOnLanding();
 		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/basic/slide.png", frames, frame);
-		Hitbox early = new Hitbox(user, 2.8f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
+		Hitbox early = new Hitbox(user, 3.1f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 7, 40, 16, -12, 24, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addConstantVelocity(user, 0, 14, 0, Action.ChangeVelocity.noChange);
@@ -71,16 +71,17 @@ public class M_Basic extends MoveList {
 		int frames = 5;
 		int frame = 15;
 		float pushX = 6.5f;
-		float pushY = 4.0f;
+		float pushY = 0; //4.0f;
 
 		Move m = new Move(user, frames * frame);
+		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/basic/ncharge.png", frames, frame);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
-		Hitbox early = new Hitbox(user, 3.2f, 3.1f, 13, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
-		Hitbox late  = new Hitbox(user, 2.5f, 2.5f,  9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
+		Hitbox early = new Hitbox(user, 3.2f, 3.3f, 15, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
+		Hitbox late  = new Hitbox(user, 2.5f, 2.6f, 11, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
-		m.eventList.addConstantVelocity(user, frame * 2, (frame * 2) + 2, pushX, pushY);
+		m.eventList.addConstantVelocity(user, frame * 2, frame * 4, pushX, pushY);
 		m.eventList.addActionCircle(early, frame * 2, frame * 3 );
 		m.eventList.addActionCircle(late,  frame * 3, frame * 4 );
 		return m;
@@ -94,11 +95,11 @@ public class M_Basic extends MoveList {
 			frame = 30;
 		}
 		int length = frames * frame;
-		int hitboxSize = 26;
+		int hitboxSize = 27;
 
 		Move m = new Move(user, length);
 		m.setAnimation("sprites/fighters/basic/nspecial.png", frames, frame);
-		Hitbox early = new Hitbox(user, 2.6f, 4.2f, 16, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.HeavyHit());
+		Hitbox early = new Hitbox(user, 2.6f, 4.8f, 16, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.HeavyHit());
 		Hitbox late  = new Hitbox(user, 2.3f, 2.8f, 12, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.MidHit());
 		if (user instanceof Basic.Bomb) {
 			m.eventList.addExplosion((Basic.Bomb)user, frame * 2);
@@ -112,10 +113,22 @@ public class M_Basic extends MoveList {
 
 	@Override
 	public Move uSpecial() {
-		Move m = new Move(user, 60);
+		int frames = 5;
+		int frame = 15;
+		float pushY = 15.2f;
+
+		Move m = new Move(user, frames * frame);
 		m.setHelpless();
-		m.setAnimation("sprites/fighters/basic/uspecial.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 6, 70, Action.ChangeVelocity.noChange, 4);
+		m.setAnimation("sprites/fighters/basic/uspecial.png", frames, frame);
+		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
+		Hitbox early = new Hitbox(user, 3.2f, 3.1f, 13, Hitbox.SAMURAI, 0, 0, 10, new SFX.MidHit(), c);
+		Hitbox late  = new Hitbox(user, 2.5f, 2.5f,  9, Hitbox.SAMURAI, 0, 0, 10, new SFX.LightHit(), c);
+		new ActionCircleGroup(Arrays.asList(early, late));
+		m.eventList.addCharge(user, c);
+		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, 0);
+		m.eventList.addConstantVelocity(user, frame*2, frame * 2 + 4, Action.ChangeVelocity.noChange, pushY);
+		m.eventList.addActionCircle(early, frame * 2, frame * 3 );
+		m.eventList.addActionCircle(late,  frame * 3, frame * 4 );
 		return m;
 	}
 

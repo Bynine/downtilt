@@ -75,8 +75,8 @@ public class EventList {
 		actionStartTimes.add(0);
 	}
 
-	public void addNewEntity(int start, Entity en, float velX, float velY) {
-		actionList.add(new Action.AddEntity(en, velX, velY));
+	public void addNewEntity(int start, Entity user, Entity en, float velX, float velY) {
+		actionList.add(new Action.AddEntity(user, en, velX, velY));
 		actionStartTimes.add(start);
 	}
 	

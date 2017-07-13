@@ -307,7 +307,7 @@ public class GraphicsHandler {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.Filled);
+		debugRenderer.begin(ShapeType.Line);
 		for (ActionCircle ac: MapHandler.activeRoom.getActionCircleList()){
 			Circle c = ac.getArea();
 			debugRenderer.setColor(ac.getColor());
@@ -322,8 +322,10 @@ public class GraphicsHandler {
 				debugRenderer.rect(ell.x, ell.y, ell.width, ell.height);
 			}
 			if (e instanceof Fighter){
-				Rectangle tr = ((Fighter) e).groundBelowRect();
-				debugRenderer.setColor(0, 0, 0.4f, 0.6f);
+				Fighter fi = (Fighter) e;
+				Rectangle tr = fi.groundBelowRect();
+				if (fi.groundBelow()) debugRenderer.setColor(1.0f, 1.0f, 0.0f, 0.75f);
+				else debugRenderer.setColor(0.0f, 0.0f, 1.0f, 0.75f);
 				debugRenderer.rect(tr.x, tr.y, tr.width, tr.height);
 			}
 		}

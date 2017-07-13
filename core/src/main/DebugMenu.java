@@ -15,9 +15,7 @@ class DebugMenu extends Menu {
 
 	private static List<PlayerType> playableCharacters = new ArrayList<PlayerType>(Arrays.asList(
 			new PlayerType(Hero.class), new PlayerType(Basic.class),
-			new PlayerType(Basic.Bad.class), new PlayerType(Basic.Bomb.class),
-			new PlayerType(Basic.Beefy.class), new PlayerType(Basic.Bonkers.class),
-			new PlayerType(Basic.Baffle.class)
+			new PlayerType(Shoot.class), new PlayerType(Fly.class)
 			));
 	private static MenuOption<PlayerType> p1Char = new MenuOption<PlayerType>(playableCharacters);
 	private static MenuOption<PlayerType> p2Char = new MenuOption<PlayerType>(playableCharacters);
