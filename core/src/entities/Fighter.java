@@ -695,6 +695,10 @@ public abstract class Fighter extends Hittable{
 		grabbingTimer.setEndTime(caughtTime);
 		grabbingTimer.reset();
 	}
+	
+	public void parry(){
+		startAttack(new IDMove(moveList.parry(), MoveList.noStaleMove));
+	}
 
 	public void respawn() {
 		lives -= 1;

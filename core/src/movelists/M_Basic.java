@@ -187,4 +187,10 @@ public class M_Basic extends MoveList {
 		return m;
 	}
 
+	@Override
+	public Move parry() {
+		Move m = new Move(user, 12);
+		return m;
+	}
+
 }

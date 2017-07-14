@@ -28,6 +28,7 @@ public abstract class MoveList {
 	public abstract Move skid();
 	public abstract Move taunt();
 	public abstract Move block();
+	public abstract Move parry();
 	public Move getUpAttack(){
 		return dodge();
 	}

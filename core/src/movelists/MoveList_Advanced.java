@@ -76,6 +76,7 @@ public abstract class MoveList_Advanced extends MoveList{
 	public abstract Move land();
 	public abstract Move skid();
 	public abstract Move taunt();
+	public abstract Move perfectParry();
 
 	/* Move Selection */
 

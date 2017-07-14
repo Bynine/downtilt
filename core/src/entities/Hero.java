@@ -2,6 +2,9 @@ package entities;
 
 import main.GlobalRepo;
 import movelists.M_Hero;
+import movelists.MoveList;
+import movelists.MoveList_Advanced;
+import moves.IDMove;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -56,16 +59,17 @@ public class Hero extends Fighter {
 		defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
 	}
 	
-	public boolean isGuarding() { 
-		return state == State.GUARD; 
-		}
 	public boolean isPerfectGuarding() { 
 		int perfectGuard = 10;
-		return state == State.GUARD && guardTimer.getCounter() < perfectGuard; 
+		return isGuarding() && guardTimer.getCounter() < perfectGuard; 
 		}
 	
 	public Rectangle getNormalHurtBox(){
 		return GlobalRepo.makeHurtBoxDynamic(this, 0.8f, 0.9f);
+	}
+	
+	public void perfectParry(){
+		startAttack(new IDMove(((MoveList_Advanced)moveList).perfectParry(), MoveList.noStaleMove));
 	}
 	
 	TextureRegion getJumpFrame(float deltaTime){

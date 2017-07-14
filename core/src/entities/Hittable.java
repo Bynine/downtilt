@@ -274,6 +274,14 @@ public abstract class Hittable extends Entity {
 		return grabbable;
 	}
 	
+	public void parry(){
+		
+	}
+	
+	public void perfectParry(){
+		
+	}
+	
 	abstract TextureRegion getStandFrame(float deltaTime);
 	abstract TextureRegion getTumbleFrame(float deltaTime);
 	

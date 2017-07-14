@@ -85,8 +85,11 @@ public class Hitbox extends ActionCircle{
 			if (user instanceof Fighter) {
 				Fighter fi = (Fighter)user;
 				staleness = getStaleness(fi);
-				if (perfectGuarding) fi.setStun((int)(DAM * 4));
-				else if (guarding) fi.setStun((int)(DAM * 2));
+				if (isGuarding()) {
+					fi.setStun(10);
+					if (perfectGuarding)	target.perfectParry();
+					else if (guarding)		target.parry();
+				}
 			}
 			DAM *= user.getPower();
 			KBG *= user.getPower();
@@ -99,8 +102,7 @@ public class Hitbox extends ActionCircle{
 		if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
 		else 	if (ANG == REVERSE) setReverseAngle(target, knockback);
 		else 						knockback = setAngle(knockback);
-		if (perfectGuarding) knockback.set(0, 0);
-		else if (guarding) knockback.set(knockback.x/4, 0);
+		if (isGuarding()) knockback.set(0, 0);
 		knockback.x *= applyReverseHitbox(target);
 		if (knockbackFormula(target) > 8 && null != user) user.takeRecoil(recoilFormula(knockback, target));
 		int hitstun = hitstunFormula( target, knockbackFormula(target) * staleness );
@@ -136,6 +138,10 @@ public class Hitbox extends ActionCircle{
 		}
 		sfx.play();
 		hitFighterList.add(target);
+	}
+	
+	private boolean isGuarding(){
+		return guarding || perfectGuarding;
 	}
 	
 	protected Vector2 setAngle(Vector2 knockback){

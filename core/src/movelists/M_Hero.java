@@ -309,8 +309,10 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/fthrow.png", frames, frame);
 		m.dontTurn();
 		Hitbox thro  =  new Hitbox(user, 3.6f, 0.0f,  1, 70,  8, 0, throwSize, new SFX.None());
-		Hitbox swing1 = new Hitbox(user, 4.0f, 2.4f, 14, 30,  8, 0, 20, new SFX.MeatyHit());
-		Hitbox swing2 = new Hitbox(user, 4.0f, 2.4f, 14, 30, 28, 0, 20, new SFX.MeatyHit());
+		Hitbox swing1 = new Hitbox(user, 5.4f, 1.0f, 14, 30,  8, 0, 20, new SFX.MeatyHit());
+		Hitbox swing2 = new Hitbox(user, 5.4f, 1.0f, 14, 30, 28, 0, 20, new SFX.MeatyHit());
+//		Hitbox swing1 = new Hitbox(user, 4.0f, 2.4f, 14, 30,  8, 0, 20, new SFX.MeatyHit());
+//		Hitbox swing2 = new Hitbox(user, 4.0f, 2.4f, 14, 30, 28, 0, 20, new SFX.MeatyHit());
 		thro.setNoReverse();
 		swing1.setNoReverse();
 		swing2.setNoReverse();
@@ -327,8 +329,9 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 24);
 		m.setAnimation("sprites/fighters/bomber/bthrow.png", 3, 8);
 		m.dontTurn();
-		Hitbox thro = new Hitbox(user, 5.5f, 0, 2, 160, 8, 0, throwSize, new SFX.LightHit());
-		Hitbox kick = new Hitbox(user, 3, 2.4f, 12, 150, -24, 0, throwSize, new SFX.MeatyHit());
+		Hitbox thro = new Hitbox(user, 5.5f, 0.0f,  2, 160, 8, 0, throwSize, new SFX.LightHit());
+		Hitbox kick = new Hitbox(user, 4.1f, 1.1f, 12, 150, -24, 0, throwSize, new SFX.MeatyHit());
+//		Hitbox kick = new Hitbox(user, 3, 2.4f, 12, 150, -24, 0, throwSize, new SFX.MeatyHit());
 		thro.setNoReverse();
 		kick.setNoReverse();
 		kick.setHitstunType(Fighter.HitstunType.SUPER);
@@ -341,7 +344,8 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 14);
 		m.dontTurn();
 		m.setAnimation("sprites/fighters/bomber/uthrow.png", 1, 1);
-		Hitbox h1 = new Hitbox(user, 5, 1.6f, 12, 90, 8, 0, throwSize, new SFX.MidHit());
+		Hitbox h1 = new Hitbox(user, 6.3f, 0.8f, 12, 86, 8, 0, throwSize, new SFX.MidHit());
+//		Hitbox h1 = new Hitbox(user, 5.0f, 1.6f, 12, 90, 8, 0, throwSize, new SFX.MidHit());
 		h1.setNoReverse();
 		h1.setHitstunType(Fighter.HitstunType.SUPER);
 		m.eventList.addActionCircle(h1, 0, 4);
@@ -353,7 +357,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/dthrow.png", 1, 1);
 		m.dontTurn();
 		Hitbox down = 	new Hitbox(user, 3.0f, 0.0f, 4, 270, 8,  0, throwSize, new SFX.LightHit());
-		Hitbox up = 	new Hitbox(user, 5.6f, 0.1f, 8,  82, 8, -8, throwSize, new SFX.MeatyHit());
+		Hitbox up = 	new Hitbox(user, 5.6f, 0.0f, 8,  82, 8, -8, throwSize, new SFX.MeatyHit());
 		down.setNoReverse();
 		up.setNoReverse();
 		m.eventList.addActionCircle(down, 0, 1);
@@ -365,7 +369,8 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 24);
 		m.setAnimation("sprites/fighters/bomber/fairthrow.png", 2, 8);
 		Hitbox toss= new Hitbox(user, 3.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
-		Hitbox hit = new Hitbox(user, 3.0f, 2.8f, 14, 30, 22, 0, throwSize, new SFX.MidHit());
+		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14, 30, 22, 0, throwSize, new SFX.MidHit());
+//		Hitbox hit = new Hitbox(user, 3.0f, 2.8f, 14, 30, 22, 0, throwSize, new SFX.MidHit());
 		hit.setNoReverse();
 		hit.setHitstunType(Fighter.HitstunType.SUPER);
 		m.eventList.addConstantVelocity(user, 0, 8, Action.ChangeVelocity.noChange, 0);
@@ -378,7 +383,8 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 18);
 		m.setAnimation("sprites/fighters/bomber/fjump.png", 1, 1);
 		m.dontTurn();
-		Hitbox h1 = new Hitbox(user, 3, 2.4f, 14, 150, 24, -12, throwSize, new SFX.MidHit());
+		Hitbox h1 = new Hitbox(user, 4.2f, 1.4f, 14, 150, 24, -12, throwSize, new SFX.MidHit());
+//		Hitbox h1 = new Hitbox(user, 3.0f, 2.4f, 14, 150, 24, -12, throwSize, new SFX.MidHit());
 		h1.setNoReverse();
 		h1.setHitstunType(Fighter.HitstunType.SUPER);
 		m.eventList.addVelocityChange(user, 5, 4, 4);
@@ -389,7 +395,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move uAirThrow(){
 		Move m = new Move(user, 8);
 		m.setAnimation("sprites/fighters/bomber/uairthrow.png", 1, 1);
-		Hitbox h1 = new Hitbox(user, 8, 0.1f, 10, 90, 8, 0, throwSize, new SFX.MidHit());
+		Hitbox h1 = new Hitbox(user, 8.0f, 0.4f, 10, 90, 8, 0, throwSize, new SFX.MidHit());
 		h1.setNoReverse();
 		m.eventList.addActionCircle(h1, 0, 4);
 		m.eventList.addVelocityChange(user, 0, Action.ChangeVelocity.noChange, 7);
@@ -399,7 +405,8 @@ public class M_Hero extends MoveList_Advanced{
 	public Move dAirThrow(){
 		Move m = new Move(user, 24);
 		m.setAnimation("sprites/fighters/bomber/dthrow.png", 1, 1);
-		Hitbox down = new Hitbox(user, 2.4f, 3.6f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
+		Hitbox down = new Hitbox(user, 4.0f, 1.1f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
+//		Hitbox down = new Hitbox(user, 2.4f, 3.6f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
 		down.setNoReverse();
 		m.eventList.addActionCircle(down, 0, 4);
 		m.eventList.addVelocityChange(user, 0, -4.0f, 5.0f);
@@ -535,7 +542,28 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move block(){
-		Move m = new Move(user, 0);
+		Move m = new Move(user, 45);
+		m.setAnimation("sprites/fighters/bomber/block.png", 1, 1);
+		m.setStopsInAir();
+		m.eventList.addGuard(user, 0, 30);
+		return m;
+	}
+	
+	@Override
+	public Move parry() {
+		Move m = new Move(user, 20);
+		m.setAnimation("sprites/fighters/bomber/nweak.png", 1, 1);
+		Hitbox h1 = new Hitbox(user, 5.2f, 1.6f, 10, 20, 19, 0, 12, new SFX.MidHit());
+		m.eventList.addActionCircle(h1, 2, 5);
+		return m;
+	}
+	
+	@Override
+	public Move perfectParry() {
+		Move m = new Move(user, 40);
+		m.setAnimation("sprites/fighters/bomber/taunt.png", 2, 40);
+		Hitbox h1 = new Hitbox(user, 6.0f, 3.0f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit());
+		m.eventList.addActionCircle(h1, 2, 16);
 		return m;
 	}
 

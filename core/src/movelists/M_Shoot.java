@@ -165,5 +165,11 @@ public class M_Shoot extends MoveList {
 		m.eventList.addGuard(user, 5, 45);
 		return m;
 	}
+	
+	@Override
+	public Move parry() {
+		Move m = new Move(user, 12);
+		return m;
+	}
 
 }
