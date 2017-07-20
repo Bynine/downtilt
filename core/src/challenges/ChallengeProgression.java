@@ -36,7 +36,7 @@ public class ChallengeProgression {
 	 * Selection of wave lists for each challenge.
 	 */
 	List<Wave> waveTest = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots), 8, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.zen), 8, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
 			));
 	
@@ -70,17 +70,17 @@ public class ChallengeProgression {
 	 * List of challenges to be iterated through.
 	 */
 	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList(
-//			new  ChallengeNorm(new Stage_Standard(), waveTest)
-//			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
-//			,new ChallengeNorm(new Stage_Blocks(), waveBlocks)
-//			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
-//			,new ChallengeNorm(new Stage_Sky(), waveFinal)
-
-			new  ChallengeNorm(new Stage_Standard(), waveStandard)
+			new  ChallengeNorm(new Stage_Standard(), waveTest)
 			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
 			,new ChallengeNorm(new Stage_Blocks(), waveBlocks)
 			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
 			,new ChallengeNorm(new Stage_Sky(), waveFinal)
+
+//			new  ChallengeNorm(new Stage_Standard(), waveStandard)
+//			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
+//			,new ChallengeNorm(new Stage_Blocks(), waveBlocks)
+//			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
+//			,new ChallengeNorm(new Stage_Sky(), waveFinal)
 			));
 
 	public Challenge getActiveChallenge(){
