@@ -337,11 +337,11 @@ public abstract class Entity {
 	}
 	public Color getColor() { return new Color(1, 1, 1, 1); }
 	public Layer getLayer() { return layer; }
-	private final List<State> groundedStates = new ArrayList<State>(Arrays.asList(State.STAND, State.WALK, State.RUN, State.DASH, State.CROUCH, State.GUARD));
+	private final List<State> groundedStates = new ArrayList<State>(Arrays.asList(State.STAND, State.WALK, State.RUN, State.DASH, State.CROUCH));
 
 	public static enum Direction{ LEFT, RIGHT }
 	public static enum Layer{ FRONT, FOREGROUND, BACKGROUND }
-	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, GUARD, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
+	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
 	public static enum Collision{ SOLID, CREATURE, GHOST }
 	public float getGravity() { return gravity; }
 	public float getFallSpeed() { return fallSpeed; }

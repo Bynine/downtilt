@@ -115,7 +115,7 @@ public class M_Basic extends MoveList {
 	public Move uSpecial() {
 		int frames = 5;
 		int frame = 15;
-		float pushY = 15.2f;
+		float pushY = 15.6f;
 
 		Move m = new Move(user, frames * frame);
 		m.setHelpless();
@@ -126,7 +126,7 @@ public class M_Basic extends MoveList {
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
 		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, 0);
-		m.eventList.addConstantVelocity(user, frame*2, frame * 2 + 4, Action.ChangeVelocity.noChange, pushY);
+		m.eventList.addConstantVelocity(user, frame*2, frame * 2 + 6, Action.ChangeVelocity.noChange, pushY);
 		m.eventList.addActionCircle(early, frame * 2, frame * 3 );
 		m.eventList.addActionCircle(late,  frame * 3, frame * 4 );
 		return m;
@@ -180,16 +180,19 @@ public class M_Basic extends MoveList {
 	}
 	
 	public Move block(){
-		Move m = new Move(user, 60);
+		Move m = new Move(user, 90);
 		m.setAnimation("sprites/fighters/basic/block.png", 1, 1);
 		m.setStopsInAir();
-		m.eventList.addGuard(user, 5, 45);
+		m.eventList.addGuard(user, 10, 60);
 		return m;
 	}
 
 	@Override
 	public Move parry() {
-		Move m = new Move(user, 12);
+		Move m = new Move(user, 30);
+		m.setAnimation("sprites/fighters/basic/parry.png", 1, 1);
+		Hitbox parry = new Hitbox(user, 5.6f, 0.8f, 10, Hitbox.SAMURAI, 4, 0, 30, new SFX.MidHit());
+		m.eventList.addActionCircle(parry, 0, 20);
 		return m;
 	}
 

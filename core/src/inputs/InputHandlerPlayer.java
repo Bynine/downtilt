@@ -19,7 +19,7 @@ public abstract class InputHandlerPlayer extends InputHandler {
 		inputToCommand(charge(), commandCharge);
 		inputToCommand(jump(), commandJump);
 		inputToCommand(grab(), commandGrab);
-		inputToCommand(dodge(), commandDodge);
+		inputToCommand(dodge(), commandBlock);
 		inputToCommand(taunt(), commandTaunt);
 		inputToCommand(flickLeft(), commandStickLeft);
 		inputToCommand(flickRight(), commandStickRight);

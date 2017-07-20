@@ -128,12 +128,6 @@ public class M_Fly extends MoveList {
 	}
 	
 	public Move block(){
-		Move m = new Move(user, 12);
-		return m;
-	}
-	
-	@Override
-	public Move parry() {
 		int invinc = 24;
 		int length = 42;
 		
@@ -142,6 +136,12 @@ public class M_Fly extends MoveList {
 		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
 		m.eventList.addInvincible(user, 10, invinc);
 		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);
+		return m;
+	}
+	
+	@Override
+	public Move parry() {	
+		Move m = new Move(user, 1);
 		return m;
 	}
 

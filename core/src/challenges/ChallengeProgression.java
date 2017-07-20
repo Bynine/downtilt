@@ -35,7 +35,7 @@ public class ChallengeProgression {
 	 * Selection of wave lists for each challenge.
 	 */
 	List<Wave> waveTest = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.flies), 8, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoots), 8, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
 			));
 	

@@ -3,7 +3,9 @@ package movelists;
 import entities.Fighter;
 import entities.Hurlable;
 import main.GlobalRepo;
+import main.SFX;
 import moves.Action;
+import moves.Hitbox;
 import moves.Move;
 
 public class M_Shoot extends MoveList {
@@ -168,7 +170,10 @@ public class M_Shoot extends MoveList {
 	
 	@Override
 	public Move parry() {
-		Move m = new Move(user, 12);
+		Move m = new Move(user, 30);
+		m.setAnimation("sprites/fighters/shoot/parry.png", 1, 1);
+		Hitbox parry = new Hitbox(user, 8.6f, 0.0f, 2, 67, 0, 0, 48, new SFX.Pop());
+		m.eventList.addActionCircle(parry, 0, 10);
 		return m;
 	}
 

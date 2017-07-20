@@ -58,20 +58,22 @@ public class Hero extends Fighter {
 		moveList = new M_Hero(this);
 		defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
 	}
-	
+
 	public boolean isPerfectGuarding() { 
 		int perfectGuard = 10;
 		return isGuarding() && guardTimer.getCounter() < perfectGuard; 
-		}
-	
+	}
+
 	public Rectangle getNormalHurtBox(){
 		return GlobalRepo.makeHurtBoxDynamic(this, 0.8f, 0.9f);
 	}
-	
+
 	public void perfectParry(){
+		endAttack();
+		invincibleTimer.reset();
 		startAttack(new IDMove(((MoveList_Advanced)moveList).perfectParry(), MoveList.noStaleMove));
 	}
-	
+
 	TextureRegion getJumpFrame(float deltaTime){
 		if (!doubleJumpGraphicTimer.timeUp()) return dJumpImage;
 		else if (Math.abs(velocity.x) > 1 && Math.signum(velocity.x) != direct()) return bJumpImage; 

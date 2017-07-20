@@ -73,6 +73,7 @@ public abstract class Hurlable extends Hittable {
 	private static abstract class Breakable extends Hurlable {
 		
 		protected final DurationTimer life = new DurationTimer(400);
+		protected float frailtyMod = 3;
 		
 		public Breakable(float posX, float posY){
 			super(posX, posY);
@@ -90,7 +91,7 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		protected void takeDamage(float DAM){
-			life.moveCounterForward((int) (DAM * 3) );
+			life.moveCounterForward((int) (DAM * frailtyMod) );
 		}
 		
 		public Color getColor(){
@@ -133,7 +134,8 @@ public abstract class Hurlable extends Hittable {
 			baseWeight = 90;
 			baseHurtleBK = minSpeedForHit;
 			touchRadius = 16;
-			life.setEndTime(600);
+			life.setEndTime(240);
+			frailtyMod = 1.5f;
 		}
 		
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {

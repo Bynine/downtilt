@@ -13,7 +13,7 @@ public abstract class InputHandler {
 	public static final int commandSpecial		= 1;
 	public static final int commandJump			= 2;
 	public static final int commandCharge		= 3; 
-	public static final int commandDodge		= 4;
+	public static final int commandBlock		= 4;
 	public static final int commandGrab 		= 5;
 	public static final int commandSelect 		= 6;
 	public static final int commandPause 		= 7;
@@ -26,7 +26,6 @@ public abstract class InputHandler {
 	public static final int commandCStickRight	=32;
 	public static final int commandCStickDown	=33;
 	public static final int commandTaunt 		=40;
-	public static final int commandBlock		=50;
 
 	Fighter fighter;
 	public InputHandler(Fighter fighter){
@@ -56,7 +55,7 @@ public abstract class InputHandler {
 			fighter.queuedCommand = command;
 			fighter.restartInputQueue();
 		}
-		else if (wasCommandAccepted && !(command == commandDodge)) {
+		else if (wasCommandAccepted) {
 			fighter.queuedCommand = commandNone;
 		}
 	}
@@ -89,7 +88,6 @@ public abstract class InputHandler {
 		case commandGrab:	 		return fighter.tryGrab();
 		case commandCharge: 		return fighter.tryCharge();
 		case commandTaunt:			return fighter.tryTaunt();
-		case commandDodge:			return fighter.tryDodge();
 		case commandCStickRight:	return fighter.tryCStickForward();
 		case commandCStickLeft:		return fighter.tryCStickBack();
 		case commandCStickUp:		return fighter.tryCStickUp();

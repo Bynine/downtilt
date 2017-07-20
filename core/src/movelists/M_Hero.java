@@ -15,6 +15,7 @@ import moves.Move;
 import moves.Effect.Charge;
 import entities.Entity.Direction;
 import entities.Fighter;
+import entities.Hittable.HitstunType;
 import entities.Projectile;
 
 public class M_Hero extends MoveList_Advanced{
@@ -408,6 +409,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox down = new Hitbox(user, 4.0f, 1.1f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
 //		Hitbox down = new Hitbox(user, 2.4f, 3.6f, 14, 270, 8, 0, throwSize, new SFX.HeavyHit());
 		down.setNoReverse();
+		down.setHitstunType(Fighter.HitstunType.SUPER);
 		m.eventList.addActionCircle(down, 0, 4);
 		m.eventList.addVelocityChange(user, 0, -4.0f, 5.0f);
 		return m;
@@ -543,8 +545,7 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move block(){
 		Move m = new Move(user, 45);
-		m.setAnimation("sprites/fighters/bomber/block.png", 1, 1);
-		m.setStopsInAir();
+		m.setAnimation("sprites/fighters/bomber/dodgebegin.png", 1, 1);
 		m.eventList.addGuard(user, 0, 30);
 		return m;
 	}
@@ -552,18 +553,22 @@ public class M_Hero extends MoveList_Advanced{
 	@Override
 	public Move parry() {
 		Move m = new Move(user, 20);
-		m.setAnimation("sprites/fighters/bomber/nweak.png", 1, 1);
-		Hitbox h1 = new Hitbox(user, 5.2f, 1.6f, 10, 20, 19, 0, 12, new SFX.MidHit());
-		m.eventList.addActionCircle(h1, 2, 5);
+		m.setAnimation("sprites/fighters/bomber/parry.png", 1, 1);
+		Hitbox h1 = new Hitbox(user, 5.2f, 1.6f, 12, 20, 19, 0, 12, new SFX.MidHit());
+		h1.setHitstunType(HitstunType.SUPER);
+		m.eventList.addActionCircle(h1, 10, 15);
+		m.eventList.addInvincible(user, 0, 10);
 		return m;
 	}
 	
 	@Override
 	public Move perfectParry() {
-		Move m = new Move(user, 40);
-		m.setAnimation("sprites/fighters/bomber/taunt.png", 2, 40);
-		Hitbox h1 = new Hitbox(user, 6.0f, 3.0f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit());
-		m.eventList.addActionCircle(h1, 2, 16);
+		Move m = new Move(user, 30);
+		m.setAnimation("sprites/fighters/bomber/perfectparry.png", 1, 1);
+		Hitbox h1 = new Hitbox(user, 6.0f, 3.5f, 24, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit());
+		h1.setHitstunType(HitstunType.SUPER);
+		m.eventList.addActionCircle(h1, 10, 20);
+		m.eventList.addInvincible(user, 0, 30);
 		return m;
 	}
 

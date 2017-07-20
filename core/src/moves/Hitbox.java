@@ -192,7 +192,10 @@ public class Hitbox extends ActionCircle{
 		if (!DowntiltEngine.getPlayers().contains(target) && !DowntiltEngine.getPlayers().contains(user)) return;
 		float hit = knockbackFormula(target);
 		if (target.getArmor() > 0) hit += target.getArmor();
-		int hitlag = hitlagFormula(hit);
+		int hitlag;
+		if (perfectGuarding) hitlag = (int) (DAM / 2);
+		else if (guarding) hitlag = (int) (DAM / 2);
+		else hitlag = hitlagFormula(hit);
 		DowntiltEngine.causeHitlag(hitlag);
 	}
 
