@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 
 import entities.Basic;
 import entities.Entity;
-import entities.Entity.Direction;
 import entities.Hittable;
 
 public class GlobalRepo {
@@ -23,8 +22,11 @@ public class GlobalRepo {
 	public static final int BADTEAM = 1;
 	public static final int NOTEAM = 2;
 	public static final float HEROHITSTUNMOD = 0.7f;
-	public static final float ENEMYHITSTUNMOD = 1.0f;
+	public static final float ENEMYHITSTUNMOD = 0.9f;
 	public static final int WHITEFREEZE = 1;
+	public static boolean 	fpsLogToggle 	= false;
+	public static boolean 	debugToggle 	= true;
+	public static boolean	musicToggle		= false;
 	private static BlockColor blockColor = BlockColor.R;
 	
 	/* GLOBAL METHODS */
@@ -47,47 +49,21 @@ public class GlobalRepo {
 	public static void log(String str){
 		System.out.println(str + " at " + DowntiltEngine.getDeltaTime());
 	}
-	
-	public static Rectangle makeRectangleFromRectangle(Rectangle r){
-		return new Rectangle(r.x, r.y, r.width, r.height);
-	}
-	
+
 	public static Rectangle makeHurtBox(Entity user, int width, int height){
-		return makeHurtBoxHelper(user, width, height);
+		return user.getImage().getBoundingRectangle();
 	}
 	
 	public static Rectangle makeHurtBoxDynamic(Entity user, float scaleX, float scaleY){
-		Rectangle hurtBox = user.getImage().getBoundingRectangle();
-		int newWidth = (int) (hurtBox.getWidth() * scaleX);
-		int newHeight = (int) (hurtBox.getHeight() * scaleY);
-		return makeHurtBoxHelper(user, newWidth, newHeight);
-	}
-	
-	private static Rectangle makeHurtBoxHelper(Entity user, int width, int height){
-		Rectangle hurtBox = GlobalRepo.makeRectangleFromRectangle(user.getImage().getBoundingRectangle());
-		float changeX = hurtBox.width - width;
-		float changeY = hurtBox.height - height;
-		hurtBox.setSize(width, height);
-		float newX = hurtBox.x + changeX/2;
-		float newY = hurtBox.y + changeY/2;
-		hurtBox.setPosition(newX, newY);
-		return hurtBox;
+		return user.getImage().getBoundingRectangle();
 	}
 	
 	public static Rectangle makeHurtBoxInner(Entity user, int width, int height){
-		return makeHurtBoxDirection(user, width, height, user.getDirection() == Direction.LEFT);
+		return user.getImage().getBoundingRectangle();
 	}
 	
 	public static Rectangle makeHurtBoxOuter(Entity user, int width, int height){
-		return makeHurtBoxDirection(user, width, height, user.getDirection() == Direction.RIGHT);
-	}
-	
-	private static Rectangle makeHurtBoxDirection(Entity user, int width, int height, boolean dir){
-		Rectangle origBox = user.getImage().getBoundingRectangle();
-		Rectangle hurtBox = makeHurtBoxHelper(user, width, height);
-		if (dir) hurtBox.x = origBox.x + (origBox.width - hurtBox.width);
-		else hurtBox.x = origBox.x;
-		return hurtBox;
+		return user.getImage().getBoundingRectangle();
 	}
 	
 	public static <T> T getRandomElementFromList(List<T> lst){

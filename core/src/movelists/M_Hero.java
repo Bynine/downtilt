@@ -53,8 +53,8 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 20);
 		m.setAnimation("sprites/fighters/bomber/dweak.png", 2, 10);
 		m.setHurtBox(GlobalRepo.makeHurtBoxInner(user, 24, 30));
-		Hitbox inner = new Hitbox(user, 4, 0.7f, 6, 82, -4, -8, 12, new SFX.MidHit());
-		Hitbox midd =  new Hitbox(user, 4, 0.8f, 7, 88, 10,-11, 10, new SFX.MidHit());
+		Hitbox inner = new Hitbox(user, 4, 0.7f, 6, 82,  2, -8, 12, new SFX.MidHit());
+		Hitbox midd =  new Hitbox(user, 4, 0.8f, 7, 88, 13,-11, 10, new SFX.MidHit());
 		Hitbox outer = new Hitbox(user, 4, 0.9f, 8, 96, 27,-11, 10, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(inner, midd, outer));
 		m.eventList.addActionCircle(inner, 10, 19);

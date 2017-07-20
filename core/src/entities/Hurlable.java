@@ -169,7 +169,7 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		public boolean inHitstun(){
-			if (life.getCounter() < 10) return false;
+			if (life.getCounter() < 6) return false;
 			return knockbackIntensity(velocity) > minSpeedForHit;
 		}
 		

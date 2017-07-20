@@ -462,8 +462,9 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public Rectangle getHurtBox(){
-		if (null == activeMove || activeMove.move.getHurtBox() == null) return getNormalHurtBox();
-		else return activeMove.move.getHurtBox();
+		return getNormalHurtBox();
+//		if (null == activeMove || activeMove.move.getHurtBox() == null) return getNormalHurtBox();
+//		else return activeMove.move.getHurtBox();
 	}
 
 	public Rectangle getNormalHurtBox(){

@@ -132,7 +132,7 @@ public class M_Fly extends MoveList {
 		int length = 42;
 		
 		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/fly/dash.png", 1, 1);
+		m.setAnimation("sprites/fighters/fly/dodge.png", 1, 1);
 		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
 		m.eventList.addInvincible(user, 10, invinc);
 		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);

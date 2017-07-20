@@ -29,12 +29,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static ChallengeProgression challengeProgression;
 	private static GameState gameState = GameState.MENU;
 	private static InputHandlerPlayer primaryInputHandler = null;
-
-	/* DEBUG */
-	public static boolean 	fpsLogToggle 	= false;
-	public static boolean 	debugToggle 	= false;
-	public static boolean	musicToggle		= true;
-	private static float	volume			= 1f;
+	private static float volume	= 1f;
 	private static ShaderProgram p2Palette;
 
 	public void create () {
@@ -72,7 +67,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 			deltaTime++;
 			updateTimers();
 		}
-		if (fpsLogToggle) fpsLogger.log();
+		if (GlobalRepo.fpsLogToggle) fpsLogger.log();
 		
 		switch(gameState){
 		case GAME:	updateGame();		break;
@@ -124,7 +119,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	
 	public static void startDebugChallenge(List<Fighter> newPlayers, int startChallenge, boolean debug){
 		startNewChallenge(newPlayers, startChallenge);
-		debugToggle = debug;
+		GlobalRepo.debugToggle = debug;
 	}
 	
 	public static void startNewChallenge(List<Fighter> newPlayers, int startChallenge){

@@ -20,7 +20,7 @@ public class Move {
 	private Animation animation = null;
 	private int addedFrames = 0;
 	private Rectangle hurtBox = null;
-	private float hurtBoxDispX = 0, hurtBoxDispY = 0;
+	private float hurtBoxDispX = 0, hurtBoxDispY = 0, hurtBoxWidth = 0, hurtBoxHeight = 0;
 
 	public Move(Fighter user, int dur){
 		this.user = user;
@@ -33,11 +33,16 @@ public class Move {
 		for (ActionCircle ac: eventList.acList){
 			if (ac.hitFighterList.size() > 0) connected = true;
 		}
-		if (null != user && null != hurtBox){
-			hurtBox.x = user.getPosition().x + hurtBoxDispX;
-			if (user.getDirection() == Direction.LEFT) hurtBox.x += hurtBox.width/2;
-			hurtBox.y = user.getPosition().y + hurtBoxDispY;
-		}
+		if (null != user && null != hurtBox) updateHurtBox();
+	}
+
+	private void updateHurtBox(){
+//		hurtBox.x = user.getImage().getX() + hurtBoxDispX;
+//		if (user.getDirection() == Direction.LEFT) hurtBox.x += hurtBox.width/2;
+//		hurtBox.y = user.getImage().getY() + hurtBoxDispY;
+		hurtBox.width = hurtBoxWidth;
+		hurtBox.height = hurtBoxHeight;
+		//System.out.println("HB width: " + hurtBox.width + " height: " + hurtBox.height);
 	}
 
 	public boolean done(){ return duration.timeUp(); }
@@ -64,9 +69,14 @@ public class Move {
 		return false;
 	}
 	public void setHurtBox(Rectangle hb) { 
+		System.out.println("Set hurtbox");
 		hurtBox = hb; 
 		hurtBoxDispX = hb.x - user.getImage().getBoundingRectangle().x;
 		hurtBoxDispY = hb.y - user.getImage().getBoundingRectangle().y;
+		hurtBoxWidth = hb.width;
+		hurtBoxHeight = hb.height;
+		if (hurtBoxWidth < 0) hurtBoxWidth *= -1;
+		if (hurtBoxHeight < 0) hurtBoxHeight *= -1;
 	}
 
 	public void setAnimation(String string, int cols, int speed) {

@@ -161,7 +161,7 @@ public class GraphicsHandler {
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
-		if (DowntiltEngine.debugToggle) debugRender();
+		if (GlobalRepo.debugToggle) debugRender();
 
 		batch.begin();
 		renderGUI();
@@ -175,7 +175,7 @@ public class GraphicsHandler {
 			Fighter fi = (Fighter) e;
 			drawFighterPercentage(fi);
 			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
-			if (DowntiltEngine.debugToggle) drawState(e);
+			if (GlobalRepo.debugToggle) drawState(e);
 
 			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
 			if (fi.isInvincible()) 
@@ -307,37 +307,28 @@ public class GraphicsHandler {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.Line);
+		debugRenderer.begin(ShapeType.Filled);
 		for (ActionCircle ac: MapHandler.activeRoom.getActionCircleList()){
-			Circle c = ac.getArea();
+			Circle actionCircle = ac.getArea();
 			debugRenderer.setColor(ac.getColor());
 			if (ac.toRemove()) debugRenderer.setColor(0.9f, 1, 1, 0.5f);
-			debugRenderer.circle(c.x, c.y, c.radius);
+			debugRenderer.circle(actionCircle.x, actionCircle.y, actionCircle.radius);
 		}
 
 		for (Entity e: MapHandler.activeRoom.getEntityList()){
-			Rectangle ell = e.getHurtBox();
+			Rectangle hurtbox = e.getHurtBox();
 			if (e instanceof Hittable) {
 				debugRenderer.setColor(0, 1, 0, 0.4f);
-				debugRenderer.rect(ell.x, ell.y, ell.width, ell.height);
+				debugRenderer.rect(hurtbox.x, hurtbox.y, hurtbox.width, hurtbox.height);
 			}
 			if (e instanceof Fighter){
 				Fighter fi = (Fighter) e;
-				Rectangle tr = fi.groundBelowRect();
+				Rectangle groundBelowRect = fi.groundBelowRect();
 				if (fi.groundBelow()) debugRenderer.setColor(1.0f, 1.0f, 0.0f, 0.75f);
 				else debugRenderer.setColor(0.0f, 0.0f, 1.0f, 0.75f);
-				debugRenderer.rect(tr.x, tr.y, tr.width, tr.height);
+				debugRenderer.rect(groundBelowRect.x, groundBelowRect.y, groundBelowRect.width, groundBelowRect.height);
 			}
 		}
-		debugRenderer.end();
-	}
-
-	public static void drawRectangle(Rectangle r) {
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		debugRenderer.begin(ShapeType.Filled);
-		debugRenderer.setColor(new Color(1, 1, 1, 1));
-		debugRenderer.rect(r.x, r.y, r.width, r.height);
 		debugRenderer.end();
 	}
 

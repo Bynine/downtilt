@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import main.GlobalRepo;
 import main.MapHandler;
 import main.SFX;
 import main.DowntiltEngine;
@@ -217,7 +216,7 @@ public abstract class Entity {
 	}
 
 	public Rectangle getHurtBox(){
-		return GlobalRepo.makeRectangleFromRectangle(image.getBoundingRectangle());
+		return image.getBoundingRectangle();
 	}
 
 	public void flip(){
@@ -242,7 +241,7 @@ public abstract class Entity {
 		hitboxRect.setHeight(hitboxRect.getHeight() - decrement);
 		hitboxRect.setX(hitboxRect.getX() + decrement/2);
 		hitboxRect.setY(hitboxRect.getY() + decrement/2);
-		return Intersector.overlaps(image.getBoundingRectangle(), hitboxRect);
+		return Intersector.overlaps(getHurtBox(), hitboxRect);
 	}
 
 	public void setPosition(Vector2 startPosition) {

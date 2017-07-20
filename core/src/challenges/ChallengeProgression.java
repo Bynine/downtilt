@@ -6,6 +6,7 @@ import java.util.List;
 
 import entities.*;
 import main.DowntiltEngine;
+import main.GlobalRepo;
 import main.SFX;
 import maps.*;
 
@@ -91,7 +92,7 @@ public class ChallengeProgression {
 	 * Starts a new challenge after finishing the old one..
 	 */
 	public void update(){
-		if (DowntiltEngine.musicToggle) getActiveChallenge().getStage().getMusic().play();
+		if (GlobalRepo.musicToggle) getActiveChallenge().getStage().getMusic().play();
 		if (!getActiveChallenge().started) getActiveChallenge().begin();
 		getActiveChallenge().update();
 		if (getActiveChallenge().finished()) {
