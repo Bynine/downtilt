@@ -102,7 +102,7 @@ public class Hitbox extends ActionCircle{
 		if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
 		else 	if (ANG == REVERSE) setReverseAngle(target, knockback);
 		else 						knockback = setAngle(knockback);
-		if (isGuarding()) knockback.set(0, 0);
+		if (isGuarding() || staleness == overuseStaleness) knockback.set(0, 0);
 		knockback.x *= applyReverseHitbox(target);
 		if (knockbackFormula(target) > 8 && null != user) user.takeRecoil(recoilFormula(knockback, target));
 		int hitstun = hitstunFormula( target, knockbackFormula(target) * staleness );
@@ -121,12 +121,7 @@ public class Hitbox extends ActionCircle{
 		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
 		
 		startHitlag(target);
-		if (perfectGuarding) {
-			sfx = new SFX.EmptyHit();
-			new SFX.Victory().play();
-			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
-		}
-		else if (guarding) {
+		if (guarding) {
 			sfx = new SFX.EmptyHit();
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
@@ -148,6 +143,7 @@ public class Hitbox extends ActionCircle{
 		return knockback.setAngle(ANG);
 	}
 
+	private static final float overuseStaleness = 0.25f;
 	private float getStaleness(Fighter user) {
 		float staleMod = 0.94f;
 		IDMove currMove = user.getActiveMove();
@@ -160,7 +156,7 @@ public class Hitbox extends ActionCircle{
 			if (im.id != currMove.id) spam = false;
 		}
 		if (spam) {
-			staleness = 0.25f;
+			staleness = overuseStaleness;
 			sfx = new SFX.EmptyHit();
 		}
 		return staleness;
@@ -191,7 +187,7 @@ public class Hitbox extends ActionCircle{
 	void startHitlag(Hittable target){
 		if (!DowntiltEngine.getPlayers().contains(target) && !DowntiltEngine.getPlayers().contains(user)) return;
 		float hit = knockbackFormula(target);
-		if (target.getArmor() > 0) hit += target.getArmor();
+		hit += target.getArmor();
 		int hitlag;
 		if (perfectGuarding) hitlag = (int) (DAM / 2);
 		else if (guarding) hitlag = (int) (DAM / 2);
@@ -211,7 +207,6 @@ public class Hitbox extends ActionCircle{
 	}
 
 	public int hitstunFormula(Hittable target, float knockback){
-		//final float hitstunRatio = 4f;
 		final float hitstunRatio = 5f;
 		if (BKB + KBG == 0 || perfectGuarding) return 0;
 		int hitstun = 2 + (int) (knockback * hitstunRatio * target.getHitstun());

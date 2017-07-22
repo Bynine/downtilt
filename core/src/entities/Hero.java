@@ -1,6 +1,7 @@
 package entities;
 
 import main.GlobalRepo;
+import main.SFX;
 import movelists.M_Hero;
 import movelists.MoveList;
 import movelists.MoveList_Advanced;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Hero extends Fighter {
 
@@ -60,16 +60,13 @@ public class Hero extends Fighter {
 	}
 
 	public boolean isPerfectGuarding() { 
-		int perfectGuard = 10;
+		int perfectGuard = 5;
 		return isGuarding() && guardTimer.getCounter() < perfectGuard; 
-	}
-
-	public Rectangle getNormalHurtBox(){
-		return GlobalRepo.makeHurtBoxDynamic(this, 0.8f, 0.9f);
 	}
 
 	public void perfectParry(){
 		endAttack();
+		new SFX.Victory().play();
 		invincibleTimer.reset();
 		startAttack(new IDMove(((MoveList_Advanced)moveList).perfectParry(), MoveList.noStaleMove));
 	}

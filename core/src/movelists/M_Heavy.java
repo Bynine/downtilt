@@ -9,24 +9,26 @@ import moves.Effect;
 import moves.Hitbox;
 import moves.Move;
 import moves.Effect.Charge;
-import entities.Basic;
 import entities.Fighter;
+import entities.Heavy;
 
-public class M_Basic extends MoveList {
+public class M_Heavy extends MoveList {
 
-	public M_Basic(Fighter user) {
+	public M_Heavy(Fighter user) {
 		super(user);
 	}
 
 	@Override
 	public Move nWeak() {
 		int frames = 3;
-		int frame = 10;
+		int frame = 60;
 
 		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/basic/nweak.png", 3, frame);
-		Hitbox h1 = new Hitbox(user, 1.8f, 1.4f, 12, Hitbox.SAMURAI, 20, 4, 16, new SFX.LightHit());
+		m.setAnimation("sprites/fighters/heavy/nweak.png", frames, frame);
+		Hitbox h1 = new Hitbox(user, 5.8f, 3.2f, 20, Hitbox.SAMURAI, 38, -2, 32, new SFX.MidHit());
+		m.eventList.addArmor(m, 0, frame * 2, 4);
 		m.eventList.addActionCircle(h1, frame, frame + 4);
+		m.eventList.addArmor(m, frame * 2, frame * 3, -Heavy.HEAVY_ARMOR);
 		return m;
 	}
 
@@ -34,14 +36,13 @@ public class M_Basic extends MoveList {
 	public Move slide() {
 		int frames = 4;
 		int frame = 14;
-		int length = frames * frame;
 
-		Move m = new Move(user, length);
+		Move m = new Move(user, frames * frame);
 		m.setContinueOnLanding();
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/basic/slide.png", frames, frame);
-		Hitbox early = new Hitbox(user, 3.1f, 2.6f, 14, 40, 16, -12, 24, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 10, 40, 16, -12, 24, new SFX.MidHit());
+		m.setAnimation("sprites/fighters/heavy/slide.png", frames, frame);
+		Hitbox early = new Hitbox(user, 3.1f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
+		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 7, 40, 16, -12, 24, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addConstantVelocity(user, 0, 14, 0, Action.ChangeVelocity.noChange);
 		m.eventList.addVelocityChange(user, 14, 5, Action.ChangeVelocity.noChange);
@@ -56,9 +57,9 @@ public class M_Basic extends MoveList {
 		int end = 32;
 		
 		Move m = new Move(user, end);
-		m.setAnimation("sprites/fighters/basic/nair.png", 6, 4);
-		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 13, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
+		m.setAnimation("sprites/fighters/heavy/nair.png", 6, 4);
+		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
+		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 6, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addVelocityChange(user, 8, Action.ChangeVelocity.noChange, 1);
 		m.eventList.addActionCircle(early, 8, 13);
@@ -75,10 +76,10 @@ public class M_Basic extends MoveList {
 
 		Move m = new Move(user, frames * frame);
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/basic/ncharge.png", frames, frame);
+		m.setAnimation("sprites/fighters/heavy/ncharge.png", frames, frame);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
-		Hitbox early = new Hitbox(user, 3.2f, 3.3f, 16, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
-		Hitbox late  = new Hitbox(user, 2.5f, 2.6f, 12, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
+		Hitbox early = new Hitbox(user, 3.2f, 3.3f, 15, Hitbox.SAMURAI, 0, 0, 22, new SFX.HeavyHit(), c);
+		Hitbox late  = new Hitbox(user, 2.5f, 2.6f, 11, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit(), c);
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
 		m.eventList.addConstantVelocity(user, frame * 2, frame * 4, pushX, pushY);
@@ -91,23 +92,8 @@ public class M_Basic extends MoveList {
 	public Move nSpecial() {
 		int frames = 8;
 		int frame = 22;
-		if (user instanceof Basic.Bomb) {
-			frame = 30;
-		}
-		int length = frames * frame;
-		int hitboxSize = 27;
 
-		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/basic/nspecial.png", frames, frame);
-		Hitbox early = new Hitbox(user, 2.6f, 4.8f, 20, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.HeavyHit());
-		Hitbox late  = new Hitbox(user, 2.3f, 2.8f, 14, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.MidHit());
-		if (user instanceof Basic.Bomb) {
-			m.eventList.addExplosion((Basic.Bomb)user, frame * 2);
-		}
-		if (!(user instanceof Basic.Bomb)){
-			m.eventList.addActionCircle(early, frame * 2, frame * 3);
-			m.eventList.addActionCircle(late, frame * 3, frame * 4);
-		}
+		Move m = new Move(user, frames * frame);
 		return m;
 	}
 
@@ -115,14 +101,14 @@ public class M_Basic extends MoveList {
 	public Move uSpecial() {
 		int frames = 5;
 		int frame = 15;
-		float pushY = 15.6f;
+		float pushY = 18.6f;
 
 		Move m = new Move(user, frames * frame);
 		m.setHelpless();
-		m.setAnimation("sprites/fighters/basic/uspecial.png", frames, frame);
+		m.setAnimation("sprites/fighters/heavy/uspecial.png", frames, frame);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
-		Hitbox early = new Hitbox(user, 4.2f, 3.1f, 15, 80, 0, 0, 10, new SFX.MidHit(), c);
-		Hitbox late  = new Hitbox(user, 2.5f, 2.5f, 10, Hitbox.SAMURAI, 0, 0, 10, new SFX.LightHit(), c);
+		Hitbox early = new Hitbox(user, 7.2f, 3.1f, 23,  80, 0, 0, 50, new SFX.HeavyHit(), c);
+		Hitbox late  = new Hitbox(user, 7.5f, 2.5f, 19, 270, 0, 0, 50, new SFX.MeatyHit(), c);
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
 		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, 0);
@@ -146,7 +132,7 @@ public class M_Basic extends MoveList {
 	private Move roll(){
 		Move m = new Move(user, 48);
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/basic/sgetup.png", 2, 16);
+		m.setAnimation("sprites/fighters/heavy/sgetup.png", 2, 16);
 		m.eventList.addConstantVelocity(user, 2, 20, -3, Action.ChangeVelocity.noChange);
 		return m;
 	}
@@ -154,23 +140,23 @@ public class M_Basic extends MoveList {
 	@Override
 	public Move dodge() {
 		Move m = new Move(user, 32);
-		m.setAnimation("sprites/fighters/basic/ngetup.png", 1, 1);
+		m.setAnimation("sprites/fighters/heavy/ngetup.png", 1, 1);
 		return m;
 	}
 
 	@Override
 	public Move land() {
-		Move m = new Move(user, 8);
+		Move m = new Move(user, 30);
 		if (null != user.getPrevMove())
-			if (user.getPrevMove().id == MoveList.aerial) m = new Move(user, 16);
-		m.setAnimation("sprites/fighters/basic/crouch.png", 1, 1);
+			if (user.getPrevMove().id == MoveList.aerial) m = new Move(user, 40);
+		m.setAnimation("sprites/fighters/heavy/crouch.png", 1, 1);
 		return m;
 	}
 
 	@Override
 	public Move skid() {
 		Move m = new Move(user, 12);
-		m.setAnimation("sprites/fighters/basic/crouch.png", 1, 1);
+		m.setAnimation("sprites/fighters/heavy/crouch.png", 1, 1);
 		return m;
 	}
 
@@ -180,18 +166,18 @@ public class M_Basic extends MoveList {
 	}
 	
 	public Move block(){
-		Move m = new Move(user, 90);
-		m.setAnimation("sprites/fighters/basic/block.png", 1, 1);
+		Move m = new Move(user, 120);
+		m.setAnimation("sprites/fighters/heavy/block.png", 1, 1);
 		m.setStopsInAir();
-		m.eventList.addGuard(user, 10, 60);
+		m.eventList.addGuard(user, 20, 90);
 		return m;
 	}
 
 	@Override
 	public Move parry() {
 		Move m = new Move(user, 30);
-		m.setAnimation("sprites/fighters/basic/parry.png", 1, 1);
-		Hitbox parry = new Hitbox(user, 5.6f, 0.8f, 10, Hitbox.SAMURAI, 4, 0, 30, new SFX.MidHit());
+		m.setAnimation("sprites/fighters/heavy/parry.png", 1, 1);
+		Hitbox parry = new Hitbox(user, 5.6f, 4.8f, 10, Hitbox.SAMURAI, 4, 0, 30, new SFX.HeavyHit());
 		m.eventList.addActionCircle(parry, 0, 20);
 		return m;
 	}

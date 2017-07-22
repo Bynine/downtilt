@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
-public class ChallengeGraphicsHandler {
+public class TransitionGraphicsHandler {
 		
 	private static SpriteBatch batch = null;
 	private static final Timer readyGoTimer = new Timer(90);

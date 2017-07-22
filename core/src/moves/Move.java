@@ -36,8 +36,9 @@ public class Move {
 		}
 	}
 
-	public void setAnimation(String string, int cols, int speed) {
-		animation = GlobalRepo.makeAnimation(string, cols, 1, speed, PlayMode.LOOP);
+	public void setAnimation(String string, int cols, int frameLength) {
+		String finalString = string.toLowerCase();
+		animation = GlobalRepo.makeAnimation(finalString, cols, 1, frameLength, PlayMode.LOOP);
 	}
 
 	public void addFrame() {

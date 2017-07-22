@@ -541,9 +541,9 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move block(){
-		Move m = new Move(user, 45);
+		Move m = new Move(user, 32);
 		m.setAnimation("sprites/fighters/bomber/dodgebegin.png", 1, 1);
-		m.eventList.addGuard(user, 0, 30);
+		m.eventList.addGuard(user, 0, 12);
 		return m;
 	}
 	

@@ -26,7 +26,8 @@ public class Fly extends Fighter {
 
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);
-		baseWeight = 54;
+		baseWeight = 45;
+		armor = -1;
 		runAcc = 0.2f;
 		runSpeed = 1f;
 		walkAcc = 0.2f;
@@ -34,21 +35,21 @@ public class Fly extends Fighter {
 		airSpeed = 4.2f;
 		airAcc = 0.24f;
 		friction = 0.95f;
-		gravity = -0.13f;
-		jumpStrength = 3f;
+		gravity = -0.15f;
+		jumpStrength = 3.2f;
 		jumpAcc = 0.2f;
 		dashStrength = 0f;
-		doubleJumpStrength = 4.5f;
+		doubleJumpStrength = 4.8f;
 		fallSpeed = -6.7f;
 		jumpSquatTimer.setEndTime(8);
 		moveList = new M_Fly(this);
-		baseHitstun = GlobalRepo.ENEMYHITSTUNMOD;
-		doubleJumpMax = 4;
+		baseHitstun = GlobalRepo.ENEMYHITSTUNMOD + 0.6f;
+		doubleJumpMax = 3;
 		doubleJumps = doubleJumpMax;
 	}
 	
 	public float getGravity() { 
-		if (!hitstunTimer.timeUp()) return -0.62f;
+		if (!hitstunTimer.timeUp()) return -0.35f;
 		else return gravity; 
 		}
 	

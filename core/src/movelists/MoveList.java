@@ -44,10 +44,6 @@ public abstract class MoveList {
 		else return new IDMove(uSpecial(), noStaleMove);
 	}
 
-	public IDMove selectThrow(){
-		return new IDMove(null, noMove);
-	}
-
 	public IDMove selectGrab(){
 		return new IDMove(null, noMove);
 	}

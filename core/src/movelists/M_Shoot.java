@@ -161,10 +161,10 @@ public class M_Shoot extends MoveList {
 	}
 
 	public Move block(){
-		Move m = new Move(user, 60);
-		m.setAnimation("sprites/fighters/shoot/block.png", 1, 1);
+		Move m = new Move(user, 70);
+		m.setAnimation("sprites/fighters/shoot/block.png", 2, 40);
 		m.setStopsInAir();
-		m.eventList.addGuard(user, 5, 45);
+		m.eventList.addGuard(user, 5, 40);
 		return m;
 	}
 	
@@ -172,7 +172,7 @@ public class M_Shoot extends MoveList {
 	public Move parry() {
 		Move m = new Move(user, 30);
 		m.setAnimation("sprites/fighters/shoot/parry.png", 1, 1);
-		Hitbox parry = new Hitbox(user, 8.6f, 0.0f, 2, 67, 0, 0, 48, new SFX.Pop());
+		Hitbox parry = new Hitbox(user, 8.6f, 0.1f, 12, 67, 0, 0, 48, new SFX.Pop());
 		m.eventList.addActionCircle(parry, 0, 10);
 		return m;
 	}

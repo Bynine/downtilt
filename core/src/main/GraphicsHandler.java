@@ -249,6 +249,9 @@ public class GraphicsHandler {
 			font.draw(batch, "PAUSED", cam.position.x, cam.position.y);
 			font.draw(batch, "Press Select to quit", cam.position.x, cam.position.y - GlobalRepo.TILE * 2);
 		}
+		
+		font.draw(batch, DowntiltEngine.getChallenge().getTime(), 
+				cam.position.x, cam.position.y - SCREENHEIGHT * stockLocationMod);
 	}
 
 	private static List<Float> cameraBoundaries(){

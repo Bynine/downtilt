@@ -199,9 +199,12 @@ public abstract class Brain{
 	}
 	
 	public static class FlyBrain extends Brain{
+		
+		private final Timer dodgeTimer = new Timer(60);
 
 		public FlyBrain(InputHandlerCPU body) {
 			super(body);
+			timerList.add(dodgeTimer);
 		}
 
 		void update(InputPackage pack){
@@ -218,7 +221,10 @@ public abstract class Brain{
 		
 		void chooseAttack(){
 			if		(shouldAttack(0.04, 70,  true))		performJump(performJump);
-			if		(shouldAttack(0.28, 60,  false) && pack.playerAttacking)		attackPlayer(InputHandler.commandBlock);
+			if		(shouldAttack(0.28, 60,  false) && pack.playerAttacking && dodgeTimer.timeUp()){
+				dodgeTimer.reset();
+				attackPlayer(InputHandler.commandBlock);
+			}
 			else if (shouldAttack(0.22, 25,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandAttack);
 			else if (shouldAttack(0.08, 30,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandCharge);
 		}
@@ -260,6 +266,30 @@ public abstract class Brain{
 					&& pack.distanceYFromPlayer > 20)	attackPlayer(InputHandler.commandSpecial);
 			else 
 				if (shouldAttack(0.01, 300, false)) 	attackPlayer(InputHandler.commandCharge);
+		}
+
+	}
+	
+	
+	public static class HeavyBrain extends Brain{
+
+		public HeavyBrain(InputHandlerCPU body) {
+			super(body);
+		}
+
+		void update(InputPackage pack){
+			super.update(pack);
+			body.yInput = 0;
+			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 50 ) headTowardPlayer(changeDirection);
+			if (!performJump.timeUp()) performJump(performJump);
+			if (shouldGetUp(0.02)) getUp();
+			//else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
+			else if (inVerticalAttackRange()) chooseAttack();
+			else if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+		}
+		
+		void chooseAttack(){
+			if (shouldAttack(0.22, 80, true))								attackPlayer(InputHandler.commandAttack);
 		}
 
 	}

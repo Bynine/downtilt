@@ -8,6 +8,7 @@ import entities.Fighter;
 import entities.TreasureChest;
 import main.GlobalRepo;
 import main.MapHandler;
+import main.SFX;
 import main.DowntiltEngine;
 import maps.*;
 
@@ -41,7 +42,7 @@ public abstract class Challenge {
 		
 		if (!GlobalRepo.debugToggle){
 			int waitBetween = 60;
-			ChallengeGraphicsHandler.readyGo();
+			TransitionGraphicsHandler.readyGo();
 			DowntiltEngine.wait(waitBetween);
 		}
 		
@@ -55,15 +56,15 @@ public abstract class Challenge {
 			if (waves.size() > 0) nextWave();
 			else finished = true;
 		}
-		checkIfAllPlayersDead();
+		if (inFailState()) endChallenge();
 	}
 	
-	private void checkIfAllPlayersDead(){
+	protected boolean inFailState(){
 		boolean shouldRestart = true;
 		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
 			if (player.getLives() > 0) shouldRestart = false;
 		}
-		if (shouldRestart) restart();
+		return shouldRestart;
 	}
 
 	private void nextWave(){
@@ -74,7 +75,8 @@ public abstract class Challenge {
 	/**
 	 * Called if all players die
 	 */
-	public void restart(){
+	public void endChallenge(){
+		new SFX.Error().play();
 		DowntiltEngine.returnToMenu();
 	}
 
@@ -110,7 +112,27 @@ public abstract class Challenge {
 		return startPosition;
 	}
 	
-	public abstract String getEnemyCounter();
+	public String getEnemyCounter() {
+		return "WAVES LEFT: " + (waves.size() + 1);
+	}
+	
+	public final String getTime(){
+		int minutes = getTimeMinSec()[0];
+		int seconds = getTimeMinSec()[1];
+		String secondsString = "" + seconds;
+		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);
+		return getTimeString() + minutes + ":" + secondsString;
+	}
+	
+	protected int[] getTimeMinSec(){
+		int minutes = (DowntiltEngine.getDeltaTime() /3600);
+		int seconds = (DowntiltEngine.getDeltaTime() /60) - (minutes * 60);
+		return new int[]{minutes, seconds};
+	}
+	
+	protected String getTimeString(){
+		return "TIME: ";
+	}
 
 	public Stage getStage() {
 		return stage;

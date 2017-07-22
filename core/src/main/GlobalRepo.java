@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.math.Rectangle;
-
 import entities.Basic;
-import entities.Entity;
 import entities.Hittable;
 
 public class GlobalRepo {
@@ -48,22 +45,6 @@ public class GlobalRepo {
 	
 	public static void log(String str){
 		System.out.println(str + " at " + DowntiltEngine.getDeltaTime());
-	}
-
-	public static Rectangle makeHurtBox(Entity user, int width, int height){
-		return user.getImage().getBoundingRectangle();
-	}
-	
-	public static Rectangle makeHurtBoxDynamic(Entity user, float scaleX, float scaleY){
-		return user.getImage().getBoundingRectangle();
-	}
-	
-	public static Rectangle makeHurtBoxInner(Entity user, int width, int height){
-		return user.getImage().getBoundingRectangle();
-	}
-	
-	public static Rectangle makeHurtBoxOuter(Entity user, int width, int height){
-		return user.getImage().getBoundingRectangle();
 	}
 	
 	public static <T> T getRandomElementFromList(List<T> lst){

@@ -26,7 +26,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
-	private static ChallengeProgression challengeProgression;
+	private static WorldMap challengeProgression;
 	private static GameState gameState = GameState.MENU;
 	private static InputHandlerPlayer primaryInputHandler = null;
 	private static float volume	= 1f;
@@ -42,7 +42,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		Menu.begin();
 		DebugMenu.begin();
 		MainMenu.begin();
-		challengeProgression = new ChallengeProgression();
+		challengeProgression = new WorldMap();
 
 	}
 	
@@ -86,7 +86,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 			if (outOfHitlag()) MapHandler.updateEntities();
 		}
 		GraphicsHandler.updateGraphics();
-		ChallengeGraphicsHandler.update();
+		TransitionGraphicsHandler.update();
 		GraphicsHandler.updateCamera();
 	}
 
@@ -123,16 +123,16 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	
 	public static void startNewChallenge(List<Fighter> newPlayers, int startChallenge){
-		challengeProgression = new ChallengeProgression(startChallenge);
+		challengeProgression = new WorldMap(startChallenge);
 		gameState = GameState.GAME;
 		playerList.clear();
 		paused = false;
-		int i = 0;
+		int playerNum = 0;
 		for (Fighter player: newPlayers) {
-			beginFighter(player, i);
-			if (i >= 1) player.setPalette(p2Palette);
+			beginFighter(player, playerNum);
+			if (playerNum >= 1) player.setPalette(p2Palette);
 			System.out.println(player.getInputHandler().getControllerName());
-			i++;
+			playerNum++;
 		}
 		GraphicsHandler.begin();
 		MapHandler.begin();

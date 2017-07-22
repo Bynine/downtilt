@@ -37,7 +37,6 @@ public abstract class Hittable extends Entity {
 	protected float wallJumpStrengthX = 8f, wallJumpStrengthY = 7.2f;
 	protected float wallSlideSpeed = -1f;
 
-	//protected float powerMod = 1, defenseMod = 1, speedMod = 1, airMod = 1, armorAdd = 0;
 	protected int hitstunDealtBonus = 0;
 	private Equipment equipment = new Equipment.Default();
 
@@ -79,9 +78,13 @@ public abstract class Hittable extends Entity {
 
 	void checkPushAway(Hittable hi){
 		int pushDistance = 16 + 2 * ((int) image.getWidth() - defaultTexture.getRegionWidth());
-		boolean toPush = isTouching(hi, pushDistance) && Math.abs(hi.velocity.x) < 1 && Math.abs(this.velocity.x) < 1;
+		boolean toPush = shouldPushAway(pushDistance, hi);
 		if (getTeam() == hi.getTeam()) toPush = isTouching(hi, 0);
 		if (toPush) pushAway(hi);
+	}
+	
+	protected boolean shouldPushAway(int pushDistance, Hittable hi){
+		return isTouching(hi, pushDistance) && Math.abs(hi.velocity.x) < 1 && Math.abs(this.velocity.x) < 1;
 	}
 
 	protected void pushAway(Entity e){

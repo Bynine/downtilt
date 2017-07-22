@@ -45,9 +45,11 @@ public abstract class InputHandler {
 	protected void handleCommand(int command){
 		boolean wasCommandAccepted = false;
 
+		wasCommandAccepted = handleActions(command);
 		if (fighter.canMove()) wasCommandAccepted = handleCanMoveActions(command);
 		if (fighter.canAct()) wasCommandAccepted = handleCanActActions(command);
 		if (fighter.canAttack()) wasCommandAccepted = handleCanAttackActions(command);
+		
 
 		boolean shouldAddToInputQueue = !wasCommandAccepted && fighter.inputQueueTimeUp()
 				&& !stickCommands.contains(command) && !(command == commandJump && fighter.isGrounded());
@@ -63,14 +65,20 @@ public abstract class InputHandler {
 	public void refresh(){
 		/* */
 	}
+	
+	private boolean handleActions(int command){
+		switch (command){
+		case commandStickRight:		return fighter.tryStickRight();
+		case commandStickLeft:		return fighter.tryStickLeft();
+		case commandStickUp:		return fighter.tryStickUp();
+		case commandStickDown:		return fighter.tryStickDown();
+		}
+		return true;
+	}
 
 	private boolean handleCanMoveActions(int command){
 		switch (command){
 		case commandAttack:			return fighter.tryNormal();
-		case commandStickRight:		return fighter.tryStickForward();
-		case commandStickLeft:		return fighter.tryStickBack();
-		case commandStickUp:		return fighter.tryStickUp();
-		case commandStickDown:		return fighter.tryStickDown();
 		}
 		return true;
 	}

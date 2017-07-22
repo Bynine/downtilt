@@ -51,7 +51,7 @@ public abstract class Fighter extends Hittable{
 
 	protected TextureRegion defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconalien.png")));
 
-	private Hittable caughtFighter = null;
+	private Hittable caughtTarget = null;
 	private IDMove activeMove = null, prevMove = null; 
 
 	private InputHandler inputHandler = new InputHandlerKeyboard(this);
@@ -82,7 +82,9 @@ public abstract class Fighter extends Hittable{
 		if (grabbingTimer.timeJustUp()) dropTarget();
 		else if (!grabbingTimer.timeUp()) handleThrow();
 		if (null != getActiveMove()) {
-			if (getActiveMove().id != MoveList_Advanced.noStaleMove && getActiveMove().move.connected() && !staleMoveQueue.contains(getActiveMove())){
+			if (getActiveMove().id != MoveList_Advanced.noStaleMove && 
+					getActiveMove().move.connected() && 
+					!staleMoveQueue.contains(getActiveMove())){
 				staleMoveQueue.add(getActiveMove());
 				if (staleMoveQueue.size() > staleMoveQueueSize) staleMoveQueue.remove(0);
 			}
@@ -94,8 +96,8 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private void handleThrow(){
-		setActiveMove(moveList.selectThrow());
 		if (null != getActiveMove()) {
+			if (!activeMoveIsThrow()) return;
 			startAttack(getActiveMove());
 			beginThrow();
 		}
@@ -107,16 +109,16 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private void dropTarget(){
-		if (null == caughtFighter) return;
+		if (null == caughtTarget) return;
 		new SFX.LightHit().play();
 		release(this, -1);
 		releaseTarget();
 	}
 
 	private void releaseTarget(){
-		release(caughtFighter, 1);
-		caughtFighter.caughtTimer.end();
-		caughtFighter = null;
+		release(caughtTarget, 1);
+		caughtTarget.caughtTimer.end();
+		caughtTarget = null;
 	}
 
 	private void release(Hittable fi, int direction){
@@ -124,6 +126,10 @@ public abstract class Fighter extends Hittable{
 		fi.velocity.y = 2;
 		fi.hitstunTimer.reset();
 		fi.hitstunTimer.setEndTime(10);
+	}
+	
+	protected boolean shouldPushAway(int pushDistance, Hittable hi){
+		return super.shouldPushAway(pushDistance, hi) && (null == getActiveMove());
 	}
 
 	private void handleMove(){
@@ -233,27 +239,21 @@ public abstract class Fighter extends Hittable{
 		return true;
 	}
 
-	public boolean tryDodge(){
-		//		Move block = moveList.selectBlock().move;
-		//		if (null != block && canAttackDodge()){
-		//			startAttack(moveList.selectBlock());
-		//			return true;
-		//		}
-		//		else return false;
-		return tryBlock();
-	}
-
 	public boolean tryBlock(){
 		startAttack(moveList.selectBlock());
 		return true;
 	}
 
-	public boolean tryStickForward(){
+	public boolean tryStickRight(){
 		if (isGuarding()) {
 			if (direction == Direction.LEFT) startAttack(new IDMove(moveList.rollBack(), MoveList_Advanced.noStaleMove));
 			else startAttack(new IDMove(moveList.rollForward(), MoveList_Advanced.noStaleMove));
 		}
-		if (state == State.FALLEN){
+		else if (isGrabbing()){
+			MoveList_Advanced advMoveList = (MoveList_Advanced) moveList; // fighters that can grab must have an advanced movelist
+			setActiveMove(advMoveList.selectForwardThrow());
+		}
+		else if (state == State.FALLEN){
 			state = State.STAND;
 			if (direction == Direction.LEFT) startAttack(new IDMove(moveList.rollBack(), MoveList_Advanced.noStaleMove));
 			else startAttack(new IDMove(moveList.rollForward(), MoveList_Advanced.noStaleMove));
@@ -262,12 +262,16 @@ public abstract class Fighter extends Hittable{
 		return true;
 	}
 
-	public boolean tryStickBack(){ 
+	public boolean tryStickLeft(){ 
 		if (isGuarding()) {
 			if (direction == Direction.LEFT) startAttack(new IDMove(moveList.rollForward(), MoveList_Advanced.noStaleMove));
 			else startAttack(new IDMove(moveList.rollBack(), MoveList_Advanced.noStaleMove));
 		}
-		if (state == State.FALLEN){
+		else if (isGrabbing()){
+			MoveList_Advanced advMoveList = (MoveList_Advanced) moveList; // fighters that can grab must have an advanced movelist
+			setActiveMove(advMoveList.selectBackThrow());
+		}
+		else if (state == State.FALLEN){
 			state = State.STAND;
 			if (direction == Direction.LEFT) startAttack(new IDMove(moveList.rollForward(), MoveList_Advanced.noStaleMove));
 			else startAttack(new IDMove(moveList.rollBack(), MoveList_Advanced.noStaleMove));
@@ -277,13 +281,21 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public boolean tryStickUp(){
-		upDownStick();
+		if (isGrabbing()){
+			MoveList_Advanced advMoveList = (MoveList_Advanced) moveList; // fighters that can grab must have an advanced movelist
+			setActiveMove(advMoveList.selectUpThrow());
+		}
+		else tryStickVertical();
 		return true; 
 	}
 
 	public boolean tryStickDown(){
-		upDownStick();
-		if (isGrounded() && canAct()) fallThroughThinFloor();
+		if (isGrabbing()){
+			MoveList_Advanced advMoveList = (MoveList_Advanced) moveList; // fighters that can grab must have an advanced movelist
+			setActiveMove(advMoveList.selectDownThrow());
+		}
+		else if (isGrounded() && canAct()) fallThroughThinFloor();
+		else tryStickVertical();
 		return true; 
 	}
 
@@ -300,7 +312,7 @@ public abstract class Fighter extends Hittable{
 		}
 	}
 
-	private void upDownStick(){
+	private void tryStickVertical(){
 		if (state == State.FALLEN){
 			state = State.STAND;
 			spotDodge();
@@ -438,7 +450,7 @@ public abstract class Fighter extends Hittable{
 		footStoolee.tumbling = true;
 		footStoolee.percentage += footStoolDamage;
 		if (!footStoolee.inHitstun()){
-			footStoolee.hitstunTimer.setEndTime((int) (footStoolDuration * footStoolee.getHitstun()));
+			footStoolee.hitstunTimer.setEndTime((int) (footStoolDuration * footStoolee.getHitstun() * (100.0/footStoolee.getWeight() )));
 			footStoolee.hitstunTimer.reset();
 		}
 		footStoolTimer.reset();
@@ -591,6 +603,7 @@ public abstract class Fighter extends Hittable{
 		}
 		tumbling = false;
 		super.ground();
+		
 		boolean upThroughThinPlatform = velocity.y >= 0;
 		if (null != getActiveMove() && !getActiveMove().move.continuesOnLanding() && !upThroughThinPlatform) endAttack();
 		if (velocity.y < 0 && getActiveMove() == null && state != State.FALLEN){
@@ -636,6 +649,10 @@ public abstract class Fighter extends Hittable{
 	protected boolean activeMoveIsCharge(){
 		return activeMoveIsWhatever(MoveList_Advanced.chargeRange);
 	}
+	
+	protected boolean activeMoveIsThrow(){
+		return activeMoveIsWhatever(MoveList_Advanced.throwRange);
+	}
 
 	private boolean activeMoveIsWhatever(int[] range){
 		if (null == getActiveMove()) return false;
@@ -679,11 +696,11 @@ public abstract class Fighter extends Hittable{
 
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
-		if (null != caughtFighter) beginThrow();
+		if (null != caughtTarget) beginThrow();
 	}
 
 	public void isNowGrabbing(Hittable target, int caughtTime){
-		caughtFighter = target;
+		caughtTarget = target;
 		grabbingTimer.setEndTime(caughtTime);
 		grabbingTimer.reset();
 	}
@@ -745,6 +762,9 @@ public abstract class Fighter extends Hittable{
 		if (null == getInputHandler()) return false;
 		else return activeMoveIsCharge() && getInputHandler().isCharging();
 	}
+	public boolean isGrabbing(){
+		return !grabbingTimer.timeUp();
+	}
 	public boolean groundBelow(){
 		Rectangle r = groundBelowRect();
 		for (Rectangle tr: tempRectangleList) {
@@ -793,7 +813,9 @@ public abstract class Fighter extends Hittable{
 	public float getSpecialMeter() { return specialMeter; }
 	public float getArmor() { 
 		float addedMoveArmor = 0;
-		if (null != getActiveMove()) addedMoveArmor = getActiveMove().move.getArmor();
+		if (null != getActiveMove()) {
+			addedMoveArmor = getActiveMove().move.getArmor();
+		}
 		return super.getArmor() + addedMoveArmor; 
 	}
 	public int getTeam() { return team; }

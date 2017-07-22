@@ -11,11 +11,13 @@ public class EnemyRepo {
 	public static final EnemyType zen = new EnemyType(Basic.class, Brain.Recover.class);
 	
 	public static final EnemyType basic = new EnemyType(Basic.class, Brain.MookBrain.class);
-	public static final EnemyType bombs = new EnemyType(Basic.Bomb.class, Brain.MookBrain.class);
+	public static final EnemyType bomb = new EnemyType(Basic.Bomb.class, Brain.MookBrain.class);
 	public static final EnemyType fatbasic = new EnemyType(Basic.class, Brain.MookBrain.class, EnemyType.PowerUp.ALL);
 	
-	public static final EnemyType shoots = new EnemyType(Shoot.class, Brain.ShootBrain.class);
+	public static final EnemyType shoot = new EnemyType(Shoot.class, Brain.ShootBrain.class);
 	
-	public static final EnemyType flies = new EnemyType(Fly.class, Brain.FlyBrain.class);
+	public static final EnemyType fly = new EnemyType(Fly.class, Brain.FlyBrain.class);
+	
+	public static final EnemyType heavy = new EnemyType(Heavy.class, Brain.HeavyBrain.class);
 
 }

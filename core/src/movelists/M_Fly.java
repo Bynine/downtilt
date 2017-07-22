@@ -27,8 +27,8 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move nAir() {
-		int end = 54;
-		int startSwoop = 15;
+		int end = 50;
+		int startSwoop = 18;
 		int iter = 6;
 		int endSwoop = startSwoop + (iter * 4);
 		
@@ -51,7 +51,7 @@ public class M_Fly extends MoveList {
 		int frames = 2;
 		
 		Move m = new Move(user, frame * 6);
-		m.setAnimation("sprites/fighters/fly/nSpecial.png", frames, frame);
+		m.setAnimation("sprites/fighters/fly/nspecial.png", frames, frame);
 		Windbox wind1 = new Windbox(user, 0.9f, 0.3f, 60, 0, 30);
 		Windbox wind3 = new Windbox(user, 1.4f, 0.5f, 30, 0, 20);
 		Windbox wind2 = new Windbox(user, 0.7f, 0.2f, 40, 0, 40);
@@ -76,7 +76,7 @@ public class M_Fly extends MoveList {
 		Move m = new Move(user, 20);
 		m.setHelpless();
 		m.setAnimation("sprites/fighters/fly/jump.png", 1, 1);
-		m.eventList.addVelocityChange(user, 5, Action.ChangeVelocity.noChange, 8);
+		m.eventList.addVelocityChange(user, 5, Action.ChangeVelocity.noChange, 5);
 		return m;
 	}
 
@@ -128,12 +128,12 @@ public class M_Fly extends MoveList {
 	}
 	
 	public Move block(){
-		int invinc = 24;
-		int length = 42;
+		int invinc = 20;
+		int length = 30;
 		
 		Move m = new Move(user, length);
 		m.setAnimation("sprites/fighters/fly/dodge.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
+		m.eventList.addConstantVelocity(user, 5, invinc, 7, 0);
 		m.eventList.addInvincible(user, 10, invinc);
 		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);
 		return m;

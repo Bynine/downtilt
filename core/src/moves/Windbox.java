@@ -23,6 +23,11 @@ public class Windbox extends ActionCircle {
 			en.getVelocity().add(pushX, strY);
 		}
 	}
+	
+	@Override
+	public boolean teamCheck(Hittable target){
+		return true;
+	}
 
 	@Override
 	public Color getColor() {

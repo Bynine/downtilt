@@ -10,7 +10,7 @@ public abstract class MoveList_Advanced extends MoveList{
 	MoveList_Advanced(Fighter user) {
 		super(user);
 	}
-	
+
 	/* grounded normals */
 	public abstract Move nWeak();
 	public abstract Move uWeak();
@@ -106,6 +106,7 @@ public abstract class MoveList_Advanced extends MoveList{
 	static final int IDnair = 54;
 	public static int[] specialRange = {10, 19};
 	public static int[] chargeRange = {40, 49};
+	public static int[] throwRange = {20, 29};
 
 	public IDMove selectNormalMove(){
 		if (user.isGrounded()) {
@@ -128,20 +129,27 @@ public abstract class MoveList_Advanced extends MoveList{
 		else return new IDMove(nSpecial(), IDnspecial);
 	}
 
-	public IDMove selectThrow(){
-		if (user.isGrounded()){
-			if (user.isHoldUp()) return new IDMove(uThrow(), IDuthrow);
-			else if (user.isHoldDown()) return new IDMove(dThrow(), IDdthrow);
-			else if (user.isHoldForward()) return new IDMove(fThrow(), IDfthrow);
-			else if (user.isHoldBack()) return new IDMove(bThrow(), IDbthrow);
-		}
-		else{
-			if (user.isHoldUp()) return new IDMove(uAirThrow(), IDuairthrow);
-			else if (user.isHoldDown()) return new IDMove(dAirThrow(), IDdairthrow);
-			else if (user.isHoldForward()) return new IDMove(fAirThrow(), IDfairthrow);
-			else if (user.isHoldBack()) return new IDMove(bAirThrow(), IDbairthrow);
-		}
-		return null;
+	public IDMove selectForwardThrow(){
+		if (user.getDirection() == Direction.RIGHT) return selectThrow(new IDMove(fThrow(), IDfthrow), new IDMove(fAirThrow(), IDfairthrow));
+		else return selectThrow(new IDMove(bThrow(), IDbthrow), new IDMove(bAirThrow(), IDbairthrow));
+	}
+
+	public IDMove selectBackThrow(){
+		if (user.getDirection() == Direction.LEFT) return selectThrow(new IDMove(fThrow(), IDfthrow), new IDMove(fAirThrow(), IDfairthrow));
+		else return selectThrow(new IDMove(bThrow(), IDbthrow), new IDMove(bAirThrow(), IDbairthrow));
+	}
+
+	public IDMove selectUpThrow(){
+		return selectThrow(new IDMove(uThrow(), IDuthrow), new IDMove(uAirThrow(), IDuairthrow));
+	}
+
+	public IDMove selectDownThrow(){
+		return selectThrow(new IDMove(dThrow(), IDdthrow), new IDMove(dAirThrow(), IDdairthrow));
+	}
+	
+	private IDMove selectThrow(IDMove groundThrow, IDMove airThrow){
+		if (user.isGrounded()) return groundThrow;
+		else return airThrow;
 	}
 
 	public IDMove selectGrab(){
@@ -189,7 +197,7 @@ public abstract class MoveList_Advanced extends MoveList{
 			else return new IDMove(bAir(), IDbair);
 		}
 	}
-	
+
 	protected IDMove cStickCharge(boolean dir){
 		IDMove im = new IDMove(nCharge(), IDncharge);
 		if (dir) user.flip();

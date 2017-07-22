@@ -93,12 +93,9 @@ public abstract class ActionCircle {
 	public Circle getArea(){ return area; }
 	public boolean toRemove() { return duration.timeUp(); }
 	public boolean didHitTarget(Hittable target){ 
-		boolean teamCheck = true;
 		boolean attackTimeUp = true;
-		if (null != user) {
-			teamCheck = user.getTeam() != target.getTeam() || !(target instanceof Fighter);
-			if (user instanceof Fighter) attackTimeUp = !((Fighter)user).attackTimeUp();
-		}
+		if (null != user) if (user instanceof Fighter) attackTimeUp = !((Fighter)user).attackTimeUp();
+		boolean teamCheck = teamCheck(target);
 		return 
 					teamCheck
 				&& !remove 
@@ -106,6 +103,13 @@ public abstract class ActionCircle {
 				&& !target.isInvincible() 
 				&& Intersector.overlaps(area, target.getHurtBox()) 
 				&& !hitFighterList.contains(target); 
+	}
+	protected boolean teamCheck(Hittable target){
+		boolean teamCheck = true;
+		if (null != user) {
+			teamCheck = user.getTeam() != target.getTeam() || !(target instanceof Fighter);
+		}
+		return teamCheck;
 	}
 	public boolean isInitialHit() { return initialHit; }
 	public boolean hitAnybody() { return hitFighterList.size() >= 1; }

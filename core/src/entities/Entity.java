@@ -277,11 +277,13 @@ public abstract class Entity {
 	}
 
 	public void ground(){ 
-		if (velocity.y < -1 && !inGroundedState()){
-			MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + 8));
-			MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
-			new SFX.Ground().play();
-		}
+		if (velocity.y < -1 && !inGroundedState()) hitGround();
+	}
+	
+	protected void hitGround(){
+		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + 8));
+		MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
+		new SFX.Ground().play();
 	}
 
 	public void setRemove() { toRemove = true; }

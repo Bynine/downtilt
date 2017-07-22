@@ -22,7 +22,8 @@ public class Grabbox extends ActionCircle {
 	private int caughtTimeFormula(Hittable target){
 		int minGrabTime = 15;
 		int maxGrabTime = 60;
-		int grabTime = (int) (minGrabTime + target.getPercentage()/3);
+		float weightMod = 100.0f/target.getWeight();
+		int grabTime = (int) ((minGrabTime + target.getPercentage()/3) * weightMod);
 		if (grabTime > maxGrabTime) grabTime = maxGrabTime;
 		return grabTime;
 	}
