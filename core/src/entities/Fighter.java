@@ -541,7 +541,8 @@ public abstract class Fighter extends Hittable{
 		if (doesCollide(position.x, position.y) && !doesCollide(position.x, position.y + dispY)) position.y += dispY;
 
 		if (doesCollide(position.x, position.y)) {
-			System.out.println("Had to reset image");
+			System.out.println("Had to reset image of " + this);
+			position.y += 8;
 			setImage(prevImage);
 		}
 	}
@@ -773,7 +774,7 @@ public abstract class Fighter extends Hittable{
 		return false;
 	}
 	public Rectangle groundBelowRect(){
-		int rectHeight = GlobalRepo.TILE * 16;
+		int rectHeight = GlobalRepo.TILE * 32;
 		return new Rectangle (getCenter().x, position.y - rectHeight, 12, rectHeight);
 	}
 

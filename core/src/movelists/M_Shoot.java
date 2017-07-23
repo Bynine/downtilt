@@ -75,15 +75,15 @@ public class M_Shoot extends MoveList {
 		m.setStopsInAir();
 		m.eventList.addNewEntity(frame * 2,
 				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 2, 8
+				user.direct() * 7.5f, 3.6f
 				);
 		m.eventList.addNewEntity(frame * 2 + betweenShot,
 				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * xGenericSpeed, yGenericSpeed
+				user.direct() * 7.0f, 2.9f
 				);
 		m.eventList.addNewEntity(frame * 2 + betweenShot * 2,
 				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 6, 2
+				user.direct() * 6.5f, 2.4f
 				);
 		return m;
 	}

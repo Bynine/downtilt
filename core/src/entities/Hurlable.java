@@ -133,6 +133,7 @@ public abstract class Hurlable extends Hittable {
 			friction = 0.97f;
 			baseWeight = 90;
 			baseHurtleBK = minSpeedForHit;
+			baseKBG = 3.5f;
 			touchRadius = 16;
 			life.setEndTime(240);
 			frailtyMod = 1.5f;
@@ -161,6 +162,7 @@ public abstract class Hurlable extends Hittable {
 			}
 		}
 		
+		@Override
 		public void ground(){ 
 			if (velocity.y < -1 && !inGroundedState()){
 				velocity.y *= -1.1;
@@ -168,10 +170,27 @@ public abstract class Hurlable extends Hittable {
 			super.ground();
 		}
 		
+		@Override
 		public boolean inHitstun(){
 			if (life.getCounter() < 6) return false;
 			return knockbackIntensity(velocity) > minSpeedForHit;
 		}
 		
+		@Override
+		public Rectangle getBodyHitBox(){
+			Rectangle r = getHurtBox();
+			float mod = 0.75f;
+			int inc = 4; 
+			r.setWidth(r.getWidth() * mod);
+			r.setHeight(r.getHeight() * mod);
+			r.setX(r.getX() + inc);
+			r.setY(r.getY() + inc);
+			return r;
+		}
+		
 	}
+	
+//	public static class Rocket extends Hurlable {
+//		
+//	}
 }

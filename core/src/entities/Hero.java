@@ -46,7 +46,7 @@ public class Hero extends Fighter {
 		friction = 0.83f;
 		gravity = -0.52f;
 		jumpAcc = 0.92f;
-		dashStrength = 0;
+		dashStrength = 0.5f;
 		doubleJumpStrength = 9.7f;
 		wallJumpStrengthX = 6.5f;
 		wallJumpStrengthY = 8.4f;
@@ -60,7 +60,7 @@ public class Hero extends Fighter {
 	}
 
 	public boolean isPerfectGuarding() { 
-		int perfectGuard = 5;
+		int perfectGuard = 7;
 		return isGuarding() && guardTimer.getCounter() < perfectGuard; 
 	}
 

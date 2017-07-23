@@ -41,8 +41,9 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/uweak.png", frames, frame);
 		m.setHurtBox(25, 45, -8, Move.HURTBOXNOTSET);
-		Hitbox swing = new Hitbox(user, 4.0f, 0.2f, 4, 95, 6, 8, 22, new SFX.LightHit());
-		Hitbox punch = new Hitbox(user, 3.0f, 2.0f, 5, 85, 0, 34, 14, new SFX.MidHit());
+		Hitbox swing = new Hitbox(user, 3.0f, 2.1f, 7, 90, 6, 8, 22, new SFX.MidHit());
+		Hitbox punch = new Hitbox(user, 3.0f, 2.1f, 8, 85, 0, 34, 14, new SFX.MidHit());
+		new ActionCircleGroup(Arrays.asList(swing, punch));
 		m.eventList.addActionCircle(swing, frame, frame * 2);
 		m.eventList.addActionCircle(punch, frame + 2, frame * 2 + 2);
 		return m;
@@ -313,6 +314,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox swing1 = new Hitbox(user, 5.4f, 1.0f, 14, 30,  8, 0, 20, new SFX.MeatyHit());
 		Hitbox swing2 = new Hitbox(user, 5.4f, 1.0f, 14, 30, 28, 0, 20, new SFX.MeatyHit());
 		thro.setNoReverse();
+		thro.setProperty(Property.STUN);
 		swing1.setNoReverse();
 		swing2.setNoReverse();
 		swing1.setHitstunType(Fighter.HitstunType.SUPER);
@@ -365,7 +367,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move fAirThrow(){
 		Move m = new Move(user, 24);
 		m.setAnimation("sprites/fighters/bomber/fairthrow.png", 2, 8);
-		Hitbox toss= new Hitbox(user, 3.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
+		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
 		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14, 30, 22, 0, throwSize, new SFX.MidHit());
 		hit.setNoReverse();
 		hit.setHitstunType(Fighter.HitstunType.SUPER);
@@ -415,7 +417,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/grab.png", 1, 1);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Grabbox g1 = new Grabbox(user, 18, 6, 16);
-		m.eventList.addActionCircle(g1, 4, 8);
+		m.eventList.addActionCircle(g1, 6, 8);
 		return m;
 	}
 
@@ -425,7 +427,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.eventList.addVelocityChange(user, 4, 6, Action.ChangeVelocity.noChange);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Grabbox g1 = new Grabbox(user, 18, 6, 16);
-		m.eventList.addActionCircle(g1, 4, 8);
+		m.eventList.addActionCircle(g1, 6, 8);
 		return m;
 	}
 
@@ -434,7 +436,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/airgrab.png", 1, 1);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Grabbox g1 = new Grabbox(user, 14, 0, 20);
-		m.eventList.addActionCircle(g1, 4, 8);
+		m.eventList.addActionCircle(g1, 6, 8);
 		return m;
 	}
 
@@ -481,10 +483,10 @@ public class M_Hero extends MoveList_Advanced{
 		return m;
 	}
 
-	private final int rollLength = 16;
-	private final int rollInvinc = 12;
-	private final float rollHeight = 2.8f;
-	private final float rollSpeed = -7.0f;
+	private final int rollLength = 20;
+	private final int rollInvinc = 15;
+	private final float rollHeight = 3.1f;
+	private final float rollSpeed = -7.4f;
 	public Move rollForward(){
 		Move m = new Move(user, rollLength);
 		m.dontTurn();
@@ -531,6 +533,7 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 10);
 		m.dontTurn();
 		m.setAnimation("sprites/fighters/bomber/skid.png", 1, 1);
+		m.eventList.addConstantVelocity(user, 0, 5, 5.0f, 0);
 		return m;
 	}
 
@@ -543,7 +546,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move block(){
 		Move m = new Move(user, 32);
 		m.setAnimation("sprites/fighters/bomber/dodgebegin.png", 1, 1);
-		m.eventList.addGuard(user, 0, 12);
+		m.eventList.addGuard(user, 0, 16);
 		return m;
 	}
 	
@@ -554,6 +557,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(25, 50, -4, Move.HURTBOXNOTSET);
 		Hitbox h1 = new Hitbox(user, 5.2f, 1.6f, 12, 20, 19, 0, 12, new SFX.MidHit());
 		h1.setHitstunType(HitstunType.SUPER);
+		h1.setIgnoreArmor();
 		m.eventList.addActionCircle(h1, 10, 15);
 		m.eventList.addInvincible(user, 0, 10);
 		return m;
@@ -566,6 +570,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(25, 50, 0, Move.HURTBOXNOTSET);
 		Hitbox h1 = new Hitbox(user, 6.0f, 3.5f, 24, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit());
 		h1.setHitstunType(HitstunType.SUPER);
+		h1.setIgnoreArmor();
 		m.eventList.addActionCircle(h1, 10, 20);
 		m.eventList.addInvincible(user, 0, 30);
 		return m;

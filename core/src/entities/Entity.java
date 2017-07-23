@@ -218,6 +218,10 @@ public abstract class Entity {
 	public Rectangle getHurtBox(){
 		return image.getBoundingRectangle();
 	}
+	
+	public Rectangle getBodyHitBox(){
+		return getHurtBox();
+	}
 
 	public void flip(){
 		if (direction == Direction.LEFT){
@@ -236,7 +240,7 @@ public abstract class Entity {
 	}
 
 	public boolean isTouching(Entity en, int decrement){
-		Rectangle hitboxRect = en.getHurtBox();
+		Rectangle hitboxRect = en.getBodyHitBox();
 		hitboxRect.setWidth(hitboxRect.getWidth() - decrement);
 		hitboxRect.setHeight(hitboxRect.getHeight() - decrement);
 		hitboxRect.setX(hitboxRect.getX() + decrement/2);

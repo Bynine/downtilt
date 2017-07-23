@@ -258,14 +258,14 @@ public abstract class Brain{
 		}
 		
 		void chooseAttack(){
-			if		(shouldAttack(0.02, 250,  true))	performJump(performJump);
-			if 		(shouldAttack(0.02, 250, false))	attackPlayer(InputHandler.commandAttack);
+			if		(shouldAttack(0.02, 120,  true))	performJump(performJump);
+			if 		(shouldAttack(0.06, 350, false))	attackPlayer(InputHandler.commandAttack);
 			if		(shouldAttack(0.21, 50,  true) && pack.playerAttacking)		attackPlayer(InputHandler.commandBlock);
 			else 
-				if (shouldAttack(0.02, 300, true)
+				if (shouldAttack(0.03, 400, true)
 					&& pack.distanceYFromPlayer > 20)	attackPlayer(InputHandler.commandSpecial);
 			else 
-				if (shouldAttack(0.01, 300, false)) 	attackPlayer(InputHandler.commandCharge);
+				if (shouldAttack(0.03, 400, false)) 	attackPlayer(InputHandler.commandCharge);
 		}
 
 	}

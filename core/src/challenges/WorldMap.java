@@ -36,6 +36,10 @@ public class WorldMap {
 	 * Selection of wave lists for each challenge.
 	 */
 	
+	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.shoot), 8, 4, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
+			));
 	List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 3, 1, 60))
@@ -60,11 +64,6 @@ public class WorldMap {
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.bomb), 10, 10, 40))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb), 20, 4, 30))
 			));
-	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 8, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
-			));
-
 
 	/**
 	 * List of challenges to be iterated through.

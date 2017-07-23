@@ -28,7 +28,7 @@ public abstract class Hittable extends Entity {
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	protected int team = GlobalRepo.BADTEAM;
 
-	protected float baseHurtleBK = 4;
+	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f;
 	protected float baseHitSpeed = -0.6f;
 	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 1, armor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
@@ -114,25 +114,24 @@ public abstract class Hittable extends Entity {
 	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
 		float bkb = knockbackIntensity(knockIntoVector) * 0.8f;
-		float kbg = 2.0f;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
 		Hitbox h;
 		if (hurtler.hitstunType != HitstunType.NORMAL) {
 			if (hurtler.hitstunType == HitstunType.ULTRA){ // ultra hitstun
 				bkb *= 1.05f;
-				h = new Hitbox(hurtler, bkb, kbg, dam * 3, knockIntoVector.angle(), 0, 0, 0, null);
+				h = new Hitbox(hurtler, bkb, baseKBG, dam * 3, knockIntoVector.angle(), 0, 0, 0, null);
 			}
 			else { // super hitstun
-				bkb *= .7f;
-				h = new Hitbox(hurtler, bkb, kbg, dam * 2, knockIntoVector.angle(), 0, 0, 0, null);
+				bkb *= .8f;
+				h = new Hitbox(hurtler, bkb, baseKBG, dam * 2, knockIntoVector.angle(), 0, 0, 0, null);
 			}
 			knockIntoVector.set(h.knockbackFormula(this), h.knockbackFormula(this));
 			float newAngle = h.getAngle();
 			knockIntoVector.setAngle(newAngle);
 		}
 		else { // normal hitstun
-			bkb *= .3f;
-			h = new Hitbox(hurtler, bkb, kbg, dam, knockIntoVector.angle(), 0, 0, 0, null);
+			bkb *= .45f;
+			h = new Hitbox(hurtler, bkb, baseKBG, dam, knockIntoVector.angle(), 0, 0, 0, null);
 			knockIntoVector.set(h.knockbackFormula(this), h.knockbackFormula(this));
 			knockIntoVector.setAngle( (h.getAngle() + 90) / 2);
 		}

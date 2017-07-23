@@ -100,7 +100,7 @@ public class M_Heavy extends MoveList {
 	@Override
 	public Move uSpecial() {
 		int frames = 5;
-		int frame = 15;
+		int frame = 27;
 		float pushY = 18.6f;
 
 		Move m = new Move(user, frames * frame);

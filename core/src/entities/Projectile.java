@@ -173,39 +173,6 @@ public abstract class Projectile extends Entity{
 		}
 	}
 
-	private static class RocketExplosion extends Projectile{
-
-		private final int lifeTime = 30;
-		private final int displacement = 40;
-
-		public RocketExplosion(Fighter owner, Projectile rocket, int ownerDirect) {
-			super(0, 0, owner);
-			setup("sprites/entities/explosion.png", lifeTime, 0, 0);
-			new SFX.Explode().play();
-			int facingOffset = 40 * ownerDirect;
-			position.x = rocket.position.x - displacement;
-			position.y = rocket.position.y - displacement;
-			ac = 		 new ProjectileHitbox(owner,10.0f, 3.5f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit(), this, lifeTime);
-			Hitbox ac2 = new ProjectileHitbox(owner, 8.0f, 3.0f, 16, Hitbox.SAMURAI, facingOffset, 0, 60, new SFX.MidHit(), this, lifeTime);
-			Hitbox ac3 = new ProjectileHitbox(null,  4.0f,    0,  0, Hitbox.SAMURAI, facingOffset * 2, 0, 80, new SFX.LightHit(), this, lifeTime);
-			ac.setRefresh(2);
-			ac2.setRefresh(4);
-			ac.setHitstunType(HitstunType.SUPER);
-			new ActionCircleGroup(Arrays.asList(ac, ac2, ac3));
-			MapHandler.addActionCircle(ac);
-			MapHandler.addActionCircle(ac2);
-			MapHandler.addActionCircle(ac3);
-		}
-
-		void touchOtherProjectile(Projectile p){
-			/* nothing */
-		}
-
-		void handleHitWall(){
-			/* nothing */
-		}
-	}
-
 	public static class Grenade extends Projectile{
 		private final int lifeTime = 90;
 		boolean exploded = false;
@@ -295,6 +262,40 @@ public abstract class Projectile extends Entity{
 			verticalBounceMod = -0.1;
 		}
 
+	}
+	
+
+	private static class RocketExplosion extends Projectile{
+
+		private final int lifeTime = 30;
+		private final int displacement = 40;
+
+		public RocketExplosion(Fighter owner, Projectile rocket, int ownerDirect) {
+			super(0, 0, owner);
+			setup("sprites/entities/explosion.png", lifeTime, 0, 0);
+			new SFX.Explode().play();
+			int facingOffset = 40 * ownerDirect;
+			position.x = rocket.position.x - displacement;
+			position.y = rocket.position.y - displacement;
+			ac = 		 new ProjectileHitbox(owner,10.0f, 3.5f, 20, Hitbox.SAMURAI, 0, 0, 40, new SFX.HeavyHit(), this, lifeTime);
+			Hitbox ac2 = new ProjectileHitbox(owner, 8.0f, 3.0f, 16, Hitbox.SAMURAI, facingOffset, 0, 60, new SFX.MidHit(), this, lifeTime);
+			Hitbox ac3 = new ProjectileHitbox(null,  4.0f,    0,  0, Hitbox.SAMURAI, facingOffset * 2, 0, 80, new SFX.LightHit(), this, lifeTime);
+			ac.setRefresh(2);
+			ac2.setRefresh(4);
+			ac.setHitstunType(HitstunType.SUPER);
+			new ActionCircleGroup(Arrays.asList(ac, ac2, ac3));
+			MapHandler.addActionCircle(ac);
+			MapHandler.addActionCircle(ac2);
+			MapHandler.addActionCircle(ac3);
+		}
+
+		void touchOtherProjectile(Projectile p){
+			/* nothing */
+		}
+
+		void handleHitWall(){
+			/* nothing */
+		}
 	}
 
 	private static class GrenadeExplosion extends Projectile{

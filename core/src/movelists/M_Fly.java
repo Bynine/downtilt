@@ -128,12 +128,12 @@ public class M_Fly extends MoveList {
 	}
 	
 	public Move block(){
-		int invinc = 20;
-		int length = 30;
+		int invinc = 16;
+		int length = 24;
 		
 		Move m = new Move(user, length);
 		m.setAnimation("sprites/fighters/fly/dodge.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 5, invinc, 7, 0);
+		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
 		m.eventList.addInvincible(user, 10, invinc);
 		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);
 		return m;

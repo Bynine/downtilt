@@ -65,8 +65,7 @@ public class Hitbox extends ActionCircle{
 		this.charge = charge;
 	}
 
-	private boolean guarding = false;
-	private boolean perfectGuarding = false;
+	private boolean guarding = false, perfectGuarding = false, ignoreArmor = false;
 
 	public void hitTarget(Hittable target){
 		final int meteorAngleSize = 50;
@@ -187,7 +186,7 @@ public class Hitbox extends ActionCircle{
 	void startHitlag(Hittable target){
 		if (!DowntiltEngine.getPlayers().contains(target) && !DowntiltEngine.getPlayers().contains(user)) return;
 		float hit = knockbackFormula(target);
-		hit += target.getArmor();
+		if (!ignoreArmor) hit += target.getArmor();
 		int hitlag;
 		if (perfectGuarding) hitlag = (int) (DAM / 2);
 		else if (guarding) hitlag = (int) (DAM / 2);
@@ -215,15 +214,14 @@ public class Hitbox extends ActionCircle{
 	}
 
 	public float knockbackFormula(Hittable target){
-		final float crouchCancelMod = .75f;
-		//final float kbgMod = 0.029f;
+		final float crouchCancelMod = .75f;;
 		final float kbgMod = 0.023f;
 		final float weightMod = 0.01f;
 		final float minKnockback = 0.2f;
 
 		if (BKB + KBG == 0 || perfectGuarding) return 0;
 		float knockback = heldCharge * (BKB + ( (KBG * target.getPercentage() * kbgMod) / (target.getWeight() * weightMod) ));
-		knockback -= target.getArmor();
+		if (!ignoreArmor) knockback -= target.getArmor();
 		if (target instanceof Fighter){
 			if (( (Fighter) target ).getState() == State.CROUCH)  knockback *= crouchCancelMod;
 		}
@@ -258,6 +256,7 @@ public class Hitbox extends ActionCircle{
 	public float getAngle() { return ANG; }
 	public void setProperty(Property property) { this.property = property; }
 	public void setHitstunType(Fighter.HitstunType ht) { hitstunType = ht; }
+	public void setIgnoreArmor() { ignoreArmor = true; }
 	public Color getColor() {
 		return new Color(1, 0.2f, 0.2f, 0.75f);
 	}
