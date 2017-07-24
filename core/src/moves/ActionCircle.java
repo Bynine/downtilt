@@ -27,8 +27,8 @@ public abstract class ActionCircle {
 	final Timer refreshTimer = new DurationTimer(6);
 	boolean initialHit = false, remove = false, doesRefresh = false, reflects = false, reverse = true;
 	float movesAheadMod = 1;
-	final List<Hittable> hitFighterList = new ArrayList<Hittable>();
-	private Set<Hittable> s;
+	final List<Hittable> hitTargetList = new ArrayList<Hittable>();
+	private Set<Hittable> hitFighterHashSet;
 	Property property = Property.NORMAL;
 	Fighter.HitstunType hitstunType = HitstunType.NORMAL;
 	ActionCircleGroup group = null;
@@ -45,10 +45,10 @@ public abstract class ActionCircle {
 
 	public void checkGroup(){ 
 		if (null != group) for (ActionCircle ac: group.connectedCircles) {
-			hitFighterList.addAll(ac.hitFighterList);
-			s = new HashSet<Hittable>(hitFighterList);
-			hitFighterList.clear();
-			hitFighterList.addAll(s);
+			hitTargetList.addAll(ac.hitTargetList);
+			hitFighterHashSet = new HashSet<Hittable>(hitTargetList); // removes all repeats
+			hitTargetList.clear();
+			hitTargetList.addAll(hitFighterHashSet);
 			if (ac.isInitialHit() || ac.remove) remove = true;
 		}
 	}
@@ -73,7 +73,7 @@ public abstract class ActionCircle {
 	}
 
 	public void reset(){
-		hitFighterList.clear();
+		hitTargetList.clear();
 		remove = false;
 		setInitialHit(false);
 	}
@@ -91,6 +91,7 @@ public abstract class ActionCircle {
 	}
 	
 	public Circle getArea(){ return area; }
+	public List<Hittable> getHitTargets(){ return hitTargetList; }
 	public boolean toRemove() { return duration.timeUp(); }
 	public boolean didHitTarget(Hittable target){ 
 		boolean attackTimeUp = true;
@@ -102,7 +103,7 @@ public abstract class ActionCircle {
 				&& attackTimeUp
 				&& !target.isInvincible() 
 				&& Intersector.overlaps(area, target.getHurtBox()) 
-				&& !hitFighterList.contains(target); 
+				&& !hitTargetList.contains(target); 
 	}
 	protected boolean teamCheck(Hittable target){
 		boolean teamCheck = true;
@@ -112,7 +113,7 @@ public abstract class ActionCircle {
 		return teamCheck;
 	}
 	public boolean isInitialHit() { return initialHit; }
-	public boolean hitAnybody() { return hitFighterList.size() >= 1; }
+	public boolean hitAnybody() { return hitTargetList.size() >= 1; }
 	public boolean doesReflect() { return reflects; }
 	public void setRefresh(int time) { 
 		refreshTimer.setEndTime(time);

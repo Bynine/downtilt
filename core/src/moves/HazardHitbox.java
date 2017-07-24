@@ -27,7 +27,7 @@ public class HazardHitbox extends Hitbox {
 				!remove &&
 				!target.isInvincible() &&
 				Intersector.overlaps(area, target.getHurtBox()) &&
-				!hitFighterList.contains(target);
+				!hitTargetList.contains(target);
 		return hitAnyFighter; 
 	}
 	

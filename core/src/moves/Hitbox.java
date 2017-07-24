@@ -131,7 +131,7 @@ public class Hitbox extends ActionCircle{
 				MapHandler.addEntity(new Graphic.HitBadGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
 		sfx.play();
-		hitFighterList.add(target);
+		hitTargetList.add(target);
 	}
 	
 	private boolean isGuarding(){

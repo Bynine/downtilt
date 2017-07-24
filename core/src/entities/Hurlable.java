@@ -26,7 +26,6 @@ public abstract class Hurlable extends Hittable {
 	public Hurlable(float posX, float posY) {
 		super(posX, posY);
 		baseHitstun = 8;
-		baseHitSpeed = -0.6f;
 	}
 
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
@@ -190,7 +189,19 @@ public abstract class Hurlable extends Hittable {
 		
 	}
 	
-//	public static class Rocket extends Hurlable {
-//		
-//	}
+	public static class Rocket extends Hurlable {
+
+		public Rocket(float posX, float posY) {
+			super(posX, posY);
+		}
+		
+	}
+	
+	public static class Grenade extends Hurlable {
+
+		public Grenade(float posX, float posY) {
+			super(posX, posY);
+		}
+		
+	}
 }

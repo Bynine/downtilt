@@ -8,6 +8,7 @@ public class IDMove {
 	public IDMove(Move move, int id){
 		this.move = move;
 		this.id = id;
+		move.setID(id);
 	}
 	
 }

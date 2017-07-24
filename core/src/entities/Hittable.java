@@ -29,8 +29,8 @@ public abstract class Hittable extends Entity {
 	protected int team = GlobalRepo.BADTEAM;
 
 	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f;
-	protected float baseHitSpeed = -0.6f;
-	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 1, armor = 0, baseWeight = 100;
+	protected float baseHitSpeed = -0.8f;
+	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 2.2f, armor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
 	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 8f;
 	protected float walkAcc = 0.5f, runAcc = 0.75f, airAcc = 0.25f, jumpAcc = 0.54f;
@@ -131,7 +131,7 @@ public abstract class Hittable extends Entity {
 		}
 		else { // normal hitstun
 			bkb *= .45f;
-			h = new Hitbox(hurtler, bkb, baseKBG, dam, knockIntoVector.angle(), 0, 0, 0, null);
+			h = new Hitbox(hurtler, bkb, baseKBG, dam * 1.2f, knockIntoVector.angle(), 0, 0, 0, null);
 			knockIntoVector.set(h.knockbackFormula(this), h.knockbackFormula(this));
 			knockIntoVector.setAngle( (h.getAngle() + 90) / 2);
 		}
@@ -140,6 +140,11 @@ public abstract class Hittable extends Entity {
 		hurtler.knockIntoTimer.reset();
 		knockIntoTimer.reset();
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
+		addKnockIntoToCombo();
+	}
+	
+	protected void addKnockIntoToCombo(){
+		/* */
 	}
 
 	private void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){

@@ -22,7 +22,7 @@ public class GlobalRepo {
 	public static final float ENEMYHITSTUNMOD = 0.9f;
 	public static final int WHITEFREEZE = 1;
 	public static boolean 	fpsLogToggle 	= false;
-	public static boolean 	debugToggle 	= true;
+	public static boolean 	debugToggle 	= false;
 	public static boolean	musicToggle		= false;
 	private static BlockColor blockColor = BlockColor.R;
 	

@@ -37,7 +37,7 @@ public class WorldMap {
 	 */
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.shoot), 8, 4, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 8, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
 			));
 	List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(

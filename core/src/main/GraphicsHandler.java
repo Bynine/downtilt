@@ -279,12 +279,19 @@ public class GraphicsHandler {
 		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2;
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
 		font.draw(batch, "" + (int)(fi.getPercentage()), xPos, yPos);
+		
+		if (fi.getCombo().getRank() > 0) {
+			float combo = fi.getCombo().getRank()/10;
+			if (combo > 1) combo = 1;
+			font.setColor(0, combo, 1 - combo, 1);
+			font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
+		}
 	}
 
 	private static void drawState(Entity e) {
 		Fighter fi = (Fighter) e;
 		float xPos = fi.getPosition().x - 16 + fi.getImage().getWidth()/2;
-		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight() * 2;
+		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight() * 3;
 		font.draw(batch, fi.getState().toString(), xPos, yPos);
 	}
 

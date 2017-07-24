@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import entities.Entity.Direction;
 import entities.Fighter;
+import entities.Hittable;
 import timers.DurationTimer;
 import timers.Timer;
 
@@ -19,7 +20,7 @@ public class Move {
 	private boolean helpless = false, continueOnLanding = false, noTurn = false, connected = false, stopsInAir = false;
 	float armor = 0;
 	private Animation animation = null;
-	private int addedFrames = 0;
+	private int addedFrames = 0, id = -1;
 	public static final float HURTBOXNOTSET = -1;
 	private float hurtBoxWidth = HURTBOXNOTSET, hurtBoxHeight = HURTBOXNOTSET, hurtBoxX = HURTBOXNOTSET, hurtBoxY = HURTBOXNOTSET;
 
@@ -32,7 +33,13 @@ public class Move {
 		duration.countUp();
 		eventList.update(duration.getCounter(), user.inHitstun());
 		for (ActionCircle ac: eventList.acList){
-			if (ac.hitFighterList.size() > 0) connected = true;
+			if (ac.hitTargetList.size() > 0) connected = true;
+			for (Hittable target: ac.getHitTargets()){
+				if (target instanceof Fighter){
+					Fighter fi = (Fighter) target;
+					fi.getCombo().addMoveID(id);
+				}
+			}
 		}
 	}
 
@@ -76,6 +83,12 @@ public class Move {
 		hurtBoxX = x;
 		hurtBoxY = y;
 	}
+	
+	public void setID(int id){
+		this.id = id;
+	}
+	
+	/* GETTERS */
 	
 	public Rectangle getMoveHurtBox(Fighter user, Rectangle r){
 		float origWidth = r.width;

@@ -33,7 +33,7 @@ public class ProjectileHitbox extends Hitbox {
 				!remove &&
 				!target.isInvincible() &&
 				Intersector.overlaps(area, target.getHurtBox()) &&
-				!hitFighterList.contains(target);
+				!hitTargetList.contains(target);
 		if (null == user) return hitAnyFighter; 
 		return 
 				target != user &&

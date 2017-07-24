@@ -12,6 +12,7 @@ import main.GlobalRepo;
 import main.MapHandler;
 import main.SFX;
 import movelists.*;
+import moves.Combo;
 import moves.IDMove;
 import moves.Move;
 import timers.Timer;
@@ -42,8 +43,8 @@ public abstract class Fighter extends Hittable{
 	private final Vector2 spawnPoint;
 	private int lives = 1;
 
-	public static final int SPECIALMETERMAX = 8;
-	private float specialMeter = SPECIALMETERMAX;
+	public static final int SPECIALMETERMAX = 8, STARTINGSPECIAL = 1;
+	private float specialMeter = STARTINGSPECIAL;
 
 	protected Vector2 footStoolKB = new Vector2(0, 0);
 	protected int footStoolDuration = 30;
@@ -53,6 +54,7 @@ public abstract class Fighter extends Hittable{
 
 	private Hittable caughtTarget = null;
 	private IDMove activeMove = null, prevMove = null; 
+	private final Combo combo = new Combo();
 
 	private InputHandler inputHandler = new InputHandlerKeyboard(this);
 	private final int randomAnimationDisplacement;
@@ -127,7 +129,7 @@ public abstract class Fighter extends Hittable{
 		fi.hitstunTimer.reset();
 		fi.hitstunTimer.setEndTime(10);
 	}
-	
+
 	protected boolean shouldPushAway(int pushDistance, Hittable hi){
 		return super.shouldPushAway(pushDistance, hi) && (null == getActiveMove());
 	}
@@ -592,7 +594,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public void ground(){
-		if (hitstunTimer.getCounter() > 1 && velocity.y < 0){	
+		if (!combo.isACombo() && hitstunTimer.getCounter() > 1 && velocity.y < 0){	
 			if (tumbling) {
 				if (inputHandler.isTeching()) tech();
 				else {
@@ -604,16 +606,23 @@ public abstract class Fighter extends Hittable{
 		}
 		tumbling = false;
 		super.ground();
-		
+
 		boolean upThroughThinPlatform = velocity.y >= 0;
 		if (null != getActiveMove() && !getActiveMove().move.continuesOnLanding() && !upThroughThinPlatform) endAttack();
 		if (velocity.y < 0 && getActiveMove() == null && state != State.FALLEN){
 			startAttack(new IDMove(moveList.land(), MoveList_Advanced.noStaleMove));
 		}
-		refreshDoubleJump();
+		refreshDoubleJumps();
+		if (velocity.y < 0) endComboOnHitGround();
+	}
+	
+	private void endComboOnHitGround(){
+		int comboStunMod = 24;
+		int stunTime = (int) (combo.finish() * comboStunMod);
+		setStun(stunTime);
 	}
 
-	private void refreshDoubleJump(){
+	private void refreshDoubleJumps(){
 		doubleJumps = doubleJumpMax;
 	}
 
@@ -650,7 +659,7 @@ public abstract class Fighter extends Hittable{
 	protected boolean activeMoveIsCharge(){
 		return activeMoveIsWhatever(MoveList_Advanced.chargeRange);
 	}
-	
+
 	protected boolean activeMoveIsThrow(){
 		return activeMoveIsWhatever(MoveList_Advanced.throwRange);
 	}
@@ -705,6 +714,10 @@ public abstract class Fighter extends Hittable{
 		grabbingTimer.setEndTime(caughtTime);
 		grabbingTimer.reset();
 	}
+	
+	protected void addKnockIntoToCombo(){
+		combo.addMoveID(Combo.knockIntoID);
+	}
 
 	public void parry(){
 		endAttack();
@@ -730,12 +743,12 @@ public abstract class Fighter extends Hittable{
 
 	private void re(){
 		position.set(spawnPoint);
-		changeSpecial(SPECIALMETERMAX);
+		changeSpecial(STARTINGSPECIAL);
 		percentage = 0;
 		velocity.x = 0;
 		velocity.y = 0;
 		state = State.FALL;
-		refreshDoubleJump();
+		refreshDoubleJumps();
 		tumbling = false;
 		if (direction == Direction.LEFT) flip();
 		for (Timer t: timerList) t.end();
@@ -773,6 +786,7 @@ public abstract class Fighter extends Hittable{
 		}
 		return false;
 	}
+	public Combo getCombo() { return combo; }
 	public Rectangle groundBelowRect(){
 		int rectHeight = GlobalRepo.TILE * 32;
 		return new Rectangle (getCenter().x, position.y - rectHeight, 12, rectHeight);
@@ -781,7 +795,10 @@ public abstract class Fighter extends Hittable{
 	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }
 	public void restartInputQueue() { inputQueueTimer.reset(); }
 	public void countDownAttackTimer(){ attackTimer.countDown(); }
-	public void setLives(int i) { lives = i; }
+	public void setLives(int i) { 
+		lives = i; 
+		combo.finish();
+	}
 	public void setArmor(float armor) { this.armor = armor; }
 	public void setActiveMove(IDMove activeMove) { 
 		prevMove = this.activeMove;
