@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Fly extends Fighter {
@@ -27,7 +28,7 @@ public class Fly extends Fighter {
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);
 		baseWeight = 45;
-		armor = -1;
+		baseArmor = -1;
 		runAcc = 0.2f;
 		runSpeed = 1f;
 		walkAcc = 0.2f;
@@ -92,5 +93,19 @@ public class Fly extends Fighter {
 	TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
 	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	
+	public static class Swarm extends Fly {
+
+		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/fly/swarm.glsl"));
+
+		public Swarm(float posX, float posY, int team) {
+			super(posX, posY, team);
+			setPalette(norm);
+			baseWeight = 14;
+			baseArmor = -2;
+		}
+
+
+	}
 
 }

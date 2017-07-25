@@ -20,6 +20,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class DowntiltEngine extends ApplicationAdapter {
 
+	/**
+	 * MUST BE ON before making a jar/releasing!
+	 */
+	private static boolean release = true;
+	
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
@@ -32,20 +37,27 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static float volume	= 1f;
 	private static ShaderProgram p2Palette;
 
+	private static boolean musicToggle = false;
+	private static boolean debugToggle = true;
+	private static boolean fpsLoggle = true;
+
 	public void create () {
 		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
 		Fighter player1 = new Hero(0, 0, 0);
 		beginFighter(player1, 0);
 		GraphicsHandler.begin();
 		MapHandler.begin();
-		
+
 		Menu.begin();
 		DebugMenu.begin();
 		MainMenu.begin();
 		challengeProgression = new WorldMap();
 
 	}
-	
+
+	/**
+	 * Creates a fighter and initializes their controller
+	 */
 	private static void beginFighter(Fighter player, int cont){
 		playerList.add(player);
 		InputHandlerController ch = new InputHandlerController(player);
@@ -62,21 +74,23 @@ public class DowntiltEngine extends ApplicationAdapter {
 		if (primaryInputHandler == null) primaryInputHandler = kh;
 	}
 
+	/**
+	 * Core loop of the game.
+	 */
+	@Override
 	public void render () {
 		if (!paused) {
 			deltaTime++;
 			updateTimers();
 		}
-		if (GlobalRepo.fpsLogToggle) fpsLogger.log();
-		
+		if (fpsLoggle && !release) fpsLogger.log();
 		switch(gameState){
 		case GAME:	updateGame();		break;
 		case DEBUG: DebugMenu.update();	break;
 		case MENU:	MainMenu.update();	break;
 		}
-		
 	}
-	
+
 	private void updateGame(){
 		challengeProgression.update();
 		if (waitTimer.timeUp()) MapHandler.updateInputs();
@@ -98,7 +112,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		hitlagTimer.setEndTime(length);
 		hitlagTimer.reset();
 	}
-	
+
 	public static void wait(int length){
 		waitTimer.setEndTime(length);
 		waitTimer.reset();
@@ -116,12 +130,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 		MapHandler.updateRoomMap(stage);
 		GraphicsHandler.updateRoomGraphics(getPlayers().get(0));
 	}
-	
+
 	public static void startDebugChallenge(List<Fighter> newPlayers, int startChallenge, boolean debug){
 		startNewChallenge(newPlayers, startChallenge);
-		GlobalRepo.debugToggle = debug;
+		debugToggle = debug;
 	}
-	
+
 	public static void startNewChallenge(List<Fighter> newPlayers, int startChallenge){
 		challengeProgression = new WorldMap(startChallenge);
 		gameState = GameState.GAME;
@@ -137,19 +151,19 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.begin();
 		MapHandler.begin();
 	}
-	
+
 	public static void startDebugMenu(){
 		gameState = GameState.DEBUG;
 	}
-	
+
 	public static void returnToMenu(){
 		gameState = GameState.MENU;
 	}
-	
+
 	public static Challenge getChallenge(){
 		return challengeProgression.getActiveChallenge();
 	}
-	
+
 	public enum GameState{
 		GAME, DEBUG, MENU
 	}
@@ -161,8 +175,14 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static boolean outOfHitlag(){ return hitlagTimer.timeUp(); }
 	public static boolean justOutOfHitlag() { return hitlagTimer.timeJustUp(); }
 	public static GameState getGameState() { return gameState; }
+	public static boolean musicOn(){
+		return musicToggle || release;
+	}
+	public static boolean debugOn(){
+		return debugToggle && !release;
+	}
 	public static InputHandlerPlayer getPrimaryInputHandler() { 
 		return primaryInputHandler; 
-		}
+	}
 
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import main.GlobalRepo;
 import main.MapHandler;
 import main.SFX;
+import moves.Combo;
 import moves.Equipment;
 import moves.Hitbox;
 import timers.Timer;
@@ -30,7 +31,7 @@ public abstract class Hittable extends Entity {
 
 	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f;
 	protected float baseHitSpeed = -0.8f;
-	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 2.2f, armor = 0, baseWeight = 100;
+	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 2.2f, baseArmor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
 	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 8f;
 	protected float walkAcc = 0.5f, runAcc = 0.75f, airAcc = 0.25f, jumpAcc = 0.54f;
@@ -113,7 +114,7 @@ public abstract class Hittable extends Entity {
 
 	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
-		float bkb = knockbackIntensity(knockIntoVector) * 0.8f;
+		float bkb = knockbackIntensity(knockIntoVector) * 0.8f * hurtler.getWeight()/100.0f;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
 		Hitbox h;
 		if (hurtler.hitstunType != HitstunType.NORMAL) {
@@ -140,10 +141,10 @@ public abstract class Hittable extends Entity {
 		hurtler.knockIntoTimer.reset();
 		knockIntoTimer.reset();
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
-		addKnockIntoToCombo();
+		addToCombo(Combo.knockIntoID);
 	}
 	
-	protected void addKnockIntoToCombo(){
+	protected void addToCombo(int id){
 		/* */
 	}
 
@@ -224,7 +225,7 @@ public abstract class Hittable extends Entity {
 
 	public float getPower(){ return basePower * checkTimerForBonus(powerTimer) * equipment.getPowerMod(); }
 	public float getWeight() { return baseWeight * checkTimerForBonus(defenseTimer) * equipment.getWeightMod(); }
-	public float getArmor() { return armor + 5 * (checkTimerForBonus(defenseTimer) - 1) + equipment.getArmorMod(); }
+	public float getArmor() { return baseArmor + 5 * (checkTimerForBonus(defenseTimer) - 1) + equipment.getArmorMod(); }
 	public float getDashStrength() { return dashStrength * getSpeedMod(); }
 	public float getWalkSpeed() { return walkSpeed * getSpeedMod() * equipment.getSpeedMod() * equipment.getWalkSpeedMod(); }
 	public float getWalkAcc() { return walkAcc * getSpeedMod() * equipment.getSpeedMod() * equipment.getWalkAccMod(); }

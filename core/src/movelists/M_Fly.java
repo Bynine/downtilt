@@ -27,9 +27,9 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move nAir() {
-		int end = 50;
-		int startSwoop = 18;
-		int iter = 6;
+		int end = 60;
+		int startSwoop = 26;
+		int iter = 8;
 		int endSwoop = startSwoop + (iter * 4);
 		
 		Move m = new Move(user, end);

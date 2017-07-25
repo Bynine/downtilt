@@ -448,6 +448,7 @@ public abstract class Fighter extends Hittable{
 		doubleJumps ++;
 		doubleJumpGraphicTimer.end();
 		new SFX.FootStool().play();
+		footStoolee.addToCombo(Combo.footstoolID);
 		footStoolee.velocity.set(footStoolKB);
 		footStoolee.tumbling = true;
 		footStoolee.percentage += footStoolDamage;
@@ -688,7 +689,8 @@ public abstract class Fighter extends Hittable{
 	private void addSpeed(float speed, float acc){ 
 		if (Math.abs(velocity.x) < Math.abs(speed)) velocity.x += Math.signum(stickX) * acc; 
 	}
-
+	
+	@Override
 	protected float directionalInfluenceAngle(Vector2 knockback){
 		float diStrength = 8;
 		if (team == GlobalRepo.GOODTEAM) diStrength = 40;
@@ -703,7 +705,8 @@ public abstract class Fighter extends Hittable{
 		knockback.setAngle((float) (knockback.angle() + diModifier));
 		return knockback.angle();
 	}
-
+	
+	@Override
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
 		if (null != caughtTarget) beginThrow();
@@ -715,8 +718,9 @@ public abstract class Fighter extends Hittable{
 		grabbingTimer.reset();
 	}
 	
-	protected void addKnockIntoToCombo(){
-		combo.addMoveID(Combo.knockIntoID);
+	@Override
+	protected void addToCombo(int id){
+		combo.addMoveID(id);
 	}
 
 	public void parry(){
@@ -799,7 +803,7 @@ public abstract class Fighter extends Hittable{
 		lives = i; 
 		combo.finish();
 	}
-	public void setArmor(float armor) { this.armor = armor; }
+	public void setArmor(float armor) { this.baseArmor = armor; }
 	public void setActiveMove(IDMove activeMove) { 
 		prevMove = this.activeMove;
 		this.activeMove = activeMove; 

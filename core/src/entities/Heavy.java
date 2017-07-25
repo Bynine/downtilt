@@ -35,7 +35,7 @@ public class Heavy extends Fighter {
 		image = new Sprite(standImage.getKeyFrame(0));
 		gravity = -0.60f;
 		baseWeight = 240;
-		armor = HEAVY_ARMOR;
+		baseArmor = HEAVY_ARMOR;
 		jumpAcc = 0.66f;
 		airSpeed = 1.1f;
 		walkSpeed = 1.7f;

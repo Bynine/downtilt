@@ -34,9 +34,9 @@ public class TreasureChest extends Hurlable {
 	}
 
 	private void open(){
-		int numberOfCollectibles = 2;
+		//int numberOfCollectibles = 2;
 		int numberOfPowerups = 1;
-		for (int i = 0; i < numberOfCollectibles; ++i) addCollectible(spawnCollectible());
+		//for (int i = 0; i < numberOfCollectibles; ++i) addCollectible(spawnCollectible());
 		for (int i = 0; i < numberOfPowerups; ++i) addCollectible(spawnPowerUp());
 		opened = true;
 	}
@@ -49,12 +49,12 @@ public class TreasureChest extends Hurlable {
 		MapHandler.addEntity(co);
 	}
 
-	private Collectible spawnCollectible(){
-		List<Collectible> potentialCollectibles = new ArrayList<Collectible>();
-		potentialCollectibles.add(new Collectible.Food(position.x, position.y));
-		potentialCollectibles.add(new Collectible.Ammo(position.x, position.y));
-		return GlobalRepo.getRandomElementFromList(potentialCollectibles);
-	}
+//	private Collectible spawnCollectible(){
+//		List<Collectible> potentialCollectibles = new ArrayList<Collectible>();
+//		potentialCollectibles.add(new Collectible.Food(position.x, position.y));
+//		potentialCollectibles.add(new Collectible.Ammo(position.x, position.y));
+//		return GlobalRepo.getRandomElementFromList(potentialCollectibles);
+//	}
 	
 	private Collectible spawnPowerUp(){
 		List<Collectible> potentialCollectibles = new ArrayList<Collectible>();

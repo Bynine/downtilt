@@ -42,8 +42,8 @@ public class GraphicsHandler {
 	private static final ShapeRenderer debugRenderer = new ShapeRenderer();
 	private static BitmapFont font = new BitmapFont();
 	private static TextureRegion 
-		guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
-		defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
+	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
+	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
 	private static ShaderProgram hitstunShader, airShader, defenseShader, powerShader, speedShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE));
@@ -97,7 +97,7 @@ public class GraphicsHandler {
 		float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
 		parallaxCam.position.x = 
 				(parallaxCam.position.x * (updateSpeed - 1) +
-				( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
+						( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
 		parallaxCam.position.y = cam.position.y;
 
 		if (!DowntiltEngine.outOfHitlag() && !DowntiltEngine.isPaused()) shakeScreen();
@@ -126,7 +126,7 @@ public class GraphicsHandler {
 
 		arr = new int[]{1};  // render back
 		renderer.render(arr);
-		
+
 		batch.begin();  // render bg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.BACKGROUND) renderEntity(e);
 		batch.end();
@@ -146,22 +146,17 @@ public class GraphicsHandler {
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
-//		batch.begin(); 
-//		arr = new int[]{numLayers-2};  // render middle
-//		renderer.render(arr);
-//		batch.end();
-//		
 		batch.begin(); 
 		arr = new int[]{numLayers-1};  // render front
 		renderer.render(arr);
 		batch.end();
-		
+
 		batch.begin();  // render fg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.FRONT) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
-		if (GlobalRepo.debugToggle) debugRender();
+		if (DowntiltEngine.debugOn()) debugRender();
 
 		batch.begin();
 		renderGUI();
@@ -173,15 +168,15 @@ public class GraphicsHandler {
 		batch.setColor(e.getColor());
 		if (e instanceof Fighter) {
 			Fighter fi = (Fighter) e;
-			drawFighterPercentage(fi);
+			if (fi.getCombo().getRank() > 0) drawCombo(fi);
 			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
-			if (GlobalRepo.debugToggle) drawState(e);
+			if (DowntiltEngine.debugOn()) drawState(e);
 
-			batch.setColor(batch.getColor().r - 0.1f, batch.getColor().g - 0.1f, batch.getColor().g - 0.1f, 1);
-			if (fi.isInvincible()) 
-				batch.setColor(batch.getColor().r - 0.5f, batch.getColor().g * 2, batch.getColor().b * 2, 1);
-			else if (fi.isCharging()) 
-				batch.setColor(batch.getColor().r + 0.1f, batch.getColor().g + 0.1f, batch.getColor().g + 0.1f, 1);
+			float colorMod = 0.4f * fi.getPercentage() / fi.getWeight();
+			float rColor = MathUtils.clamp(1 - colorMod / 2, 0.45f, 1);
+			float gbColor = MathUtils.clamp(1 - colorMod, 0.15f, 1);
+			batch.setColor(rColor, gbColor, gbColor, 1);
+			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
 
 			if (!fi.powerTimer.timeUp()) drawAfterImage(fi, batch.getColor(), batch.getShader(), powerShader);
@@ -249,7 +244,7 @@ public class GraphicsHandler {
 			font.draw(batch, "PAUSED", cam.position.x, cam.position.y);
 			font.draw(batch, "Press Select to quit", cam.position.x, cam.position.y - GlobalRepo.TILE * 2);
 		}
-		
+
 		font.draw(batch, DowntiltEngine.getChallenge().getTime(), 
 				cam.position.x, cam.position.y - SCREENHEIGHT * stockLocationMod);
 	}
@@ -272,20 +267,15 @@ public class GraphicsHandler {
 		return cam.position;
 	}
 
-	private static void drawFighterPercentage(Entity e) {
-		Fighter fi = (Fighter) e;
-		float darken = fi.getPercentage()*0.0075f;
-		font.setColor(1, 1 - darken, 1 - (darken*1.1f), 1);
+	private static void drawCombo(Fighter fi) {
 		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2;
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
-		font.draw(batch, "" + (int)(fi.getPercentage()), xPos, yPos);
+		float combo = (fi.getCombo().getRank() - 1)/8.0f;
+		final float powMod = 0.75f;
 		
-		if (fi.getCombo().getRank() > 0) {
-			float combo = fi.getCombo().getRank()/10;
-			if (combo > 1) combo = 1;
-			font.setColor(0, combo, 1 - combo, 1);
-			font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
-		}
+		if (combo > 1) combo = 1;
+		font.setColor((float) Math.pow(1 - combo, powMod), (float) Math.pow(combo, powMod), 0, 1);
+		font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
 	}
 
 	private static void drawState(Entity e) {
@@ -317,7 +307,7 @@ public class GraphicsHandler {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.Filled);
+		debugRenderer.begin(ShapeType.Line);
 		for (ActionCircle ac: MapHandler.activeRoom.getActionCircleList()){
 			Circle actionCircle = ac.getArea();
 			debugRenderer.setColor(ac.getColor());

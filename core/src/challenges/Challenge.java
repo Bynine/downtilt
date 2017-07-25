@@ -40,7 +40,7 @@ public abstract class Challenge {
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
 		
-		if (!GlobalRepo.debugToggle){
+		if (!DowntiltEngine.debugOn()){
 			int waitBetween = 60;
 			TransitionGraphicsHandler.readyGo();
 			DowntiltEngine.wait(waitBetween);

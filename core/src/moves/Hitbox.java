@@ -126,12 +126,16 @@ public class Hitbox extends ActionCircle{
 		}
 		else{
 			if (target.getTeam() == GlobalRepo.BADTEAM) 
-				MapHandler.addEntity(new Graphic.HitGoodGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+				MapHandler.addEntity(new Graphic.HitGoodGraphic(area.x + area.radius/2, area.y + area.radius/2, graphicLengthFormula(knockbackFormula(target))));
 			if (target.getTeam() == GlobalRepo.GOODTEAM) 
-				MapHandler.addEntity(new Graphic.HitBadGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+				MapHandler.addEntity(new Graphic.HitBadGraphic(area.x + area.radius/2, area.y + area.radius/2, graphicLengthFormula(knockbackFormula(target))));
 		}
 		sfx.play();
 		hitTargetList.add(target);
+	}
+	
+	private int graphicLengthFormula(float knockback){
+		return (int) (1.5f * hitlagFormula(knockback));
 	}
 	
 	private boolean isGuarding(){

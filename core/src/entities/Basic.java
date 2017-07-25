@@ -73,40 +73,6 @@ public class Basic extends Fighter {
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
 	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
 
-	public static class Bad extends Basic {
-
-		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/bad.glsl"));
-
-		public Bad(float posX, float posY, int team) {
-			super(posX, posY, team);
-			setPalette(norm);
-			gravity = -0.4f;
-			airSpeed = 0.5f;
-			walkSpeed = 1.2f;
-			runSpeed = 1.8f;
-			basePower = 0.5f;
-			baseWeight = 50;
-		}
-
-
-	}
-
-	public static class Beefy extends Basic {
-
-		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/beefy.glsl"));
-
-		public Beefy(float posX, float posY, int team) {
-			super(posX, posY, team);
-			setPalette(norm);
-			basePower = 1.6f;
-			baseWeight = 180;
-			walkSpeed = 2.1f;
-			runSpeed = 3f;
-		}
-
-
-	}
-
 	public static class Bomb extends Basic {
 
 		private final Timer kaboom = new DurationTimer(120);
@@ -148,49 +114,6 @@ public class Basic extends Fighter {
 			kaboom.setEndTime(time);
 			timerList.add(kaboom);
 		}
-
-	}
-
-	public static class Bonkers extends Basic {
-
-		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/bonkers.glsl"));
-
-		public Bonkers(float posX, float posY, int team) {
-			super(posX, posY, team);
-			setPalette(norm);
-			gravity = -0.35f;
-			airSpeed = 2.2f;
-			walkAcc = 1.8f;
-			walkSpeed = 2.2f;
-			runAcc = 2.5f;
-			runSpeed = 3.5f;
-			friction = 0.7f;
-			airFriction = 0.85f;
-			armor = 1;
-			baseHitstun = 0.5f;
-			basePower = 2.1f;
-			baseWeight = 350;
-			powerTimer.reset();
-		}
-
-
-	}
-	
-	public static class Baffle extends Bonkers {
-
-		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/baffle.glsl"));
-
-		public Baffle(float posX, float posY, int team) {
-			super(posX, posY, team);
-			setPalette(norm);
-			armor = 0;
-		}
-		
-		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
-			super.update(rectangleList, entityList, deltaTime);
-			super.update(rectangleList, entityList, deltaTime);
-		}
-
 
 	}
 

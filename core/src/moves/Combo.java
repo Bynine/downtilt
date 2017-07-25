@@ -21,7 +21,7 @@ public class Combo {
 	private static final Sound SOUND_6 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/6.wav"));
 	private static final Sound SOUND_7 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/7.wav"));
 	private static final Sound SOUND_FINISH = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish.wav"));
-	public static final int knockIntoID = 999;
+	public static final int knockIntoID = 999, footstoolID = 998;
 
 	public void addMoveID(int id){
 		if (id == knockIntoID || !moveIDsUsed.contains(id)){

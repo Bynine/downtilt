@@ -6,7 +6,6 @@ import java.util.List;
 
 import entities.*;
 import main.DowntiltEngine;
-import main.GlobalRepo;
 import main.SFX;
 import maps.*;
 
@@ -23,6 +22,7 @@ public class WorldMap {
 	 */
 	public WorldMap(){
 		activeChallengeIndex = 0;
+		initializeChallengeList();
 	}
 
 	/**
@@ -30,6 +30,19 @@ public class WorldMap {
 	 */
 	public WorldMap(int index){
 		activeChallengeIndex = index;
+		initializeChallengeList();
+	}
+	
+	/**
+	 * Decides between debug beginning round and intended one.
+	 */
+	private void initializeChallengeList(){
+		if (DowntiltEngine.debugOn()) {
+			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
+		}
+		else {
+			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
+		}
 	}
 
 	/**
@@ -37,7 +50,7 @@ public class WorldMap {
 	 */
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 8, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 8, 30))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
 			));
 	List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
@@ -69,9 +82,7 @@ public class WorldMap {
 	 * List of challenges to be iterated through.
 	 */
 	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList(
-//			new  ChallengeNorm(new Stage_Standard(), waveStandard) // Normal
-			new  ChallengeNorm(new Stage_Standard(), waveDebug)
-			,new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
+			new ChallengeNorm(new Stage_Rooftop(), waveRooftop)
 			,new ChallengeNorm(new Stage_Blocks(), waveBlocks)
 			,new ChallengeNorm(new Stage_Mushroom(), waveForest)
 			,new ChallengeNorm(new Stage_Sky(), waveFinal)
@@ -86,7 +97,7 @@ public class WorldMap {
 	 * Starts a new challenge after finishing the old one..
 	 */
 	public void update(){
-		if (GlobalRepo.musicToggle) getActiveChallenge().getStage().getMusic().play();
+		if (DowntiltEngine.musicOn()) getActiveChallenge().getStage().getMusic().play();
 		if (!getActiveChallenge().started) getActiveChallenge().begin();
 		getActiveChallenge().update();
 		if (getActiveChallenge().finished()) {

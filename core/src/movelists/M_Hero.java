@@ -533,7 +533,6 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 10);
 		m.dontTurn();
 		m.setAnimation("sprites/fighters/bomber/skid.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 0, 5, 5.0f, 0);
 		return m;
 	}
 
@@ -558,6 +557,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox h1 = new Hitbox(user, 5.2f, 1.6f, 12, 20, 19, 0, 12, new SFX.MidHit());
 		h1.setHitstunType(HitstunType.SUPER);
 		h1.setIgnoreArmor();
+		h1.setNoReverse();
 		m.eventList.addActionCircle(h1, 10, 15);
 		m.eventList.addInvincible(user, 0, 10);
 		return m;
