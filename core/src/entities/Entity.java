@@ -20,13 +20,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
-	final Vector2 position = new Vector2();
-	final Vector2 velocity = new Vector2();
-	final Vector2 startPosition = new Vector2();
+	final Vector2 position = new Vector2(), velocity = new Vector2(), startPosition = new Vector2();
 	State state, prevState, preJumpSquatState;
 	Direction direction = Direction.RIGHT;
 	Layer layer = Layer.FOREGROUND;
-	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/dummy.png"))));
+	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nothing.png"))));
 	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 

@@ -10,7 +10,7 @@ import entities.Basic;
 import entities.Entity;
 import entities.Fighter;
 import entities.Graphic;
-import entities.Projectile;
+import entities.Explosion;
 
 public class EventList {
 
@@ -59,7 +59,7 @@ public class EventList {
 		actionStartTimes.add(start);
 	}
 	
-	public <T extends Projectile> void addProjectile(Fighter user, Class<T> proj, int start){
+	public <T extends Explosion> void addProjectile(Fighter user, Class<T> proj, int start){
 		actionList.add(new Action.MakeProjectile<>(user, proj));
 		actionStartTimes.add(start);
 	}
@@ -81,6 +81,11 @@ public class EventList {
 
 	public void addNewEntity(int start, Entity user, Entity en, float velX, float velY) {
 		actionList.add(new Action.AddEntity(user, en, velX, velY));
+		actionStartTimes.add(start);
+	}
+	
+	public void addNewEntity(int start, Entity user, Entity en, float velX, float velY, float dispX, float dispY) {
+		actionList.add(new Action.AddEntity(user, en, velX, velY, dispX, dispY));
 		actionStartTimes.add(start);
 	}
 	

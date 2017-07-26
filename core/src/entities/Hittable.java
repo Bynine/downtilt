@@ -139,6 +139,11 @@ public abstract class Hittable extends Entity {
 		knockIntoTimer.reset();
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
 		addToCombo(Combo.knockIntoID);
+		hurtler.knockInto();
+	}
+	
+	protected void knockInto(){
+		/* */
 	}
 
 	protected void addToCombo(int id){

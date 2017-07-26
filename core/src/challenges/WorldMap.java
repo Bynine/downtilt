@@ -22,7 +22,7 @@ public class WorldMap {
 	 */
 	private void initializeChallengeList(){
 		if (DowntiltEngine.debugOn()) {
-			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
+			challengeList.add(0, new ChallengeNorm(new Stage_Mushroom(), waveDebug));
 		}
 		else {
 			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
@@ -50,7 +50,7 @@ public class WorldMap {
 	 */
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 4, 1, 30))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.zen), 4, 1, 30))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 6, 3, 120))
 			));
 	List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(

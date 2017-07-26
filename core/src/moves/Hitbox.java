@@ -165,15 +165,11 @@ public class Hitbox extends ActionCircle{
 		return staleness;
 	}
 
-	private Vector2 recoilFormula(Vector2 knockback, Hittable target) {
+	protected Vector2 recoilFormula(Vector2 knockback, Hittable target) {
 		float recoil = -knockback.x/4;
 		recoil *= (target.getWeight()/100);
 		Vector2 recoilVector = new Vector2(recoil, 0);
 		return recoilVector;
-	}
-
-	void handlePerfectBlockingKnockback(){
-		/* NOTHING! */
 	}
 
 	protected void setSamuraiAngle(Hittable target, Vector2 knockback){

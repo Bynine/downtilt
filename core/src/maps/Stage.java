@@ -27,9 +27,8 @@ public abstract class Stage {
 	protected MapObjects mapCollision, mapEntities;
 	protected final TmxMapLoader tmxMapLoader = new TmxMapLoader();
 	protected final List<Rectangle> rectangleList = new ArrayList<>();
-	protected final List<Entity> entityList = new ArrayList<>();
-	protected final List<Entity> newEntityList = new ArrayList<>();
-	protected final List<ActionCircle> actionCircleList = new ArrayList<>();
+	protected final List<Entity> entityList = new ArrayList<>(), newEntityList = new ArrayList<>();
+	private final List<ActionCircle> actionCircleList = new ArrayList<>(), newActionCircleList = new ArrayList<>();
 	protected Music roomMusic;
 	protected float r, g, b = 1;
 	protected float a = 0;
@@ -71,13 +70,19 @@ public abstract class Stage {
 	}
 
 	public ActionCircle addActionCircle(ActionCircle ac) {
-		actionCircleList.add(ac);
-		return actionCircleList.get(actionCircleList.size() - 1);
+		newActionCircleList.add(ac);
+		return newActionCircleList.get(newActionCircleList.size() - 1);
 	}
 
 	public void update(int deltaTime){
-		for (Entity e: newEntityList) entityList.add(e);
+		for (Entity e: newEntityList) {
+			entityList.add(e);
+		}
 		newEntityList.clear();
+		for (ActionCircle ac: newActionCircleList) {
+			actionCircleList.add(ac);
+		}
+		newActionCircleList.clear();
 		for (ActionCircle ac: actionCircleList) ac.update(deltaTime);
 		for (Entity en: entityList) if (en instanceof ChangeBlock) ((ChangeBlock)en).update(entityList);
 	}

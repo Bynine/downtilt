@@ -5,6 +5,7 @@ import java.util.List;
 import timers.DurationTimer;
 import main.DowntiltEngine;
 import main.GlobalRepo;
+import main.MapHandler;
 import main.SFX;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -53,6 +55,33 @@ public abstract class Hurlable extends Hittable {
 		return tumbleImage.getKeyFrame(deltaTime);
 	}
 
+	private static abstract class Explosive extends Hurlable {
+
+		private boolean exploded = false;
+
+		public Explosive(float posX, float posY) {
+			super(posX, posY);
+		}
+
+		protected abstract Explosion getExplosion();
+
+		protected boolean shouldExplode(){
+			return !exploded;
+		}
+
+		protected void explode(){
+			if (!shouldExplode()) return;
+			exploded = true;
+			MapHandler.addEntity(getExplosion());
+			setRemove();
+		}
+		
+		@Override
+		public boolean inHitstun(){
+			return true;
+		}
+
+	}
 
 	public static class TrashCan extends Hurlable {
 
@@ -68,38 +97,38 @@ public abstract class Hurlable extends Hittable {
 		}
 
 	}
-	
+
 	private static abstract class Breakable extends Hurlable {
-		
+
 		protected final DurationTimer life = new DurationTimer(400);
 		protected float frailtyMod = 0;
-		
+
 		public Breakable(float posX, float posY){
 			super(posX, posY);
 			timerList.add(life);
 		}
-		
+
 		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 			super.update(rectangleList, entityList, deltaTime);
 			if (life.timeUp()) shatter();
 		}
-		
+
 		private void shatter(){
 			new SFX.Break().play();
 			setRemove();
 		}
-		
+
 		protected void takeDamage(float DAM){
 			life.moveCounterForward((int) (DAM * frailtyMod) );
 		}
-		
+
 		public Color getColor(){
 			if ( (DowntiltEngine.getDeltaTime() % 20 < 10) && life.getCounter() > life.getEndTime() * (5.0/6.0)) return new Color(1, 1, 1, 0.5f);
 			else return super.getColor();
 		}
-		
+
 	}
-	
+
 	public static class Nut extends Breakable {
 
 		public Nut(float posX, float posY) {
@@ -114,7 +143,7 @@ public abstract class Hurlable extends Hittable {
 		}
 
 	}
-	
+
 	public static class ShootBall extends Breakable {
 
 		private final float minSpeedForHit = 2.2f;
@@ -136,17 +165,17 @@ public abstract class Hurlable extends Hittable {
 			touchRadius = 16;
 			life.setEndTime(240);
 		}
-		
+
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
 			super.takeDamagingKnockback(knockback, DAM, hitstun, hitboxhitstunType, user);
 			if (null != user) switchTeam(user);
 		}
-		
+
 		public void getGrabbed(Fighter user, Hittable target, int caughtTime) {
 			super.getGrabbed(user, target, caughtTime);
 			switchTeam(user);
 		}
-		
+
 		private void switchTeam(Hittable user){
 			if (user.getTeam() == GlobalRepo.GOODTEAM) {
 				team = GlobalRepo.BADTEAM;
@@ -159,7 +188,7 @@ public abstract class Hurlable extends Hittable {
 				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
 			}
 		}
-		
+
 		@Override
 		public void ground(){ 
 			if (velocity.y < -1 && !inGroundedState()){
@@ -167,13 +196,13 @@ public abstract class Hurlable extends Hittable {
 			}
 			super.ground();
 		}
-		
+
 		@Override
 		public boolean inHitstun(){
 			if (life.getCounter() < 6) return false;
 			return knockbackIntensity(velocity) > minSpeedForHit;
 		}
-		
+
 		@Override
 		public Rectangle getBodyHitBox(){
 			Rectangle r = getHurtBox();
@@ -185,22 +214,125 @@ public abstract class Hurlable extends Hittable {
 			r.setY(r.getY() + inc);
 			return r;
 		}
-		
-	}
-	
-	public static class Rocket extends Hurlable {
 
-		public Rocket(float posX, float posY) {
+	}
+
+	public static class Rocket extends Explosive {
+
+		private final DurationTimer flightTime = new DurationTimer(48);
+		private int dir;
+		private final Fighter user;
+
+		public Rocket(Fighter user, float posX, float posY) {
 			super(posX, posY);
+			this.user = user;
+			dir = user.direct();
+			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/rocket.png")));
+			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/rocket.png", 2, 1, 8, PlayMode.LOOP);
+			timerList.add(flightTime);
+			airFrictionX = 0.9f;
+			gravity = -0.5f;
+			updateImage(0);
+			team = GlobalRepo.BADTEAM;
+		}
+
+		@Override
+		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+			if (!flightTime.timeUp()) {
+				if (Math.signum(velocity.x) != 0 && Math.signum(velocity.x) != dir) dir *= -1;
+				velocity.x += dir * 0.28;
+			}
+			else explode();
+			super.update(rectangleList, entityList, deltaTime);
+		}
+
+		@Override
+		public float getGravity() {
+			if (!flightTime.timeUp()) return 0;
+			else return gravity; 
 		}
 		
-	}
-	
-	public static class Grenade extends Hurlable {
+		@Override
+		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
+			if (DAM > 0) {
+				explode();
+			}
+		}
 
-		public Grenade(float posX, float posY) {
+		@Override
+		public void knockInto(){
+			explode();
+		}
+
+		@Override
+		public boolean doesCollide(float x, float y){
+			for (Rectangle r : tempRectangleList){
+				Rectangle thisR = getCollisionBox(x, y);
+				if (Intersector.overlaps(thisR, r) && thisR != r) {
+					explode();
+					return true;
+				}
+			}
+			return false;
+		}
+
+		protected Explosion getExplosion(){
+			return new Explosion.RocketExplosion(user, this, dir);
+		}
+
+	}
+
+	public static class Grenade extends Explosive {
+
+		private final Fighter user;
+		private final DurationTimer duration = new DurationTimer(120);
+
+		public Grenade(Fighter user, float posX, float posY) {
 			super(posX, posY);
+			this.user = user;
+			user.direct();
+			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/grenade.png")));
+			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/grenade.png", 1, 1, 1, PlayMode.LOOP);
+			timerList.add(duration);
+			team = GlobalRepo.BADTEAM;
+			gravity = -0.5f;
+			friction = 0.99f;
+			baseKBG = 0;
+		}
+
+		@Override
+		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+			if (duration.timeUp()) explode();
+			super.update(rectangleList, entityList, deltaTime);
+		}
+
+		@Override
+		public void ground(){ 
+			if (velocity.y < -1 && !inGroundedState()){
+				velocity.y *= -1.1;
+			}
+			super.ground();
+		}
+
+		@Override
+		public void knockInto(){
+			cook();
 		}
 		
+		@Override
+		protected Explosion getExplosion(){
+			return new Explosion.GrenadeExplosion(user, this);
+		}
+		
+		private void cook(){
+			final int cookTime = 6;
+			velocity.x *= 0.25f;
+			velocity.y = 4;
+			if (duration.getEndTime() - duration.getCounter() > cookTime) {
+				duration.setEndTime(cookTime);
+				duration.reset();
+			}
+		}
+
 	}
 }

@@ -22,7 +22,7 @@ public class MapHandler {
 	private static final List<Rectangle> rectangleList = new ArrayList<>();
 	static int mapWidth;
 	static int mapHeight; 
-	
+
 	static void begin(){
 		activeRoom = new Stage_Standard();
 		activeMap = activeRoom.getMap();
@@ -84,14 +84,14 @@ public class MapHandler {
 		fi.setLives(0);
 		return true;
 	}
-	
+
 	private static void drawDieGraphic(Fighter fi){
 		if (fi instanceof Basic.Bomb) return;
 		int mod = 6;
 		addEntity(new Graphic.Die(
 				(fi.getCenter().x * (mod-1) + GraphicsHandler.getCameraPos().x) / mod, 
 				(fi.getCenter().y * (mod-1) + GraphicsHandler.getCameraPos().y) / mod
-		));
+				));
 	}
 
 	static void updateActionCircleInteractions(){
@@ -121,7 +121,9 @@ public class MapHandler {
 	}
 
 	private static void fighterHitboxInteract(Entity en){
-		for (ActionCircle ac: activeRoom.getActionCircleList()) ac.hitTarget((Hittable) en);
+		for (ActionCircle ac: activeRoom.getActionCircleList()){
+			ac.hitTarget((Hittable) en);
+		}
 	}
 
 	public static void updateRoomMap(Stage room) {
@@ -139,7 +141,9 @@ public class MapHandler {
 		DowntiltEngine.changeRoom(activeRoom); 
 	}
 
-	public static void addEntity(Entity e){ activeRoom.addEntity(e); }
+	public static void addEntity(Entity e){ 
+		activeRoom.addEntity(e); 
+	}
 	public static ActionCircle addActionCircle(ActionCircle ac){ 
 		return activeRoom.addActionCircle(ac); 
 	}
@@ -163,15 +167,15 @@ public class MapHandler {
 		if (activeRoom == null) return new ArrayList<ActionCircle>();
 		else return activeRoom.getActionCircleList();
 	}
-//
-//	public static void playMusic() {
-//		//System.out.println("Playing music");
-//		if (null != activeRoom) activeRoom.getMusic().setVolume(DowntiltEngine.getVolume());
-//	}
-//	
-//	public static void stopMusic() {
-//		//System.out.println("Stopping music");
-//		if (null != activeRoom) activeRoom.getMusic().setVolume(0);
-//	}
+	//
+	//	public static void playMusic() {
+	//		//System.out.println("Playing music");
+	//		if (null != activeRoom) activeRoom.getMusic().setVolume(DowntiltEngine.getVolume());
+	//	}
+	//	
+	//	public static void stopMusic() {
+	//		//System.out.println("Stopping music");
+	//		if (null != activeRoom) activeRoom.getMusic().setVolume(0);
+	//	}
 
 }

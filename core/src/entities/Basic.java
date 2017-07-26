@@ -102,7 +102,7 @@ public class Basic extends Fighter {
 		}
 
 		private void explode(){
-			MapHandler.addEntity(new Projectile.BombExplosion(this, direct()));
+			MapHandler.addEntity(new Explosion.BombExplosion(this, direct()));
 			setRemove();
 		}
 

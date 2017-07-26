@@ -14,8 +14,8 @@ import moves.Move;
 import moves.Effect.Charge;
 import entities.Entity.Direction;
 import entities.Fighter;
+import entities.Hurlable;
 import entities.Hittable.HitstunType;
-import entities.Projectile;
 
 public class M_Hero extends MoveList_Advanced{
 
@@ -286,18 +286,23 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/dspecial.png", frames, frame);
 		m.setContinueOnLanding();
 		m.eventList.addArmor(m, 0, frames * frame, 4);
-		m.eventList.addUseSpecial(user, frame - 1, -4);
+		//m.eventList.addUseSpecial(user, frame - 1, -4);
 		m.eventList.addVelocityChange(user, frame, -7, Action.ChangeVelocity.noChange);
-		m.eventList.addProjectile(user, Projectile.Rocket.class, frame);
+		//m.eventList.addProjectile(user, Explosion.Rocket.class, frame);
+		m.eventList.addNewEntity(frame, user, (new Hurlable.Rocket(user, user.getPosition().x, user.getPosition().y)), 0, 0, user.direct()* 16, 16);
 		return m;
 	}
 
 	public Move nSpecial() {
-		Move m = new Move(user, 20);
-		m.setAnimation("sprites/fighters/bomber/grab.png", 1, 1);
+		int frame = 10;
+		int frames = 3;
+		
+		Move m = new Move(user, frame * frames);
+		m.setAnimation("sprites/fighters/bomber/fairthrow.png", frames, frame);
 		m.setContinueOnLanding();
-		m.eventList.addUseSpecial(user, 9, -2);
-		m.eventList.addProjectile(user, Projectile.Grenade.class, 10);
+		
+		m.eventList.addNewEntity(frame, user, 
+				(new Hurlable.Grenade(user, user.getPosition().x, user.getPosition().y)), user.direct() * 6, 4, user.direct()*16, 16);
 		return m;
 	}
 

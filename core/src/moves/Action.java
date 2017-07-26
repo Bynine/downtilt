@@ -1,9 +1,11 @@
 package moves;
 
+import com.badlogic.gdx.math.Vector2;
+
 import entities.Basic;
 import entities.Entity;
 import entities.Fighter;
-import entities.Projectile;
+import entities.Explosion;
 import main.MapHandler;
 import main.SFX;
 import moves.Effect.Charge;
@@ -67,7 +69,7 @@ public abstract class Action {
 		
 	}
 	
-	public static class MakeProjectile<T extends Projectile> extends Action{
+	public static class MakeProjectile<T extends Explosion> extends Action{
 		final Class<T> proj;
 		final Fighter user;
 
@@ -134,16 +136,25 @@ public abstract class Action {
 	public static class AddEntity extends Action {
 		final Entity en, user;
 		final float velX, velY;
+		float dispX, dispY;
 		
 		public AddEntity(Entity user, Entity en, float velX, float velY){
 			this.user = user;
 			this.en = en;
 			this.velX = velX;
 			this.velY = velY;
+			dispX = 0;
+			dispY = 0;
+		}
+		
+		public AddEntity(Entity user, Entity en, float velX, float velY, float dispX, float dispY){
+			this(user, en, velX, velY);
+			this.dispX = dispX;
+			this.dispY = dispY;
 		}
 
 		void performAction() {
-			en.setPosition(user.getPosition());
+			en.setPosition(user.getPosition().add(new Vector2(dispX, dispY)));
 			en.getVelocity().x = velX;
 			en.getVelocity().y = velY;
 			MapHandler.addEntity(en);
