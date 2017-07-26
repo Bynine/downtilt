@@ -3,9 +3,7 @@ package movelists;
 import entities.Fighter;
 import entities.Hurlable;
 import main.GlobalRepo;
-import main.SFX;
 import moves.Action;
-import moves.Hitbox;
 import moves.Move;
 
 public class M_Shoot extends MoveList {
@@ -15,7 +13,7 @@ public class M_Shoot extends MoveList {
 	}
 	private float xGenericSpeed = 7;
 	private float yGenericSpeed = 4;
-	private int genericFrameLength = 30;
+	private int genericFrameLength = 35;
 
 	@Override
 	public Move nWeak() {
@@ -35,7 +33,7 @@ public class M_Shoot extends MoveList {
 	@Override
 	public Move slide() {
 		int frames = 2;
-		int frame = genericFrameLength;
+		int frame = 40;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
@@ -50,7 +48,7 @@ public class M_Shoot extends MoveList {
 	@Override
 	public Move nAir() {
 		int frames = 2;
-		int frame = 20;
+		int frame = 30;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nair.png", frames, frame);
@@ -67,7 +65,7 @@ public class M_Shoot extends MoveList {
 	 */
 	public Move nCharge() {
 		int frames = 4;
-		int frame = 40;
+		int frame = 45;
 		int betweenShot = 24;
 
 		Move m = new Move(user, frames * frame);
@@ -94,7 +92,7 @@ public class M_Shoot extends MoveList {
 	 */
 	public Move nSpecial() {
 		int frames = 2;
-		int frame = genericFrameLength;
+		int frame = 40;
 
 		Move m = new Move(user, frames * frame);
 		m.setStopsInAir();
@@ -158,23 +156,6 @@ public class M_Shoot extends MoveList {
 	@Override
 	public Move taunt() {
 		return new Move(user, 60);
-	}
-
-	public Move block(){
-		Move m = new Move(user, 70);
-		m.setAnimation("sprites/fighters/shoot/block.png", 2, 40);
-		m.setStopsInAir();
-		m.eventList.addGuard(user, 5, 40);
-		return m;
-	}
-	
-	@Override
-	public Move parry() {
-		Move m = new Move(user, 30);
-		m.setAnimation("sprites/fighters/shoot/parry.png", 1, 1);
-		Hitbox parry = new Hitbox(user, 8.6f, 0.1f, 12, 67, 0, 0, 48, new SFX.Pop());
-		m.eventList.addActionCircle(parry, 0, 10);
-		return m;
 	}
 
 }

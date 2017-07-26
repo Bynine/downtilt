@@ -269,6 +269,7 @@ public abstract class Brain{
 
 		public HeavyBrain(InputHandlerCPU body) {
 			super(body);
+			maxVerticalAttackRange = 300;
 		}
 
 		void update(InputPackage pack){
@@ -277,12 +278,15 @@ public abstract class Brain{
 			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 50 ) headTowardPlayer(changeDirection);
 			if (!performJump.timeUp()) performJump(performJump);
 			if (shouldGetUp(0.02)) getUp();
-			//else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
+			else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
 			else if (inVerticalAttackRange()) chooseAttack();
 			else if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
 		}
 		
 		void chooseAttack(){
+			if (shouldAttack(0.08, 30, false)){
+				attackPlayer(InputHandler.commandAttack);
+			}
 			if (shouldAttack(0.22, 80, true))								attackPlayer(InputHandler.commandAttack);
 		}
 

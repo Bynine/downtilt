@@ -57,6 +57,11 @@ abstract class Menu {
 	protected static class PlayerType{
 		final Class<? extends Fighter> type;
 		final String name;
+		
+		PlayerType(Class<? extends Fighter> type, String name){
+			this.type = type;
+			this.name = name;
+		}
 
 		PlayerType(Class<? extends Fighter> type){
 			this.type = type;

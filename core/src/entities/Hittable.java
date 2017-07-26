@@ -24,8 +24,10 @@ public abstract class Hittable extends Entity {
 	protected float percentage = 0;
 	protected boolean tumbling = false, slowed = true, grabbable = true;
 	protected final Timer caughtTimer = new Timer(0), knockIntoTimer = new Timer(20), stunTimer = new Timer(0), guardTimer = new Timer(0);
-	public final Timer powerTimer = new Timer(1800), speedTimer = new Timer(1800), defenseTimer = new Timer(1800), airTimer = new Timer(1800);
-	private float initialHitAngle = 0;
+	public static final int BOOSTTIMERDEFAULT = 1800, BOOSTTIMERRUSH = 600;
+	public final Timer powerTimer = new Timer(BOOSTTIMERDEFAULT), speedTimer = new Timer(BOOSTTIMERDEFAULT), 
+			defenseTimer = new Timer(BOOSTTIMERDEFAULT), airTimer = new Timer(BOOSTTIMERDEFAULT);
+	//private float initialHitAngle = 0;
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	protected int team = GlobalRepo.BADTEAM;
 
@@ -59,12 +61,6 @@ public abstract class Hittable extends Entity {
 		else setImage(getStandFrame(deltaTime));
 	}
 
-	void limitSpeeds(){
-		boolean notAMeteor = initialHitAngle > 0 && initialHitAngle < 180;
-		float gravFallSpeed = getFallSpeed() * MapHandler.getRoomGravity();
-		if ( (!inHitstun() || notAMeteor) && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
-	}
-
 	void updatePosition(){
 		if (canMove()) super.updatePosition();
 	}
@@ -83,7 +79,7 @@ public abstract class Hittable extends Entity {
 		if (getTeam() == hi.getTeam()) toPush = isTouching(hi, 0);
 		if (toPush) pushAway(hi);
 	}
-	
+
 	protected boolean shouldPushAway(int pushDistance, Hittable hi){
 		return isTouching(hi, pushDistance) && Math.abs(hi.velocity.x) < 1 && Math.abs(this.velocity.x) < 1;
 	}
@@ -96,7 +92,7 @@ public abstract class Hittable extends Entity {
 	}
 
 	protected int touchRadius = 8;
-	private void checkHitByHurtlingObject(Hittable hi){
+	protected void checkHitByHurtlingObject(Hittable hi){
 		boolean fighterGoingFastEnough = knockbackIntensity(hi.velocity) > hi.baseHurtleBK;
 		if (hi.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
 		boolean correctTeam = getTeam() == hi.getTeam();
@@ -106,7 +102,7 @@ public abstract class Hittable extends Entity {
 			else getHitByHurtlingObject(hi);
 		}
 	}
-	
+
 	private void blockHurtlingObject(Hittable hurtler){
 		if (isPerfectGuarding()) perfectParry();
 		else parry();
@@ -114,7 +110,8 @@ public abstract class Hittable extends Entity {
 
 	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
-		float bkb = knockbackIntensity(knockIntoVector) * 0.8f * hurtler.getWeight()/100.0f;
+		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.7);
+		float bkb = knockbackIntensity(knockIntoVector) * 0.8f * weightMod;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
 		Hitbox h;
 		if (hurtler.hitstunType != HitstunType.NORMAL) {
@@ -143,7 +140,7 @@ public abstract class Hittable extends Entity {
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
 		addToCombo(Combo.knockIntoID);
 	}
-	
+
 	protected void addToCombo(int id){
 		/* */
 	}
@@ -179,7 +176,7 @@ public abstract class Hittable extends Entity {
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		knockback.setAngle(directionalInfluenceAngle(knockback));
 		if (shouldChangeKnockback) velocity.set(knockback);
-		initialHitAngle = knockback.angle();
+		//initialHitAngle = knockback.angle();
 		if (state == State.HELPLESS) state = State.FALL;
 		hitstunTimer.setEndTime(hitstun);
 		hitstunTimer.reset();
@@ -235,20 +232,36 @@ public abstract class Hittable extends Entity {
 	public float getAirAcc() { return airAcc * checkTimerForBonus(airTimer) * equipment.getAirAccMod(); }
 	public float getJumpStrength() { return jumpStrength; }
 	public float getJumpAcc() { return jumpAcc * checkTimerForBonus(airTimer) * equipment.getJumpAccMod(); }
-	public float getFallSpeed() { return fallSpeed * equipment.getFallSpeedMod(); }
 	public float getGravity() { return gravity * equipment.getGravityMod(); }
 	public float getFriction() { return (float) Math.pow(friction, equipment.getFrictionMod()); }
-	public float getAirFriction() { return (float) Math.pow(airFriction, equipment.getAirFrictionMod()); }
+	public float getAirFrictionX() { return (float) Math.pow(airFrictionX, equipment.getAirFrictionMod()); }
 	public float getDoubleJumpStrength() { return doubleJumpStrength * checkTimerForBonus(airTimer); }
 	public float getWallJumpStrengthX() { return wallJumpStrengthX; }
 	public float getWallJumpStrengthY() { return wallJumpStrengthY; }
 	public float getWallSlideSpeed() { return wallSlideSpeed * equipment.getWallSlideMod(); }
 
-	public void addPower(float add){ powerTimer.reset(); }
-	public void addDefense(float add){ defenseTimer.reset(); }
-	//public void addArmor(float add){ armorAdd += add; }
-	public void addSpeed(float add){ speedTimer.reset(); }
-	public void addAir(float add){ airTimer.reset(); }
+	public void addPower(int time){ 
+		powerTimer.setEndTime(time);
+		powerTimer.reset(); 
+	}
+	public void addDefense(int time){ 
+		defenseTimer.setEndTime(time);
+		defenseTimer.reset(); 
+	}
+	public void addSpeed(int time){ 
+		speedTimer.setEndTime(time);
+		speedTimer.reset(); 
+	}
+	public void addAir(int time){ 
+		airTimer.setEndTime(time);
+		airTimer.reset(); 
+	}
+	public void addAll(int time){
+		addPower(time);
+		addDefense(time);
+		addSpeed(time);
+		addAir(time);
+	}
 
 	public float getSpeedMod(){ return checkTimerForBonus(speedTimer) * equipment.getSpeedMod(); }
 	public float getAirMod(){ return checkTimerForBonus(airTimer); }

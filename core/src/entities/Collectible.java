@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-
 import timers.*;
 import main.GlobalRepo;
 import main.SFX;
@@ -20,7 +18,7 @@ public abstract class Collectible extends Entity {
 	public Collectible(float posX, float posY) {
 		super(posX, posY);
 		timerList.add(noTouchie);
-		airFriction = 0.94f;
+		airFrictionX = 0.94f;
 	}
 
 	void handleTouchHelper(Entity e){
@@ -48,47 +46,47 @@ public abstract class Collectible extends Entity {
 	
 	/* COLLECTIBLES */
 	
-	public static class Food extends Collectible {
-
-		public Food(float posX, float posY) {
-			super(posX, posY);
-			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/food.png"))));
-			bonus = 30;
-		}
-
-		void collectHelper(Fighter fi) {
-			fi.setPercentage(MathUtils.clamp(fi.getPercentage() - restoredHealth(), 0, 999));
-		}
-		
-		private float restoredHealth(){
-			return (float) ( 20 + (Math.random() * 15) );
-		}
-
-	}
-	
-	public static class Ammo extends Collectible {
-
-		public Ammo(float posX, float posY) {
-			super(posX, posY);
-			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ammo.png"))));
-			bonus = 30;
-		}
-
-		void collectHelper(Fighter fi){
-			fi.changeSpecial(4);
-		}
-
-	}
-	
-	public static class Treasure extends Collectible {
-
-		public Treasure(float posX, float posY) {
-			super(posX, posY);
-			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/treasure.png"))));
-			bonus = 100;
-		}
-
-	}
+//	public static class Food extends Collectible {
+//
+//		public Food(float posX, float posY) {
+//			super(posX, posY);
+//			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/food.png"))));
+//			bonus = 30;
+//		}
+//
+//		void collectHelper(Fighter fi) {
+//			fi.setPercentage(MathUtils.clamp(fi.getPercentage() - restoredHealth(), 0, 999));
+//		}
+//		
+//		private float restoredHealth(){
+//			return (float) ( 20 + (Math.random() * 15) );
+//		}
+//
+//	}
+//	
+//	public static class Ammo extends Collectible {
+//
+//		public Ammo(float posX, float posY) {
+//			super(posX, posY);
+//			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ammo.png"))));
+//			bonus = 30;
+//		}
+//
+//		void collectHelper(Fighter fi){
+//			fi.changeSpecial(4);
+//		}
+//
+//	}
+//	
+//	public static class Treasure extends Collectible {
+//
+//		public Treasure(float posX, float posY) {
+//			super(posX, posY);
+//			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/treasure.png"))));
+//			bonus = 100;
+//		}
+//
+//	}
 	
 	private abstract static class StatBooster extends Collectible {
 
@@ -99,10 +97,10 @@ public abstract class Collectible extends Entity {
 		}
 		
 		void collectHelper(Fighter fi){
-			addStat(0.1f, fi);
+			addStat(fi);
 		}
 		
-		abstract void addStat(float add, Fighter fi);
+		abstract void addStat(Fighter fi);
 
 	}
 	
@@ -111,8 +109,8 @@ public abstract class Collectible extends Entity {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_attack.png"))));
 		}
-		void addStat(float add, Fighter fi){
-			fi.addPower(add);
+		void addStat(Fighter fi){
+			fi.addPower(Hittable.BOOSTTIMERDEFAULT);
 		}
 	}
 	public static class BoostDefense extends StatBooster {
@@ -120,8 +118,8 @@ public abstract class Collectible extends Entity {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_defend.png"))));
 		}
-		void addStat(float add, Fighter fi){
-			fi.addDefense(add);
+		void addStat(Fighter fi){
+			fi.addDefense(Hittable.BOOSTTIMERDEFAULT);
 		}
 	}
 	public static class BoostSpeed extends StatBooster {
@@ -129,8 +127,8 @@ public abstract class Collectible extends Entity {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_speed.png"))));
 		}
-		void addStat(float add, Fighter fi){
-			fi.addSpeed(add);
+		void addStat(Fighter fi){
+			fi.addSpeed(Hittable.BOOSTTIMERDEFAULT);
 		}
 	}
 	public static class BoostAir extends StatBooster {
@@ -138,8 +136,8 @@ public abstract class Collectible extends Entity {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_air.png"))));
 		}
-		void addStat(float add, Fighter fi){
-			fi.addAir(add);
+		void addStat(Fighter fi){
+			fi.addAir(Hittable.BOOSTTIMERDEFAULT);
 		}
 	}
 	public static class BoostAll extends StatBooster {
@@ -147,12 +145,8 @@ public abstract class Collectible extends Entity {
 			super(posX, posY);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/statboost_all.png"))));
 		}
-		void addStat(float add, Fighter fi){
-			fi.addPower(add);
-			fi.addDefense(add);
-			fi.addSpeed(add);
-			fi.addAir(add);
-			fi.takeDamage(50);
+		void addStat(Fighter fi){
+			fi.addAll(Hittable.BOOSTTIMERRUSH);
 		}
 	}
 

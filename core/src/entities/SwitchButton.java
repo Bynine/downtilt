@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class SwitchButton extends Hittable {
 
-	static Timer cantBeHit = new Timer(30);
+	static Timer cantBeHit = new Timer(180);
 	private TextureRegion green = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockgreen.png")));
 	private TextureRegion red = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockred.png")));
 	private TextureRegion blue = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockblue.png")));
@@ -34,6 +34,12 @@ public class SwitchButton extends Hittable {
 	private void changeBlocks(){
 		cantBeHit.reset();
 		GlobalRepo.rotateBlocks();
+	}
+	
+	@Override
+	protected void checkHitByHurtlingObject(Hittable hi){
+		if (!cantBeHit.timeUp()) return;
+		else super.checkHitByHurtlingObject(hi);
 	}
 
 	@Override

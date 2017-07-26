@@ -50,13 +50,13 @@ public class Hero extends Fighter {
 		doubleJumpStrength = 9.7f;
 		wallJumpStrengthX = 6.5f;
 		wallJumpStrengthY = 8.4f;
-		fallSpeed = -6.7f;
 		jumpSquatTimer.setEndTime(3);
 		footStoolDuration = 25;
 		dashTimer.setEndTime(20);
 		baseHitstun = GlobalRepo.HEROHITSTUNMOD;
 		moveList = new M_Hero(this);
 		defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconwasp.png")));
+		updateImage(0);
 	}
 
 	public boolean isPerfectGuarding() { 

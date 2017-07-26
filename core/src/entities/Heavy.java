@@ -27,7 +27,7 @@ public class Heavy extends Fighter {
 	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fallen.png")));
 	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/dash.png")));
 	
-	public static final float HEAVY_ARMOR = 2;
+	public static final float HEAVY_ARMOR = 0.5f;
 
 	public Heavy(float posX, float posY, int team) {
 		super(posX, posY, team);

@@ -87,6 +87,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move slide() { 
 		Move m = new Move(user, 32);
 		m.dontTurn();
+		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/bomber/slideattack.png", 2, 16);
 		Hitbox early = new Hitbox(user, 4.0f, 2.4f, 10, 65, 12, -4, 12, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 3.0f, 1.0f, 07, 90, 16, -4,  8, new SFX.LightHit());
@@ -365,15 +366,18 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move fAirThrow(){
-		Move m = new Move(user, 24);
-		m.setAnimation("sprites/fighters/bomber/fairthrow.png", 2, 8);
+		int frame = 10;
+		int frames = 3;
+		
+		Move m = new Move(user, frame * frames);
+		m.setAnimation("sprites/fighters/bomber/fairthrow.png", frames, frame);
 		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
-		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14, 30, 22, 0, throwSize, new SFX.MidHit());
+		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14,  0, 22, 0, throwSize, new SFX.MidHit());
 		hit.setNoReverse();
 		hit.setHitstunType(Fighter.HitstunType.SUPER);
-		m.eventList.addConstantVelocity(user, 0, 8, Action.ChangeVelocity.noChange, 0);
-		m.eventList.addActionCircle(toss, 0,  8);
-		m.eventList.addActionCircle(hit,  8, 16);
+		m.eventList.addConstantVelocity(user, 0, frame, Action.ChangeVelocity.noChange, 0);
+		m.eventList.addActionCircle(toss, 0,  frame);
+		m.eventList.addActionCircle(hit,  frame, frame*2);
 		return m;
 	}
 
@@ -543,7 +547,7 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move block(){
-		Move m = new Move(user, 32);
+		Move m = new Move(user, 48);
 		m.setAnimation("sprites/fighters/bomber/dodgebegin.png", 1, 1);
 		m.eventList.addGuard(user, 0, 16);
 		return m;

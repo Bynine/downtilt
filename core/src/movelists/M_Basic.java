@@ -56,6 +56,7 @@ public class M_Basic extends MoveList {
 		int end = 32;
 		
 		Move m = new Move(user, end);
+		m.setAerial();
 		m.setAnimation("sprites/fighters/basic/nair.png", 6, 4);
 		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 13, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
 		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
@@ -177,23 +178,6 @@ public class M_Basic extends MoveList {
 	@Override
 	public Move taunt() {
 		return new Move(user, 60);
-	}
-	
-	public Move block(){
-		Move m = new Move(user, 60);
-		m.setAnimation("sprites/fighters/basic/block.png", 1, 1);
-		m.setStopsInAir();
-		m.eventList.addGuard(user, 10, 30);
-		return m;
-	}
-
-	@Override
-	public Move parry() {
-		Move m = new Move(user, 30);
-		m.setAnimation("sprites/fighters/basic/parry.png", 1, 1);
-		Hitbox parry = new Hitbox(user, 5.6f, 0.8f, 10, Hitbox.SAMURAI, 4, 0, 30, new SFX.MidHit());
-		m.eventList.addActionCircle(parry, 0, 20);
-		return m;
 	}
 
 }

@@ -30,7 +30,7 @@ public abstract class Entity {
 	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 
-	protected float gravity = -0.35f, friction = 0.85f, airFriction = 0.95f, fallSpeed = -7f;
+	protected float gravity = -0.35f, friction = 0.85f, airFrictionX = 0.95f, airFrictionY = 0.93f; //fallSpeed = -7f;
 	final int tumbleBK = 10;
 
 	boolean toRemove = false;
@@ -130,13 +130,12 @@ public abstract class Entity {
 
 	void handleFriction(){
 		if (!isGrounded() && inHitstun() || state == State.JUMPSQUAT) {}
-		else if (!isGrounded()) velocity.x *= getAirFriction();
+		else if (!isGrounded()) velocity.x *= getAirFrictionX();
 		else velocity.x *= getFriction();
 	}
 
 	void limitSpeeds(){
-		float gravFallSpeed = getFallSpeed() * MapHandler.getRoomGravity();
-		if (!inHitstun() && velocity.y < gravFallSpeed) velocity.y = gravFallSpeed;
+		if (velocity.y < 0) velocity.y *= airFrictionY;
 	}
 
 	void setupRectangles(List<Rectangle> mapRectangleList, List<Entity> entityList){
@@ -206,7 +205,7 @@ public abstract class Entity {
 	}
 	
 	protected boolean upThroughThinPlatform(Rectangle r){
-		return  r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
+		return r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
 	}
 
 	Rectangle getCollisionBox(float x, float y){
@@ -349,9 +348,9 @@ public abstract class Entity {
 	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
 	public static enum Collision{ SOLID, CREATURE, GHOST }
 	public float getGravity() { return gravity; }
-	public float getFallSpeed() { return fallSpeed; }
 	public float getFriction() { return friction; }
-	public float getAirFriction() { return airFriction; }
+	public float getAirFrictionX() { return airFrictionX; }
+	public float getAirFrictionY() { return airFrictionY; }
 	public Timer getHitstunTimer() { return hitstunTimer; }
 
 }

@@ -54,16 +54,17 @@ public class M_Heavy extends MoveList {
 
 	@Override
 	public Move nAir() {
-		int end = 32;
-		
-		Move m = new Move(user, end);
+		int startFall = 60;
+		int moveEnd = 180;
+
+		Move m = new Move(user, moveEnd);
+		m.setAerial();
 		m.setAnimation("sprites/fighters/heavy/nair.png", 6, 4);
-		Hitbox early = new Hitbox(user, 2.2f, 1.6f, 9, Hitbox.SAMURAI, 0, 0, 22, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 1.6f, 0.6f, 6, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
-		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addVelocityChange(user, 8, Action.ChangeVelocity.noChange, 1);
-		m.eventList.addActionCircle(early, 8, 13);
-		m.eventList.addActionCircle(late, 14, 22);
+		Hitbox early = new Hitbox(user, 5.2f, 3.6f, 30, 300, 0, -20, 22, new SFX.MeatyHit());
+		m.eventList.addConstantVelocity(user, 0, startFall/3, Action.ChangeVelocity.noChange, 0);
+		m.eventList.addConstantVelocity(user, startFall/3, startFall, 0, 1);
+		m.eventList.addActionCircle(early, startFall, moveEnd);
+		m.eventList.addConstantVelocity(user, startFall, moveEnd, 0, -10);
 		return m;
 	}
 
@@ -148,7 +149,11 @@ public class M_Heavy extends MoveList {
 	public Move land() {
 		Move m = new Move(user, 30);
 		if (null != user.getPrevMove())
-			if (user.getPrevMove().id == MoveList.aerial) m = new Move(user, 40);
+			if (user.getPrevMove().id == MoveList.aerial) {
+				m = new Move(user, 60);
+//				Hitbox h1 = new Hitbox(user, 5.8f, 3.2f, 20, Hitbox.SAMURAI, 0, -20, 32, new SFX.MidHit());
+//				m.eventList.addActionCircle(h1, 0, 4);
+			}
 		m.setAnimation("sprites/fighters/heavy/crouch.png", 1, 1);
 		return m;
 	}
@@ -163,23 +168,6 @@ public class M_Heavy extends MoveList {
 	@Override
 	public Move taunt() {
 		return new Move(user, 60);
-	}
-	
-	public Move block(){
-		Move m = new Move(user, 120);
-		m.setAnimation("sprites/fighters/heavy/block.png", 1, 1);
-		m.setStopsInAir();
-		m.eventList.addGuard(user, 20, 90);
-		return m;
-	}
-
-	@Override
-	public Move parry() {
-		Move m = new Move(user, 30);
-		m.setAnimation("sprites/fighters/heavy/parry.png", 1, 1);
-		Hitbox parry = new Hitbox(user, 5.6f, 4.8f, 10, Hitbox.SAMURAI, 4, 0, 30, new SFX.HeavyHit());
-		m.eventList.addActionCircle(parry, 0, 20);
-		return m;
 	}
 
 }

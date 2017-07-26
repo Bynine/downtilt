@@ -17,8 +17,7 @@ public class Raindrop extends Entity {
 		super(posX, posY);
 		setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindrop.png"))));
 		gravity = -1.5f;
-		fallSpeed = -6f;
-		airFriction = 0.996f;
+		airFrictionX = 0.996f;
 		collision = Collision.CREATURE;
 	}
 	
@@ -45,7 +44,7 @@ public class Raindrop extends Entity {
 		public Raindroplet(float posX, float posY) {
 			super(posX, posY);
 			setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindroplet.png"))));
-			airFriction = 0.996f;
+			airFrictionX = 0.996f;
 			velocity.x = (float) ( 3 * (0.5 - Math.random()));
 			velocity.y = (float) (Math.random() + 2);
 		}

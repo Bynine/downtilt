@@ -71,11 +71,13 @@ public abstract class MoveList_Advanced extends MoveList{
 	public abstract Move airDodge();
 	public abstract Move getUpAttack();
 	public abstract Move dodge();
+	public abstract Move block();
 
 	/* misc */
 	public abstract Move land();
 	public abstract Move skid();
 	public abstract Move taunt();
+	public abstract Move parry();
 	public abstract Move perfectParry();
 
 	/* Move Selection */
@@ -204,6 +206,7 @@ public abstract class MoveList_Advanced extends MoveList{
 		return im;
 	}
 
+	@Override
 	public IDMove selectBlock() {
 		if (!user.isGrounded() && (user.isHoldUp() || user.isHoldDown() || user.isHoldBack() || user.isHoldForward())) return new IDMove(airDodge(), noStaleMove);
 		else return new IDMove(block(), noStaleMove);

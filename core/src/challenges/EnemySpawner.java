@@ -11,12 +11,14 @@ import main.GlobalRepo;
 import main.MapHandler;
 import main.DowntiltEngine;
 import entities.Fighter;
+import entities.Spawner;
 
 public class EnemySpawner {
 	private final List<EnemyType> enemyList = new ArrayList<EnemyType>();
 	private int initAmount, amount, capacity, killed;
 	private float frequency;
 	private final List<Fighter> spawnedEntities = new ArrayList<Fighter>();
+	private final Vector2 spawnPoint = new Vector2();
 
 	public static final int ENDLESS = -5;
 
@@ -37,8 +39,11 @@ public class EnemySpawner {
 	}
 
 	void update(float deltaTime){
-		if (deltaTime % frequency == 1 && amount > 0 && spawnedEntities.size() < capacity) spawnNewEnemy();
-		else if (deltaTime % frequency == 1 && amount == ENDLESS && spawnedEntities.size() < capacity) spawnNewEnemy();
+		if (amount > 0 && spawnedEntities.size() < capacity) {
+			if (deltaTime % frequency == 1) createNewSpawner((int)frequency);
+			if (deltaTime % frequency == frequency - 1) spawnNewEnemy();
+		}
+		//else if (deltaTime % frequency == 1 && amount == ENDLESS && spawnedEntities.size() < capacity) spawnNewEnemy();
 
 		Iterator<Fighter> spawnIter = spawnedEntities.iterator();
 		while (spawnIter.hasNext()){
@@ -49,14 +54,18 @@ public class EnemySpawner {
 			}
 		}
 	}
-
-	void spawnNewEnemy(){
-		Fighter enemy = null;
-		Vector2 spawnPoint = new Vector2(DowntiltEngine.getChallenge().getStartPosition());
+	
+	private void createNewSpawner(int frequency){
+		spawnPoint.set(DowntiltEngine.getChallenge().getStartPosition());
 		float dispX = GlobalRepo.TILE * 2;
 		float dispY = GlobalRepo.TILE * 3;
 		if (Math.random() < 0.5f) spawnPoint.set(spawnPoint.x - dispX, spawnPoint.y + dispY);
 		else spawnPoint.set(spawnPoint.x + dispX, spawnPoint.y + dispY);
+		MapHandler.addEntity(new Spawner(spawnPoint.x, spawnPoint.y, (int) (frequency * 1.25) ));
+	}
+
+	private void spawnNewEnemy(){
+		Fighter enemy = null;
 		EnemyType enemyType = getEnemy();
 		try {
 			enemy = enemyType.type.getDeclaredConstructor(float.class, float.class, int.class).newInstance(spawnPoint.x, spawnPoint.y, 1);

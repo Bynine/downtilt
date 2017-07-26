@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 import entities.Fighter;
+import entities.Hittable;
 import main.DowntiltEngine;
 
 public class Combo {
@@ -20,7 +21,7 @@ public class Combo {
 	private static final Sound SOUND_5 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/5.wav"));
 	private static final Sound SOUND_6 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/6.wav"));
 	private static final Sound SOUND_7 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/7.wav"));
-	private static final Sound SOUND_FINISH = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish.wav"));
+	//private static final Sound SOUND_FINISH = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish.wav"));
 	public static final int knockIntoID = 999, footstoolID = 998;
 
 	public void addMoveID(int id){
@@ -76,8 +77,13 @@ public class Combo {
 
 	private void finishHelper(float addedSpecial){
 		if (!isACombo()) return;
-		SOUND_FINISH.play();
-		for (Fighter player: DowntiltEngine.getPlayers()) player.changeSpecial(addedSpecial);
+		//SOUND_FINISH.play();
+		for (Fighter player: DowntiltEngine.getPlayers()) {
+			player.changeSpecial(addedSpecial);
+			if (rank == 5) player.addAll(Hittable.BOOSTTIMERRUSH/4);
+			else if (rank == 6) player.addAll(Hittable.BOOSTTIMERRUSH/2);
+			else if (rank >= 7) player.addAll(Hittable.BOOSTTIMERRUSH);
+		}
 	}
 
 }

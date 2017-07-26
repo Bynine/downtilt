@@ -41,7 +41,7 @@ public class Fly extends Fighter {
 		jumpAcc = 0.2f;
 		dashStrength = 0f;
 		doubleJumpStrength = 4.8f;
-		fallSpeed = -6.7f;
+		airFrictionY = 0.96f;
 		jumpSquatTimer.setEndTime(8);
 		moveList = new M_Fly(this);
 		baseHitstun = GlobalRepo.ENEMYHITSTUNMOD + 0.6f;

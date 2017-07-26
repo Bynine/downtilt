@@ -14,12 +14,12 @@ import entities.Projectile;
 
 public class EventList {
 
-	List<Action> actionList = new ArrayList<Action>();
-	List<Effect> effectList = new ArrayList<Effect>();
-	List<Integer> actionStartTimes = new ArrayList<Integer>();
-	List<ActionCircle> acList = new ArrayList<ActionCircle>();
+	protected final List<Action> actionList = new ArrayList<Action>();
+	protected final List<Effect> effectList = new ArrayList<Effect>();
+	protected final List<Integer> actionStartTimes = new ArrayList<Integer>();
+	protected final List<ActionCircle> acList = new ArrayList<ActionCircle>();
 
-	public void update(int time, boolean hitstun) {
+	void update(int time, boolean hitstun) {
 		time = time - 1;
 		if (hitstun) return;
 		for (Effect e: effectList){
@@ -31,6 +31,10 @@ public class EventList {
 			actionStartTimes.remove(new Integer(time));
 			a.performAction();
 		}
+	}
+	
+	void clearActionCircles(){
+		for (ActionCircle ac: acList) ac.remove();
 	}
 
 	public void addActionCircle(ActionCircle ac, int start, int finish){

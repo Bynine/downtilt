@@ -33,6 +33,7 @@ public class M_Fly extends MoveList {
 		int endSwoop = startSwoop + (iter * 4);
 		
 		Move m = new Move(user, end);
+		m.setAerial();
 		m.setAnimation("sprites/fighters/fly/nair.png", 3, 20);
 		Hitbox hit = new Hitbox(user, 4.2f, 2.8f, 16, 80, 10, -10, 22, new SFX.MidHit());
 		hit.setMovesAheadMod(1);
@@ -125,24 +126,6 @@ public class M_Fly extends MoveList {
 	@Override
 	public Move taunt() {
 		return new Move(user, 60);
-	}
-	
-	public Move block(){
-		int invinc = 16;
-		int length = 24;
-		
-		Move m = new Move(user, length);
-		m.setAnimation("sprites/fighters/fly/dodge.png", 1, 1);
-		m.eventList.addConstantVelocity(user, 5, invinc, 6, 0);
-		m.eventList.addInvincible(user, 10, invinc);
-		m.eventList.addConstantVelocity(user, invinc, length, 0, 0);
-		return m;
-	}
-	
-	@Override
-	public Move parry() {	
-		Move m = new Move(user, 1);
-		return m;
 	}
 
 }

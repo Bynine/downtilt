@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 import moves.ActionCircle;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -179,10 +178,15 @@ public class GraphicsHandler {
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
 
-			if (!fi.powerTimer.timeUp()) drawAfterImage(fi, batch.getColor(), batch.getShader(), powerShader);
-			if (!fi.defenseTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), defenseShader);
-			if (!fi.airTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), airShader);
-			if (!fi.speedTimer.timeUp()) drawAfterImage(fi, batch.getColor(),  batch.getShader(), speedShader);
+			if (!fi.powerTimer.timeUp() && !fi.defenseTimer.timeUp() && !fi.airTimer.timeUp() && !fi.speedTimer.timeUp()){
+				drawRainbowAfterImage(fi, batch.getShader());
+			}
+			else {
+				if (!fi.powerTimer.timeUp()) drawAfterImage(fi, batch.getShader(), powerShader);
+				if (!fi.defenseTimer.timeUp()) drawAfterImage(fi, batch.getShader(), defenseShader);
+				if (!fi.airTimer.timeUp()) drawAfterImage(fi,  batch.getShader(), airShader);
+				if (!fi.speedTimer.timeUp()) drawAfterImage(fi, batch.getShader(), speedShader);
+			}
 			if (fi.isGuarding() || fi.isPerfectGuarding()) drawShield = true;
 		}
 		if (e instanceof Hittable){
@@ -198,18 +202,30 @@ public class GraphicsHandler {
 		batch.setShader(null);
 	}
 
-	private static void drawAfterImage(Fighter fi, Color c, ShaderProgram origSG, ShaderProgram newSG){
+	private static void drawAfterImage(Fighter fi, ShaderProgram origSG, ShaderProgram newSG){
 		batch.setShader(newSG);
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2);
-		batch.setColor(new Color(c.r, c.b, c.g, c.a/2));
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4);
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4);
-		batch.setColor(new Color(c.r, c.b, c.g, c.a/2));
-		batch.draw(fi.getImage(), fi.getPosition().x - fi.getVelocity().x*6, fi.getPosition().y - fi.getVelocity().y*6);
-		batch.setColor(c);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2, 4);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4, 2);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*6, fi.getPosition().y - fi.getVelocity().y*6, 1);
 		batch.setShader(origSG);
+	}
+	
+	private static void drawRainbowAfterImage(Fighter fi,ShaderProgram origSG){
+		batch.setShader(powerShader);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2, 4);
+		batch.setShader(airShader);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*4, fi.getPosition().y - fi.getVelocity().y*4, 3);
+		batch.setShader(speedShader);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*6, fi.getPosition().y - fi.getVelocity().y*6, 4);
+		batch.setShader(defenseShader);
+		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*8, fi.getPosition().y - fi.getVelocity().y*8, 1);
+		batch.setShader(origSG);
+	}
+	
+	private static void drawAfterImageHelper(Fighter fi, float posX, float posY, int repeat){
+		for (int i = 0; i < repeat; ++i){
+			batch.draw(fi.getImage(), posX, posY);
+		}
 	}
 
 	private static boolean isOffScreen(Entity e){
@@ -272,7 +288,7 @@ public class GraphicsHandler {
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
 		float combo = (fi.getCombo().getRank() - 1)/8.0f;
 		final float powMod = 0.75f;
-		
+
 		if (combo > 1) combo = 1;
 		font.setColor((float) Math.pow(1 - combo, powMod), (float) Math.pow(combo, powMod), 0, 1);
 		font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);

@@ -17,7 +17,7 @@ public class Move {
 	final Fighter user;
 	final Timer duration;
 	public final EventList eventList = new EventList();
-	private boolean helpless = false, continueOnLanding = false, noTurn = false, connected = false, stopsInAir = false;
+	private boolean helpless = false, continueOnLanding = false, noTurn = false, connected = false, stopsInAir = false, isAerial = false;
 	float armor = 0;
 	private Animation animation = null;
 	private int addedFrames = 0, id = -1;
@@ -88,6 +88,10 @@ public class Move {
 		this.id = id;
 	}
 	
+	public void setAerial(){
+		isAerial = true;
+	}
+	
 	/* GETTERS */
 	
 	public Rectangle getMoveHurtBox(Fighter user, Rectangle r){
@@ -153,6 +157,14 @@ public class Move {
 
 	public boolean done(){ 
 		return duration.timeUp(); 
+	}
+	
+	public boolean isAerial(){
+		return isAerial;
+	}
+
+	public void clearHitboxes() {
+		eventList.clearActionCircles();
 	}
 
 

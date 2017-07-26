@@ -187,10 +187,10 @@ public abstract class Projectile extends Entity{
 			if (Math.signum(owner.getStickX()) == owner.direct()) additionalSpeed = (owner.getStickX() * 4);
 			velocity.x = owner.direct() * 6 + additionalSpeed;
 			velocity.y = 6 - owner.getStickY() * 4;
-			airFriction = 0.993f;
+			airFrictionX = 0.993f;
 			friction = 0.97f;
 			gravity = -0.42f;
-			fallSpeed = -10f;
+			airFrictionY = 0.99f;
 			timerList.add(bounceTimer);
 		}
 

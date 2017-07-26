@@ -16,6 +16,18 @@ import maps.*;
 public class WorldMap {
 
 	private int activeChallengeIndex;
+	
+	/**
+	 * Decides between debug beginning round and intended one.
+	 */
+	private void initializeChallengeList(){
+		if (DowntiltEngine.debugOn()) {
+			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
+		}
+		else {
+			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
+		}
+	}
 
 	/**
 	 * Default constructor. Used for normal gameplay.
@@ -32,26 +44,14 @@ public class WorldMap {
 		activeChallengeIndex = index;
 		initializeChallengeList();
 	}
-	
-	/**
-	 * Decides between debug beginning round and intended one.
-	 */
-	private void initializeChallengeList(){
-		if (DowntiltEngine.debugOn()) {
-			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
-		}
-		else {
-			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
-		}
-	}
 
 	/**
 	 * Selection of wave lists for each challenge.
 	 */
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 8, 30))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 2, 120))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 4, 1, 30))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 6, 3, 120))
 			));
 	List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 3, 1, 60))
