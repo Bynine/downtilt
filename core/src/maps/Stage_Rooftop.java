@@ -14,9 +14,8 @@ import entities.Hazard;
 
 public class Stage_Rooftop extends Stage {
 	
-	LightningHandler lh1 = new LightningHandler();
-	LightningHandler lh2 = new LightningHandler();
-	// dark shader
+	private final LightningHandler lh1 = new LightningHandler();
+	// dark shader?
 
 	public Stage_Rooftop(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
@@ -30,7 +29,6 @@ public class Stage_Rooftop extends Stage {
 	public void update(int deltaTime){
 		super.update(deltaTime);
 		lh1.update();
-		lh2.update();
 		rain();
 	}
 
@@ -44,7 +42,7 @@ public class Stage_Rooftop extends Stage {
 		
 		void update(){
 			lightningTimer.countUp();
-			if (lightningTimer.timeUp() && DowntiltEngine.getDeltaTime() % 30 == 0 && Math.random() < 0.07){
+			if (lightningTimer.timeUp() && DowntiltEngine.getDeltaTime() % 30 == 0 && Math.random() < 0.13){
 				lightningTimer.reset();
 				lightningPos = makeNewLightningPos();
 				MapHandler.addEntity(new Graphic.Sparks(lightningPos.x, lightningPos.y, lightningTimer.getEndTime() ));

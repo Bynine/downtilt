@@ -190,7 +190,7 @@ public abstract class Brain{
 		
 		void chooseAttack(){
 			if		(shouldAttack(0.02, 70,  true))								performJump(performJump);
-			else if (shouldAttack(0.22, 25, false))								attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.08, 50, false))								attackPlayer(InputHandler.commandAttack);
 			else if (shouldAttack(0.08, 30,  true))								attackPlayer(InputHandler.commandSpecial);
 			else if (shouldAttack(0.04, 40, 70, false)) 						attackPlayer(InputHandler.commandCharge);
 		}
@@ -284,7 +284,7 @@ public abstract class Brain{
 		}
 		
 		void chooseAttack(){
-			if (shouldAttack(0.08, 30, false)){
+			if (shouldAttack(0.08, 50, false) && pack.distanceYFromPlayer < 0 && !pack.isGrounded) {
 				attackPlayer(InputHandler.commandAttack);
 			}
 			if (shouldAttack(0.22, 80, true))								attackPlayer(InputHandler.commandAttack);

@@ -21,11 +21,11 @@ public class M_Basic extends MoveList {
 	@Override
 	public Move nWeak() {
 		int frames = 3;
-		int frame = 10;
+		int frame = 20;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/basic/nweak.png", 3, frame);
-		Hitbox h1 = new Hitbox(user, 1.8f, 1.4f, 12, Hitbox.SAMURAI, 20, 4, 16, new SFX.LightHit());
+		Hitbox h1 = new Hitbox(user, 2.2f, 2.2f, 12, Hitbox.SAMURAI, 20, 4, 16, new SFX.LightHit());
 		m.eventList.addActionCircle(h1, frame, frame + 4);
 		return m;
 	}

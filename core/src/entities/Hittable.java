@@ -27,7 +27,7 @@ public abstract class Hittable extends Entity {
 	public static final int BOOSTTIMERDEFAULT = 1800, BOOSTTIMERRUSH = 600;
 	public final Timer powerTimer = new Timer(BOOSTTIMERDEFAULT), speedTimer = new Timer(BOOSTTIMERDEFAULT), 
 			defenseTimer = new Timer(BOOSTTIMERDEFAULT), airTimer = new Timer(BOOSTTIMERDEFAULT);
-	//private float initialHitAngle = 0;
+	//boolean permaPower, permaSpeed, permaDefense, permaAir;
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	protected int team = GlobalRepo.BADTEAM;
 
@@ -92,15 +92,19 @@ public abstract class Hittable extends Entity {
 	}
 
 	protected int touchRadius = 8;
-	protected void checkHitByHurtlingObject(Hittable hi){
-		boolean fighterGoingFastEnough = knockbackIntensity(hi.velocity) > hi.baseHurtleBK;
-		if (hi.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
-		boolean correctTeam = getTeam() == hi.getTeam();
-		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hi.inHitstun();
-		if (knockInto && isTouching(hi, touchRadius) && knockbackIntensity(hi.velocity) > knockbackIntensity(velocity) && !isInvincible()) {
-			if (isGuarding()) blockHurtlingObject(hi);
-			else getHitByHurtlingObject(hi);
+	protected void checkHitByHurtlingObject(Hittable hurtler){
+		boolean fighterGoingFastEnough = knockbackIntensity(hurtler.velocity) > hurtler.baseHurtleBK;
+		if (hurtler.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
+		boolean correctTeam = teamCheck(hurtler);
+		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hurtler.inHitstun();
+		if (knockInto && isTouching(hurtler, touchRadius) && knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity) && !isInvincible()) {
+			if (isGuarding()) blockHurtlingObject(hurtler);
+			else getHitByHurtlingObject(hurtler);
 		}
+	}
+	
+	protected boolean teamCheck(Hittable hi){
+		return getTeam() == hi.getTeam();
 	}
 
 	private void blockHurtlingObject(Hittable hurtler){

@@ -37,10 +37,11 @@ public class Heavy extends Fighter {
 		baseWeight = 240;
 		baseArmor = HEAVY_ARMOR;
 		jumpAcc = 0.66f;
-		airSpeed = 1.1f;
-		walkSpeed = 1.7f;
-		runSpeed = 2.5f;
-		friction = 0.8f;
+		airAcc = 0.8f;
+		airSpeed = 1.8f;
+		walkSpeed = 1.4f;
+		runSpeed = 1.4f;
+		friction = 0.86f;
 		doubleJumpMax = 0;
 		doubleJumps = doubleJumpMax;
 		moveList = new M_Heavy(this);

@@ -45,10 +45,8 @@ public class GraphicsHandler {
 	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
 	private static ShaderProgram hitstunShader, airShader, defenseShader, powerShader, speedShader;
 
-	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE));
-	public static final int SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
-	public static final float ZOOM2X = 1/2f;
-	public static final float ZOOM1X = 1/1f;
+	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE)), SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
+	public static final float ZOOM2X = 1/2f, ZOOM1X = 1/1f;
 	static float ZOOM = ZOOM2X;
 
 	private final static Vector2 origCamPosition = new Vector2(0, 0);
@@ -169,15 +167,15 @@ public class GraphicsHandler {
 			Fighter fi = (Fighter) e;
 			if (fi.getCombo().getRank() > 0) drawCombo(fi);
 			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
-			if (DowntiltEngine.debugOn()) drawState(e);
+			if (DowntiltEngine.debugOn()) drawPercentage(e);
 
-			float colorMod = 0.4f * fi.getPercentage() / fi.getWeight();
+			float colorMod = 0.5f * fi.getPercentage() / fi.getWeight();
 			float rColor = MathUtils.clamp(1 - colorMod / 2, 0.45f, 1);
 			float gbColor = MathUtils.clamp(1 - colorMod, 0.15f, 1);
 			batch.setColor(rColor, gbColor, gbColor, 1);
+
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
-
 			if (!fi.powerTimer.timeUp() && !fi.defenseTimer.timeUp() && !fi.airTimer.timeUp() && !fi.speedTimer.timeUp()){
 				drawRainbowAfterImage(fi, batch.getShader());
 			}
@@ -209,7 +207,7 @@ public class GraphicsHandler {
 		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*6, fi.getPosition().y - fi.getVelocity().y*6, 1);
 		batch.setShader(origSG);
 	}
-	
+
 	private static void drawRainbowAfterImage(Fighter fi,ShaderProgram origSG){
 		batch.setShader(powerShader);
 		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*2, fi.getPosition().y - fi.getVelocity().y*2, 4);
@@ -221,7 +219,7 @@ public class GraphicsHandler {
 		drawAfterImageHelper(fi, fi.getPosition().x - fi.getVelocity().x*8, fi.getPosition().y - fi.getVelocity().y*8, 1);
 		batch.setShader(origSG);
 	}
-	
+
 	private static void drawAfterImageHelper(Fighter fi, float posX, float posY, int repeat){
 		for (int i = 0; i < repeat; ++i){
 			batch.draw(fi.getImage(), posX, posY);
@@ -294,11 +292,11 @@ public class GraphicsHandler {
 		font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
 	}
 
-	private static void drawState(Entity e) {
+	private static void drawPercentage(Entity e) {
 		Fighter fi = (Fighter) e;
 		float xPos = fi.getPosition().x - 16 + fi.getImage().getWidth()/2;
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight() * 3;
-		font.draw(batch, fi.getState().toString(), xPos, yPos);
+		font.draw(batch, (int)fi.getPercentage() + "%", xPos, yPos);
 	}
 
 	public static void updateRoomGraphics(Fighter player) {

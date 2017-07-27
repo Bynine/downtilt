@@ -23,7 +23,7 @@ public class Stage_Colosseum extends Stage {
 	}
 	
 	public Vector2 getCenterPosition(){
-		return new Vector2(19 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
+		return new Vector2(19 * GlobalRepo.TILE, 4 * GlobalRepo.TILE);
 	}
 
 }

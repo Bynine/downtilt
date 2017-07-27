@@ -296,19 +296,19 @@ public abstract class Entity {
 		return !hitstunTimer.timeUp();
 	}
 
-	private final int OOBGrace = 4;
+	private final int OOBGrace = 256;
 	public boolean isOOB(Rectangle boundary) {
 		if (
-				(position.x < (boundary.x - image.getWidth()*OOBGrace)) ||
-				(position.x > (boundary.x + boundary.width + image.getWidth()*OOBGrace))  ||
-				(position.y < (boundary.y - image.getHeight()*OOBGrace))  ||
+				(position.x < (boundary.x - OOBGrace)) ||
+				(position.x > (boundary.x + boundary.width + OOBGrace))  ||
+				(position.y < (boundary.y - OOBGrace))  ||
 				(isOffTop(boundary))
 				)
 			return true;
 		return false;
 	}
 	public boolean isOffTop(Rectangle boundary){
-		return (position.y > (boundary.y + boundary.height + image.getHeight()*OOBGrace)) && inHitstun();
+		return (position.y > (boundary.y + boundary.height + OOBGrace)) && inHitstun();
 	}
 	public Vector2 getPosition() { return position; }
 	public Vector2 getVelocity() { return velocity; }

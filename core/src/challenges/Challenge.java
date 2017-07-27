@@ -1,5 +1,6 @@
 package challenges;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
@@ -14,7 +15,7 @@ import maps.*;
 
 public abstract class Challenge {
 
-	protected final List<Wave> waves;
+	protected final List<Wave> currWaves, initWaves;
 	protected Wave activeWave = null;
 	protected final Stage stage;
 	protected long score = 0;
@@ -24,18 +25,24 @@ public abstract class Challenge {
 	protected boolean finished = false, started = false;
 
 	Challenge(Stage stage, List<Wave> waves){
-		this.waves = waves;
+		this.currWaves = new ArrayList<Wave>();
+		initWaves = new ArrayList<Wave>();
+		initWaves.addAll(waves);
 		this.stage = stage;
 	}
 
 	/**
 	 * Called when a challenge begins.
 	 */
-	protected void begin(){
+	protected void startChallenge(){
+		currWaves.clear();
+		for (Wave wave: initWaves) wave.restart();
+		currWaves.addAll(initWaves);
+		
 		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
 			player.setLives(numLives);
 		}
-		activeWave = waves.remove(0);
+		activeWave = currWaves.remove(0);
 		DowntiltEngine.changeRoom(stage);
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
@@ -53,7 +60,7 @@ public abstract class Challenge {
 	public void update(){
 		activeWave.update(DowntiltEngine.getDeltaTime());
 		if (activeWave.getNumEnemies() == 0) {
-			if (waves.size() > 0) nextWave();
+			if (currWaves.size() > 0) nextWave();
 			else finished = true;
 		}
 		if (inFailState()) endChallenge();
@@ -69,7 +76,7 @@ public abstract class Challenge {
 
 	private void nextWave(){
 		MapHandler.addEntity(new TreasureChest(startPosition.x, startPosition.y + GlobalRepo.TILE));
-		activeWave = waves.remove(0);
+		activeWave = currWaves.remove(0);
 	}
 
 	/**
@@ -77,7 +84,7 @@ public abstract class Challenge {
 	 */
 	public void endChallenge(){
 		new SFX.Error().play();
-		DowntiltEngine.returnToMenu();
+		startChallenge();
 	}
 
 	protected Stage getRoomByRound(int position){
@@ -113,7 +120,7 @@ public abstract class Challenge {
 	}
 	
 	public String getEnemyCounter() {
-		return "WAVES LEFT: " + (waves.size() + 1);
+		return "WAVES LEFT: " + (currWaves.size() + 1);
 	}
 	
 	public final String getTime(){

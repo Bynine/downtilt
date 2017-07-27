@@ -95,9 +95,10 @@ public abstract class Explosion extends ImmobileEntity{
 			position.x = grenade.position.x - displacement;
 			position.y = grenade.position.y - displacement;
 			setup("sprites/entities/grenadeexplosion.png", lifeTime, 0, 0);
-			ac =  new ExplosionHitbox(owner, 8, 5, 8, 71, 0, 0, 36, new SFX.HeavyHit(), this, lifeTime);
-			Hitbox ac2 = new ExplosionHitbox(owner, 7, 4, 24, Hitbox.SAMURAI, 0, 0, 48, new SFX.HeavyHit(), this, lifeTime);
-			ac.setRefresh(1);
+			ac =  new ExplosionHitbox(owner, 8, 5, 16, 71, 0, 0, 36, new SFX.HeavyHit(), this, lifeTime);
+			Hitbox ac2 = new ExplosionHitbox(owner, 7, 4, 8, Hitbox.SAMURAI, 0, 0, 48, new SFX.MidHit(), this, lifeTime);
+			ac.setRefresh(2);
+			ac2.setRefresh(2);
 			new ActionCircleGroup(Arrays.asList(ac, ac2));
 			MapHandler.addActionCircle(ac);
 			MapHandler.addActionCircle(ac2);

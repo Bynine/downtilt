@@ -59,11 +59,21 @@ public class Hero extends Fighter {
 		updateImage(0);
 	}
 
+	@Override
 	public boolean isPerfectGuarding() { 
 		int perfectGuard = 7;
 		return isGuarding() && guardTimer.getCounter() < perfectGuard; 
 	}
+	
+	@Override
+	public void parry(){
+		endAttack();
+		invincibleTimer.setEndTime(1);
+		invincibleTimer.reset();
+		startAttack(new IDMove(((MoveList_Advanced)moveList).parry(), MoveList.noStaleMove));
+	}
 
+	@Override
 	public void perfectParry(){
 		endAttack();
 		new SFX.Victory().play();

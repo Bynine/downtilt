@@ -36,14 +36,14 @@ public abstract class Fighter extends Hittable{
 	public int queuedCommand = InputHandler.commandNone;
 	protected final Timer inputQueueTimer = new Timer(8), wallJumpTimer = new Timer(10), attackTimer = new Timer(0), grabbingTimer = new Timer(0), 
 			dashTimer = new Timer(20), invincibleTimer = new Timer(0), guardHoldTimer = new Timer(1), footStoolTimer = new Timer(20), slowedTimer = new Timer(0),
-			doubleJumpGraphicTimer = new Timer (12), doubleJumpUseTimer = new Timer (20), respawnTimer = new Timer(3);
+			doubleJumpGraphicTimer = new Timer (12), doubleJumpUseTimer = new Timer (20), respawnTimer = new Timer(3), prevMoveTimer = new Timer(5);
 	protected float prevStickX = 0, stickX = 0, stickY = 0;
 
 	private ShaderProgram palette = null;
 	private final Vector2 spawnPoint;
 	private int lives = 1;
 
-	public static final int SPECIALMETERMAX = 8, STARTINGSPECIAL = 1;
+	public static final int SPECIALMETERMAX = 12, STARTINGSPECIAL = 2;
 	private float specialMeter = STARTINGSPECIAL;
 
 	protected Vector2 footStoolKB = new Vector2(0, 0);
@@ -70,7 +70,7 @@ public abstract class Fighter extends Hittable{
 		spawnPoint = new Vector2(posX, posY);
 		this.setInputHandler(inputHandler);
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
-				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer));
+				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer, prevMoveTimer));
 		state = State.STAND;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
@@ -608,7 +608,7 @@ public abstract class Fighter extends Hittable{
 		refreshDoubleJumps();
 		resolveCombo();
 	}
-	
+
 	private void checkFallOnGround(){
 		if (tumbling) {
 			if (inputHandler.isTeching()) tech();
@@ -619,8 +619,8 @@ public abstract class Fighter extends Hittable{
 		}
 		hitstunTimer.end();
 	}
-	
-	private void resolveCombo(){
+
+	protected void resolveCombo(){
 		int comboStunMod = 24;
 		int stunTime = (int) (combo.finish() * comboStunMod);
 		setStun(stunTime);
@@ -692,7 +692,7 @@ public abstract class Fighter extends Hittable{
 	private void addSpeed(float speed, float acc){ 
 		if (Math.abs(velocity.x) < Math.abs(speed)) velocity.x += Math.signum(stickX) * acc; 
 	}
-	
+
 	@Override
 	protected float directionalInfluenceAngle(Vector2 knockback){
 		float diStrength = 8;
@@ -708,7 +708,7 @@ public abstract class Fighter extends Hittable{
 		knockback.setAngle((float) (knockback.angle() + diModifier));
 		return knockback.angle();
 	}
-	
+
 	@Override
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
@@ -720,18 +720,11 @@ public abstract class Fighter extends Hittable{
 		grabbingTimer.setEndTime(caughtTime);
 		grabbingTimer.reset();
 	}
-	
+
 	@Override
 	protected void addToCombo(int id){
 		combo.addMoveID(id);
 	}
-//
-//	public void parry(){
-//		endAttack();
-//		invincibleTimer.setEndTime(1);
-//		invincibleTimer.reset();
-//		startAttack(new IDMove(moveList.parry(), MoveList.noStaleMove));
-//	}
 
 	public void respawn() {
 		lives -= 1;
@@ -808,6 +801,7 @@ public abstract class Fighter extends Hittable{
 	public void setArmor(float armor) { this.baseArmor = armor; }
 	public void setActiveMove(IDMove activeMove) { 
 		prevMove = this.activeMove;
+		prevMoveTimer.reset();
 		if (null != prevMove && null != prevMove.move) {
 			if (prevMove.move.isAerial()) prevMove.move.clearHitboxes();
 		}
@@ -849,7 +843,10 @@ public abstract class Fighter extends Hittable{
 	public int getLives() { return lives; }
 	public InputHandler getInputHandler() { return inputHandler; }
 	public IDMove getActiveMove() { return activeMove; }
-	public IDMove getPrevMove() { return prevMove; }
+	public IDMove getPrevMove() { 
+		if (prevMoveTimer.timeUp()) return null;
+		else return prevMove; 
+	}
 	public State getState() { return state; } 
 	public List<IDMove> getMoveQueue() { return staleMoveQueue; }
 	public InputPackage getInputPackage() { return new InputPackage(this); }

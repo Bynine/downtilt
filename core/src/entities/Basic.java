@@ -103,6 +103,7 @@ public class Basic extends Fighter {
 
 		private void explode(){
 			MapHandler.addEntity(new Explosion.BombExplosion(this, direct()));
+			resolveCombo();
 			setRemove();
 		}
 

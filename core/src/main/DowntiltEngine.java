@@ -23,7 +23,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/**
 	 * MUST BE ON before making a jar/releasing!
 	 */
-	private static boolean release = false;
+	private static boolean release = true;
 	
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer));
@@ -39,7 +39,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 	private static boolean musicToggle = false;
 	private static boolean debugToggle = true;
-	private static boolean fpsLoggle = true;
+	private static boolean fpsLoggle = false;
 
 	public void create () {
 		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
@@ -153,10 +153,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startDebugMenu(){
+		getChallenge().getStage().getMusic().stop();
 		gameState = GameState.DEBUG;
 	}
 
 	public static void returnToMenu(){
+		getChallenge().getStage().getMusic().stop();
 		gameState = GameState.MENU;
 	}
 

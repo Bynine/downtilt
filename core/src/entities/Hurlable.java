@@ -61,6 +61,7 @@ public abstract class Hurlable extends Hittable {
 
 		public Explosive(float posX, float posY) {
 			super(posX, posY);
+			baseHurtleBK = 0;
 		}
 
 		protected abstract Explosion getExplosion();
@@ -78,6 +79,14 @@ public abstract class Hurlable extends Hittable {
 		
 		@Override
 		public boolean inHitstun(){
+			return true;
+		}
+		
+		@Override
+		protected boolean teamCheck(Hittable hi){
+			for (Fighter player: DowntiltEngine.getPlayers()){
+				if (hi.equals(player)) return false;
+			}
 			return true;
 		}
 
@@ -296,7 +305,7 @@ public abstract class Hurlable extends Hittable {
 			timerList.add(duration);
 			team = GlobalRepo.BADTEAM;
 			gravity = -0.5f;
-			friction = 0.99f;
+			friction = 0.96f;
 			baseKBG = 0;
 		}
 
@@ -325,9 +334,8 @@ public abstract class Hurlable extends Hittable {
 		}
 		
 		private void cook(){
-			final int cookTime = 6;
+			final int cookTime = 1;
 			velocity.x *= 0.25f;
-			velocity.y = 4;
 			if (duration.getEndTime() - duration.getCounter() > cookTime) {
 				duration.setEndTime(cookTime);
 				duration.reset();

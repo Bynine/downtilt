@@ -61,27 +61,18 @@ public class M_Shoot extends MoveList {
 
 	@Override
 	/**
-	 * Fires multiple balls
+	 * Fires a ball super fast
 	 */
 	public Move nCharge() {
 		int frames = 4;
-		int frame = 45;
-		int betweenShot = 24;
+		int frame = 40;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/ncharge.png", frames, frame);
 		m.setStopsInAir();
 		m.eventList.addNewEntity(frame * 2,
 				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 7.5f, 3.6f
-				);
-		m.eventList.addNewEntity(frame * 2 + betweenShot,
-				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 7.0f, 2.9f
-				);
-		m.eventList.addNewEntity(frame * 2 + betweenShot * 2,
-				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * 6.5f, 2.4f
+				user.direct() * 11.5f, 3.6f
 				);
 		return m;
 	}
