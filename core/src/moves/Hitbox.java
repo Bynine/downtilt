@@ -268,7 +268,9 @@ public class Hitbox extends ActionCircle{
 		}
 		
 		protected Vector2 setAngle(Vector2 knockback){
-			return knockback.setAngle(user.getVelocity().angle());
+			Vector2 vel = user.getVelocity();
+			vel.set(vel.x * user.direct(), vel.y);
+			return knockback.setAngle(vel.angle());
 		}
 		
 	}

@@ -25,6 +25,7 @@ public abstract class Entity {
 	Direction direction = Direction.RIGHT;
 	Layer layer = Layer.FOREGROUND;
 	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nothing.png"))));
+	protected float prevHitAngle = 0;
 	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 
@@ -84,7 +85,7 @@ public abstract class Entity {
 	void handleTouchHelper(Entity e){
 		if (isTouching(e, 0) && e instanceof Bounce && bounceTimer.timeUp()) handleBounce(e);
 	}
-	
+
 	protected void handleBounce(Entity e){
 		((Bounce)e).bounce(this);
 		bounceTimer.reset();
@@ -108,7 +109,7 @@ public abstract class Entity {
 	void limitingForces(List<Rectangle> mapRectangleList, List<Entity> entityList){
 		handleGravity();
 		handleFriction();
-		limitSpeeds();
+		applyAirFrictionY();
 		handleWind();
 
 		setupRectangles(mapRectangleList, entityList);
@@ -119,7 +120,9 @@ public abstract class Entity {
 	}
 
 	void handleWind(){
-		velocity.x += MapHandler.getRoomWind();
+		final int windLimiter = 8;
+		if (MapHandler.getRoomWind() < 0 && velocity.x > MapHandler.getRoomWind() * windLimiter) velocity.x += MapHandler.getRoomWind();
+		else if (MapHandler.getRoomWind() > 0 && velocity.x < MapHandler.getRoomWind() * windLimiter) velocity.x += MapHandler.getRoomWind();
 	}
 
 	void handleGravity(){
@@ -132,8 +135,9 @@ public abstract class Entity {
 		else velocity.x *= getFriction();
 	}
 
-	void limitSpeeds(){
-		if (velocity.y < 0) velocity.y *= airFrictionY;
+	void applyAirFrictionY(){
+		boolean meteor = inHitstun() && (prevHitAngle > 240 && prevHitAngle < 300);
+		if (velocity.y < 0 && !meteor) velocity.y *= airFrictionY;
 	}
 
 	void setupRectangles(List<Rectangle> mapRectangleList, List<Entity> entityList){
@@ -201,7 +205,7 @@ public abstract class Entity {
 		}
 		return false;
 	}
-	
+
 	protected boolean upThroughThinPlatform(Rectangle r){
 		return r.getHeight() <= 1 && r.getY() - this.getPosition().y > 0;
 	}
@@ -215,7 +219,7 @@ public abstract class Entity {
 	public Rectangle getHurtBox(){
 		return image.getBoundingRectangle();
 	}
-	
+
 	public Rectangle getBodyHitBox(){
 		return getHurtBox();
 	}
@@ -280,7 +284,7 @@ public abstract class Entity {
 	public void ground(){ 
 		if (velocity.y < -1 && !inGroundedState()) hitGround();
 	}
-	
+
 	protected void hitGround(){
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + 8));
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
@@ -296,19 +300,19 @@ public abstract class Entity {
 		return !hitstunTimer.timeUp();
 	}
 
-	private final int OOBGrace = 256;
+	private final int OOBGrace = 64;
 	public boolean isOOB(Rectangle boundary) {
 		if (
-				(position.x < (boundary.x - OOBGrace)) ||
-				(position.x > (boundary.x + boundary.width + OOBGrace))  ||
-				(position.y < (boundary.y - OOBGrace))  ||
+				(position.x < (boundary.x - image.getWidth() - OOBGrace)) ||
+				(position.x > (boundary.x + boundary.width + image.getWidth() + OOBGrace))  ||
+				(position.y < (boundary.y - image.getHeight() - OOBGrace))  ||
 				(isOffTop(boundary))
 				)
 			return true;
 		return false;
 	}
 	public boolean isOffTop(Rectangle boundary){
-		return (position.y > (boundary.y + boundary.height + OOBGrace)) && inHitstun();
+		return (position.y > (boundary.y + boundary.height + (image.getHeight() + OOBGrace) )) && inHitstun();
 	}
 	public Vector2 getPosition() { return position; }
 	public Vector2 getVelocity() { return velocity; }

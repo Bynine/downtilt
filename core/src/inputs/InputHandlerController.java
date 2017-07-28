@@ -127,6 +127,10 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean jumpHold(){
 		return control.getButton(commandJump);
 	}
+	
+	public boolean attackHold(){
+		return control.getButton(commandAttack);
+	}
 
 	public boolean flickLeft(){
 		return leftX.flick(-1);

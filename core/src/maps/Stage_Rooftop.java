@@ -15,11 +15,12 @@ import entities.Hazard;
 public class Stage_Rooftop extends Stage {
 	
 	private final LightningHandler lh1 = new LightningHandler();
-	// dark shader?
 
 	public Stage_Rooftop(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
+		dispX = GlobalRepo.TILE * 4;
 		setup();
+		name = "ROOFTOP";
 	}
 
 	public TiledMap getMap() {

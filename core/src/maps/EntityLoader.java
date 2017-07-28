@@ -24,6 +24,7 @@ public class EntityLoader {
 		case "changec": return new ChangeBlock.BlockB(x, y);
 		case "switchblock": return new SwitchButton(x, y);
 		case "randall": return new Randall(x, y);
+		case "truckhead": return new Hazard.TruckHead(x, y);
 		default: {
 			System.out.println(m.getName() + " not found by Entity Loader");
 			return new Hurlable.TrashCan(x, y);

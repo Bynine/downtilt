@@ -17,10 +17,10 @@ abstract class Menu {
 	
 	protected static BitmapFont font = new BitmapFont();
 	protected static SpriteBatch batch;
-	protected final static String startStr = "Press DPAD to begin";
-	protected final static Color fontColor = Color.SALMON;
+	protected final static String startStr = "Press A to begin!";
+	protected final static Color fontColor = Color.GOLDENROD;
 	
-	static void begin(){
+	static void initialize(){
 		batch = new SpriteBatch();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/nes.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -86,10 +86,13 @@ abstract class Menu {
 		}
 
 		void moveCursor(int mov){
-			if (cursor + mov > -1 && cursor + mov < choices.size())	cursor += mov;
-			else if (cursor + mov >= choices.size())				cursor = 0;
-			else if (cursor + mov <= -1)							cursor = choices.size() - 1;
-			new SFX.LightHit().play(0.3f);
+			if (cursor + mov > -1 && cursor + mov < choices.size())	{
+				cursor += mov;
+				new SFX.LightHit().play(0.3f);
+			}
+//			else if (cursor + mov >= choices.size())				cursor = 0;
+//			else if (cursor + mov <= -1)							cursor = choices.size() - 1;
+
 		}
 
 		public void setCursor(int i) {

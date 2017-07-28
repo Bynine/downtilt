@@ -10,12 +10,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Stage_Sky extends Stage {
 	
-	SFX gust = new SFX.Gust();
+	boolean windPlay = false;
 
 	public Stage_Sky(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/dance.mp3"));
 		setup();
-		name = "STANDARD";
+		name = "SKY CASTLE";
+		dispX = GlobalRepo.TILE * 3;
 	}
 
 	public TiledMap getMap() {
@@ -29,7 +30,7 @@ public class Stage_Sky extends Stage {
 
 
 	public Vector2 getStartPosition() {
-		return new Vector2(18 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(19 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){
@@ -37,16 +38,18 @@ public class Stage_Sky extends Stage {
 	}
 
 	public float getWind(){
-		float windStrength = 0.16f;
-		int directionTiming = 1200;
+		float windStrength = -0.24f;
+		int directionTiming = 1000;
 		int windDuration = 240;
-		int wind1 = 400;
-		int wind2 = 1000;
+		int windTiming = 500;
 		
 		int gx = (DowntiltEngine.getDeltaTime() % directionTiming);
-		//if (DowntiltEngine.getDeltaTime() == wind1 || DowntiltEngine.getDeltaTime() == wind2) gust.play();
-		if (gx > wind1 && gx < wind1 + windDuration) return  windStrength;
-		if (gx > wind2 && gx < wind2 + windDuration) return -windStrength;
+		if (gx > windTiming) windPlay = false;
+		else if (gx == windTiming && !windPlay) {
+			windPlay = true;
+			new SFX.Gust().play();
+		}
+		if (gx > windTiming && gx < windTiming + windDuration) return windStrength;
 		else return 0;
 	}
 

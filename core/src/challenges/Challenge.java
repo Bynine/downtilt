@@ -19,7 +19,7 @@ public abstract class Challenge {
 	protected Wave activeWave = null;
 	protected final Stage stage;
 	protected long score = 0;
-	protected int numLives = 5;
+	private int longestCombo = 0;
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
 	protected boolean finished = false, started = false;
@@ -35,13 +35,16 @@ public abstract class Challenge {
 	 * Called when a challenge begins.
 	 */
 	protected void startChallenge(){
+		final int soloLives = 5;
+		final int coopLives = 3;
+		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
+			if (DowntiltEngine.getPlayers().size() == 1) player.setLives(soloLives);
+			else player.setLives(coopLives);
+		}
+		
 		currWaves.clear();
 		for (Wave wave: initWaves) wave.restart();
 		currWaves.addAll(initWaves);
-		
-		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
-			player.setLives(numLives);
-		}
 		activeWave = currWaves.remove(0);
 		DowntiltEngine.changeRoom(stage);
 		centerPosition.set(stage.getCenterPosition());
@@ -119,7 +122,7 @@ public abstract class Challenge {
 		return startPosition;
 	}
 	
-	public String getEnemyCounter() {
+	public String getWaveCounter() {
 		return "WAVES LEFT: " + (currWaves.size() + 1);
 	}
 	
@@ -143,6 +146,18 @@ public abstract class Challenge {
 
 	public Stage getStage() {
 		return stage;
+	}
+
+	public float getStartDispX() {
+		return stage.getDispX();
+	}
+	
+	public int getLongestCombo(){
+		return longestCombo;
+	}
+	
+	public void updateLongestCombo(int combo){
+		if (combo > longestCombo) longestCombo = combo;
 	}
 
 }

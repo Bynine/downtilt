@@ -54,7 +54,8 @@ public abstract class SFX {
 	public static class Sparks extends SFX{ public Sparks(){ setSFX("/lightningstart.mp3"); } }
 	public static class Lightning extends SFX{ public Lightning(){ setSFX("/lightningstrike.mp3"); } }
 	public static class Error extends SFX{ public Error(){ setSFX("/error.wav"); } }
-	public static class Gust extends SFX{ public Gust(){ setSFX("/gust.mp3"); } }
-	public static class Pop extends SFX{ public Pop(){ setSFX("/pop.wav"); } }
+	public static class Gust extends SFX{ public Gust(){ setSFX("/gust.wav"); } }
+	public static class Pause extends SFX{ public Pause(){ setSFX("/pause.mp3"); } }
+	public static class Unpause extends SFX{ public Unpause(){ setSFX("/unpause.mp3"); } }
 	
 }

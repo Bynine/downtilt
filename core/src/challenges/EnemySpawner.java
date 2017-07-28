@@ -43,7 +43,6 @@ public class EnemySpawner {
 			if (deltaTime % frequency == 1) createNewSpawner((int)frequency);
 			if (deltaTime % frequency == frequency - 1) spawnNewEnemy();
 		}
-		//else if (deltaTime % frequency == 1 && amount == ENDLESS && spawnedEntities.size() < capacity) spawnNewEnemy();
 
 		Iterator<Fighter> spawnIter = spawnedEntities.iterator();
 		while (spawnIter.hasNext()){
@@ -56,15 +55,20 @@ public class EnemySpawner {
 	}
 	
 	private void createNewSpawner(int frequency){
+		setSpawnPoint();
+		MapHandler.addEntity(new Spawner(spawnPoint.x, spawnPoint.y, (int) (frequency * 1.25) ));
+	}
+	
+	private void setSpawnPoint(){
 		spawnPoint.set(DowntiltEngine.getChallenge().getStartPosition());
-		float dispX = GlobalRepo.TILE * 2;
+		float dispX = DowntiltEngine.getChallenge().getStartDispX();
 		float dispY = GlobalRepo.TILE * 3;
 		if (Math.random() < 0.5f) spawnPoint.set(spawnPoint.x - dispX, spawnPoint.y + dispY);
 		else spawnPoint.set(spawnPoint.x + dispX, spawnPoint.y + dispY);
-		MapHandler.addEntity(new Spawner(spawnPoint.x, spawnPoint.y, (int) (frequency * 1.25) ));
 	}
 
 	private void spawnNewEnemy(){
+		if (spawnPoint.x == 0) setSpawnPoint();
 		Fighter enemy = null;
 		EnemyType enemyType = getEnemy();
 		try {
@@ -74,11 +78,16 @@ public class EnemySpawner {
 		}
 		enemy.setInputHandler(new InputHandlerCPU(enemy, enemyType.brain));
 		switch (enemyType.powerUp){
-		case POWER: enemy.powerTimer.reset(); break;
-		case DEFENSE: enemy.defenseTimer.reset(); break;
-		case SPEED: enemy.speedTimer.reset(); break;
-		case AIR: enemy.airTimer.reset(); break;
-		case ALL: enemy.powerTimer.reset(); enemy.defenseTimer.reset(); enemy.speedTimer.reset(); enemy.airTimer.reset(); break;
+		case POWER: enemy.setPermaPower(); break;
+		case DEFENSE: enemy.setPermaDefense(); break;
+		case SPEED: enemy.setPermaSpeed(); break;
+		case AIR: enemy.setPermaAir(); break;
+		case ALL: {
+			enemy.setPermaPower();
+			enemy.setPermaDefense();
+			enemy.setPermaSpeed();
+			enemy.setPermaAir();
+		} break;
 		case NONE: break;
 		}
 		MapHandler.addEntity(enemy);

@@ -46,7 +46,7 @@ public class GraphicsHandler {
 	private static ShaderProgram hitstunShader, airShader, defenseShader, powerShader, speedShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE)), SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
-	public static final float ZOOM2X = 1/2f, ZOOM1X = 1/1f;
+	public static final float ZOOM4X = 1/4f, ZOOM2X = 1/2f, ZOOM1X = 1/1f;
 	static float ZOOM = ZOOM2X;
 
 	private final static Vector2 origCamPosition = new Vector2(0, 0);
@@ -88,13 +88,21 @@ public class GraphicsHandler {
 		cam.position.x = MathUtils.round(MathUtils.clamp(cam.position.x, screenBoundary(SCREENWIDTH), MapHandler.mapWidth - screenBoundary(SCREENWIDTH)));
 		cam.position.y = MathUtils.round(MathUtils.clamp(cam.position.y, screenBoundary(SCREENHEIGHT), MapHandler.mapHeight - screenBoundary(SCREENHEIGHT)));
 
-		parallaxCam.position.x = cam.position.x;
-		int parallax = 2;
-		int updateSpeed = 4;
-		float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
-		parallaxCam.position.x = 
-				(parallaxCam.position.x * (updateSpeed - 1) +
-						( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
+		if (DowntiltEngine.getChallenge().getStage().scrolls()){
+			final float blackBounds = SCREENWIDTH/4;
+			if (parallaxCam.position.x == 0) parallaxCam.position.x = blackBounds;
+			if (!DowntiltEngine.isPaused()) parallaxCam.position.x += 12;
+			if (parallaxCam.position.x + blackBounds > MapHandler.mapWidth) parallaxCam.position.x = blackBounds;
+		}
+		else{
+			parallaxCam.position.x = cam.position.x;
+			int parallax = 2;
+			int updateSpeed = 4;
+			float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
+			parallaxCam.position.x = 
+					(parallaxCam.position.x * (updateSpeed - 1) +
+							( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
+		}
 		parallaxCam.position.y = cam.position.y;
 
 		if (!DowntiltEngine.outOfHitlag() && !DowntiltEngine.isPaused()) shakeScreen();
@@ -176,14 +184,14 @@ public class GraphicsHandler {
 
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
-			if (!fi.powerTimer.timeUp() && !fi.defenseTimer.timeUp() && !fi.airTimer.timeUp() && !fi.speedTimer.timeUp()){
+			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
 				drawRainbowAfterImage(fi, batch.getShader());
 			}
 			else {
-				if (!fi.powerTimer.timeUp()) drawAfterImage(fi, batch.getShader(), powerShader);
-				if (!fi.defenseTimer.timeUp()) drawAfterImage(fi, batch.getShader(), defenseShader);
-				if (!fi.airTimer.timeUp()) drawAfterImage(fi,  batch.getShader(), airShader);
-				if (!fi.speedTimer.timeUp()) drawAfterImage(fi, batch.getShader(), speedShader);
+				if (fi.powerActive()) drawAfterImage(fi, batch.getShader(), powerShader);
+				if (fi.defenseActive()) drawAfterImage(fi, batch.getShader(), defenseShader);
+				if (fi.speedActive()) drawAfterImage(fi, batch.getShader(), speedShader);
+				if (fi.airActive()) drawAfterImage(fi,  batch.getShader(), airShader);
 			}
 			if (fi.isGuarding() || fi.isPerfectGuarding()) drawShield = true;
 		}
@@ -252,15 +260,17 @@ public class GraphicsHandler {
 					cam.position.x - SCREENWIDTH * (stockLocationMod/1.5f), cam.position.y - SCREENHEIGHT * stockLocationMod + lineHeight);
 			lineHeight *= -1/2;
 		}
-		font.draw(batch,  DowntiltEngine.getChallenge().getEnemyCounter(), 
-				cam.position.x + SCREENWIDTH * (stockLocationMod/1.6f), cam.position.y - SCREENHEIGHT * stockLocationMod);
-		if (DowntiltEngine.isPaused()) {
-			font.draw(batch, "PAUSED", cam.position.x, cam.position.y);
-			font.draw(batch, "Press Select to quit", cam.position.x, cam.position.y - GlobalRepo.TILE * 2);
-		}
-
 		font.draw(batch, DowntiltEngine.getChallenge().getTime(), 
 				cam.position.x, cam.position.y - SCREENHEIGHT * stockLocationMod);
+		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), 
+				cam.position.x + SCREENWIDTH * (stockLocationMod/ 3f), cam.position.y - SCREENHEIGHT * stockLocationMod);
+		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), 
+				cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), cam.position.y - SCREENHEIGHT * stockLocationMod);
+		
+		if (DowntiltEngine.isPaused()) {
+			font.draw(batch, "PAUSED", cam.position.x, cam.position.y);
+			font.draw(batch, "Press Y to quit", cam.position.x, cam.position.y - GlobalRepo.TILE * 2);
+		}
 	}
 
 	private static List<Float> cameraBoundaries(){

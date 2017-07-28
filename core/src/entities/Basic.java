@@ -88,6 +88,7 @@ public class Basic extends Fighter {
 			walkSpeed = 1.2f;
 			runSpeed = 1.8f;
 			gravity = -0.6f;
+			jumpAcc = 0.58f;
 			basePower = 1.2f;
 			baseWeight = 110;
 		}

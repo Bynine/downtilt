@@ -30,6 +30,7 @@ public abstract class InputHandlerPlayer extends InputHandler {
 		inputToCommand(flickCUp(), commandCStickUp);
 		inputToCommand(flickCDown(), commandCStickDown);
 		if (pause()) DowntiltEngine.pauseGame(); 
+		if (chargeHold() && DowntiltEngine.isPaused()) DowntiltEngine.returnToMenu();
 		if (select() && DowntiltEngine.isPaused()) DowntiltEngine.startDebugMenu();
 		
 		fighter.handleJumpHeld(jumpHold());
@@ -72,5 +73,6 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	public abstract boolean chargeHold();
 	public abstract boolean jumpHold();
 	public abstract boolean blockHold();
+	public abstract boolean attackHold();
 
 }

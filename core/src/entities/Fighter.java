@@ -823,10 +823,6 @@ public abstract class Fighter extends Hittable{
 	public void setStun(int i) { 
 		setTimer(stunTimer, i); 
 	}
-	private void setTimer(Timer t, int i){
-		t.setEndTime(i);
-		t.reset();
-	}
 	public void setHitstunImage() { setImage(getHitstunFrame(DowntiltEngine.getDeltaTime())); }
 
 	public float getStickX() { return stickX; }

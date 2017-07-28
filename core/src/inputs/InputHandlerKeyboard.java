@@ -40,8 +40,9 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 		return 0;
 	}
 	
+	private int attackInput = Keys.J;
 	public boolean attack(){
-		return Gdx.input.isKeyJustPressed(Keys.J);
+		return Gdx.input.isKeyJustPressed(attackInput);
 	}
 	
 	public boolean special(){
@@ -77,6 +78,10 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	
 	public boolean blockHold(){
 		return Gdx.input.isKeyPressed(blockInput);
+	}
+	
+	public boolean attackHold(){
+		return Gdx.input.isKeyPressed(attackInput);
 	}
 	
 	public boolean taunt(){

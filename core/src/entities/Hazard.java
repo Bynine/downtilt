@@ -81,7 +81,7 @@ public abstract class Hazard extends Entity {
 			
 			int inc = 64;
 			for (Hitbox h: hitboxes){
-				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 45, 0, inc, 36, new SFX.SharpHit());
+				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 45, 0, inc, 32, new SFX.SharpHit());
 				h.setProperty(Property.STUN);
 				inc -= 64;
 				finale.add(h);
@@ -100,6 +100,33 @@ public abstract class Hazard extends Entity {
 				for (ActionCircle ac: acg.getConnectedCircles()) ac.remove();
 				setRemove();
 			}
+		}
+
+	}
+	
+	/**
+	 * Front of the truck, hits forward and up
+	 */
+	public static class TruckHead extends Hazard{
+
+		Hitbox h1;
+
+		public TruckHead(float posX, float posY) { 
+			super(posX, posY); 
+			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/bounce.png"))));
+			h1 = new HazardHitbox(this, 5.5f, 5.0f, 20, 45, 0, 0, 24, new SFX.HeavyHit());
+			h1.setRefresh(20);
+			for (ActionCircle ac: getActionCircles()) MapHandler.addActionCircle(ac);
+			gravity = 0;
+		}
+
+		@Override
+		List<ActionCircle> getActionCircles() {
+			return new ArrayList<ActionCircle>(Arrays.asList( h1 ));
+		}
+
+		void updatePosition(){
+			/* doesn't move */
 		}
 
 	}

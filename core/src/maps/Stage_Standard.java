@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Standard extends Stage {
 
 	public Stage_Standard(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/sand.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/stroll.mp3"));
 		setup();
-		name = "STANDARD";
+		name = "PLAIN";
 	}
 
 	public TiledMap getMap() {

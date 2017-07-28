@@ -11,8 +11,8 @@ public class M_Shoot extends MoveList {
 	public M_Shoot(Fighter user) {
 		super(user);
 	}
-	private float xGenericSpeed = 7;
-	private float yGenericSpeed = 4;
+	private float xGenericSpeed = 5.5f;
+	private float yGenericSpeed = 3.5f;
 	private int genericFrameLength = 35;
 
 	@Override
@@ -32,17 +32,7 @@ public class M_Shoot extends MoveList {
 
 	@Override
 	public Move slide() {
-		int frames = 2;
-		int frame = 40;
-
-		Move m = new Move(user, frames * frame);
-		m.setAnimation("sprites/fighters/shoot/nspecial.png", frames, frame);
-		m.setStopsInAir();
-		m.eventList.addNewEntity(frame,
-				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
-				user.direct() * xGenericSpeed, yGenericSpeed
-				);
-		return m;
+		return nWeak();
 	}
 
 	@Override
@@ -52,7 +42,7 @@ public class M_Shoot extends MoveList {
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nair.png", frames, frame);
-		m.eventList.addVelocityChange(user, frame, -4, 8);
+		m.eventList.addVelocityChange(user, frame, -4, 6);
 		m.eventList.addNewEntity(frame, user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 3, -6
 				);

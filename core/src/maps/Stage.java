@@ -34,10 +34,9 @@ public abstract class Stage {
 	protected float a = 0;
 	protected float wind = 0;
 	protected float gravity = 1;
+	protected float dispX = GlobalRepo.TILE * 2;
 	protected String name = "DEFAULT STAGE";
-	
-	public static final float LOWGRAV = 0.66f;
-	public static final float HIGRAV  = 1.3f;
+	protected boolean scrolls = false;
 
 	public Stage(){
 		clearOut();
@@ -132,5 +131,7 @@ public abstract class Stage {
 	public float getA(){ return a; }
 	public float getWind() { return wind; }
 	public float getGravity() { return gravity; }
+	public float getDispX() { return dispX; }
+	public boolean scrolls() { return scrolls; }
 
 }

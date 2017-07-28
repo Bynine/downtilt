@@ -23,7 +23,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/**
 	 * MUST BE ON before making a jar/releasing!
 	 */
-	private static boolean release = true;
+	private static boolean release = false;
 	
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer));
@@ -31,7 +31,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
-	private static WorldMap challengeProgression;
+	private static Adventure activeAdventure;
 	private static GameState gameState = GameState.MENU;
 	private static InputHandlerPlayer primaryInputHandler = null;
 	private static float volume	= 1f;
@@ -48,10 +48,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.begin();
 		MapHandler.begin();
 
-		Menu.begin();
-		DebugMenu.begin();
-		MainMenu.begin();
-		challengeProgression = new WorldMap();
+		Menu.initialize();
+		DebugMenu.initialize();
+		MainMenu.initialize();
+		activeAdventure = new Adventure();
 
 	}
 
@@ -92,7 +92,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	private void updateGame(){
-		challengeProgression.update();
+		activeAdventure.update();
 		if (waitTimer.timeUp()) MapHandler.updateInputs();
 		if (!paused){
 			MapHandler.activeRoom.update(deltaTime);
@@ -119,6 +119,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void pauseGame() {
+		if (paused) new SFX.Unpause().play();
+		else new SFX.Pause().play();
 		paused = !paused;
 	}
 
@@ -136,8 +138,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 		debugToggle = debug;
 	}
 
-	public static void startNewChallenge(List<Fighter> newPlayers, int startChallenge){
-		challengeProgression = new WorldMap(startChallenge);
+	public static void startNewChallenge(List<Fighter> newPlayers, int initialChallenge){
+		activeAdventure = new Adventure(initialChallenge);
 		gameState = GameState.GAME;
 		playerList.clear();
 		paused = false;
@@ -153,17 +155,21 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startDebugMenu(){
-		getChallenge().getStage().getMusic().stop();
-		gameState = GameState.DEBUG;
+		toMenu(GameState.DEBUG);
 	}
 
 	public static void returnToMenu(){
+		toMenu(GameState.MENU);
+	}
+	
+	private static void toMenu(GameState gs){
 		getChallenge().getStage().getMusic().stop();
-		gameState = GameState.MENU;
+		MainMenu.begin();
+		gameState = gs;
 	}
 
 	public static Challenge getChallenge(){
-		return challengeProgression.getActiveChallenge();
+		return activeAdventure.getActiveChallenge();
 	}
 
 	public enum GameState{

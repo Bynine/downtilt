@@ -14,7 +14,7 @@ public class Stage_Mushroom extends Stage {
 	public Stage_Mushroom(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
-		name = "STANDARD";
+		name = "MUSHROOMS";
 	}
 
 	public TiledMap getMap() {

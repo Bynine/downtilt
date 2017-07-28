@@ -28,6 +28,7 @@ public class Combo {
 		if (id == knockIntoID || !moveIDsUsed.contains(id)){
 			playCorrespondingSound();
 			rank++;
+			DowntiltEngine.getChallenge().updateLongestCombo(rank);
 			moveIDsUsed.add(id);
 		}
 	}

@@ -16,8 +16,8 @@ vec3 setColor(vec3 colorVec, float r, float g, float b){
 
 void main() {
         vec3 color = texture2D(u_texture, v_texCoords).rgb * v_color;
-        float oldR = color.r;
-        color.r = color.g;
-        color.g = oldR;
+        float oldG = color.g;
+        color.g = color.b;
+        color.b = oldG;
         gl_FragColor = vec4(color, texture2D(u_texture, v_texCoords).a);
 }

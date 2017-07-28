@@ -20,5 +20,6 @@ public class EnemyRepo {
 	public static final EnemyType swarm = new EnemyType(Fly.Swarm.class, Brain.FlyBrain.class);
 	
 	public static final EnemyType heavy = new EnemyType(Heavy.class, Brain.HeavyBrain.class);
+	public static final EnemyType fatheavy = new EnemyType(Heavy.class, Brain.HeavyBrain.class, EnemyType.PowerUp.ALL);
 
 }

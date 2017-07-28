@@ -17,7 +17,7 @@ public class Raindrop extends Entity {
 		super(posX, posY);
 		setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindrop.png"))));
 		gravity = -1.5f;
-		airFrictionX = 0.996f;
+		airFrictionX = 0.999f;
 		collision = Collision.CREATURE;
 	}
 	
@@ -29,6 +29,10 @@ public class Raindrop extends Entity {
 			if (!thinPlatform && Intersector.overlaps(thisR, r) && thisR != r && !toRemove) splish();
 		}
 		return false;
+	}
+	
+	void handleWind(){
+		velocity.x = MapHandler.getRoomWind() * 30;
 	}
 	
 	private void splish(){
