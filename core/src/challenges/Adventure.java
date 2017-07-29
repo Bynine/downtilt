@@ -22,7 +22,7 @@ public class Adventure {
 	 */
 	private void initializeChallengeList(){
 		if (DowntiltEngine.debugOn()) {
-			challengeList.add(0, new ChallengeNorm(new Stage_Truck(), waveDebug));
+			challengeList.add(0, new ChallengeEndless(new Stage_Boss(), waveDebug));
 		}
 		else {
 			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
@@ -50,8 +50,9 @@ public class Adventure {
 	 */
 
 	private List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 7, 1, 30))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 6, 3, 120))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy,
+					EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb), 
+					EnemySpawner.ENDLESS, 5, 50))
 			));
 	private List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 2, 1, 60))
@@ -81,14 +82,17 @@ public class Adventure {
 	private List<Wave> waveSpace = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 6, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.fly), 6, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.basic, EnemyRepo.basic), 8, 4, 20))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.fatheavy, EnemyRepo.shoot), 3, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.basic), 8, 4, 20))
 			));
 	private List<Wave> waveSky = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 6, 4, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 6, 40))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 3, 2, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy), 18, 3, 30))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 6, 40))
+			));
+	private List<Wave> waveBoss = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy,
+					EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb), 
+					EnemySpawner.ENDLESS, 5, 50))
 			));
 
 	/**
@@ -102,6 +106,7 @@ public class Adventure {
 			,new ChallengeNorm(new Stage_Mushroom(), waveMushroom)
 			,new ChallengeNorm(new Stage_Space(), waveSpace)
 			,new ChallengeNorm(new Stage_Sky(), waveSky)
+			,new ChallengeEndless(new Stage_Boss(), waveBoss)
 			));
 
 	public Challenge getActiveChallenge(){

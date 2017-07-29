@@ -15,7 +15,8 @@ class DebugMenu extends Menu {
 
 	private static List<PlayerType> playableCharacters = new ArrayList<PlayerType>(Arrays.asList(
 			new PlayerType(Hero.class), new PlayerType(Basic.class),
-			new PlayerType(Shoot.class), new PlayerType(Fly.class)
+			new PlayerType(Shoot.class), new PlayerType(Fly.class),
+			new PlayerType(Heavy.class), new PlayerType(Basic.Bomb.class)
 			));
 	private static MenuOption<PlayerType> p1Char = new MenuOption<PlayerType>(playableCharacters);
 	private static MenuOption<PlayerType> p2Char = new MenuOption<PlayerType>(playableCharacters);
@@ -26,7 +27,7 @@ class DebugMenu extends Menu {
 			0, 1, 2, 3, 4
 			));
 	private static MenuOption<Boolean> debug = new MenuOption<Boolean>(Arrays.asList(
-			false, true
+			true, false
 			));
 	private static MenuOption<String> choices = new MenuOption<String>(Arrays.asList("STAGE", "P1CHAR", "P2CHAR", "PLAYERS", "DEBUG"));
 	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, challengeNumber, p1Char, p2Char, players, debug));
@@ -43,7 +44,7 @@ class DebugMenu extends Menu {
 		if (DowntiltEngine.getPrimaryInputHandler().flickRight())	handleCursor(1, options,choices);
 		if (DowntiltEngine.getPrimaryInputHandler().flickUp())		choices.moveCursor(-1);
 		if (DowntiltEngine.getPrimaryInputHandler().flickDown())	choices.moveCursor(1);
-		if (DowntiltEngine.getPrimaryInputHandler().taunt())		start();
+		if (DowntiltEngine.getPrimaryInputHandler().attackHold())	start();
 
 		try { draw(); }
 		catch (Exception e) { System.out.println(e); }

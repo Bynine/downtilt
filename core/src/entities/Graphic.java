@@ -212,5 +212,70 @@ public abstract class Graphic extends Entity{
 		}
 
 	}
+	
+	public static class Fire extends Graphic {
+		private static final TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/fire.png")));
+		private final Hittable user;
+		private final static int dispX = -24;
+		public Fire(Hittable user, int dur) {
+			super(user.getPosition().x + dispX, user.getPosition().y, dur);
+			this.user = user;
+			image = new Sprite(tex);
+			updatePosition();
+			layer = Layer.BACKGROUND;
+		}
+		
+		void updatePosition(){
+			position.set(user.getPosition());
+			position.x += dispX;
+			if (duration.timeUp()) setRemove();
+		}
+
+	}
+	
+	public static class Steam extends Graphic {
+		private static final TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/steam.png")));
+		private final Hittable user;
+		private final static int dispY = -32;
+		public Steam(Hittable user, int dur) {
+			super(user.getPosition().x, user.getPosition().y + dispY, dur);
+			this.user = user;
+			image = new Sprite(tex);
+			updatePosition();
+			layer = Layer.BACKGROUND;
+		}
+		
+		void updatePosition(){
+			position.set(user.getPosition());
+			position.y += dispY;
+			if (duration.timeUp()) setRemove();
+		}
+
+	}
+	
+	public static class Gust extends Graphic {
+		private static final TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/gust.png")));
+		private final Fighter user;
+		private int dispX = 36;
+		private final int dispY = -12;
+		public Gust(Fighter user, int dur) {
+			super(user.getPosition().x, user.getPosition().y, dur);
+			this.user = user;
+			image = new Sprite(tex);
+			if (user.getDirection() == Direction.LEFT){
+				dispX = (int) (-6 - user.getImage().getWidth());
+			}
+			updatePosition();
+		}
+		
+		void updatePosition(){
+			position.set(user.getPosition());
+			position.x += dispX;
+			position.y += dispY;
+			image.setFlip(user.getImage().isFlipX(), false);
+			if (duration.timeUp() || !user.isAttacking()) setRemove();
+		}
+
+	}
 
 }

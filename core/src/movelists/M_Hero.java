@@ -280,7 +280,6 @@ public class M_Hero extends MoveList_Advanced{
 		m.eventList.addActionCircle(push, start, end - 4);
 		m.eventList.addActionCircle(fini, end - 4, end - 2);
 		m.eventList.addVelocityChange(user, end, 0, 0);
-		m.setHelpless();
 		return m;
 	}
 

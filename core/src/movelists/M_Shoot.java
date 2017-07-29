@@ -38,7 +38,7 @@ public class M_Shoot extends MoveList {
 	@Override
 	public Move nAir() {
 		int frames = 2;
-		int frame = 30;
+		int frame = 40;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/nair.png", frames, frame);
@@ -60,6 +60,7 @@ public class M_Shoot extends MoveList {
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/shoot/ncharge.png", frames, frame);
 		m.setStopsInAir();
+		m.eventList.addTremble(m, 0, frame * 2);
 		m.eventList.addNewEntity(frame * 2,
 				user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 11.5f, 3.6f

@@ -49,4 +49,8 @@ public class Wave {
 		baseKilled = numKilled;
 	}
 
+	public boolean isEndless() {
+		return fSList.get(0).getAmount() == EnemySpawner.ENDLESS;
+	}
+
 }

@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import entities.Boss;
 import entities.Entity;
 import entities.Fighter;
 import entities.Hittable;
@@ -138,21 +139,21 @@ public class GraphicsHandler {
 		font.setColor(1, 1, 1, 1);
 
 		renderer.setView(cam);
-		int numLayers = MapHandler.activeMap.getLayers().getCount() - 2;  // render tiles
+		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
 		arr = new int[numLayers];
 		for (int i = 0; i < arr.length; ++i) {
 			arr[i] = i + 2;
 		}
 		renderer.render(arr);
 		renderer.getBatch().setShader(null);
-
+		
 		batch.begin();  // render fg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.FOREGROUND) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
 		batch.begin(); 
-		arr = new int[]{numLayers-1};  // render front
+		arr = new int[]{numLayers - 0, numLayers - 1};  // render front
 		renderer.render(arr);
 		batch.end();
 
@@ -201,6 +202,10 @@ public class GraphicsHandler {
 				if (h instanceof Fighter) ((Fighter)e).setHitstunImage();
 				batch.setShader(hitstunShader);
 			}
+		}
+		if (e instanceof Boss && DowntiltEngine.debugOn()){
+			Boss b = (Boss) e;
+			font.draw(batch, b.getHealth() + "", b.getPosition().x, b.getPosition().y + b.getImage().getHeight());
 		}
 		batch.draw(e.getImage(), e.getPosition().x, e.getPosition().y);
 		if (drawShield) batch.draw(defend, e.getCenter().x - 16, e.getCenter().y - 16);

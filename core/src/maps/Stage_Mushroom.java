@@ -32,5 +32,9 @@ public class Stage_Mushroom extends Stage {
 	public Vector2 getStartPosition() {
 		return new Vector2(23 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
 	}
+	
+	public Vector2 getCenterPosition(){
+		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
+	}
 
 }

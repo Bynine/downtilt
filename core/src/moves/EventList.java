@@ -116,4 +116,8 @@ public class EventList {
 		effectList.add(new GraphicEffect(user, start, end, g));
 	}
 
+	public void addTremble(Move move, int start, int end) {
+		effectList.add(new Effect.Tremble(move, start, end));
+	}
+
 }

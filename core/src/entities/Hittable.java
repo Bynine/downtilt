@@ -35,7 +35,7 @@ public abstract class Hittable extends Entity {
 	protected float baseHitSpeed = -0.8f;
 	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 2.2f, baseArmor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
-	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 8f;
+	protected float jumpStrength = 5f, doubleJumpStrength = 8.5f, dashStrength = 0f;
 	protected float walkAcc = 0.5f, runAcc = 0.75f, airAcc = 0.25f, jumpAcc = 0.54f;
 	protected float wallJumpStrengthX = 8f, wallJumpStrengthY = 7.2f;
 	protected float wallSlideSpeed = -1f;
@@ -141,9 +141,13 @@ public abstract class Hittable extends Entity {
 		takeKnockIntoKnockback(knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
 		hurtler.knockIntoTimer.reset();
 		knockIntoTimer.reset();
-		if (!(this instanceof SwitchButton)) hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
+		setKnockIntoVelocity(hurtler);
 		addToCombo(Combo.knockIntoID);
 		hurtler.knockInto();
+	}
+	
+	protected void setKnockIntoVelocity(Hittable hurtler){
+		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
 	
 	protected void knockInto(){
@@ -154,7 +158,7 @@ public abstract class Hittable extends Entity {
 		/* */
 	}
 
-	private void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
+	protected void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
 		knockbackHelper(knockback, DAM, hitstun, knockbackIntensity(velocity) < knockbackIntensity(knockback), HitstunType.NORMAL);
 	}
 

@@ -190,7 +190,8 @@ public abstract class Brain{
 		
 		void chooseAttack(){
 			if		(shouldAttack(0.02, 70,  true))								performJump(performJump);
-			else if (shouldAttack(0.08, 50, false))								attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.03, 40,  false))							attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.07, 50,  true))								attackPlayer(InputHandler.commandAttack);
 			else if (shouldAttack(0.08, 30,  true))								attackPlayer(InputHandler.commandSpecial);
 			else if (shouldAttack(0.04, 40, 70, false)) 						attackPlayer(InputHandler.commandCharge);
 		}
@@ -220,8 +221,9 @@ public abstract class Brain{
 		
 		void chooseAttack(){
 			if		(shouldAttack(0.04, 70,  true))		performJump(performJump);
-			else if (shouldAttack(0.22, 25,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandAttack);
-			else if (shouldAttack(0.08, 30,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandCharge);
+			else if (shouldAttack(0.18, 25,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.08, 25,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandCharge);
+			else if (shouldAttack(0.08, 30,  false) && !pack.isGrounded)			attackPlayer(InputHandler.commandTaunt);
 		}
 		
 		boolean checkPerformJump(){

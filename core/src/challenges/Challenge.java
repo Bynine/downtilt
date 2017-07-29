@@ -62,11 +62,11 @@ public abstract class Challenge {
 
 	public void update(){
 		activeWave.update(DowntiltEngine.getDeltaTime());
-		if (activeWave.getNumEnemies() == 0) {
+		if (activeWave.getNumEnemies() == 0 && !activeWave.isEndless()) {
 			if (currWaves.size() > 0) nextWave();
-			else finished = true;
+			else succeedChallenge();
 		}
-		if (inFailState()) endChallenge();
+		if (inFailState()) failChallenge();
 	}
 	
 	protected boolean inFailState(){
@@ -85,9 +85,13 @@ public abstract class Challenge {
 	/**
 	 * Called if all players die
 	 */
-	public void endChallenge(){
+	public void failChallenge(){
 		new SFX.Error().play();
 		startChallenge();
+	}
+	
+	public void succeedChallenge(){
+		finished = true;
 	}
 
 	protected Stage getRoomByRound(int position){

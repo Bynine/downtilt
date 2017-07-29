@@ -96,7 +96,7 @@ public abstract class Entity {
 		position.y += velocity.y;
 	}
 
-	final void updateImagePosition(int deltaTime){
+	void updateImagePosition(int deltaTime){
 		image.setX(position.x);
 		image.setY(position.y);
 	}
@@ -276,7 +276,7 @@ public abstract class Entity {
 		image.setY(y);
 	}
 
-	private final float aboveGround = 2;
+	private final float aboveGround = 1;
 	public boolean isGrounded(){ 
 		return doesCollide(position.x, position.y - aboveGround); 
 	}

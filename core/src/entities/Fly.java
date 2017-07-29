@@ -35,7 +35,7 @@ public class Fly extends Fighter {
 		walkSpeed = 1f;
 		airSpeed = 4.2f;
 		airAcc = 0.24f;
-		friction = 0.95f;
+		friction = 0.98f;
 		gravity = -0.15f;
 		jumpStrength = 3.2f;
 		jumpAcc = 0.2f;
@@ -50,7 +50,7 @@ public class Fly extends Fighter {
 	}
 	
 	public float getGravity() { 
-		if (!hitstunTimer.timeUp()) return -0.35f;
+		if (!hitstunTimer.timeUp() || state == State.HELPLESS) return -0.35f;
 		else return gravity; 
 		}
 	
@@ -62,6 +62,11 @@ public class Fly extends Fighter {
 	
 	public boolean tryCharge(){
 		startAttack(new IDMove(moveList.nCharge(), 0));
+		return true;
+	}
+	
+	public boolean tryTaunt(){
+		startAttack(moveList.selectTaunt()); 
 		return true;
 	}
 	

@@ -114,7 +114,7 @@ public abstract class Hazard extends Entity {
 		public TruckHead(float posX, float posY) { 
 			super(posX, posY); 
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/bounce.png"))));
-			h1 = new HazardHitbox(this, 5.5f, 5.0f, 20, 45, 0, 0, 24, new SFX.HeavyHit());
+			h1 = new HazardHitbox(this, 5.5f, 5.0f, 20, 55, 0, 0, 24, new SFX.HeavyHit());
 			h1.setRefresh(20);
 			for (ActionCircle ac: getActionCircles()) MapHandler.addActionCircle(ac);
 			gravity = 0;

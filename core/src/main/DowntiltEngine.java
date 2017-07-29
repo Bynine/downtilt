@@ -23,7 +23,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/**
 	 * MUST BE ON before making a jar/releasing!
 	 */
-	private static boolean release = false;
+	private static boolean release = true;
 	
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer));

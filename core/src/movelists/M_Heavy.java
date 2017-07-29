@@ -37,22 +37,7 @@ public class M_Heavy extends MoveList {
 
 	@Override
 	public Move slide() {
-		int frames = 4;
-		int frame = 14;
-
-		Move m = new Move(user, frames * frame);
-		m.setContinueOnLanding();
-		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/heavy/slide.png", frames, frame);
-		Hitbox early = new Hitbox(user, 3.1f, 2.6f, 11, 40, 16, -12, 24, new SFX.MidHit());
-		Hitbox late  = new Hitbox(user, 2.0f, 2.0f, 7, 40, 16, -12, 24, new SFX.MidHit());
-		new ActionCircleGroup(Arrays.asList(early, late));
-		m.eventList.addConstantVelocity(user, 0, 14, 0, Action.ChangeVelocity.noChange);
-		m.eventList.addVelocityChange(user, 14, 5, Action.ChangeVelocity.noChange);
-		m.eventList.addConstantVelocity(user, 16, 30, 3, Action.ChangeVelocity.noChange);
-		m.eventList.addActionCircle(early, 16, 20);
-		m.eventList.addActionCircle(late, 21, 30);
-		return m;
+		return nWeak();
 	}
 
 	@Override

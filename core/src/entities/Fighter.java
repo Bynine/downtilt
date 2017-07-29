@@ -95,7 +95,15 @@ public abstract class Fighter extends Hittable{
 		}
 
 		super.update(rectangleList, entityList, deltaTime);
+		if (isTrembling()){
+			if (DowntiltEngine.getDeltaTime() % 2 == 0 && !doesCollide(position.x + 2, position.y)) position.set(position.x + 2, position.y);
+			else if (!doesCollide(position.x - 2, position.y)) position.set(position.x - 2, position.y);
+		}
 		prevStickX = stickX;
+	}
+
+	private boolean isTrembling(){
+		return (!stunTimer.timeUp() || getActiveMove() != null && getActiveMove().move.doesTremble());
 	}
 
 	private void handleThrow(){
@@ -141,8 +149,10 @@ public abstract class Fighter extends Hittable{
 		if (getActiveMove().move.doesStopInAir() && (!isGrounded() || !inGroundedState()) ) getActiveMove().move.setDone();
 		if (getActiveMove().move.isAerial() && isGrounded()) getActiveMove().move.setDone();
 		if (getActiveMove().move.done()) {
-			if (getActiveMove().move.causesHelpless()) state = State.HELPLESS;
-			endAttack();
+			if (getActiveMove().move.causesHelpless()){ 
+				state = State.HELPLESS;
+				endAttack();
+			}
 		}
 	}
 
@@ -769,7 +779,7 @@ public abstract class Fighter extends Hittable{
 	public boolean isRunning() { return state == State.RUN || state == State.DASH; }
 	public boolean isInvincible(){ return hitstunTimer.getCounter() == 0 || !invincibleTimer.timeUp(); }
 	public boolean inputQueueTimeUp(){ return inputQueueTimer.timeUp(); }
-	public boolean attackTimeUp(){ return attackTimer.timeUp(); }
+	public boolean isAttacking(){ return attackTimer.timeUp(); }
 	public boolean isGuarding() { return isGrounded() && !guardTimer.timeUp(); }
 	public boolean isCharging() {
 		if (null == getInputHandler()) return false;

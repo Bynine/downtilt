@@ -11,12 +11,12 @@ import entities.Graphic;
 public abstract class Effect extends Action{
 
 	protected int start, end;
-	
+
 	Effect(int start, int end){
 		this.start = start;
 		this.end = end;
 	}
-	
+
 	public int getStart(){ return start; }
 	public int getEnd() { return end; }
 	public void moveForward(){
@@ -27,7 +27,7 @@ public abstract class Effect extends Action{
 		return position > start && position < end;
 	}
 	abstract void finish();
-	
+
 	public static class ConstantVelocity extends Effect{
 		float velX, velY;
 		Fighter user;
@@ -48,13 +48,13 @@ public abstract class Effect extends Action{
 		}
 		void finish() { /* */ }
 	}
-	
+
 	public static class ConstantVelocityAngled extends Effect {
 		final Fighter user;
 		final float velocity;
 		boolean firstTime = true;
 		Vector2 newVelocity, angle;
-		
+
 		ConstantVelocityAngled(Fighter user, int start, int end, float velocity){
 			super(start, end);
 			this.user = user;
@@ -72,7 +72,7 @@ public abstract class Effect extends Action{
 		}
 		void finish() { /* */ }
 	}
-	
+
 	public static class Charge extends Effect{
 		private float heldCharge = 1;
 		private final float chargeSpeed;
@@ -106,7 +106,7 @@ public abstract class Effect extends Action{
 		}
 		void finish() { /* */ }
 	}
-	
+
 	public static class Armor extends Effect {
 		private final Move move;
 		private final float armor;
@@ -122,7 +122,7 @@ public abstract class Effect extends Action{
 			move.setArmor(0);
 		}
 	}
-	
+
 	public static class GraphicEffect extends Effect {
 		final Graphic g;
 		boolean made = false;
@@ -139,5 +139,23 @@ public abstract class Effect extends Action{
 			}
 		}	
 	}
-	
+
+	public static class Tremble extends Effect {
+		final Move m;
+
+		Tremble(Move m, int start, int end) {
+			super(start, end);
+			this.m = m;
+			m.setTremble(true);
+		}
+
+		void finish() { 
+			m.setTremble(false);
+		}
+
+		void performAction() {
+
+		}	
+	}
+
 }

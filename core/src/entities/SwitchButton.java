@@ -26,6 +26,10 @@ public class SwitchButton extends Hittable {
 	void updatePosition(){
 		/* doesn't move */
 	}
+	
+	protected void setKnockIntoVelocity(Hittable hurtler){
+		/* */
+	}
 
 	protected void knockbackHelper(Vector2 knockback, float DAM, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		if (cantBeHit.timeUp()) changeBlocks();

@@ -40,7 +40,7 @@ public class Stage_Sky extends Stage {
 	public float getWind(){
 		float windStrength = -0.24f;
 		int directionTiming = 1000;
-		int windDuration = 240;
+		int windDuration = 210;
 		int windTiming = 500;
 		
 		int gx = (DowntiltEngine.getDeltaTime() % directionTiming);
