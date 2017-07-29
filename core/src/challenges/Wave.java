@@ -52,5 +52,9 @@ public class Wave {
 	public boolean isEndless() {
 		return fSList.get(0).getAmount() == EnemySpawner.ENDLESS;
 	}
+	
+	public void setEndless(){
+		for (EnemySpawner fs: fSList) fs.setToEndless();
+	}
 
 }

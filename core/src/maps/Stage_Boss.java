@@ -1,7 +1,6 @@
 package maps;
 
 import main.GlobalRepo;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
@@ -9,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Boss extends Stage {
 
 	public Stage_Boss(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/lock.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
 		name = "BOSS";
 	}
@@ -19,11 +18,12 @@ public class Stage_Boss extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(21 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
 	}
 	
+	@Override
 	public Vector2 getCenterPosition(){
-		return new Vector2(24 * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
+		return new Vector2(21.5f * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
 	}
 
 }

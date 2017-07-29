@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class SwitchButton extends Hittable {
 
-	static Timer cantBeHit = new Timer(180);
+	static Timer cantBeHit = new Timer(90);
 	private TextureRegion green = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockgreen.png")));
 	private TextureRegion red = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockred.png")));
 	private TextureRegion blue = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/switchblockblue.png")));

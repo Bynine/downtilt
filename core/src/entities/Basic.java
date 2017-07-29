@@ -11,6 +11,7 @@ import main.MapHandler;
 import movelists.M_Basic;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -109,7 +110,7 @@ public class Basic extends Fighter {
 		}
 
 		protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
-			if (!timerList.contains(kaboom) && hitstun > (30 + Math.random() * 30)) timerList.add(kaboom);
+			if (!timerList.contains(kaboom) && hitstun > (45 + Math.random() * 20)) timerList.add(kaboom);
 			super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
 		}
 
@@ -117,6 +118,8 @@ public class Basic extends Fighter {
 			kaboom.setEndTime(time);
 			timerList.add(kaboom);
 		}
+		
+		public Color getColor() { return new Color(0.5f, 0.6f, 0.6f, 1); }
 
 	}
 

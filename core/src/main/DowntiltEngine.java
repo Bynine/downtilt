@@ -23,10 +23,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/**
 	 * MUST BE ON before making a jar/releasing!
 	 */
-	private static boolean release = true;
+	private static boolean release = false;
 	
-	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0);
-	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer));
+	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0);
+	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
@@ -109,13 +109,15 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void causeHitlag(int length){
-		hitlagTimer.setEndTime(length);
-		hitlagTimer.reset();
+		hitlagTimer.reset(length);
 	}
 
 	public static void wait(int length){
-		waitTimer.setEndTime(length);
-		waitTimer.reset();
+		waitTimer.reset(length);
+	}
+	
+	public static void slow(int length){
+		slowTimer.reset(length);
 	}
 
 	public static void pauseGame() {
@@ -126,6 +128,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 	public static void changeRoom (Stage stage) {
 		deltaTime = 0;
+		slowTimer.end();
 		for (Fighter player: getPlayers()){
 			player.setPosition(stage.getStartPosition());
 		}
@@ -181,8 +184,15 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static boolean isPaused() { return paused; }
 	public static List<Fighter> getPlayers(){ return playerList; }
 	public static boolean outOfHitlag(){ return hitlagTimer.timeUp(); }
+	public static boolean isSlowed(){ return !slowTimer.timeUp(); }
 	public static boolean justOutOfHitlag() { return hitlagTimer.timeJustUp(); }
 	public static GameState getGameState() { return gameState; }
+	public static boolean entityIsPlayer(Entity en){
+		for (Fighter player: DowntiltEngine.getPlayers()){
+			if (en.equals(player)) return true;
+		}
+		return false;
+	}
 	public static boolean musicOn(){
 		return musicToggle || release;
 	}

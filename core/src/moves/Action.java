@@ -6,6 +6,7 @@ import entities.Basic;
 import entities.Entity;
 import entities.Fighter;
 import entities.Explosion;
+import main.DowntiltEngine;
 import main.MapHandler;
 import main.SFX;
 import moves.Effect.Charge;
@@ -175,5 +176,20 @@ public abstract class Action {
 		}
 		
 	}
+	
+	public static class Slow extends Action {
+		final int time;
+		
+		public Slow( int time){
+			this.time = time;
+		}
+
+		void performAction() {
+			new SFX.Slow().play();
+			DowntiltEngine.slow(time);
+		}
+		
+	}
+
 	
 }

@@ -65,11 +65,21 @@ public abstract class Hittable extends Entity {
 		if (canMove()) super.updatePosition();
 	}
 
-	void handleTouchHelper(Entity e){
-		super.handleTouchHelper(e);
-		if (e instanceof Hittable){
-			checkPushAway((Hittable) e);
-			checkHitByHurtlingObject((Hittable) e);
+	void handleTouchHelper(Entity en){
+		super.handleTouchHelper(en);
+		if (isTouching(en, 16) && en instanceof BossEye) {
+			BossEye bossEye = (BossEye)en;
+			if (bossEye.isOpen()){
+				bossEye.bounce(this);
+			}
+			else{
+				if (this instanceof Fighter) MapHandler.kill((Fighter)this);
+				else setRemove();
+			}
+		}
+		if (en instanceof Hittable){
+			checkPushAway((Hittable) en);
+			checkHitByHurtlingObject((Hittable) en);
 		}
 	}
 
@@ -102,7 +112,7 @@ public abstract class Hittable extends Entity {
 			else getHitByHurtlingObject(hurtler);
 		}
 	}
-	
+
 	protected boolean teamCheck(Hittable hi){
 		return getTeam() == hi.getTeam();
 	}
@@ -145,11 +155,11 @@ public abstract class Hittable extends Entity {
 		addToCombo(Combo.knockIntoID);
 		hurtler.knockInto();
 	}
-	
+
 	protected void setKnockIntoVelocity(Hittable hurtler){
 		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
-	
+
 	protected void knockInto(){
 		/* */
 	}
@@ -320,12 +330,12 @@ public abstract class Hittable extends Entity {
 	public void perfectParry(){
 		/* */
 	}
-	
+
 	protected void setTimer(Timer t, int i){
 		t.setEndTime(i);
 		t.reset();
 	}
-	
+
 	public void setPermaPower() { permaPower = true; }
 	public void setPermaDefense() { permaDefense = true; }
 	public void setPermaSpeed() { permaSpeed = true; }

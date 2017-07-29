@@ -160,6 +160,15 @@ public abstract class Hurlable extends Hittable {
 			super(posX, posY);
 			if (user.getDirection() == Direction.LEFT) posX += user.getImage().getWidth()/4;
 			else posX += 3 * user.getImage().getWidth()/4;
+			setup(team);
+		}
+		
+		public ShootBall(int team, float posX, float posY) {
+			super(posX, posY);
+			setup(team);
+		}
+		
+		private void setup(int team){
 			this.team = team;
 			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
 			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
@@ -172,7 +181,7 @@ public abstract class Hurlable extends Hittable {
 			baseHurtleBK = minSpeedForHit;
 			baseKBG = 3.5f;
 			touchRadius = 16;
-			life.setEndTime(240);
+			life.setEndTime(120);
 		}
 
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
@@ -188,11 +197,13 @@ public abstract class Hurlable extends Hittable {
 		private void switchTeam(Hittable user){
 			if (user.getTeam() == GlobalRepo.GOODTEAM) {
 				team = GlobalRepo.BADTEAM;
+				life.reset();
 				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
 				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 4, 1, 6, PlayMode.LOOP);
 			}
 			else if (user.getTeam() == GlobalRepo.BADTEAM) {
 				team = GlobalRepo.GOODTEAM;
+				life.reset();
 				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
 				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
 			}

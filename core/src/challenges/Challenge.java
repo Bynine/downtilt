@@ -163,5 +163,9 @@ public abstract class Challenge {
 	public void updateLongestCombo(int combo){
 		if (combo > longestCombo) longestCombo = combo;
 	}
+	
+	public void rotateEyes(){
+		/* */
+	}
 
 }

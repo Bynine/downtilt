@@ -30,7 +30,7 @@ public class Stage_Truck extends Stage {
 	}
 	
 	public Vector2 getCenterPosition(){
-		return new Vector2(24 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(24 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
 	}
 
 	public float getWind(){

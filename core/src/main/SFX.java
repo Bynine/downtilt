@@ -40,6 +40,7 @@ public abstract class SFX {
 	public static class MeatyHit extends SFX{ public MeatyHit(){ setSFX("/melee/blow.wav"); } }
 	public static class HeavyHit extends SFX{ public HeavyHit(){ setSFX("/melee/heavy2.wav"); } }
 	public static class SharpHit extends SFX{ public SharpHit(){ setSFX("/melee/shika.wav"); } }
+	public static class Slow extends SFX{ public Slow(){ setSFX("/melee/vwoop.wav"); } }
 	public static class LaserFire extends SFX{ public LaserFire(){ setSFX("/melee/pew.wav"); } }
 	public static class ChargeLaserFire extends SFX{ public ChargeLaserFire(){ setSFX("/melee/vwoop.wav"); } }
 	public static class Explode extends SFX{ public Explode(){ setSFX("/melee/fire.wav"); } }

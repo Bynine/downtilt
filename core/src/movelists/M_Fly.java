@@ -100,7 +100,7 @@ public class M_Fly extends MoveList {
 	private Move roll(){
 		Move m = new Move(user, 48);
 		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/fly/jump.png", 2, 16);
+		m.setAnimation("sprites/fighters/fly/jump.png", 1, 1);
 		m.eventList.addConstantVelocity(user, 2, 20, -4, getUpYSpeed);
 		return m;
 	}

@@ -11,6 +11,7 @@ public class ChallengeEndless extends Challenge {
 	 */
 	public ChallengeEndless(Stage stage, List<Wave> waves){
 		super(stage, waves);
+		for (Wave w: waves) w.setEndless();
 	}
 	
 	public String getWaveCounter() {

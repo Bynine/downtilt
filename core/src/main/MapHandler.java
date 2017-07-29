@@ -44,8 +44,7 @@ public class MapHandler {
 		Iterator<Entity> entityIter = activeRoom.getEntityList().iterator();
 		while (entityIter.hasNext()) {
 			Entity en = entityIter.next();
-			boolean shouldUpdate = DowntiltEngine.outOfHitlag() || en instanceof Graphic;
-			if (shouldUpdate) en.update(rectangleList, activeRoom.getEntityList(), DowntiltEngine.getDeltaTime()); 
+			if (shouldUpdate(en)) en.update(rectangleList, activeRoom.getEntityList(), DowntiltEngine.getDeltaTime()); 
 			Rectangle boundary = new Rectangle(0, 0, mapWidth, mapHeight);
 			Rectangle cameraBoundary = GraphicsHandler.getCameraBoundary();
 			boolean toRemove = en.toRemove() || en.isOOB(boundary) || (en instanceof Fighter && en.isOOB(cameraBoundary));
@@ -62,6 +61,16 @@ public class MapHandler {
 				else entityIter.remove();
 			}
 		}
+	}
+	
+	private static boolean shouldUpdate(Entity en){
+		int slowMod = 8;
+		
+		if (en instanceof Hittable){
+			boolean slow = !DowntiltEngine.entityIsPlayer(en);
+			if (slow && DowntiltEngine.isSlowed() && DowntiltEngine.getDeltaTime() % slowMod != 0) return false;
+		}
+		return DowntiltEngine.outOfHitlag() || en instanceof Graphic;
 	}
 
 	public static boolean kill(Fighter fi){

@@ -26,7 +26,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import entities.Boss;
 import entities.Entity;
 import entities.Fighter;
 import entities.Hittable;
@@ -44,7 +43,7 @@ public class GraphicsHandler {
 	private static TextureRegion 
 	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
 	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
-	private static ShaderProgram hitstunShader, airShader, defenseShader, powerShader, speedShader;
+	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE)), SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
 	public static final float ZOOM4X = 1/4f, ZOOM2X = 1/2f, ZOOM1X = 1/1f;
@@ -58,6 +57,7 @@ public class GraphicsHandler {
 		defenseShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/defense.glsl"));
 		powerShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/power.glsl"));
 		speedShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/speed.glsl"));
+		slowShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/slow.glsl"));
 		batch = new SpriteBatch();
 		cam.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		cam.zoom = ZOOM;
@@ -92,7 +92,10 @@ public class GraphicsHandler {
 		if (DowntiltEngine.getChallenge().getStage().scrolls()){
 			final float blackBounds = SCREENWIDTH/4;
 			if (parallaxCam.position.x == 0) parallaxCam.position.x = blackBounds;
-			if (!DowntiltEngine.isPaused()) parallaxCam.position.x += 12;
+			if (!DowntiltEngine.isPaused()) {
+				if (DowntiltEngine.isSlowed()) parallaxCam.position.x += 12/8;
+				else parallaxCam.position.x += 12;
+			}
 			if (parallaxCam.position.x + blackBounds > MapHandler.mapWidth) parallaxCam.position.x = blackBounds;
 		}
 		else{
@@ -169,22 +172,26 @@ public class GraphicsHandler {
 		batch.end();
 	}
 
-	private static void renderEntity(Entity e){
+	private static void renderEntity(Entity en){
 		boolean drawShield = false;
-		batch.setColor(e.getColor());
-		if (e instanceof Fighter) {
-			Fighter fi = (Fighter) e;
+		batch.setColor(en.getColor());
+		if (en instanceof Fighter) {
+			Fighter fi = (Fighter) en;
 			if (fi.getCombo().getRank() > 0) drawCombo(fi);
 			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
-			if (DowntiltEngine.debugOn()) drawPercentage(e);
+			if (DowntiltEngine.debugOn()) drawPercentage(en);
 
+			batch.setColor(fi.getColor());
 			float colorMod = 0.5f * fi.getPercentage() / fi.getWeight();
-			float rColor = MathUtils.clamp(1 - colorMod / 2, 0.45f, 1);
-			float gbColor = MathUtils.clamp(1 - colorMod, 0.15f, 1);
+			float rColor = MathUtils.clamp(fi.getColor().r - colorMod / 2, 0.45f, 1);
+			float gbColor = MathUtils.clamp(fi.getColor().g - colorMod, 0.15f, 1);
 			batch.setColor(rColor, gbColor, gbColor, 1);
 
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
+			
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
+			if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(fi)) batch.setShader(slowShader);
+			
 			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
 				drawRainbowAfterImage(fi, batch.getShader());
 			}
@@ -196,19 +203,15 @@ public class GraphicsHandler {
 			}
 			if (fi.isGuarding() || fi.isPerfectGuarding()) drawShield = true;
 		}
-		if (e instanceof Hittable){
-			Hittable h = (Hittable) e;
+		if (en instanceof Hittable){
+			Hittable h = (Hittable) en;
 			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) {
-				if (h instanceof Fighter) ((Fighter)e).setHitstunImage();
+				if (h instanceof Fighter) ((Fighter)en).setHitstunImage();
 				batch.setShader(hitstunShader);
 			}
 		}
-		if (e instanceof Boss && DowntiltEngine.debugOn()){
-			Boss b = (Boss) e;
-			font.draw(batch, b.getHealth() + "", b.getPosition().x, b.getPosition().y + b.getImage().getHeight());
-		}
-		batch.draw(e.getImage(), e.getPosition().x, e.getPosition().y);
-		if (drawShield) batch.draw(defend, e.getCenter().x - 16, e.getCenter().y - 16);
+		batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
+		if (drawShield) batch.draw(defend, en.getCenter().x - 16, en.getCenter().y - 16);
 		batch.setColor(1, 1, 1, 1);
 		batch.setShader(null);
 	}

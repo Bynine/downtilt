@@ -37,7 +37,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move uWeak() {
 		int frame = 8;
 		int frames = 3;
-		
+
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/uweak.png", frames, frame);
 		m.setHurtBox(25, 45, -8, Move.HURTBOXNOTSET);
@@ -263,12 +263,12 @@ public class M_Hero extends MoveList_Advanced{
 		int end = start + 16;
 		Move m = new Move(user, end + 1);
 		m.setAnimation("sprites/fighters/bomber/uspecial.png", 1, 1);
-		
+
 		Hitbox push = new Hitbox.AngleHitbox(user, 8.0f, 0.0f, 3, 0, 0, 24, new SFX.LightHit());
 		push.setMovesAheadMod(1);
 		push.setRefresh(4);
 		push.setNoReverse();
-		
+
 		Hitbox fini = new Hitbox.AngleHitbox(user, 3.0f, 3.2f, 8, 0, 0, 28, new SFX.MidHit());
 		fini.setMovesAheadMod(1);
 		fini.setNoReverse();
@@ -290,17 +290,23 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/bomber/dspecial.png", frames, frame);
 		m.setContinueOnLanding();
-		m.eventList.addArmor(m, 0, frames * frame, 4);
-		m.eventList.addUseSpecial(user, frame - 1, -4);
-		m.eventList.addVelocityChange(user, frame, -7, Action.ChangeVelocity.noChange);
-		m.eventList.addNewEntity(frame, user, (new Hurlable.Rocket(user, user.getPosition().x, user.getPosition().y)), 0, 0, user.direct()* 16, 16);
+		m.eventList.addConstantVelocity(user, 0, frame, 0, 0);
+		m.eventList.addUseSpecial(user, frame - 1, -6);
+		m.eventList.addSlow(frame, 300);
 		return m;
 	}
+
+
+	//	m.setContinueOnLanding();
+	//	m.eventList.addArmor(m, 0, frames * frame, 4);
+	//	m.eventList.addUseSpecial(user, frame - 1, -4);
+	//	m.eventList.addVelocityChange(user, frame, -7, Action.ChangeVelocity.noChange);
+	//	m.eventList.addNewEntity(frame, user, (new Hurlable.Rocket(user, user.getPosition().x, user.getPosition().y)), 0, 0, user.direct()* 16, 16);
 
 	public Move nSpecial() {
 		int frame = 10;
 		int frames = 3;
-		
+
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/fairthrow.png", frames, frame);
 		m.setContinueOnLanding();
@@ -377,7 +383,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move fAirThrow(){
 		int frame = 10;
 		int frames = 3;
-		
+
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/fairthrow.png", frames, frame);
 		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
@@ -527,7 +533,7 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 3);
 		if (null != user.getPrevMove()){
 			switch(user.getPrevMove().id){
-			
+
 			case MoveList_Advanced.IDnair: m = new Move(user, 5); break;
 			case MoveList_Advanced.IDfair: m = new Move(user, 12); break;
 			case MoveList_Advanced.IDbair: m = new Move(user, 8); break;
@@ -565,7 +571,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.eventList.addGuard(user, 0, 16);
 		return m;
 	}
-	
+
 	@Override
 	public Move parry() {
 		Move m = new Move(user, 20);
@@ -579,7 +585,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.eventList.addInvincible(user, 0, 10);
 		return m;
 	}
-	
+
 	@Override
 	public Move perfectParry() {
 		Move m = new Move(user, 30);
