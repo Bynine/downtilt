@@ -184,7 +184,12 @@ public abstract class Hittable extends Entity {
 
 	protected void knockbackHelper(Vector2 knockback, float DAM, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		takeDamage(DAM);
-		prevHitAngle = knockback.angle();
+		if (!isGrounded()) {
+			prevAerialHitAngle = knockback.angle();
+		}
+		else{
+			prevAerialHitAngle = 0;
+		}
 		if (knockbackIntensity(knockback) > 0) takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
 		if (knockbackIntensity(knockback) > tumbleBK) tumbling = true;
 	}

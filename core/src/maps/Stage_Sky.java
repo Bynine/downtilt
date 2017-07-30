@@ -15,7 +15,7 @@ public class Stage_Sky extends Stage {
 	public Stage_Sky(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/dance.mp3"));
 		setup();
-		name = "SKY CASTLE";
+		name = "CRAZY CLOUD CASTLE";
 		dispX = GlobalRepo.TILE * 3;
 	}
 

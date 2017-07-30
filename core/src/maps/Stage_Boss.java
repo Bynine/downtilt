@@ -10,7 +10,7 @@ public class Stage_Boss extends Stage {
 	public Stage_Boss(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
-		name = "BOSS";
+		name = "BIG BAD BOSS BEATDOWN";
 	}
 
 	public TiledMap getMap() {

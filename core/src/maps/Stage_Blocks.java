@@ -11,7 +11,7 @@ public class Stage_Blocks extends Stage {
 	public Stage_Blocks(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/leaf.mp3"));
 		setup();
-		name = "BLOCKS";
+		name = "PUZZLE PALACE";
 	}
 
 	public TiledMap getMap() {

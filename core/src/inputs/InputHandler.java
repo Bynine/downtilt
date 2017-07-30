@@ -27,14 +27,18 @@ public abstract class InputHandler {
 	public static final int commandCStickDown	=33;
 	public static final int commandTaunt 		=40;
 
-	Fighter fighter;
+	Fighter player;
 	public InputHandler(Fighter fighter){
-		this.fighter = fighter;
+		this.player = fighter;
+	}
+	
+	public void setPlayer(Fighter fighter){
+		this.player = fighter;
 	}
 
 	public void update(){
-		if (fighter.inputQueueTimeUp()) fighter.queuedCommand = commandNone;
-		if (!fighter.inputQueueTimeUp()) handleCommand(fighter.queuedCommand);
+		if (player.inputQueueTimeUp()) player.queuedCommand = commandNone;
+		if (!player.inputQueueTimeUp()) handleCommand(player.queuedCommand);
 	}
 
 	public abstract float getXInput();
@@ -46,19 +50,19 @@ public abstract class InputHandler {
 		boolean wasCommandAccepted = false;
 
 		wasCommandAccepted = handleActions(command);
-		if (fighter.canMove()) wasCommandAccepted = handleCanMoveActions(command);
-		if (fighter.canAct()) wasCommandAccepted = handleCanActActions(command);
-		if (fighter.canAttack()) wasCommandAccepted = handleCanAttackActions(command);
+		if (player.canMove()) wasCommandAccepted = handleCanMoveActions(command);
+		if (player.canAct()) wasCommandAccepted = handleCanActActions(command);
+		if (player.canAttack()) wasCommandAccepted = handleCanAttackActions(command);
 		
 
-		boolean shouldAddToInputQueue = !wasCommandAccepted && fighter.inputQueueTimeUp()
-				&& !stickCommands.contains(command) && !(command == commandJump && fighter.isGrounded());
+		boolean shouldAddToInputQueue = !wasCommandAccepted && player.inputQueueTimeUp()
+				&& !stickCommands.contains(command) && !(command == commandJump && player.isGrounded());
 		if (shouldAddToInputQueue) {
-			fighter.queuedCommand = command;
-			fighter.restartInputQueue();
+			player.queuedCommand = command;
+			player.restartInputQueue();
 		}
 		else if (wasCommandAccepted) {
-			fighter.queuedCommand = commandNone;
+			player.queuedCommand = commandNone;
 		}
 	}
 	
@@ -68,38 +72,38 @@ public abstract class InputHandler {
 	
 	private boolean handleActions(int command){
 		switch (command){
-		case commandStickRight:		return fighter.tryStickRight();
-		case commandStickLeft:		return fighter.tryStickLeft();
-		case commandStickUp:		return fighter.tryStickUp();
-		case commandStickDown:		return fighter.tryStickDown();
+		case commandStickRight:		return player.tryStickRight();
+		case commandStickLeft:		return player.tryStickLeft();
+		case commandStickUp:		return player.tryStickUp();
+		case commandStickDown:		return player.tryStickDown();
 		}
 		return true;
 	}
 
 	private boolean handleCanMoveActions(int command){
 		switch (command){
-		case commandAttack:			return fighter.tryNormal();
+		case commandAttack:			return player.tryNormal();
 		}
 		return true;
 	}
 
 	private boolean handleCanActActions(int command){
-		if (command == commandJump) return fighter.tryJump();
+		if (command == commandJump) return player.tryJump();
 		return true;
 	}
 
 	private boolean handleCanAttackActions(int command){
 		switch (command){
-		case commandBlock:			return fighter.tryBlock();
-		case commandAttack:			return fighter.tryNormal();
-		case commandSpecial:		return fighter.trySpecial();
-		case commandGrab:	 		return fighter.tryGrab();
-		case commandCharge: 		return fighter.tryCharge();
-		case commandTaunt:			return fighter.tryTaunt();
-		case commandCStickRight:	return fighter.tryCStickForward();
-		case commandCStickLeft:		return fighter.tryCStickBack();
-		case commandCStickUp:		return fighter.tryCStickUp();
-		case commandCStickDown:		return fighter.tryCStickDown();
+		case commandBlock:			return player.tryBlock();
+		case commandAttack:			return player.tryNormal();
+		case commandSpecial:		return player.trySpecial();
+		case commandGrab:	 		return player.tryGrab();
+		case commandCharge: 		return player.tryCharge();
+		case commandTaunt:			return player.tryTaunt();
+		case commandCStickRight:	return player.tryCStickForward();
+		case commandCStickLeft:		return player.tryCStickBack();
+		case commandCStickUp:		return player.tryCStickUp();
+		case commandCStickDown:		return player.tryCStickDown();
 		}
 		return false;
 	}

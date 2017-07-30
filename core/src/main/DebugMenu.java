@@ -24,7 +24,7 @@ class DebugMenu extends Menu {
 			1, 2
 			));
 	private static MenuOption<Integer> challengeNumber = new MenuOption<Integer>(Arrays.asList(
-			0, 1, 2, 3, 4
+			0, 1, 2, 3, 4, 5, 6, 7
 			));
 	private static MenuOption<Boolean> debug = new MenuOption<Boolean>(Arrays.asList(
 			true, false

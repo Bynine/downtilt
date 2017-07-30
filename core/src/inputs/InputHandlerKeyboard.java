@@ -128,6 +128,11 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 		return false;
 	}
 	
+	@Override
+	public String getControllerName(){
+		return "Keyboard";
+	}
+	
 	/* NOT USED */
 
 	@Override public boolean keyDown(int keycode) { return false; }

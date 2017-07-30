@@ -12,7 +12,7 @@ public class Stage_Truck extends Stage {
 	public Stage_Truck(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/lock.mp3"));
 		setup();
-		name = "BEEP BEEP";
+		name = "HIGH-SPEED HIGHWAY HOEDOWN";
 		scrolls = true;
 	}
 

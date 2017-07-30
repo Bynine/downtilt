@@ -11,7 +11,7 @@ public class Stage_Space extends Stage {
 	public Stage_Space(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/spook.mp3"));
 		setup();
-		name = "SPACE";
+		name = "SPACE SMACKDOWN";
 		dispX = GlobalRepo.TILE * 4;
 		gravity = 0.7f;
 	}

@@ -282,13 +282,13 @@ public abstract class Brain{
 			if (shouldGetUp(0.02)) getUp();
 			else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
 			else if (inVerticalAttackRange()) chooseAttack();
-			else if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
 		}
 		
 		void chooseAttack(){
-			if (shouldAttack(0.08, 50, false) && pack.distanceYFromPlayer < 0 && !pack.isGrounded) {
-				attackPlayer(InputHandler.commandAttack);
-			}
+//			if (shouldAttack(0.08, 50, false) && pack.distanceYFromPlayer < 0 && !pack.isGrounded) {
+//				attackPlayer(InputHandler.commandAttack);
+//			}
 			if (shouldAttack(0.22, 80, true))								attackPlayer(InputHandler.commandAttack);
 		}
 

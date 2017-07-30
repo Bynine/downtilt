@@ -188,6 +188,10 @@ public class GraphicsHandler {
 			batch.setColor(rColor, gbColor, gbColor, 1);
 
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
+			if (fi.getArmor() > 0) {
+				float armorAddition = fi.getArmor()/12;
+				batch.setColor(batch.getColor().r - armorAddition, batch.getColor().g - armorAddition, batch.getColor().b, batch.getColor().a);
+			}
 			
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
 			if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(fi)) batch.setShader(slowShader);

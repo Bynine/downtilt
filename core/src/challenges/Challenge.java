@@ -23,6 +23,8 @@ public abstract class Challenge {
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
 	protected boolean finished = false, started = false;
+	int soloLives = 5;
+	int coopLives = 3;
 
 	Challenge(Stage stage, List<Wave> waves){
 		this.currWaves = new ArrayList<Wave>();
@@ -35,8 +37,6 @@ public abstract class Challenge {
 	 * Called when a challenge begins.
 	 */
 	protected void startChallenge(){
-		final int soloLives = 5;
-		final int coopLives = 3;
 		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
 			if (DowntiltEngine.getPlayers().size() == 1) player.setLives(soloLives);
 			else player.setLives(coopLives);
@@ -45,7 +45,7 @@ public abstract class Challenge {
 		currWaves.clear();
 		for (Wave wave: initWaves) wave.restart();
 		currWaves.addAll(initWaves);
-		activeWave = currWaves.remove(0);
+		setActiveWave();
 		DowntiltEngine.changeRoom(stage);
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
@@ -56,8 +56,14 @@ public abstract class Challenge {
 			DowntiltEngine.wait(waitBetween);
 		}
 		
-		for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
+		for (Fighter player: DowntiltEngine.getPlayers()) {
+			player.refresh();
+		}
 		started = true;
+	}
+	
+	protected void setActiveWave(){
+		activeWave = currWaves.remove(0);
 	}
 
 	public void update(){
@@ -79,7 +85,7 @@ public abstract class Challenge {
 
 	private void nextWave(){
 		MapHandler.addEntity(new TreasureChest(startPosition.x, startPosition.y + GlobalRepo.TILE));
-		activeWave = currWaves.remove(0);
+		setActiveWave();
 	}
 
 	/**

@@ -21,16 +21,23 @@ public class M_Heavy extends MoveList {
 	@Override
 	public Move nWeak() {
 		int frames = 3;
-		int frame = 60;
+		int frame = 50;
+		int subFrame = frame/5;
+		float bkb = 5.8f;
+		float kbg = 3.2f;
+		int damage = 20;
 
 		Move m = new Move(user, frames * frame);
+		m.setHurtBox(80, 80, 0, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/heavy/nweak.png", frames, frame);
-		Hitbox early = new Hitbox(user, 5.8f, 3.2f, 20, Hitbox.SAMURAI, 42, -2, 32, new SFX.HeavyHit());
-		Hitbox late =  new Hitbox(user, 3.8f, 2.2f, 20, Hitbox.SAMURAI, 42, -2, 27, new SFX.MidHit());
-		new ActionCircleGroup(Arrays.asList(early, late));
+		Hitbox early1 = new Hitbox(user, bkb, kbg, damage, Hitbox.SAMURAI, 48, -24, 24, new SFX.HeavyHit());
+		Hitbox early2 = new Hitbox(user, bkb, kbg, damage, Hitbox.SAMURAI, 42,  -2, 28, new SFX.HeavyHit());
+		Hitbox early3 = new Hitbox(user, bkb, kbg, damage, Hitbox.SAMURAI, 32,   8, 24, new SFX.HeavyHit());
+		new ActionCircleGroup(Arrays.asList(early1, early2, early3));
 		m.eventList.addArmor(m, frame * 0, frame * 1, 6);
-		m.eventList.addActionCircle(early, frame, frame + 4);
-		m.eventList.addActionCircle(late, frame + 4, frame + 8);
+		m.eventList.addActionCircle(early1, frame + (subFrame * 0), frame + (subFrame * 1));
+		m.eventList.addActionCircle(early2, frame + (subFrame * 0), frame + (subFrame * 1));
+		m.eventList.addActionCircle(early3, frame + (subFrame * 0), frame + (subFrame * 1));
 		m.eventList.addArmor(m, frame * 1, frame * 3, -Heavy.HEAVY_ARMOR * 2);
 		return m;
 	}
@@ -88,21 +95,21 @@ public class M_Heavy extends MoveList {
 
 	@Override
 	public Move uSpecial() {
-		int frames = 5;
 		int frame = 27;
-		float pushY = 15.0f;
+		float pushY = 19.5f;
 
 		Move m = new Move(user, 20 * frame);
 		m.setHelpless();
 		m.setAerial();
-		m.setAnimation("sprites/fighters/heavy/uspecial.png", frames, frame);
+		m.setAnimation("sprites/fighters/heavy/uspecial.png", 1, 1);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
-		Hitbox rise = new Hitbox(user, 6.2f, 2.1f, 23,  80, 0, 0, 35, new SFX.MidHit(), c);
-		Hitbox crash  = new Hitbox(user, 7.5f, 3.5f, 19, 280, 0, 0, 35, new SFX.MeatyHit(), c);
+		Hitbox rise = new Hitbox(user, 6.2f, 2.1f, 20,  80, 0, 0, 30, new SFX.MidHit(), c);
+		Hitbox crash  = new Hitbox(user, 7.5f, 3.5f, 40, 270, 0, -20, 30, new SFX.MeatyHit(), c);
 		new ActionCircleGroup(Arrays.asList(rise, crash));
 		m.eventList.addCharge(user, c);
 		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, 0);
-		m.eventList.addConstantVelocity(user, frame * 2, frame * 3, Action.ChangeVelocity.noChange, pushY);
+		m.eventList.addArmor(m, frame * 2, frame * 3, 4);
+		m.eventList.addConstantVelocity(user, frame * 2, frame * 2 + 2, Action.ChangeVelocity.noChange, pushY);
 		m.eventList.addActionCircle(rise, frame * 2, frame * 3 );
 		m.eventList.addActionCircle(crash,  frame * 3, frame * 20 );
 		return m;

@@ -33,46 +33,42 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	int prevButton = commandNone;
 	Timer pauseSelectBuffer = new Timer(10);
 	ControllerType controllerType;
-	private static final List<String> usedControllers = new ArrayList<String>();
 
 	public InputHandlerController(Fighter player) {
 		super(player);
-		this.fighter = player;
+		this.player = player;
+		Controllers.addListener(this);
 	}
 
-	public boolean setupController(int index){
-		writeControllersToConsole();
-		if (Controllers.getControllers().size <= index) return false;
-		for (Controller c: Controllers.getControllers()){
-			if ((c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"))) {
-				setController(c, ControllerType.XBOX360);
-			}
-			if ((c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"))) {
-				setController(c, ControllerType.PS3);
-			}
-			if (null != control){ // Should ensure the same controller won't be used for 2 separate players, but doesn't
-				usedControllers.add(c.getName());
-			}
+	public boolean setupController(Controller c){
+		//		writeControllersToConsole();
+		//		if (Controllers.getControllers().size <= index) return false;
+		if (null == c) return false;
+		if ((c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"))) {
+			setController(c, ControllerType.XBOX360);
 		}
-		if (null == control) return false;
+		else if ((c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"))) {
+			setController(c, ControllerType.PS3);
+		}
+		else return false;
 		Controllers.addListener(this);
 		return true;
 	}
 
-	private void setController(Controller c, ControllerType ct){
+	public void setController(Controller c, ControllerType ct){
 		controllerType = ct;
 		control = c;
 	}
 
-	private void writeControllersToConsole(){
-		if (Controllers.getControllers().size > 0){
-			System.out.println(Controllers.getControllers().size + " controller(s found:");
-			for (Controller c: Controllers.getControllers()) {
-				System.out.println("- " + c.getName());
-			}
-		}
-		else System.out.println("No controllers found");
-	}
+//	private void writeControllersToConsole(){
+//		if (Controllers.getControllers().size > 0){
+//			System.out.println(Controllers.getControllers().size + " controller(s found:");
+//			for (Controller c: Controllers.getControllers()) {
+//				System.out.println("- " + c.getName());
+//			}
+//		}
+//		else System.out.println("No controllers found");
+//	}
 
 	private final float pushed = 0.85f;
 	public void update() {
@@ -127,7 +123,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean jumpHold(){
 		return control.getButton(commandJump);
 	}
-	
+
 	public boolean attackHold(){
 		return control.getButton(commandAttack);
 	}
@@ -206,7 +202,7 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 		}
 	}
 
-	private enum ControllerType{
+	public enum ControllerType{
 		XBOX360, PS3, OTHER
 	}
 

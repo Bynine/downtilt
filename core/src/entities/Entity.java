@@ -25,7 +25,7 @@ public abstract class Entity {
 	Direction direction = Direction.RIGHT;
 	Layer layer = Layer.FOREGROUND;
 	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nothing.png"))));
-	protected float prevHitAngle = 0;
+	protected float prevAerialHitAngle = 0;
 	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 
@@ -136,7 +136,7 @@ public abstract class Entity {
 	}
 
 	void applyAirFrictionY(){
-		boolean meteor = inHitstun() && (prevHitAngle > 240 && prevHitAngle < 300);
+		boolean meteor = inHitstun() && (prevAerialHitAngle > 240 && prevAerialHitAngle < 300);
 		if (velocity.y < 0 && !meteor) velocity.y *= airFrictionY;
 	}
 

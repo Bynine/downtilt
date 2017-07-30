@@ -7,12 +7,12 @@ import maps.Stage;
 
 public class ChallengeTimed extends Challenge {
 	
-	private static final int MINUTE = 3600;
+	private static final int MINUTE = 60;
 	private final int time;
 
-	ChallengeTimed(Stage stage, List<Wave> waves, double time) {
+	ChallengeTimed(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves);
-		this.time = (int) (MINUTE * time);
+		this.time = (int) (MINUTE * sec);
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class ChallengeTimed extends Challenge {
 	
 	@Override
 	protected String getTimeString(){
-		return "TIME LEFT: ";
+		return "TIME: ";
 	}
 	
 	@Override

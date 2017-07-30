@@ -26,7 +26,7 @@ public class InputHandlerCPU extends InputHandler {
 	}
 
 	public void update() {
-		cpuBrain.update(fighter.getInputPackage());
+		cpuBrain.update(player.getInputPackage());
 	}
 
 	public boolean isCharging() {

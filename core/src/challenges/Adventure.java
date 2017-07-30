@@ -4,26 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import entities.*;
 import main.DowntiltEngine;
 import main.SFX;
 import maps.*;
 
 /**
- * A substitute for the eventual world map. Controls active challenge.
+ * Adventure mode. A series of challenges.
  */
 
-public class Adventure {
-
-	private int activeChallengeIndex;
+public class Adventure extends Mode{
 
 	/**
 	 * Decides between debug beginning round and intended one.
 	 */
 	private void initializeChallengeList(){
 		if (DowntiltEngine.debugOn()) {
-			challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveDebug));
-			//challengeList.add(0, new ChallengeNorm(new Stage_Truck(), waveDebug));
+			//challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveDebug));
+			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
 		}
 		else {
 			challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveStandard));
@@ -50,9 +47,7 @@ public class Adventure {
 	 * Selection of wave lists for each challenge.
 	 */
 	private List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy,
-					EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb), 
-					10, 3, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 10, 1, 60))
 			));
 	private List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 2, 1, 60))
@@ -106,27 +101,13 @@ public class Adventure {
 			,new ChallengeNorm(new Stage_Mushroom(), waveMushroom)
 			,new ChallengeNorm(new Stage_Space(), waveSpace)
 			,new ChallengeNorm(new Stage_Sky(), waveSky)
-			,new ChallengeEndless(new Stage_Boss(), waveBoss)
+			,new ChallengeBoss(new Stage_Boss(), waveBoss)
 			));
-
-	public Challenge getActiveChallenge(){
-		if (activeChallengeIndex >= challengeList.size()) return challengeList.get(challengeList.size() - 1);
-		return challengeList.get(activeChallengeIndex);
-	}
-
-	/**
-	 * Starts a new challenge after finishing the old one..
-	 */
+	
+	@Override
 	public void update(){
-		if (DowntiltEngine.musicOn()) getActiveChallenge().getStage().getMusic().play();
-		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
-		getActiveChallenge().update();
-		if (getActiveChallenge().finished()) {
-			for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
-			getActiveChallenge().getStage().getMusic().stop();
-			activeChallengeIndex++;
-		}
-		if (activeChallengeIndex > challengeList.size()) win();
+		super.update();
+		if (activeChallengeIndex > getChallengeList().size()) win();
 	}
 
 	/**
@@ -135,6 +116,11 @@ public class Adventure {
 	void win(){
 		new SFX.Victory().play();
 		DowntiltEngine.returnToMenu();
+	}
+
+	@Override
+	List<Challenge> getChallengeList() {
+		return challengeList;
 	}
 
 }

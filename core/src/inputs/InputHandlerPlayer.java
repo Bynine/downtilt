@@ -13,6 +13,7 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	}
 
 	public void update(){
+		if (null == player) return;
 		super.update();
 		inputToCommand(attack(), commandAttack);
 		inputToCommand(special(), commandSpecial);
@@ -33,8 +34,8 @@ public abstract class InputHandlerPlayer extends InputHandler {
 		if (chargeHold() && DowntiltEngine.isPaused()) DowntiltEngine.returnToMenu();
 		if (select() && DowntiltEngine.isPaused()) DowntiltEngine.startDebugMenu();
 		
-		fighter.handleJumpHeld(jumpHold());
-		fighter.handleBlockHeld(blockHold());
+		player.handleJumpHeld(jumpHold());
+		player.handleBlockHeld(blockHold());
 		
 		if (dodge() && techTimer.timeUp()) techTimer.reset();
 		techTimer.countUp();

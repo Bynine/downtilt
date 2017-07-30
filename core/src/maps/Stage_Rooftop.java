@@ -20,7 +20,7 @@ public class Stage_Rooftop extends Stage {
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
 		dispX = GlobalRepo.TILE * 4;
 		setup();
-		name = "ROOFTOP";
+		name = "LIGHTNING LOOKOUT";
 	}
 
 	public TiledMap getMap() {

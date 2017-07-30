@@ -133,10 +133,14 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private void release(Hittable fi, int direction){
-		fi.velocity.x = 3 * direction * direct();
-		fi.velocity.y = 2;
+		float releaseMod = 1;
+		if (fi.getWeight() > 100){
+			releaseMod = 1/fi.getWeight();
+		}
+		fi.velocity.x = releaseMod * 3 * direction * direct();
+		fi.velocity.y = 3;
 		fi.hitstunTimer.reset();
-		fi.hitstunTimer.setEndTime(10);
+		fi.hitstunTimer.setEndTime((int) (releaseMod * 10));
 	}
 
 	protected boolean shouldPushAway(int pushDistance, Hittable hi){

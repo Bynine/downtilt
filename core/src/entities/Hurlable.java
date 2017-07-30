@@ -176,7 +176,7 @@ public abstract class Hurlable extends Hittable {
 			baseKnockIntoDamage = 4f;
 			hitstunDealtBonus = 8;
 			airFrictionX = 0.992f;
-			friction = 0.97f;
+			friction = 0.94f;
 			baseWeight = 90;
 			baseHurtleBK = minSpeedForHit;
 			baseKBG = 3.5f;
@@ -219,7 +219,7 @@ public abstract class Hurlable extends Hittable {
 
 		@Override
 		public boolean inHitstun(){
-			if (life.getCounter() < 6) return false;
+			if (life.getCounter() < 3) return false;
 			return knockbackIntensity(velocity) > minSpeedForHit;
 		}
 

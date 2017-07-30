@@ -12,13 +12,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 
 import entities.Basic;
 import entities.Fighter;
+import timers.Timer;
 
 abstract class Menu {
 	
 	protected static BitmapFont font = new BitmapFont();
 	protected static SpriteBatch batch;
 	protected final static String startStr = "Press A to begin!";
-	protected final static Color fontColor = Color.GOLDENROD;
+	protected final static Color fontColor = Color.WHITE;
 	
 	static void initialize(){
 		batch = new SpriteBatch();
@@ -72,9 +73,11 @@ abstract class Menu {
 	protected static class MenuOption <T> {
 		private int cursor = 0;
 		private final List<T> choices;
+		private final Timer waitToMoveTimer = new Timer(5);
 
 		MenuOption(List<T> lst){
 			this.choices = lst;
+			DowntiltEngine.addTimer(waitToMoveTimer);
 		}
 
 		T selected(){
@@ -86,9 +89,10 @@ abstract class Menu {
 		}
 
 		void moveCursor(int mov){
-			if (cursor + mov > -1 && cursor + mov < choices.size())	{
+			if (cursor + mov > -1 && cursor + mov < choices.size() && waitToMoveTimer.timeUp())	{
 				cursor += mov;
 				new SFX.LightHit().play(0.3f);
+				waitToMoveTimer.reset();
 			}
 //			else if (cursor + mov >= choices.size())				cursor = 0;
 //			else if (cursor + mov <= -1)							cursor = choices.size() - 1;

@@ -22,7 +22,7 @@ public class Heavy extends Fighter {
 	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/jump.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/crouch.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/hitstun.png", 1, 1, 8, PlayMode.LOOP);
 	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fall.png")));
 	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fallen.png")));
 	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/dash.png")));
@@ -33,10 +33,10 @@ public class Heavy extends Fighter {
 		super(posX, posY, team);
 		setInputHandler(new InputHandlerCPU(this, MookBrain.class));
 		image = new Sprite(standImage.getKeyFrame(0));
-		gravity = -0.60f;
-		baseWeight = 240;
+		gravity = -0.57f;
+		baseWeight = 200;
 		baseArmor = HEAVY_ARMOR;
-		jumpAcc = 0.66f;
+		jumpAcc = 0.64f;
 		airAcc = 1.2f;
 		airSpeed = 1.8f;
 		walkAcc = 1.2f;

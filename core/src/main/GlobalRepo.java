@@ -21,7 +21,7 @@ public class GlobalRepo {
 	public static final float HEROHITSTUNMOD = 0.7f;
 	public static final float ENEMYHITSTUNMOD = 0.9f;
 	public static final int WHITEFREEZE = 1;
-	private static BlockColor blockColor = BlockColor.R;
+	private static BlockColor blockColor = BlockColor.G;
 	
 	/* GLOBAL METHODS */
 
