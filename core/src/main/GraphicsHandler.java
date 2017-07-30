@@ -42,7 +42,8 @@ public class GraphicsHandler {
 	private static BitmapFont font = new BitmapFont();
 	private static TextureRegion 
 	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
-	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png")));
+	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png"))),
+	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/pauseoverlay.png")));
 	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE)), SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
@@ -280,8 +281,9 @@ public class GraphicsHandler {
 				cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), cam.position.y - SCREENHEIGHT * stockLocationMod);
 		
 		if (DowntiltEngine.isPaused()) {
-			font.draw(batch, "PAUSED", cam.position.x, cam.position.y);
-			font.draw(batch, "Press Y to quit", cam.position.x, cam.position.y - GlobalRepo.TILE * 2);
+			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
+			font.draw(batch, "PAUSED", cam.position.x - 25, cam.position.y + 50);
+			font.draw(batch, "Press Y to quit", cam.position.x - 60, cam.position.y - GlobalRepo.TILE * 2);
 		}
 	}
 

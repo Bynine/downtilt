@@ -94,9 +94,10 @@ abstract class Menu {
 				new SFX.LightHit().play(0.3f);
 				waitToMoveTimer.reset();
 			}
-//			else if (cursor + mov >= choices.size())				cursor = 0;
-//			else if (cursor + mov <= -1)							cursor = choices.size() - 1;
-
+		}
+		
+		public int getSize(){
+			return choices.size();
 		}
 
 		public void setCursor(int i) {

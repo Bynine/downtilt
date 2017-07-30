@@ -1,6 +1,7 @@
 package challenges;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -100,16 +101,8 @@ public class EnemySpawner {
 
 	EnemyType getEnemy(){
 		EnemyType en = enemyList.get(0);
-		rotate(enemyList);
+		Collections.rotate(enemyList, -1);
 		return en;
-	}
-
-	public <T> List<T> rotate(List<T> lst) {  // remove last element, add it to front of the ArrayList
-		if (lst.size() == 0) return lst;
-		T element = null;
-		element = lst.remove( lst.size() - 1 );
-		lst.add(0, element);
-		return lst;
 	}
 
 	public void restart() {

@@ -276,7 +276,7 @@ public abstract class Entity {
 		image.setY(y);
 	}
 
-	private final float aboveGround = 1;
+	private final float aboveGround = 2;
 	public boolean isGrounded(){ 
 		return doesCollide(position.x, position.y - aboveGround); 
 	}

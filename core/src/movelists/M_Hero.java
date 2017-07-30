@@ -278,9 +278,9 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, end + 1);
 		m.setAnimation("sprites/fighters/bomber/uspecial.png", 1, 1);
 
-		Hitbox push = new Hitbox.AngleHitbox(user, 7.2f, 0.0f, 3, 0, 0, 24, new SFX.LightHit());
+		Hitbox push = new Hitbox.AngleHitbox(user, 7.2f, 0.0f, 2, 0, 0, 24, new SFX.LightHit());
 		push.setMovesAheadMod(1);
-		push.setRefresh(4);
+		push.setRefresh(2);
 		push.setNoReverse();
 
 		Hitbox fini = new Hitbox.AngleHitbox(user, 3.0f, 3.2f, 8, 0, 0, 28, new SFX.MidHit());
@@ -332,7 +332,7 @@ public class M_Hero extends MoveList_Advanced{
 
 	/* THROWS */
 
-	int throwSize = 18;
+	int throwSize = 20;
 	public Move fThrow(){
 		int frame = 8;
 		int frames = 3;
@@ -400,8 +400,8 @@ public class M_Hero extends MoveList_Advanced{
 
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/fairthrow.png", frames, frame);
-		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 50, 14, 0, throwSize, new SFX.None());
-		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14,  0, 22, 0, throwSize, new SFX.MidHit());
+		Hitbox toss= new Hitbox(user, 2.0f, 0.0f,  0, 50, 6, 0, throwSize, new SFX.None());
+		Hitbox hit = new Hitbox(user, 4.4f, 1.4f, 14,  0, 14, 0, throwSize, new SFX.MidHit());
 		hit.setNoReverse();
 		hit.setHitstunType(Fighter.HitstunType.SUPER);
 		m.eventList.addConstantVelocity(user, 0, frame, Action.ChangeVelocity.noChange, 0);

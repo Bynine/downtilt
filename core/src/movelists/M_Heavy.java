@@ -23,8 +23,8 @@ public class M_Heavy extends MoveList {
 		int frames = 3;
 		int frame = 50;
 		int subFrame = frame/5;
-		float bkb = 5.8f;
-		float kbg = 3.2f;
+		float bkb = 6.8f;
+		float kbg = 3.4f;
 		int damage = 20;
 
 		Move m = new Move(user, frames * frame);

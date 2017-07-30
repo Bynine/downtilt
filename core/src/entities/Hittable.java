@@ -219,15 +219,21 @@ public abstract class Hittable extends Entity {
 	}
 
 	public void getGrabbed(Fighter user, Hittable target, int caughtTime) {
-		float heldDistance = 24;
 		user.isNowGrabbing(target, caughtTime);
-		float newPosX = user.position.x + (heldDistance * user.direct());
+		caughtTimer.setEndTime(caughtTime);
+		caughtTimer.reset();
+		float newPosX = user.getCenter().x - target.getImage().getWidth()/4;
+		if (user.getDirection() == Direction.LEFT) newPosX -= target.getImage().getWidth()/2;
 		float newPosY = user.position.y + image.getHeight()/4;
 		if (!doesCollide(newPosX, newPosY)) position.set(newPosX, newPosY);
 		else if (!doesCollide(position.x, newPosY)) position.set(position.x, newPosY);
-		caughtTimer.setEndTime(caughtTime);
-		caughtTimer.reset();
+		else if (!doesCollide(newPosX, position.y)) position.set(newPosX, position.y);
 		disrupt();
+	}
+
+	@Override
+	protected boolean upThroughThinPlatform(Rectangle r){
+		return !caughtTimer.timeUp() && super.upThroughThinPlatform(r);
 	}
 
 	private void disrupt(){

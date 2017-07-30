@@ -18,9 +18,9 @@ import maps.*;
 
 class MainMenu extends Menu {
 	
-	private static final String str_ADVENTURE = "Adventure >";
-	private static final String str_TIMETRIAL = "< Time Trial >";
-	private static final String str_ENDLESS = "< Endless";
+	private static final String str_ADVENTURE = "Adventure";
+	private static final String str_TIMETRIAL = "Time Trial";
+	private static final String str_ENDLESS = "Endless";
 	private static MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
 			str_ADVENTURE, str_TIMETRIAL, str_ENDLESS
 			));
@@ -67,7 +67,7 @@ class MainMenu extends Menu {
 	}
 
 	private static void draw(){
-		int posX = 200;
+		int posX = 220;
 		int startY = 500;
 		int dec = 60;
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -79,17 +79,17 @@ class MainMenu extends Menu {
 		batch.draw(title, posX + centerInc, startY + 100);
 		font.draw(batch, startStr, posX + centerInc, startY);
 
-		font.draw(batch, "MODE: " + mode.selected(), posX, startY -= dec);
+		font.draw(batch, appendCursors("MODE:   ", mode) + mode.selected(), posX, startY -= dec);
 		if (mode.selected() == str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
-		font.draw(batch, "STAGE: " + getStage().getName(), posX, startY -= dec);
+		font.draw(batch, appendCursors("STAGE:  ", stages) + getStage().getName(), posX, startY -= dec);
 		font.setColor(fontColor);
 		
 		String playerMode = "";
 		switch(players.selected()){
-		case 1: playerMode = "Solo >"; break;
-		default: playerMode = "< Co-op"; break;
+		case 1: playerMode = "Solo"; break;
+		default: playerMode = "Co-op"; break;
 		}
-		font.draw(batch, "PLAYERS: " + playerMode , posX, startY -= dec);
+		font.draw(batch, appendCursors("PLAYERS:", players) + playerMode , posX, startY -= dec);
 
 		startY -= dec;
 		font.draw(batch, "P1: " + DowntiltEngine.getPlayers().get(0).getInputHandler().getControllerName(), posX,  startY -= dec);
@@ -101,6 +101,14 @@ class MainMenu extends Menu {
 
 		batch.draw(cursor, posX - 50, (420) - dec * (choices.cursorPos()));
 		batch.end();
+	}
+	
+	private static String appendCursors(String str, MenuOption<?> menuOption){
+		if (menuOption.cursorPos() == 0) str = "  ".concat(str);
+		else str = "< ".concat(str);
+		if (menuOption.cursorPos() == menuOption.getSize() - 1) str = str.concat("   ");
+		else str = str.concat(" > ");
+		return str;
 	}
 
 	private static void start(){

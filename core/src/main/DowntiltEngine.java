@@ -155,6 +155,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void pauseGame() {
+		if (gameState != GameState.GAME) return;
 		if (paused) new SFX.Unpause().play();
 		else new SFX.Pause().play();
 		paused = !paused;
@@ -196,6 +197,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	
 	private static void toMenu(GameState gs){
+		paused = false;
 		beginFighters(true);
 		getChallenge().getStage().getMusic().stop();
 		MainMenu.begin();
