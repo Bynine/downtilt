@@ -154,8 +154,13 @@ public abstract class Hurlable extends Hittable {
 	}
 
 	public static class ShootBall extends Breakable {
+		
+		protected TextureRegion stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
+		protected TextureRegion stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
+		protected Animation moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
+		protected Animation moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 4, 1, 6, PlayMode.LOOP);
 
-		private final float minSpeedForHit = 2.2f;
+		protected float minSpeedForHit = 2.2f;
 		public ShootBall(Fighter user, int team, float posX, float posY) {
 			super(posX, posY);
 			if (user.getDirection() == Direction.LEFT) posX += user.getImage().getWidth()/4;
@@ -170,11 +175,10 @@ public abstract class Hurlable extends Hittable {
 		
 		private void setup(int team){
 			this.team = team;
-			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
-			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
+			setImages(team);
 			image = new Sprite(normImage);
 			baseKnockIntoDamage = 4f;
-			hitstunDealtBonus = 8;
+			hitstunDealtBonus = 6;
 			airFrictionX = 0.992f;
 			friction = 0.94f;
 			baseWeight = 90;
@@ -182,6 +186,17 @@ public abstract class Hurlable extends Hittable {
 			baseKBG = 3.5f;
 			touchRadius = 16;
 			life.setEndTime(120);
+		}
+		
+		protected void setImages(int team){
+			if (team == GlobalRepo.BADTEAM) {
+				normImage = stillGoodTexture;
+				tumbleImage = moveGoodAnim;
+			}
+			else if (team == GlobalRepo.GOODTEAM) {
+				normImage = stillBadTexture;
+				tumbleImage = moveBadAnim;
+			}
 		}
 
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
@@ -198,21 +213,19 @@ public abstract class Hurlable extends Hittable {
 			if (user.getTeam() == GlobalRepo.GOODTEAM) {
 				team = GlobalRepo.BADTEAM;
 				life.reset();
-				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
-				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 4, 1, 6, PlayMode.LOOP);
 			}
 			else if (user.getTeam() == GlobalRepo.BADTEAM) {
 				team = GlobalRepo.GOODTEAM;
 				life.reset();
-				normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
-				tumbleImage = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
 			}
+			setImages(team);
 		}
 
+		protected float bounceMod = -1.1f;
 		@Override
 		public void ground(){ 
 			if (velocity.y < -1 && !inGroundedState()){
-				velocity.y *= -1.1;
+				velocity.y *= bounceMod;
 			}
 			super.ground();
 		}
@@ -235,6 +248,30 @@ public abstract class Hurlable extends Hittable {
 			return r;
 		}
 
+	}
+	
+	public static class Boulder extends ShootBall{
+
+		public Boulder(Fighter user, int team, float posX, float posY) {
+			super(user, team, posX, posY);
+			baseKnockIntoDamage = 7.0f;
+			hitstunDealtBonus = 9;
+			baseWeight = 160;
+			baseKBG = 8.0f;
+			baseBKB = 4.0f;
+			gravity = -1.2f;
+			airFrictionY = 0.9f;
+			minSpeedForHit = 1.2f;
+			friction = 0.98f;
+			stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/boulderbad.png")));
+			stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/bouldergood.png")));
+			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/boulderbadspin.png", 4, 1, 6, PlayMode.LOOP);
+			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/bouldergoodspin.png", 4, 1, 6, PlayMode.LOOP);
+			setImages(team);
+			bounceMod = -0.2f;
+			baseHitSpeed = -0.1f;
+		}
+		
 	}
 
 	public static class Rocket extends Explosive {

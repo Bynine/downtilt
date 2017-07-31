@@ -12,17 +12,15 @@ public class Endless extends Mode {
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb, EnemyRepo.heavy), 0, 3, 60))
 			));
 
-	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList(
-
-			));
-
-	@Override
-	List<Challenge> getChallengeList() {
-		return challengeList;
-	}
+	List<Challenge> challengeList = new ArrayList<Challenge>();
 
 	public Endless(Stage stage){
 		challengeList.add(new ChallengeEndless(stage, wave));
+	}
+	
+	@Override
+	List<Challenge> getChallengeList() {
+		return challengeList;
 	}
 
 }

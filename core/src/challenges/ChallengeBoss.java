@@ -9,6 +9,7 @@ import entities.BossEye;
 import main.DowntiltEngine;
 import main.GlobalRepo;
 import main.MapHandler;
+import main.SFX;
 import maps.Stage;
 
 public class ChallengeBoss extends ChallengeEndless {
@@ -60,6 +61,12 @@ public class ChallengeBoss extends ChallengeEndless {
 
 	public String getWaveCounter() {
 		return "HEALTH: " + boss.getHealth();
+	}
+	
+	@Override
+	public void failChallenge(){
+		new SFX.Error().play();
+		startChallenge();
 	}
 
 }

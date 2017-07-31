@@ -120,7 +120,7 @@ public class Hitbox extends ActionCircle{
 		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
 		
 		startHitlag(target);
-		if (guarding) {
+		if (guarding || ( knockback.x == 0 && knockback.y == 0) ) {
 			sfx = new SFX.EmptyHit();
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
@@ -273,6 +273,25 @@ public class Hitbox extends ActionCircle{
 			return knockback.setAngle(vel.angle());
 		}
 		
+	}
+	
+	public static class QuakeHitbox extends Hitbox{
+
+		public QuakeHitbox(Hittable user, float BKB, float KBG, float DAM, float ANG, float dispX, float dispY,
+				int size, SFX sfx) {
+			super(user, BKB, KBG, DAM, ANG, dispX, dispY, size, sfx);
+		}
+		
+		public boolean didHitTarget(Hittable target){ 
+			return target.isGrounded() && user.getPosition().y >= (target.getPosition().y - 4) && super.didHitTarget(target);
+		}
+//		
+//		@Override
+//		public boolean teamCheck(Hittable target){
+//			if (target == user) return false;
+//			else return true;
+//		}
+//		
 	}
 
 }

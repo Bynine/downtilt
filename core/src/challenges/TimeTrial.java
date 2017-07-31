@@ -15,17 +15,15 @@ public class TimeTrial extends Mode {
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb), 4, 4, 10))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 6, 6, 10))
 			));
-	
-	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList(
-			));
-
-	@Override
-	List<Challenge> getChallengeList() {
-		return challengeList;
-	}
+	List<Challenge> challengeList = new ArrayList<Challenge>();
 	
 	public TimeTrial(Stage stage){
 		challengeList.add(new ChallengeTimedEndless(stage, wave, 90));
+	}
+	
+	@Override
+	List<Challenge> getChallengeList() {
+		return challengeList;
 	}
 
 }

@@ -138,8 +138,8 @@ class MainMenu extends Menu {
 		try {
 			return stages.selected().getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			System.out.println(e);
-			return  null;
+			System.out.println("Couldn't get stage! Reason: " + e);
+			return null;
 		}
 	}
 

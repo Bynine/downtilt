@@ -148,27 +148,6 @@ public abstract class Graphic extends Entity{
 		}
 	}
 
-	public static class LaserCharge extends Graphic {
-		private TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/laserchargesmall.png")));
-		private TextureRegion mid = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/laserchargemid.png")));
-		private TextureRegion big = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/laserchargebig.png")));
-		private final Fighter user;
-		public LaserCharge(Fighter user, float posX, float posY){
-			super(posX, posY, 40);
-			this.user = user;
-			image = new Sprite(big);
-			updatePosition();
-		}
-		void updatePosition(){
-			position.x = user.getPosition().x - image.getWidth()/2;
-			if (user.getDirection() == Direction.RIGHT) position.x += user.getImage().getWidth();
-			position.y = user.getPosition().y + 24 - image.getHeight()/2;
-			if (duration.getCounter() > dur/3) setSmall(mid);
-			if (duration.getCounter() > 2*dur/3) setSmall(small);
-			if (duration.timeUp()) setRemove();
-		}
-	}
-	
 	public static class DoubleJumpRing extends Graphic {
 		private TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejump.png")));
 		private TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejumpsmall.png")));
@@ -203,6 +182,20 @@ public abstract class Graphic extends Entity{
 		public Sparks(float posX, float posY, int dur) {
 			super(posX, posY, dur);
 			new SFX.Sparks().play();
+			image = new Sprite(tex);
+			updatePosition();
+		}
+		
+		void updatePosition(){
+			if (duration.timeUp()) setRemove();
+		}
+
+	}
+	
+	public static class Quake extends Graphic {
+		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/sparks.png")));
+		public Quake(float posX, float posY, int dur) {
+			super(posX, posY, dur);
 			image = new Sprite(tex);
 			updatePosition();
 		}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import entities.Fighter;
 import main.DowntiltEngine;
+import main.SFX;
 
 public abstract class Mode {
 	
@@ -29,6 +30,15 @@ public abstract class Mode {
 			getActiveChallenge().getStage().getMusic().stop();
 			activeChallengeIndex++;
 		}
+		if (activeChallengeIndex > getChallengeList().size()) win();
+	}
+
+	/**
+	 * Activates when all challenges are completed.
+	 */
+	void win(){
+		new SFX.Victory().play();
+		DowntiltEngine.returnToMenu();
 	}
 
 	abstract List<Challenge> getChallengeList();

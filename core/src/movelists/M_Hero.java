@@ -241,7 +241,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox early1 = new Hitbox(user, 4.1f, 2.8f, 14,  48,  16,  -4, 14, new SFX.MeatyHit());
 		Hitbox early2 = new Hitbox(user, 4.1f, 2.8f, 14,  58,   3,  13, 12, new SFX.MeatyHit());
 		Hitbox spike = new Hitbox(user,  4.1f, 2.8f, 20, 290,  12, -22, 14, new SFX.HeavyHit());
-		Hitbox late =  new Hitbox(user,  2.1f, 1.0f,  8,  75,  18, -10, 15, new SFX.LightHit());
+		Hitbox late =  new Hitbox(user,  3.1f, 1.0f,  8,  75,  18, -10, 15, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(early1, early2, spike, late));
 		spike.setProperty(Property.ELECTRIC);
 		m.eventList.addActionCircle(early1, frame*2, frame*3);

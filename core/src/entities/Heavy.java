@@ -61,6 +61,10 @@ public class Heavy extends Fighter {
 		new SFX.Break().play();
 		DowntiltEngine.causeHitlag(2);
 	}
+	
+	protected void getFootStooled(){
+		if (getArmor() <= HEAVY_ARMOR) super.getFootStooled();
+	}
 
 //	public float getArmor() { 
 //		if (inHitstun()) return 0;

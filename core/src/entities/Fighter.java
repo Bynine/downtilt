@@ -463,15 +463,20 @@ public abstract class Fighter extends Hittable{
 		doubleJumps ++;
 		doubleJumpGraphicTimer.end();
 		new SFX.FootStool().play();
-		footStoolee.addToCombo(Combo.footstoolID);
-		footStoolee.velocity.set(footStoolKB);
-		footStoolee.tumbling = true;
-		footStoolee.percentage += footStoolDamage;
-		if (!footStoolee.inHitstun()){
-			footStoolee.hitstunTimer.setEndTime((int) (footStoolDuration * footStoolee.getHitstun() * (100.0/footStoolee.getWeight() )));
-			footStoolee.hitstunTimer.reset();
-		}
+		footStoolee.getFootStooled();
 		footStoolTimer.reset();
+	}
+	
+	protected void getFootStooled(){
+		addToCombo(Combo.footstoolID);
+		velocity.set(footStoolKB);
+		tumbling = true;
+		percentage += footStoolDamage;
+		if (!inHitstun()){
+			hitstunTimer.setEndTime((int) (footStoolDuration * getHitstun() * (100.0/getWeight() )));
+			hitstunTimer.reset();
+		}
+		disrupt();
 	}
 
 	private Fighter getEnemyAbove(){

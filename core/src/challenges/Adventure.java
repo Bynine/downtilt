@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.DowntiltEngine;
-import main.SFX;
 import maps.*;
 
 /**
@@ -47,7 +46,7 @@ public class Adventure extends Mode{
 	 * Selection of wave lists for each challenge.
 	 */
 	private List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 10, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.basic), 12, 2, 60))
 			));
 	private List<Wave> waveStandard = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 2, 1, 60))
@@ -103,20 +102,6 @@ public class Adventure extends Mode{
 			,new ChallengeNorm(new Stage_Sky(), waveSky)
 			,new ChallengeBoss(new Stage_Boss(), waveBoss)
 			));
-	
-	@Override
-	public void update(){
-		super.update();
-		if (activeChallengeIndex > getChallengeList().size()) win();
-	}
-
-	/**
-	 * Activates when all challenges are completed.
-	 */
-	void win(){
-		new SFX.Victory().play();
-		DowntiltEngine.returnToMenu();
-	}
 
 	@Override
 	List<Challenge> getChallengeList() {

@@ -68,11 +68,19 @@ public abstract class Challenge {
 
 	public void update(){
 		activeWave.update(DowntiltEngine.getDeltaTime());
+		nextWaveChecker();
+		if (inFailState()) failChallenge();
+	}
+	
+	protected void nextWaveChecker(){
 		if (activeWave.getNumEnemies() == 0 && !activeWave.isEndless()) {
 			if (currWaves.size() > 0) nextWave();
-			else succeedChallenge();
+			else if (inSuccessState()) succeedChallenge();
 		}
-		if (inFailState()) failChallenge();
+	}
+	
+	protected boolean inSuccessState(){
+		return currWaves.size() == 0 && activeWave.getNumEnemies() == 0;
 	}
 	
 	protected boolean inFailState(){
@@ -83,7 +91,7 @@ public abstract class Challenge {
 		return shouldRestart;
 	}
 
-	private void nextWave(){
+	protected void nextWave(){
 		MapHandler.addEntity(new TreasureChest(startPosition.x, startPosition.y + GlobalRepo.TILE));
 		setActiveWave();
 	}

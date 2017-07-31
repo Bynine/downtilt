@@ -282,8 +282,8 @@ public class GraphicsHandler {
 		
 		if (DowntiltEngine.isPaused()) {
 			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
-			font.draw(batch, "PAUSED", cam.position.x - 25, cam.position.y + 50);
-			font.draw(batch, "Press Y to quit", cam.position.x - 60, cam.position.y - GlobalRepo.TILE * 2);
+			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
+			font.draw(batch, "(Press Y to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
 	}
 

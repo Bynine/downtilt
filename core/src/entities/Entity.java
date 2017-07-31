@@ -119,10 +119,14 @@ public abstract class Entity {
 		if (Math.abs(velocity.y) < lowerLimit) velocity.y = 0;
 	}
 
-	void handleWind(){
+	private void handleWind(){
 		final int windLimiter = 8;
-		if (MapHandler.getRoomWind() < 0 && velocity.x > MapHandler.getRoomWind() * windLimiter) velocity.x += MapHandler.getRoomWind();
-		else if (MapHandler.getRoomWind() > 0 && velocity.x < MapHandler.getRoomWind() * windLimiter) velocity.x += MapHandler.getRoomWind();
+		if (MapHandler.getRoomWind() < 0 && velocity.x > MapHandler.getRoomWind() * windLimiter) handleWindHelper();
+		else if (MapHandler.getRoomWind() > 0 && velocity.x < MapHandler.getRoomWind() * windLimiter) handleWindHelper();
+	}
+	
+	protected void handleWindHelper(){
+		velocity.x += MapHandler.getRoomWind();
 	}
 
 	void handleGravity(){

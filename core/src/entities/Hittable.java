@@ -31,7 +31,7 @@ public abstract class Hittable extends Entity {
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	protected int team = GlobalRepo.BADTEAM;
 
-	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f;
+	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f, baseBKB = 1.0f;
 	protected float baseHitSpeed = -0.8f;
 	protected float baseHitstun = 1, basePower = 1, baseKnockIntoDamage = 2.2f, baseArmor = 0, baseWeight = 100;
 	protected float walkSpeed = 2f, runSpeed = 4f, airSpeed = 3f;
@@ -78,7 +78,7 @@ public abstract class Hittable extends Entity {
 			}
 		}
 		if (en instanceof Hittable){
-			checkPushAway((Hittable) en);
+			//checkPushAway((Hittable) en);
 			checkHitByHurtlingObject((Hittable) en);
 		}
 	}
@@ -125,7 +125,7 @@ public abstract class Hittable extends Entity {
 	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
 		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.6);
-		float bkb = knockbackIntensity(knockIntoVector) * 0.8f * weightMod;
+		float bkb = baseBKB * knockbackIntensity(knockIntoVector) * 0.8f * weightMod;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
 		Hitbox h;
 		if (hurtler.hitstunType != HitstunType.NORMAL) {
@@ -157,7 +157,14 @@ public abstract class Hittable extends Entity {
 	}
 
 	protected void setKnockIntoVelocity(Hittable hurtler){
-		hurtler.velocity.set(hurtler.velocity.x * hurtler.baseHitSpeed, hurtler.velocity.y * hurtler.baseHitSpeed);
+		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.350);
+		hurtler.velocity.set(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
+	}
+	
+	@Override
+	protected void handleWindHelper(){
+		float weightMod = (float) Math.pow(100/getWeight(), 0.420); // nice
+		velocity.x += weightMod * MapHandler.getRoomWind();
 	}
 
 	protected void knockInto(){
@@ -233,10 +240,10 @@ public abstract class Hittable extends Entity {
 
 	@Override
 	protected boolean upThroughThinPlatform(Rectangle r){
-		return !caughtTimer.timeUp() && super.upThroughThinPlatform(r);
+		return super.upThroughThinPlatform(r);
 	}
 
-	private void disrupt(){
+	protected void disrupt(){
 		stunTimer.end();
 		endAttack();
 	}

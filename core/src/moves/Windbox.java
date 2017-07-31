@@ -17,7 +17,7 @@ public class Windbox extends ActionCircle {
 
 	@Override
 	public void hitTarget(Hittable en) {
-		if (didHitTarget(en)) {
+		if (didHitTarget(en) && en != user) {
 			float pushX = strX;
 			if (user.getDirection() == Direction.LEFT) pushX *= -1;
 			en.getVelocity().add(pushX, strY);
