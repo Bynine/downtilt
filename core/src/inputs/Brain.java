@@ -289,9 +289,9 @@ public abstract class Brain{
 		
 		void chooseAttack(){
 			if (!attackTimer.timeUp()) return;
-			if (shouldAttack(0.16, 80, true))									attackPlayer(InputHandler.commandAttack);
-			if (shouldAttack(0.09, 80, true) && pack.distanceYFromPlayer < 16)	attackPlayer(InputHandler.commandCharge);
-			if (shouldAttack(0.02, 300, true))									attackPlayer(InputHandler.commandSpecial);
+			if (shouldAttack(0.16, 80, true))	attackPlayer(InputHandler.commandAttack);
+			if (shouldAttack(0.02, 160, true))	attackPlayer(InputHandler.commandCharge);
+			if (shouldAttack(0.01, 300, true))	attackPlayer(InputHandler.commandSpecial);
 		}
 
 	}

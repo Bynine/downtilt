@@ -42,8 +42,8 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/uweak.png", frames, frame);
 		m.setHurtBox(25, 45, -8, Move.HURTBOXNOTSET);
-		Hitbox swing = new Hitbox(user, 3.0f, 2.1f, 7, 90, 6, 8, 22, new SFX.MidHit());
-		Hitbox punch = new Hitbox(user, 3.0f, 2.1f, 8, 85, 0, 34, 14, new SFX.MidHit());
+		Hitbox swing = new Hitbox(user, 3.0f, 2.1f, 7, 90, 9,  5, 16, new SFX.MidHit());
+		Hitbox punch = new Hitbox(user, 3.0f, 2.1f, 8, 85, 0, 27, 14, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(swing, punch));
 		m.eventList.addActionCircle(swing, frame, frame * 2);
 		m.eventList.addActionCircle(punch, frame + 2, frame * 2 + 2);

@@ -129,22 +129,23 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move taunt() {
-		int frame = 20;
+		int frame = 30;
 		int frames = 2;
 
-		Move m = new Move(user, frame * 6);
+		Move m = new Move(user, frame * 5);
 		m.setAnimation("sprites/fighters/fly/nspecial.png", frames, frame);
 		Windbox wind1 = new Windbox(user, 0.9f, 0.3f, 60, 0, 30);
 		Windbox wind3 = new Windbox(user, 1.4f, 0.5f, 30, 0, 20);
 		Windbox wind2 = new Windbox(user, 0.7f, 0.2f, 40, 0, 40);
 		wind1.setRefresh(4);
 		wind2.setRefresh(4);
+		m.eventList.addTremble(m, 0, frame * 1);
 		m.eventList.addConstantVelocity(user, 0, frame * 1, 0, 0);
 		m.eventList.addConstantVelocity(user, frame * 1, frame * 5, -1, 0);
 		m.eventList.addGraphic(user, frame * 1,  frame * 5, new Graphic.Gust(user, frame * 4));
 		m.eventList.addActionCircle(wind1, frame * 1, frame * 3);
 		m.eventList.addActionCircle(wind3, frame * 1, frame * 3);
-		m.eventList.addActionCircle(wind2, frame * 3, frame * 5);
+		m.eventList.addActionCircle(wind2, frame * 3, frame * 4);
 		return m;
 	}
 

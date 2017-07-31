@@ -9,7 +9,8 @@ public abstract class MoveList {
 	protected final Fighter user;
 	public static final int noMove = -2;
 	public static final int noStaleMove = -1;
-	public static final int aerial = 1;
+	public static final int aerial = -3;
+	public static final int uspecial = -4;
 
 	MoveList(Fighter user){
 		this.user = user;
@@ -39,7 +40,7 @@ public abstract class MoveList {
 
 	public IDMove selectSpecialMove(){
 		if (user.isGrounded()) return new IDMove(nSpecial(), noStaleMove);
-		else return new IDMove(uSpecial(), noStaleMove);
+		else return new IDMove(uSpecial(), uspecial);
 	}
 
 	public IDMove selectGrab(){

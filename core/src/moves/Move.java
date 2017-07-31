@@ -47,6 +47,11 @@ public class Move {
 		String finalString = string.toLowerCase();
 		animation = GlobalRepo.makeAnimation(finalString, cols, 1, frameLength, PlayMode.LOOP);
 	}
+	
+	public void setAnimationNoLoop(String string, int cols, int frameLength) {
+		String finalString = string.toLowerCase();
+		animation = GlobalRepo.makeAnimation(finalString, cols, 1, frameLength, PlayMode.NORMAL);
+	}
 
 	public void addFrame() {
 		duration.setEndTime(duration.getEndTime() + 1);

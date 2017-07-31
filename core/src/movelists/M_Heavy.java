@@ -151,12 +151,13 @@ public class M_Heavy extends MoveList {
 	@Override
 	public Move uSpecial() {
 		int frame = 27;
+		int effectivelyNoEnd = 20;
 		float pushY = 19.5f;
 
-		Move m = new Move(user, 20 * frame);
+		Move m = new Move(user, effectivelyNoEnd * frame);
 		m.setHelpless();
 		m.setAerial();
-		m.setAnimation("sprites/fighters/heavy/uspecial.png", 1, 1);
+		m.setAnimationNoLoop("sprites/fighters/heavy/uspecial.png", 2, frame * 3);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
 		Hitbox rise = new Hitbox(user, 6.2f, 2.1f, 20,  80, 0, 0, 30, new SFX.MidHit(), c);
 		Hitbox crash  = new Hitbox(user, 7.5f, 3.5f, 40, 270, 0, -20, 30, new SFX.MeatyHit(), c);
@@ -201,13 +202,13 @@ public class M_Heavy extends MoveList {
 	@Override
 	public Move land() {
 		Move m = new Move(user, 30);
-		if (null != user.getPrevMove())
-			if (user.getPrevMove().id == MoveList.aerial) {
-				m = new Move(user, 60);
-//				Hitbox h1 = new Hitbox(user, 5.8f, 3.2f, 20, Hitbox.SAMURAI, 0, -20, 32, new SFX.MidHit());
-//				m.eventList.addActionCircle(h1, 0, 4);
-			}
 		m.setAnimation("sprites/fighters/heavy/crouch.png", 1, 1);
+		if (null != user.getPrevMove())
+			if (user.getPrevMove().id == MoveList.uspecial) {
+				m = new Move(user, 60);
+				m.setAnimation("sprites/fighters/heavy/landhead.png", 1, 1);
+			}
+		
 		return m;
 	}
 
