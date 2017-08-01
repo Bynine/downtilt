@@ -40,32 +40,39 @@ public class MapHandler {
 		}
 	}
 
+	private static Iterator<Entity> entityIter;
+	private static final List<Entity> entityToRemoveList = new ArrayList<Entity>();
 	static void updateEntities(){
-		Iterator<Entity> entityIter = activeRoom.getEntityList().iterator();
+		entityIter = activeRoom.getEntityList().iterator();
+
 		while (entityIter.hasNext()) {
 			Entity en = entityIter.next();
-			if (shouldUpdate(en)) en.update(rectangleList, activeRoom.getEntityList(), DowntiltEngine.getDeltaTime()); 
+			if (shouldUpdate(en)) {
+				en.update(rectangleList, activeRoom.getEntityList(), DowntiltEngine.getDeltaTime()); 
+			}
+
 			Rectangle boundary = new Rectangle(0, 0, mapWidth, mapHeight);
 			Rectangle cameraBoundary = GraphicsHandler.getCameraBoundary();
-			boolean toRemove = en.toRemove() || en.isOOB(boundary) || (en instanceof Fighter && en.isOOB(cameraBoundary));
-			if (toRemove) {
-				if (en instanceof Fighter){
+			if (en.shouldDie(boundary, cameraBoundary)) {
+
+				if (!(en instanceof Fighter)) entityIter.remove();
+				else {
 					Fighter fi = ((Fighter) en);
-					if (kill(fi)) {
-						if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) activeRoom.addEntity(
-								new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
-						if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getChallenge().addScore(20);
-						entityIter.remove();
-					}
+					kill(fi);
 				}
-				else entityIter.remove();
 			}
 		}
+		
+		for (Entity en: entityToRemoveList){
+			activeRoom.getEntityList().remove(en);
+		}
+		entityToRemoveList.clear();
+		
 	}
-	
+
 	private static boolean shouldUpdate(Entity en){
 		int slowMod = 8;
-		
+
 		if (en instanceof Hittable){
 			boolean slow = !DowntiltEngine.entityIsPlayer(en);
 			if (slow && DowntiltEngine.isSlowed() && DowntiltEngine.getDeltaTime() % slowMod != 0) return false;
@@ -74,6 +81,10 @@ public class MapHandler {
 	}
 
 	public static boolean kill(Fighter fi){
+		Rectangle cameraBoundary = GraphicsHandler.getCameraBoundary();
+		if (fi.noKill()) return false;
+		fi.setNoKill();
+		
 		drawDieGraphic(fi);
 		new SFX.Die().play();
 		if (fi.getLives() > 1) {
@@ -91,11 +102,17 @@ public class MapHandler {
 			}
 		}
 		fi.setLives(0);
+		if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) {
+			addEntity(new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
+		}
+		entityToRemoveList.add(fi);
 		return true;
 	}
 
 	private static void drawDieGraphic(Fighter fi){
-		if (fi instanceof Basic.Bomb) return;
+		if (fi instanceof Basic.Bomb) {
+			if ( ((Basic.Bomb)fi).isExploded() ) return;
+		}
 		int mod = 6;
 		addEntity(new Graphic.Die(
 				(fi.getCenter().x * (mod-1) + GraphicsHandler.getCameraPos().x) / mod, 

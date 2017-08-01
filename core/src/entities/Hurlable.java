@@ -177,8 +177,8 @@ public abstract class Hurlable extends Hittable {
 			this.team = team;
 			setImages(team);
 			image = new Sprite(normImage);
-			baseKnockIntoDamage = 4f;
-			hitstunDealtBonus = 6;
+			baseKnockIntoDamage = 3f;
+			hitstunDealtBonus = 1;
 			airFrictionX = 0.992f;
 			friction = 0.94f;
 			baseWeight = 90;

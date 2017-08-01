@@ -84,9 +84,8 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 6, 40))
 			));
 	private List<Wave> waveBoss = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy,
-					EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb), 
-					1, 3, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.heavy), 
+					1, 3, 120))
 			));
 
 	/**

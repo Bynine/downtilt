@@ -124,7 +124,7 @@ public abstract class Entity {
 		if (MapHandler.getRoomWind() < 0 && velocity.x > MapHandler.getRoomWind() * windLimiter) handleWindHelper();
 		else if (MapHandler.getRoomWind() > 0 && velocity.x < MapHandler.getRoomWind() * windLimiter) handleWindHelper();
 	}
-	
+
 	protected void handleWindHelper(){
 		velocity.x += MapHandler.getRoomWind();
 	}
@@ -295,7 +295,10 @@ public abstract class Entity {
 		new SFX.Ground().play();
 	}
 
-	public void setRemove() { toRemove = true; }
+	public void setRemove() { 
+		toRemove = true; 
+	}
+
 	public boolean toRemove() { 
 		return toRemove; 
 	} 
@@ -344,6 +347,9 @@ public abstract class Entity {
 	public static float knockbackIntensity(Vector2 knockback) { 
 		float intensity = (float) Math.sqrt(Math.pow(Math.abs(knockback.x), 2) + Math.pow(Math.abs(knockback.y), 2)); 
 		return intensity; 
+	}
+	public boolean shouldDie(Rectangle boundary, Rectangle cameraBoundary){
+		return toRemove() || isOOB(boundary);
 	}
 	public Color getColor() { return new Color(1, 1, 1, 1); }
 	public Layer getLayer() { return layer; }

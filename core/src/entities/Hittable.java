@@ -78,7 +78,6 @@ public abstract class Hittable extends Entity {
 			}
 		}
 		if (en instanceof Hittable){
-			//checkPushAway((Hittable) en);
 			checkHitByHurtlingObject((Hittable) en);
 		}
 	}

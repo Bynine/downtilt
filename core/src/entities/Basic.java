@@ -78,6 +78,7 @@ public class Basic extends Fighter {
 	public static class Bomb extends Basic {
 
 		private final Timer kaboom = new DurationTimer(120);
+		private boolean exploded = false;
 		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/basic/bomb.glsl"));
 		private final static ShaderProgram flash = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/bombflash.glsl"));
 
@@ -104,6 +105,8 @@ public class Basic extends Fighter {
 		}
 
 		private void explode(){
+			if (exploded) return;
+			exploded = true;
 			MapHandler.addEntity(new Explosion.BombExplosion(this, direct()));
 			resolveCombo();
 			setRemove();
@@ -117,6 +120,10 @@ public class Basic extends Fighter {
 		public void setBomb(int time){
 			kaboom.setEndTime(time);
 			timerList.add(kaboom);
+		}
+		
+		public boolean isExploded(){
+			return exploded;
 		}
 		
 		public Color getColor() { return new Color(0.5f, 0.6f, 0.6f, 1); }

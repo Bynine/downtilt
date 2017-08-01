@@ -1,25 +1,31 @@
 package entities;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import main.DowntiltEngine;
 import main.GlobalRepo;
 import main.MapHandler;
 import main.SFX;
+import timers.Timer;
 
 public abstract class BossEye extends Hittable {
 
 	private boolean open = true;
 	private final Boss boss;
+	Timer fireTimer = new Timer(200);
 
 	public BossEye(float posX, float posY, Boss boss) {
 		super(posX, posY);
 		this.boss = boss;
 		grabbable = false;
+		timerList.add(fireTimer);
 	}
 
 	public void toggleOpen(){
@@ -29,8 +35,16 @@ public abstract class BossEye extends Hittable {
 	public boolean isOpen(){
 		return open;
 	}
+	
+	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+		super.update(rectangleList, entityList, deltaTime);
+		if (fireTimer.timeUp()){
+			fireTimer.reset();
+			if (open) fire();
+		}
+	}
 
-	public void fire(){
+	private void fire(){
 		for (int i = 0; i < 1; ++ i){
 			MapHandler.addEntity(changeFireTrajectory(getFire()));
 		}
@@ -55,7 +69,7 @@ public abstract class BossEye extends Hittable {
 	@Override
 	protected void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
 		if (!open) return;
-		boss.setHealth((int)-DAM);
+		boss.addHealth((int)-DAM);
 		hitstunTimer.setEndTime(1);
 		hitstunTimer.reset();
 	}
