@@ -35,7 +35,7 @@ public abstract class BossEye extends Hittable {
 	public boolean isOpen(){
 		return open;
 	}
-	
+
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 		super.update(rectangleList, entityList, deltaTime);
 		if (fireTimer.timeUp()){
@@ -70,7 +70,9 @@ public abstract class BossEye extends Hittable {
 	protected void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
 		if (!open) return;
 		boss.addHealth((int)-DAM);
-		hitstunTimer.setEndTime(1);
+		new SFX.Screech().play();
+		DowntiltEngine.causeHitlag(8);
+		hitstunTimer.setEndTime(2);
 		hitstunTimer.reset();
 	}
 
@@ -109,12 +111,19 @@ public abstract class BossEye extends Hittable {
 		TextureRegion getOpen() { return idle; }
 		TextureRegion getClosed() { return closed; }
 		Hurlable getFire(){
-			Hurlable fire = new Hurlable.ShootBall(GlobalRepo.GOODTEAM, getPosition().x + image.getWidth(), getCenter().y);
-			fire.getVelocity().set(velForward, velUp);
+			Hurlable fire;
+			if (Math.random() < 0.5){
+				fire = new Hurlable.Laser(GlobalRepo.GOODTEAM, getPosition().x + image.getWidth(), getCenter().y);
+				fire.getVelocity().set(velForward, 0);
+			}
+			else {
+				fire = new Hurlable.Meteor(GlobalRepo.GOODTEAM, getPosition().x + image.getWidth(), getCenter().y);
+				fire.getVelocity().set(velForward, velUp);
+			}
 			return fire;
 		}
 		void bounce(Entity e){
-			e.getVelocity().set(velForward, velUp);
+			e.getVelocity().set(velForward, 2);
 		}
 	}
 
@@ -129,12 +138,19 @@ public abstract class BossEye extends Hittable {
 		TextureRegion getOpen() { return idle; }
 		TextureRegion getClosed() { return closed; }
 		Hurlable getFire(){
-			Hurlable fire = new Hurlable.ShootBall(GlobalRepo.GOODTEAM, getPosition().x, getCenter().y);
-			fire.getVelocity().set(-velForward, velUp);
+			Hurlable fire;
+			if (Math.random() < 0.5){
+				fire = new Hurlable.Laser(GlobalRepo.GOODTEAM, getPosition().x, getCenter().y);
+				fire.getVelocity().set(-velForward, 0);
+			}
+			else {
+				fire = new Hurlable.Meteor(GlobalRepo.GOODTEAM, getPosition().x, getCenter().y);
+				fire.getVelocity().set(-velForward, velUp);
+			}
 			return fire;
 		}
 		void bounce(Entity e){
-			e.getVelocity().set(-velForward, velUp);
+			e.getVelocity().set(-velForward, 6);
 		}
 	}
 
@@ -149,8 +165,15 @@ public abstract class BossEye extends Hittable {
 		TextureRegion getOpen() { return idle; }
 		TextureRegion getClosed() { return closed; }
 		Hurlable getFire(){
-			Hurlable fire = new Hurlable.ShootBall(GlobalRepo.GOODTEAM, getCenter().x, getPosition().y);
-			fire.getVelocity().set(0, -velForward);
+			Hurlable fire;
+			if (Math.random() < 0.5){
+				fire = new Hurlable.Laser(GlobalRepo.GOODTEAM, getCenter().x, getPosition().y);
+				fire.getVelocity().set(0, -velForward);
+			}
+			else {
+				fire = new Hurlable.Meteor(GlobalRepo.GOODTEAM, getCenter().x, getPosition().y);
+				fire.getVelocity().set(0, -velForward);
+			}
 			return fire;
 		}
 		void bounce(Entity e){

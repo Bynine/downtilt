@@ -61,7 +61,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		Menu.initialize();
 		DebugMenu.initialize();
 		MainMenu.initialize();
-		activeMode = new Adventure();
 	}
 	
 	private static boolean isXBox360Controller(Controller c){

@@ -4,7 +4,7 @@ import main.DowntiltEngine;
 
 public class Boss {
 
-	public static final int MAXHEALTH = 250;
+	public static final int MAXHEALTH = 150;
 	private int health = MAXHEALTH;
 	
 	public void addHealth(int i){

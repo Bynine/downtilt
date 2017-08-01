@@ -11,30 +11,52 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import challenges.Adventure;
+import challenges.Adventure.Difficulty;
 import challenges.Endless;
 import challenges.Mode;
 import challenges.TimeTrial;
 import maps.*;
 
 class MainMenu extends Menu {
-	
+
 	private static final String str_ADVENTURE = "Adventure";
 	private static final String str_TIMETRIAL = "Time Trial";
 	private static final String str_ENDLESS = "Endless";
 	private static MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
-			str_ADVENTURE, str_TIMETRIAL, str_ENDLESS
+			new Choice<String>(str_ADVENTURE, "Battle through stages then defeat the boss!"), 
+			new Choice<String>(str_TIMETRIAL, "Knock 'em out quick! Combos extend your time!"),  
+			new Choice<String>(str_ENDLESS, "Survive endless enemies! Combos restore your health!")
 			));
-	
+
 	private static MenuOption<Class<? extends Stage>> stages = new MenuOption<Class<? extends Stage>>(Arrays.asList(
-			Stage_Standard.class, Stage_Rooftop.class, Stage_Truck.class, Stage_Blocks.class,
-			Stage_Mushroom.class, Stage_Space.class, Stage_Sky.class
+			new Choice<Class<? extends Stage>>(Stage_Standard.class, ""),
+			new Choice<Class<? extends Stage>>(Stage_Rooftop.class, ""),
+			new Choice<Class<? extends Stage>>(Stage_Truck.class, ""),
+			new Choice<Class<? extends Stage>>(Stage_Blocks.class, ""),
+			new Choice<Class<? extends Stage>>(Stage_Mushroom.class, ""),
+			new Choice<Class<? extends Stage>>(Stage_Space.class, ""), 
+			new Choice<Class<? extends Stage>>(Stage_Sky.class, "")
 			));
+
+	private static MenuOption<Difficulty> difficulty = new MenuOption<Difficulty>(Arrays.asList(
+			new Choice<Difficulty>(Difficulty.BEGINNER, "Easygoing, perfect for a first time."),
+			new Choice<Difficulty>(Difficulty.STANDARD, "A solid standard experience."),
+			new Choice<Difficulty>(Difficulty.ADVANCED, "Random stages and extra challenge."),
+			new Choice<Difficulty>(Difficulty.NIGHTMARE, "Good luck!")
+			));
+
 	private static MenuOption<Integer> players = new MenuOption<Integer>(Arrays.asList(
-			1, 2
+			new Choice<Integer>(1, ""),
+			new Choice<Integer>(2, "")
 			));
-	
-	private static MenuOption<String> choices = new MenuOption<String>(Arrays.asList("MODE", "STAGE", "PLAYERS"));
-	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, mode, stages, players));
+
+	private static MenuOption<Integer> choices = new MenuOption<Integer>(Arrays.asList(
+			new Choice<Integer>(0, ""),
+			new Choice<Integer>(0, ""),
+			new Choice<Integer>(0, ""),
+			new Choice<Integer>(0, "")
+			));
+	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, mode, difficulty, stages, players));
 
 	private static TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/cursor.png")));
 	private static TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/title.png")));
@@ -69,7 +91,7 @@ class MainMenu extends Menu {
 	private static void draw(){
 		int posX = 220;
 		int startY = 500;
-		int dec = 60;
+		int dec = 30;
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.67f, 0.85f, 0.99f, 1);
 		batch.begin();
@@ -77,32 +99,45 @@ class MainMenu extends Menu {
 		batch.draw(menu, 0, 0);
 		int centerInc = 320;
 		batch.draw(title, posX + centerInc, startY + 100);
-		font.draw(batch, startStr, posX + centerInc, startY);
+		specialFont.draw(batch, startStr, posX + centerInc/2, startY);
 
-		font.draw(batch, appendCursors("MODE:   ", mode) + mode.selected(), posX, startY -= dec);
-		if (mode.selected() == str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
-		font.draw(batch, appendCursors("STAGE:  ", stages) + getStage().getName(), posX, startY -= dec);
+		startY -= dec;
+		font.draw(batch, appendCursors("MODE:   ", mode) + mode.selected().t, posX, startY -= dec);
+		font.draw(batch, mode.getDesc(), posX, startY -= dec);
+
+		if (mode.selected().t != str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
+		font.draw(batch, appendCursors("RANK:   ", difficulty) + difficulty.selected().t, posX, startY -= dec);
+		if (mode.selected().t != str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.0f);
+		font.draw(batch, difficulty.getDesc(), posX, startY -= dec);
 		font.setColor(fontColor);
+
 		
+		if (mode.selected().t == str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
+		font.draw(batch, appendCursors("STAGE:  ", stages) + getStage().getName(), posX, startY -= dec);
+		if (mode.selected().t == str_ADVENTURE) font.setColor(0.4f, 0.4f, 0.4f, 0.0f);
+		font.draw(batch, stages.getDesc(), posX, startY -= dec);
+		font.setColor(fontColor);
+
 		String playerMode = "";
-		switch(players.selected()){
+		switch(players.selected().t){
 		case 1: playerMode = "Solo"; break;
 		default: playerMode = "Co-op"; break;
 		}
-		font.draw(batch, appendCursors("PLAYERS:", players) + playerMode , posX, startY -= dec);
+		font.draw(batch, appendCursors("PLAYERS:", players) + playerMode, posX, startY -= dec);
+		font.draw(batch, players.getDesc(), posX, startY -= dec);
 
-		startY -= dec;
+		startY -= dec * 2;
 		font.draw(batch, "P1: " + DowntiltEngine.getPlayers().get(0).getInputHandler().getControllerName(), posX,  startY -= dec);
 		if (DowntiltEngine.getPlayers().size() > 1){
-			if (players.selected() == 1) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
-			font.draw(batch, "P2: " + DowntiltEngine.getPlayers().get(1).getInputHandler().getControllerName(), posX,  startY -= dec/2);
+			if (players.selected().t == 1) font.setColor(0.4f, 0.4f, 0.4f, 0.4f);
+			font.draw(batch, "P2: " + DowntiltEngine.getPlayers().get(1).getInputHandler().getControllerName(), posX,  startY -= dec);
 			font.setColor(fontColor);
 		}
 
-		batch.draw(cursor, posX - 50, (420) - dec * (choices.cursorPos()));
+		batch.draw(cursor, posX - 50, (420) - dec * (2 * choices.cursorPos()));
 		batch.end();
 	}
-	
+
 	private static String appendCursors(String str, MenuOption<?> menuOption){
 		if (menuOption.cursorPos() == 0) str = "  ".concat(str);
 		else str = "< ".concat(str);
@@ -114,10 +149,10 @@ class MainMenu extends Menu {
 	private static void start(){
 		Mode selectMode;
 		Stage stage = getStage();
-		
-		switch(mode.selected()){
+
+		switch(mode.selected().t){
 		case str_ADVENTURE: {
-			selectMode = new Adventure();
+			selectMode = new Adventure(difficulty.selected().t);
 		} break;
 		case str_TIMETRIAL: {
 			selectMode = new TimeTrial(stage);
@@ -129,14 +164,14 @@ class MainMenu extends Menu {
 			selectMode = null;
 		} break;
 		}
-		
-		DowntiltEngine.startMode(selectMode, players.selected(), 0);
+
+		DowntiltEngine.startMode(selectMode, players.selected().t, 0);
 		menuMusic.stop();
 	}
-	
+
 	private static Stage getStage(){
 		try {
-			return stages.selected().getDeclaredConstructor().newInstance();
+			return stages.selected().t.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			System.out.println("Couldn't get stage! Reason: " + e);
 			return null;

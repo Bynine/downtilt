@@ -16,7 +16,7 @@ import timers.Timer;
 
 abstract class Menu {
 	
-	protected static BitmapFont font = new BitmapFont();
+	protected static BitmapFont font = new BitmapFont(), specialFont = new BitmapFont();
 	protected static SpriteBatch batch;
 	protected final static String startStr = "Press A to begin!";
 	protected final static Color fontColor = Color.WHITE;
@@ -28,6 +28,9 @@ abstract class Menu {
 		parameter.size = 16;
 		parameter.color = fontColor;
 		font = generator.generateFont(parameter);
+		parameter.size = 32;
+		parameter.color = Color.GOLDENROD;
+		specialFont = generator.generateFont(parameter);
 		generator.dispose();
 	}
 	
@@ -35,7 +38,7 @@ abstract class Menu {
 		DowntiltEngine.getPrimaryInputHandler().update();
 	}
 
-	protected static void handleCursor(int mov, List<MenuOption<?>> options, MenuOption<String> choices){
+	protected static void handleCursor(int mov, List<MenuOption<?>> options, MenuOption<Integer> choices){
 		options.get(choices.cursorPos() + 1).moveCursor(mov);
 	}
 	
@@ -72,20 +75,25 @@ abstract class Menu {
 
 	protected static class MenuOption <T> {
 		private int cursor = 0;
-		private final List<T> choices;
+		private final List<Choice<T>> choices;
 		private final Timer waitToMoveTimer = new Timer(5);
 
-		MenuOption(List<T> lst){
+		MenuOption(List<Choice<T>> lst){
 			this.choices = lst;
 			DowntiltEngine.addTimer(waitToMoveTimer);
 		}
 
-		T selected(){
+		Choice<T> selected(){
 			return choices.get(cursor);
 		}
 		
 		int cursorPos(){
 			return cursor;
+		}
+		
+		public String getDesc(){
+			if (choices.get(cursor).desc.isEmpty()) return "";
+			else return "   (" + (choices.get(cursor).desc) + ")";
 		}
 
 		void moveCursor(int mov){
@@ -103,6 +111,18 @@ abstract class Menu {
 		public void setCursor(int i) {
 			cursor = i;
 		}
+	}
+	
+	static class Choice<T> {
+		final T t;
+		final String desc;
+		
+		Choice(T t, String desc){
+			this.t = t;
+			this.desc = desc;
+		}
+		
+		
 	}
 	
 }

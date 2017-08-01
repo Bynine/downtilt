@@ -135,6 +135,11 @@ public abstract class Hurlable extends Hittable {
 			if ( (DowntiltEngine.getDeltaTime() % 20 < 10) && life.getCounter() > life.getEndTime() * (5.0/6.0)) return new Color(1, 1, 1, 0.5f);
 			else return super.getColor();
 		}
+		
+		@Override
+		public void knockInto(){
+			shatter();
+		}
 
 	}
 
@@ -185,7 +190,6 @@ public abstract class Hurlable extends Hittable {
 			baseHurtleBK = minSpeedForHit;
 			baseKBG = 3.5f;
 			touchRadius = 16;
-			life.setEndTime(120);
 		}
 		
 		protected void setImages(int team){
@@ -272,6 +276,40 @@ public abstract class Hurlable extends Hittable {
 			baseHitSpeed = -0.1f;
 		}
 		
+	}
+	
+	public static class Meteor extends ShootBall{
+
+		public Meteor(int team, float posX, float posY) {
+			super(team, posX, posY);
+			new SFX.Explode().play();
+			baseKnockIntoDamage = 7.0f;
+			stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/boulderbad.png")));
+			stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/bouldergood.png")));
+			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/boulderbadspin.png", 4, 1, 6, PlayMode.LOOP);
+			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/bouldergoodspin.png", 4, 1, 6, PlayMode.LOOP);
+			setImages(team);
+		}
+	}
+	
+	public static class Laser extends ShootBall{
+
+		public Laser(int team, float posX, float posY) {
+			super(team, posX, posY);
+			new SFX.LaserFire().play();
+			hitstunDealtBonus = 10;
+			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/laserbad.png", 1, 1, 6, PlayMode.LOOP);
+			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/lasergood.png", 1, 1, 6, PlayMode.LOOP);
+			gravity = 0;
+			airFrictionX = 1;
+			airFrictionY = 1;
+			setImages(team);
+		}
+		
+		@Override
+		public boolean inHitstun(){
+			return true;
+		}
 	}
 
 	public static class Rocket extends Explosive {

@@ -29,6 +29,7 @@ import com.badlogic.gdx.math.Vector3;
 import entities.Entity;
 import entities.Fighter;
 import entities.Hittable;
+import entities.Hurlable.Laser;
 
 public class GraphicsHandler {
 
@@ -216,6 +217,12 @@ public class GraphicsHandler {
 			}
 		}
 		batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
+		if (en instanceof Laser){
+			batch.setColor(1, 1, 1, 0.5f);
+			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 2), en.getPosition().y - (en.getVelocity().y * 2));
+			batch.setColor(1, 1, 1, 0.25f);
+			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 4), en.getPosition().y - (en.getVelocity().y * 4));
+		}
 		if (drawShield) batch.draw(defend, en.getCenter().x - 16, en.getCenter().y - 16);
 		batch.setColor(1, 1, 1, 1);
 		batch.setShader(null);

@@ -86,6 +86,7 @@ public class EnemySpawner {
 		case DEFENSE: enemy.setPermaDefense(); break;
 		case SPEED: enemy.setPermaSpeed(); break;
 		case AIR: enemy.setPermaAir(); break;
+		case WEAK: enemy.setPercentage(100); break;
 		case ALL: {
 			enemy.setPermaPower();
 			enemy.setPermaDefense();

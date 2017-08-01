@@ -21,7 +21,7 @@ public class EnemyType {
 	}
 	
 	public static enum PowerUp{
-		NONE, POWER, DEFENSE, SPEED, AIR, ALL
+		NONE, POWER, DEFENSE, SPEED, AIR, ALL, WEAK
 	}
 	
 }
