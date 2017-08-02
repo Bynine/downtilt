@@ -44,6 +44,10 @@ public class GraphicsHandler {
 	private static TextureRegion 
 	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
 	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png"))),
+	specialfull = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialfull.png"))),
+	specialempty = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialempty.png"))),
+	specialbar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialbar.png"))),
+	stock = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/stock.png"))),
 	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/pauseoverlay.png")));
 	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader;
 
@@ -151,7 +155,7 @@ public class GraphicsHandler {
 		}
 		renderer.render(arr);
 		renderer.getBatch().setShader(null);
-		
+
 		batch.begin();  // render fg entities
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.FOREGROUND) renderEntity(e);
 		batch.end();
@@ -194,9 +198,9 @@ public class GraphicsHandler {
 				float armorAddition = fi.getArmor()/12;
 				batch.setColor(batch.getColor().r - armorAddition, batch.getColor().g - armorAddition, batch.getColor().b, batch.getColor().a);
 			}
-			
+
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
-			
+
 			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
 				drawRainbowAfterImage(fi, batch.getShader());
 			}
@@ -274,19 +278,43 @@ public class GraphicsHandler {
 		float stockLocationMod = 1/4.3f;
 		batch.draw(guiBar, cameraBoundaries().get(0), cameraBoundaries().get(2));
 		for (Fighter player: DowntiltEngine.getPlayers()){
-			font.draw(batch, "lives: " + player.getLives(), 
-					cam.position.x - SCREENWIDTH * stockLocationMod, cam.position.y - SCREENHEIGHT * stockLocationMod + lineHeight);
-			font.draw(batch, "special: " + player.getSpecialMeter(), 
-					cam.position.x - SCREENWIDTH * (stockLocationMod/1.5f), cam.position.y - SCREENHEIGHT * stockLocationMod + lineHeight);
+			float posX = cam.position.x - 8 - SCREENWIDTH * stockLocationMod;
+			float posY = cam.position.y - SCREENHEIGHT * stockLocationMod + lineHeight;
+			int spacing = stock.getRegionWidth() + 1;
+			int spaceMod = 0;
+
+			int lives = player.getLives();
+			if (lives <= 5){
+				font.draw(batch, "lives: ", posX, posY);
+				for (int i = 0; i < lives; ++i){
+					batch.draw(stock, posX + 48 + spaceMod, posY - 8);
+					spaceMod += spacing; 
+				}
+			}
+
+			int special = (int) (player.getSpecialMeter() * 2);
+			spacing = specialfull.getRegionWidth();
+			spaceMod = 0;
+			posX = cam.position.x - SCREENWIDTH * (stockLocationMod/1.5f);
+			posY = cam.position.y - SCREENHEIGHT * stockLocationMod + 4;
+
+			batch.draw(specialbar, posX, posY + specialfull.getRegionHeight() - specialbar.getRegionHeight());
+			for (int i = 0; i < special; ++i){
+				batch.draw(specialfull, posX + spaceMod, posY);
+				spaceMod += spacing; 
+			}
+			for (int i = spaceMod/spacing; i < Fighter.SPECIALMETERMAX * 2; ++i){
+				batch.draw(specialempty, posX + spaceMod, posY);
+				spaceMod += spacing;
+			}
 			lineHeight *= -1/2;
+
 		}
-		font.draw(batch, DowntiltEngine.getChallenge().getTime(), 
-				cam.position.x, cam.position.y - SCREENHEIGHT * stockLocationMod);
-		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), 
-				cam.position.x + SCREENWIDTH * (stockLocationMod/ 3f), cam.position.y - SCREENHEIGHT * stockLocationMod);
-		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), 
-				cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), cam.position.y - SCREENHEIGHT * stockLocationMod);
-		
+		float posY = cam.position.y + 8 - SCREENHEIGHT * stockLocationMod;
+		font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
+		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
+		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
+
 		if (DowntiltEngine.isPaused()) {
 			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
 			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);

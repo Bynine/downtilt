@@ -69,8 +69,8 @@ public abstract class Hittable extends Entity {
 		super.handleTouchHelper(en);
 		if (isTouching(en, 16) && en instanceof BossEye) {
 			BossEye bossEye = (BossEye)en;
-			if (bossEye.isOpen() && !inHitstun()){
-				takeKnockIntoKnockback(new Vector2(-velocity.x, -velocity.y), 10, 10);
+			if (bossEye.isOpen()){
+				if (!inHitstun()) takeKnockIntoKnockback(new Vector2(-velocity.x, -velocity.y), 10, 10);
 			}
 			else{
 				if (this instanceof Fighter) MapHandler.kill((Fighter)this);

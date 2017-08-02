@@ -60,7 +60,6 @@ class MainMenu extends Menu {
 
 	private static TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/cursor.png")));
 	private static TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/title.png")));
-	private static TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/menu.png")));
 	private static final Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
 
 	public static void initialize(){

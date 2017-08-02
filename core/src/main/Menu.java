@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
@@ -20,6 +22,7 @@ abstract class Menu {
 	protected static SpriteBatch batch;
 	protected final static String startStr = "Press A to begin!";
 	protected final static Color fontColor = Color.WHITE;
+	protected static TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/menu.png")));
 	
 	static void initialize(){
 		batch = new SpriteBatch();

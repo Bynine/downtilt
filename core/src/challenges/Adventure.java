@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import main.DowntiltEngine;
 import maps.*;
 
 /**
@@ -25,18 +24,18 @@ public class Adventure extends Mode{
 	private void initializeChallengeList(){
 		switch (difficulty){
 		case BEGINNER:{
-			if (DowntiltEngine.debugOn()) {
-				//challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
-				challengeList.add(0, new ChallengeNorm(new Stage_Blocks(), waveDebug));
-			}
-			else{
+//			if (DowntiltEngine.debugOn()) {
+//				//challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
+//				challengeList.add(0, new ChallengeNorm(new Stage_Blocks(), waveDebug));
+//			}
+//			else{
 				challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard1));
 				challengeList.add(new ChallengeNorm(new Stage_Rooftop(), waveRooftop1));
 				challengeList.add(new ChallengeNorm(new Stage_Truck(), waveTruck1));
 				challengeList.add(new ChallengeNorm(new Stage_Blocks(), waveBlocks1));
 				challengeList.add(new ChallengeNorm(new Stage_Mushroom(), waveMushroom1));
 				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, difficulty));
-			}
+//			}
 		} break;
 		case STANDARD: {
 			challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard2));
@@ -270,7 +269,11 @@ public class Adventure extends Mode{
 	}
 	
 	Victory getVictory(){
-		return new Victory.AdventureVictory(getCombo(), getTime(), difficulty);
+		List<Integer> longestComboList = new ArrayList<Integer>();
+		for (Challenge c: getChallengeList()){
+			longestComboList.add(c.getLongestCombo());
+		}
+		return new Victory.AdventureVictory(longestComboList, getTime(), difficulty);
 	}
 
 }

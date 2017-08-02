@@ -21,7 +21,13 @@ public class Combo {
 	private static final Sound SOUND_5 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/5.wav"));
 	private static final Sound SOUND_6 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/6.wav"));
 	private static final Sound SOUND_7 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/7.wav"));
-	//private static final Sound SOUND_FINISH = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish.wav"));
+	private static final Sound SOUND_FINISH2 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish2.wav"));
+	private static final Sound SOUND_FINISH3 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish3.wav"));
+	private static final Sound SOUND_FINISH4 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish4.wav"));
+	private static final Sound SOUND_FINISH5 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish5.wav"));
+	private static final Sound SOUND_FINISH6 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish6.wav"));
+	private static final Sound SOUND_FINISH7 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish7.wav"));
+	private static final Sound SOUND_FINISH8 = Gdx.audio.newSound(Gdx.files.internal("sfx/combo/finish8.wav"));
 	public static final int knockIntoID = 999, footstoolID = 998;
 
 	public void addMoveID(int id){
@@ -63,7 +69,7 @@ public class Combo {
 		default: finishStrength = 8.0f; break;
 		}
 
-		finishHelper(finishStrength);
+		finishHelper(rank, finishStrength);
 		end();
 		return finishStrength;
 	}
@@ -76,9 +82,17 @@ public class Combo {
 		return rank > 1;
 	}
 
-	private void finishHelper(float addedSpecial){
+	private void finishHelper(int rank, float addedSpecial){
 		if (!isACombo()) return;
-		//SOUND_FINISH.play();
+		switch(rank){
+		case 2: SOUND_FINISH2.play(); break;
+		case 3: SOUND_FINISH3.play(); break;
+		case 4: SOUND_FINISH4.play(); break;
+		case 5: SOUND_FINISH5.play(); break;
+		case 6: SOUND_FINISH6.play(); break;
+		case 7: SOUND_FINISH7.play(); break;
+		case 8: SOUND_FINISH8.play(); break;
+		}
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		for (Fighter player: DowntiltEngine.getPlayers()) {
 			player.changeSpecial(addedSpecial);

@@ -119,8 +119,8 @@ public abstract class Explosion extends ImmobileEntity{
 			int facingOffset = 40 * ownerDirect;
 			position.x = owner.position.x - displacement;
 			position.y = owner.position.y - displacement;
-			ac = 		 new ExplosionHitbox(null,  8.0f, 2.5f, 20, Hitbox.SAMURAI, 0, 0, 30, new SFX.HeavyHit(), this, lifeTime);
-			Hitbox ac2 = new ExplosionHitbox(null,  7.0f, 2.0f, 12, Hitbox.SAMURAI, facingOffset, 0, 50, new SFX.MidHit(), this, lifeTime);
+			ac = 		 new ExplosionHitbox(null,  7.0f, 2.5f, 20, Hitbox.SAMURAI, 0, 0, 30, new SFX.HeavyHit(), this, lifeTime);
+			Hitbox ac2 = new ExplosionHitbox(null,  6.0f, 2.0f, 12, Hitbox.SAMURAI, facingOffset, 0, 50, new SFX.MidHit(), this, lifeTime);
 			ac.setRefresh(2);
 			ac2.setRefresh(4);
 			ac.setHitstunType(HitstunType.SUPER);

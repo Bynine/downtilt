@@ -34,7 +34,7 @@ public class Heavy extends Fighter {
 		setInputHandler(new InputHandlerCPU(this, MookBrain.class));
 		image = new Sprite(standImage.getKeyFrame(0));
 		gravity = -0.55f;
-		baseWeight = 210;
+		baseWeight = 190;
 		baseArmor = HEAVY_ARMOR;
 		jumpAcc = 0.64f;
 		airAcc = 1.2f;

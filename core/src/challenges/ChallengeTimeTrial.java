@@ -12,11 +12,12 @@ public class ChallengeTimeTrial extends ChallengeTimed {
 	/**
 	 * Rotates waves until time is up.
 	 */
+	private static final int BASICALLYINFINITELIVES = 999;
 	ChallengeTimeTrial(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves, sec);
 		for (Wave w: waves) w.setEndless();
-		soloLives = 10;
-		coopLives = 5;
+		soloLives = BASICALLYINFINITELIVES;
+		coopLives = BASICALLYINFINITELIVES;
 	}
 	
 	@Override
