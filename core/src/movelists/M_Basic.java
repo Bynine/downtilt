@@ -26,6 +26,7 @@ public class M_Basic extends MoveList {
 
 		Move m = new Move(user, frames * frame);
 		m.setStopsInAir();
+		m.setHurtBox(40, 40, -6, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/basic/nweak.png", 3, frame);
 		Hitbox h1 = new Hitbox(user, 2.2f, 2.2f, 12, Hitbox.SAMURAI, 20, 4, 16, new SFX.MidHit());
 		m.eventList.addActionCircle(h1, frame, frame + 4);
@@ -66,7 +67,7 @@ public class M_Basic extends MoveList {
 		Hitbox late  = new Hitbox(user, 2.6f, 1.6f, 12, Hitbox.SAMURAI, 0, 0, 22, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addConstantVelocity(user, 2, frame * 2, 0, 0);
-		m.eventList.addConstantVelocity(user, frame * 2, frame * 3, Action.ChangeVelocity.noChange, 1);
+		m.eventList.addConstantVelocity(user, frame * 2, frame * 3, Action.ChangeVelocity.noChange, user.getGravity() * -2);
 		m.eventList.addActionCircle(early, frame * 2, frame * 3);
 		m.eventList.addActionCircle(late,  frame * 3, frame * 4);
 		return m;

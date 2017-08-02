@@ -196,7 +196,6 @@ public class GraphicsHandler {
 			}
 			
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
-			if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(fi)) batch.setShader(slowShader);
 			
 			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
 				drawRainbowAfterImage(fi, batch.getShader());
@@ -211,6 +210,7 @@ public class GraphicsHandler {
 		}
 		if (en instanceof Hittable){
 			Hittable h = (Hittable) en;
+			if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(h)) batch.setShader(slowShader);
 			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) {
 				if (h instanceof Fighter) ((Fighter)en).setHitstunImage();
 				batch.setShader(hitstunShader);

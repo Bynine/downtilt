@@ -38,9 +38,18 @@ public abstract class Mode {
 	 */
 	void win(){
 		new SFX.Victory().play();
-		DowntiltEngine.returnToMenu();
+		DowntiltEngine.startVictoryScreen(getVictory());
+	}
+	
+	int getCombo(){
+		int longestCombo = 0;
+		for (Challenge c: getChallengeList()){
+			if (longestCombo < c.getLongestCombo()) longestCombo = c.getLongestCombo();
+		}
+		return longestCombo;
 	}
 
 	abstract List<Challenge> getChallengeList();
+	abstract Victory getVictory();
 	
 }

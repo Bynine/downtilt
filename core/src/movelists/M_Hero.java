@@ -2,7 +2,6 @@ package movelists;
 
 import java.util.Arrays;
 
-import main.DowntiltEngine;
 import main.SFX;
 import moves.Action;
 import moves.ActionCircleGroup;
@@ -305,7 +304,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/dspecial.png", frames, frame);
 		m.setContinueOnLanding();
 		m.eventList.addConstantVelocity(user, 0, frame, 0, 0);
-		if (!DowntiltEngine.debugOn()) m.eventList.addUseSpecial(user, frame - 1, -6);
+		m.eventList.addUseSpecial(user, frame - 1, -6);
 		m.eventList.addSlow(frame, 300);
 		return m;
 	}

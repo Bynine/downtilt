@@ -19,7 +19,7 @@ public abstract class Challenge {
 	protected Wave activeWave = null;
 	protected final Stage stage;
 	protected long score = 0;
-	private int longestCombo = 0;
+	private int longestCombo = 0, timeSpent = 0;
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
 	protected boolean finished = false, started = false;
@@ -105,6 +105,7 @@ public abstract class Challenge {
 	}
 	
 	public void succeedChallenge(){
+		timeSpent = DowntiltEngine.getDeltaTime();
 		finished = true;
 	}
 
@@ -145,11 +146,11 @@ public abstract class Challenge {
 	}
 	
 	public final String getTime(){
-		int minutes = getTimeMinSec()[0];
+//		int minutes = getTimeMinSec()[0];
 		int seconds = getTimeMinSec()[1];
-		String secondsString = "" + seconds;
-		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);
-		return getTimeString() + minutes + ":" + secondsString;
+//		String secondsString = "" + seconds;
+//		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);
+		return getTimeString() + GlobalRepo.getTimeString(seconds);
 	}
 	
 	protected int[] getTimeMinSec(){
@@ -174,11 +175,19 @@ public abstract class Challenge {
 		return longestCombo;
 	}
 	
+	public int getSeconds(){
+		return timeSpent * 60;
+	}
+	
 	public void updateLongestCombo(int combo){
 		if (combo > longestCombo) longestCombo = combo;
 	}
 	
 	public void rotateEyes(){
+		/* */
+	}
+	
+	public void resolveCombo(float mod){
 		/* */
 	}
 

@@ -25,7 +25,7 @@ public class Combo {
 	public static final int knockIntoID = 999, footstoolID = 998;
 
 	public void addMoveID(int id){
-		if (id == knockIntoID || !moveIDsUsed.contains(id)){
+		if (!moveIDsUsed.contains(id)){
 			playCorrespondingSound();
 			rank++;
 			DowntiltEngine.getChallenge().updateLongestCombo(rank);
@@ -79,6 +79,7 @@ public class Combo {
 	private void finishHelper(float addedSpecial){
 		if (!isACombo()) return;
 		//SOUND_FINISH.play();
+		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		for (Fighter player: DowntiltEngine.getPlayers()) {
 			player.changeSpecial(addedSpecial);
 			if (rank == 5) player.addAll(Hittable.BOOSTTIMERRUSH/4);

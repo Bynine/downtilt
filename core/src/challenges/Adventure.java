@@ -26,8 +26,8 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case BEGINNER:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
-				//challengeList.add(0, new ChallengeNorm(new Stage_Standard(), waveDebug));
+				//challengeList.add(0, new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
+				challengeList.add(0, new ChallengeNorm(new Stage_Blocks(), waveDebug));
 			}
 			else{
 				challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard1));
@@ -97,7 +97,7 @@ public class Adventure extends Mode{
 	 */
 
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.basic), 12, 2, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 1, 1, 60))
 			));
 
 	/* BEGINNER */
@@ -112,8 +112,8 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 2, 2, 80))
 			));
 	private List<Wave> waveTruck1 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 3, 2, 80))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 3, 2, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 1, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.heavy, EnemyRepo.basic), 3, 2, 80))
 			));
 	private List<Wave> waveBlocks1 = new ArrayList<Wave>(Arrays.asList(
@@ -138,7 +138,7 @@ public class Adventure extends Mode{
 			));
 	private List<Wave> waveRooftop2 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 3, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 3, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 2, 1, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 6, 3, 80))
 			));
 	private List<Wave> waveTruck2 = new ArrayList<Wave>(Arrays.asList(
@@ -227,10 +227,10 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbomb, EnemyRepo.fatheavy, EnemyRepo.fatbomb), 9, 3, 80))
 			));
 	private List<Wave> waveBlocks4 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbasic), 5, 5, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly), 5, 5, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbomb), 5, 5, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot), 5, 5, 120))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbasic), 5, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly), 5, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbomb), 5, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot), 5, 3, 120))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatheavy), 3, 3, 180))
 			));
 	private List<Wave> waveMushroom4 = new ArrayList<Wave>(Arrays.asList(
@@ -246,7 +246,7 @@ public class Adventure extends Mode{
 			));
 	private List<Wave> waveSky4 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly, EnemyRepo.fatheavy), 6, 2, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.weakfly), 30, 20, 10))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.weakfly), 50, 20, 10))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot, EnemyRepo.fatbomb), 6, 6, 120))
 			));
 	private List<Wave> waveBoss4 = new ArrayList<Wave>(Arrays.asList(
@@ -259,6 +259,18 @@ public class Adventure extends Mode{
 	@Override
 	List<Challenge> getChallengeList() {
 		return challengeList;
+	}
+	
+	int getTime(){
+		int seconds = 0;
+		for (Challenge c: getChallengeList()){
+			seconds += c.getSeconds();
+		}
+		return seconds;
+	}
+	
+	Victory getVictory(){
+		return new Victory.AdventureVictory(getCombo(), getTime(), difficulty);
 	}
 
 }

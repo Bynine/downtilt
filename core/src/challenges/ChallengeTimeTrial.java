@@ -1,28 +1,22 @@
 package challenges;
 
-import java.util.Collections;
 import java.util.List;
 
+import entities.Fighter;
 import main.DowntiltEngine;
 import main.SFX;
 import maps.Stage;
 
-public class ChallengeTimedEndless extends ChallengeTimed {
+public class ChallengeTimeTrial extends ChallengeTimed {
 
 	/**
 	 * Rotates waves until time is up.
 	 */
-	ChallengeTimedEndless(Stage stage, List<Wave> waves, double sec) {
+	ChallengeTimeTrial(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves, sec);
-		soloLives = 3;
-		coopLives = 2;
-	}
-	
-	@Override
-	protected void setActiveWave(){
-		activeWave = currWaves.get(0);
-		activeWave.restart();
-		Collections.rotate(currWaves, -1);
+		for (Wave w: waves) w.setEndless();
+		soloLives = 10;
+		coopLives = 5;
 	}
 	
 	@Override
@@ -39,14 +33,28 @@ public class ChallengeTimedEndless extends ChallengeTimed {
 	}
 	
 	@Override
+	protected boolean inFailState(){
+		boolean shouldRestart = true;
+		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
+			if (player.getLives() > 0) shouldRestart = false;
+		}
+		return shouldRestart;
+	}
+	
+	@Override
 	public void failChallenge(){
 		new SFX.Error().play();
-		DowntiltEngine.returnToMenu();
+		DowntiltEngine.startMenu();
 	}
 	
 	@Override
 	public String getWaveCounter() {
 		return "";
+	}
+	
+	@Override
+	public void resolveCombo(float mod){
+		time += mod * MINUTE / 2;
 	}
 
 }

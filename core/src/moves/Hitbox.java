@@ -8,6 +8,7 @@ import main.DowntiltEngine;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
+import entities.BossEye;
 import entities.Entity.State;
 import entities.Fighter;
 import entities.Graphic;
@@ -120,7 +121,7 @@ public class Hitbox extends ActionCircle{
 		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
 		
 		startHitlag(target);
-		if (guarding || ( knockback.x == 0 && knockback.y == 0) ) {
+		if (guarding || ( knockback.x == 0 && knockback.y == 0) || target instanceof BossEye) {
 			sfx = new SFX.EmptyHit();
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}

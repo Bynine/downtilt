@@ -284,7 +284,7 @@ public abstract class Brain{
 			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 80 ) headTowardPlayer(changeDirection);
 			if (shouldGetUp(0.02)) getUp();
 			else if (inVerticalAttackRange()) chooseAttack();
-			if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			if (pack.isOffStage || pack.distanceYFromPlayer < -48) attemptRecovery(waitToUseUpSpecial);
 		}
 		
 		void chooseAttack(){

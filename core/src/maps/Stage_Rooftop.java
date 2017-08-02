@@ -37,6 +37,10 @@ public class Stage_Rooftop extends Stage {
 		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
 	}
 	
+	public Vector2 getCenterPosition(){
+		return new Vector2(22 * GlobalRepo.TILE, 3 * GlobalRepo.TILE);
+	}
+	
 	private class LightningHandler{
 		Timer lightningTimer = new Timer(100);
 		Vector2 lightningPos = new Vector2(0, 0);

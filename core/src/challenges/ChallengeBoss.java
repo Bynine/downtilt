@@ -24,6 +24,7 @@ public class ChallengeBoss extends ChallengeEndless {
 
 	public ChallengeBoss(Stage stage, List<Wave> waves, Difficulty difficulty) {
 		super(stage, waves);
+		for (Wave w: waves) w.setEndless();
 		this.difficulty = difficulty;
 		soloLives = 5;
 		coopLives = 3;
@@ -33,8 +34,8 @@ public class ChallengeBoss extends ChallengeEndless {
 		super.startChallenge();
 		switch(difficulty){
 		case BEGINNER: boss.setHealth(50); break;
-		case STANDARD: boss.setHealth(125); break;
-		case ADVANCED: boss.setHealth(200); break;
+		case STANDARD: boss.setHealth(100); break;
+		case ADVANCED: boss.setHealth(175); break;
 		case NIGHTMARE: boss.setHealth(300); break;
 		}
 		if (!right.isOpen())	right.toggleOpen();

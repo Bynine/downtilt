@@ -127,7 +127,7 @@ public abstract class Hurlable extends Hittable {
 			setRemove();
 		}
 
-		protected void takeDamage(float DAM){
+		public void takeDamage(float DAM){
 			life.moveCounterForward((int) (DAM * frailtyMod) );
 		}
 

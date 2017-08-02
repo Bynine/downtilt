@@ -9,21 +9,25 @@ import maps.Stage;
 public class TimeTrial extends Mode {
 
 	private List<Wave> wave = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 4, 2, 10))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.bomb), 4, 2, 10))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.shoot, EnemyRepo.fly), 3, 3, 10))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb), 4, 4, 10))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 6, 6, 10))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb, EnemyRepo.heavy), 0, 10, 180))
 			));
 	List<Challenge> challengeList = new ArrayList<Challenge>();
 	
 	public TimeTrial(Stage stage){
-		challengeList.add(new ChallengeTimedEndless(stage, wave, 90));
+		challengeList.add(new ChallengeTimeTrial(stage, wave, 60));
 	}
 	
 	@Override
 	List<Challenge> getChallengeList() {
 		return challengeList;
+	}
+	
+	int getKOs(){
+		return wave.get(0).getNumKilled();
+	}
+	
+	Victory getVictory(){
+		return new Victory.TrialVictory(getCombo(), getKOs());
 	}
 
 }

@@ -118,9 +118,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 		}
 		if (fpsLoggle && !release) fpsLogger.log();
 		switch(gameState){
-		case GAME:	updateGame();		break;
-		case DEBUG: DebugMenu.update();	break;
-		case MENU:	MainMenu.update();	break;
+		case GAME:		updateGame();			break;
+		case DEBUG: 	DebugMenu.update();		break;
+		case MENU:		MainMenu.update();		break;
+		case VICTORY: 	VictoryScreen.update();	break;
 		}
 	}
 
@@ -191,8 +192,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 		toMenu(GameState.DEBUG);
 	}
 
-	public static void returnToMenu(){
+	public static void startMenu(){
 		toMenu(GameState.MENU);
+	}
+	
+	public static void startVictoryScreen(Victory v){
+		VictoryScreen.start(v);
+		toMenu(GameState.VICTORY);
 	}
 	
 	private static void toMenu(GameState gs){
@@ -208,7 +214,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public enum GameState{
-		GAME, DEBUG, MENU
+		GAME, DEBUG, MENU, VICTORY
 	}
 
 	public static float getVolume(){ return volume; }

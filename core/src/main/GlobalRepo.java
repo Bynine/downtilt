@@ -73,4 +73,12 @@ public class GlobalRepo {
 		return blockColor;
 	}
 	
+	public static String getTimeString(int sec){
+		int minutes = (sec /60);
+		int seconds = (sec) - (minutes);
+		String secondsString = "" + seconds;
+		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);
+		return minutes + ":" + secondsString;
+	}
+	
 }

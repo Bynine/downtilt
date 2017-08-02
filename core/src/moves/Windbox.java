@@ -18,9 +18,11 @@ public class Windbox extends ActionCircle {
 	@Override
 	public void hitTarget(Hittable en) {
 		if (didHitTarget(en) && en != user) {
+			final int windLimiter = 12;
 			float pushX = strX;
 			if (user.getDirection() == Direction.LEFT) pushX *= -1;
-			en.getVelocity().add(pushX, strY);
+			if (!(Math.signum(en.getVelocity().x) == pushX && Math.abs(en.getVelocity().x) > Math.abs(pushX) * windLimiter)) en.getVelocity().add(pushX, 0);
+			if (!(Math.signum(en.getVelocity().y) == strY  && Math.abs(en.getVelocity().y) > Math.abs(strY) * windLimiter))  en.getVelocity().add(0, strY);
 		}
 	}
 	

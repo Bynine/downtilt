@@ -69,8 +69,8 @@ public abstract class Hittable extends Entity {
 		super.handleTouchHelper(en);
 		if (isTouching(en, 16) && en instanceof BossEye) {
 			BossEye bossEye = (BossEye)en;
-			if (bossEye.isOpen()){
-				bossEye.bounce(this);
+			if (bossEye.isOpen() && !inHitstun()){
+				takeKnockIntoKnockback(new Vector2(-velocity.x, -velocity.y), 10, 10);
 			}
 			else{
 				if (this instanceof Fighter) MapHandler.kill((Fighter)this);
@@ -200,8 +200,9 @@ public abstract class Hittable extends Entity {
 		if (knockbackIntensity(knockback) > tumbleBK) tumbling = true;
 	}
 
-	protected void takeDamage(float DAM){
+	public void takeDamage(float DAM){
 		percentage += DAM;
+		if (percentage < 0) percentage = 0;
 	}
 
 	protected void dealDamage(float DAM){
@@ -211,7 +212,6 @@ public abstract class Hittable extends Entity {
 	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		knockback.setAngle(directionalInfluenceAngle(knockback));
 		if (shouldChangeKnockback) velocity.set(knockback);
-		//initialHitAngle = knockback.angle();
 		if (state == State.HELPLESS) state = State.FALL;
 		hitstunTimer.setEndTime(hitstun);
 		hitstunTimer.reset();

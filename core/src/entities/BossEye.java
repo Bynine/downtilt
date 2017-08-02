@@ -75,6 +75,11 @@ public abstract class BossEye extends Hittable {
 		hitstunTimer.setEndTime(2);
 		hitstunTimer.reset();
 	}
+	
+	@Override
+	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
+		/* */
+	}
 
 	@Override
 	protected void setKnockIntoVelocity(Hittable hurtler){

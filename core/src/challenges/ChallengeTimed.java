@@ -7,8 +7,8 @@ import maps.Stage;
 
 public class ChallengeTimed extends Challenge {
 	
-	private static final int MINUTE = 60;
-	private final int time;
+	protected static final int MINUTE = 60;
+	protected int time;
 
 	ChallengeTimed(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves);
