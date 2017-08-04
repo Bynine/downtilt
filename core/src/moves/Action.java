@@ -115,8 +115,8 @@ public abstract class Action {
 		}
 
 		void performAction() {
-			if (user.getSpecialMeter() < -drain) user.endSpecialAttack();
-			else user.changeSpecial(drain);
+			if (DowntiltEngine.getChallenge().getSpecialMeter() < -drain) user.interruptSpecialAttack();
+			else DowntiltEngine.getChallenge().changeSpecial(drain);
 		}
 	}
 	

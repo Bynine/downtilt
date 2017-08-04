@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Fly extends Fighter {
@@ -36,7 +35,7 @@ public class Fly extends Fighter {
 		airSpeed = 4.2f;
 		airAcc = 0.24f;
 		friction = 0.98f;
-		gravity = -0.15f;
+		gravity = -0.18f;
 		jumpStrength = 3.2f;
 		jumpAcc = 0.2f;
 		dashStrength = 0f;
@@ -99,18 +98,4 @@ public class Fly extends Fighter {
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
 	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
 	
-	public static class Swarm extends Fly {
-
-		private final static ShaderProgram norm = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/fly/swarm.glsl"));
-
-		public Swarm(float posX, float posY, int team) {
-			super(posX, posY, team);
-			setPalette(norm);
-			baseWeight = 14;
-			baseArmor = -2;
-		}
-
-
-	}
-
 }

@@ -205,6 +205,25 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public enum ControllerType{
 		XBOX360, PS3, OTHER
 	}
+	
+	public boolean inputNormal(){
+		return control.getButton(commandAttack);
+	}
+	public boolean inputSpecial(){
+		return control.getButton(commandSpecial);
+	}
+	public boolean inputCharge(){
+		return control.getButton(commandCharge);
+	}
+	public boolean inputJump(){
+		return control.getButton(commandJump);
+	}
+	public boolean inputGrab(){
+		return control.getButton(commandGrab);
+	}
+	public boolean inputGuard(){
+		return blockHold();
+	}
 
 	/* handled by buttonDown */
 

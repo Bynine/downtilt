@@ -51,7 +51,7 @@ public class EnemySpawner {
 		Iterator<Fighter> spawnIter = spawnedEntities.iterator();
 		while (spawnIter.hasNext()){
 			Fighter spawn = spawnIter.next();
-			if (spawn.getLives() == 0) {
+			if (spawn.isDead()) {
 				spawnIter.remove();
 				killed++;
 			}
@@ -66,7 +66,7 @@ public class EnemySpawner {
 	private void setSpawnPoint(){
 		spawnPoint.set(DowntiltEngine.getChallenge().getStartPosition());
 		float dispX = DowntiltEngine.getChallenge().getStartDispX();
-		float dispY = GlobalRepo.TILE * 3;
+		float dispY = GlobalRepo.TILE * 2;
 		if (Math.random() < 0.5f) spawnPoint.set(spawnPoint.x - dispX, spawnPoint.y + dispY);
 		else spawnPoint.set(spawnPoint.x + dispX, spawnPoint.y + dispY);
 	}
@@ -86,7 +86,7 @@ public class EnemySpawner {
 		case DEFENSE: enemy.setPermaDefense(); break;
 		case SPEED: enemy.setPermaSpeed(); break;
 		case AIR: enemy.setPermaAir(); break;
-		case WEAK: enemy.setPercentage(enemy.getWeight() * 1.5f); break;
+		case WEAK: enemy.setPercentage(enemy.getWeight()); break;
 		case ALL: {
 			enemy.setPermaPower();
 			enemy.setPermaDefense();

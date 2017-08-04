@@ -12,7 +12,7 @@ public class Stage_Truck extends Stage {
 	public Stage_Truck(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/lock.mp3"));
 		setup();
-		name = "HIGH-SPEED HIGHWAY HOEDOWN";
+		name = "High-speed Highway Hoedown";
 		scrolls = true;
 	}
 
@@ -26,7 +26,7 @@ public class Stage_Truck extends Stage {
 
 
 	public Vector2 getStartPosition() {
-		return new Vector2(24 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(24 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){

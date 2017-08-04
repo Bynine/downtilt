@@ -15,7 +15,7 @@ public class Stage_Sky extends Stage {
 	public Stage_Sky(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/dance.mp3"));
 		setup();
-		name = "CRAZY CLOUD CASTLE";
+		name = "Crazy Cloud Castle";
 		dispX = GlobalRepo.TILE * 3;
 	}
 
@@ -30,7 +30,7 @@ public class Stage_Sky extends Stage {
 
 
 	public Vector2 getStartPosition() {
-		return new Vector2(19 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(19 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){

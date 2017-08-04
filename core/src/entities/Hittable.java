@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,7 +24,7 @@ public abstract class Hittable extends Entity {
 	protected TextureRegion defaultTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/dummy.png")));
 	protected float percentage = 0;
 	protected boolean tumbling = false, slowed = true, grabbable = true;
-	protected final Timer caughtTimer = new Timer(0), knockIntoTimer = new Timer(20), stunTimer = new Timer(0), guardTimer = new Timer(0);
+	protected final Timer caughtTimer = new Timer(0), knockIntoTimer = new Timer(20), stunTimer = new Timer(0), guardTimer = new Timer(0), hitstopTimer = new Timer(0);
 	public static final int BOOSTTIMERDEFAULT = 1800, BOOSTTIMERRUSH = 600;
 	protected final Timer powerTimer = new Timer(BOOSTTIMERDEFAULT), speedTimer = new Timer(BOOSTTIMERDEFAULT), 
 			defenseTimer = new Timer(BOOSTTIMERDEFAULT), airTimer = new Timer(BOOSTTIMERDEFAULT);
@@ -47,7 +48,7 @@ public abstract class Hittable extends Entity {
 		super(posX, posY);
 		image = new Sprite(defaultTexture);
 		timerList.addAll(Arrays.asList(
-				caughtTimer, knockIntoTimer, stunTimer,
+				caughtTimer, knockIntoTimer, stunTimer, hitstopTimer,
 				powerTimer, speedTimer, defenseTimer, airTimer));
 	}
 
@@ -70,7 +71,7 @@ public abstract class Hittable extends Entity {
 		if (isTouching(en, 16) && en instanceof BossEye) {
 			BossEye bossEye = (BossEye)en;
 			if (bossEye.isOpen()){
-				if (!inHitstun()) takeKnockIntoKnockback(new Vector2(-velocity.x, -velocity.y), 10, 10);
+				if (!inHitstun()) takeKnockIntoKnockback(new Vector2(-velocity.x * 2, -velocity.y * 2), 10, 10);
 			}
 			else{
 				if (this instanceof Fighter) MapHandler.kill((Fighter)this);
@@ -79,13 +80,14 @@ public abstract class Hittable extends Entity {
 		}
 		if (en instanceof Hittable){
 			checkHitByHurtlingObject((Hittable) en);
+			checkPushAway((Hittable) en);
 		}
 	}
 
 	void checkPushAway(Hittable hi){
 		int pushDistance = 16 + 2 * ((int) image.getWidth() - defaultTexture.getRegionWidth());
 		boolean toPush = shouldPushAway(pushDistance, hi);
-		if (getTeam() == hi.getTeam()) toPush = isTouching(hi, 0);
+		if (getTeam() == hi.getTeam()) toPush = isTouching(hi, 8);
 		if (toPush) pushAway(hi);
 	}
 
@@ -94,7 +96,7 @@ public abstract class Hittable extends Entity {
 	}
 
 	protected void pushAway(Entity e){
-		float pushForce = 0.04f;
+		float pushForce = 0.02f;
 		float dirPush = Math.signum(e.position.x - this.position.x);
 		velocity.x -= dirPush * pushForce;
 		e.velocity.x += dirPush * pushForce;
@@ -105,8 +107,9 @@ public abstract class Hittable extends Entity {
 		boolean fighterGoingFastEnough = knockbackIntensity(hurtler.velocity) > hurtler.baseHurtleBK;
 		if (hurtler.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
 		boolean correctTeam = teamCheck(hurtler);
+		boolean angleFarEnough = (Math.abs(hurtler.getVelocity().angle() - getVelocity().angle()) > 10) || knockbackIntensity(velocity) == 0;
 		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hurtler.inHitstun();
-		if (knockInto && isTouching(hurtler, touchRadius) && knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity) && !isInvincible()) {
+		if (angleFarEnough && knockInto && isTouching(hurtler, touchRadius) && knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity) && !isInvincible()) {
 			if (isGuarding()) blockHurtlingObject(hurtler);
 			else getHitByHurtlingObject(hurtler);
 		}
@@ -159,7 +162,7 @@ public abstract class Hittable extends Entity {
 		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.350);
 		hurtler.velocity.set(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
-	
+
 	@Override
 	protected void handleWindHelper(){
 		float weightMod = (float) Math.pow(100/getWeight(), 0.420); // nice
@@ -213,11 +216,20 @@ public abstract class Hittable extends Entity {
 		knockback.setAngle(directionalInfluenceAngle(knockback));
 		if (shouldChangeKnockback) velocity.set(knockback);
 		if (state == State.HELPLESS) state = State.FALL;
+		if (this instanceof Fighter && team != GlobalRepo.GOODTEAM){
+			hitstopTimer.setEndTime(hitstopDuration(hitstun));
+			hitstopTimer.reset();
+			hitstun += hitstopDuration(hitstun);
+		}
 		hitstunTimer.setEndTime(hitstun);
 		hitstunTimer.reset();
 		hitstunType = ht;
 		guardTimer.end();
 		disrupt();
+	}
+
+	protected int hitstopDuration(int hitstun){
+		return MathUtils.clamp(hitstun / 21, 0, 5);
 	}
 
 	protected float directionalInfluenceAngle(Vector2 knockback){
@@ -326,7 +338,11 @@ public abstract class Hittable extends Entity {
 	}
 
 	public boolean canMove(){
-		return stunTimer.timeUp() && caughtTimer.timeUp();
+		return !inHitStop() && stunTimer.timeUp() && caughtTimer.timeUp();
+	}
+
+	public boolean inHitStop(){
+		return !hitstopTimer.timeUp();
 	}
 
 	public boolean isGuarding() { return false; }

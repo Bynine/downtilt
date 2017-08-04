@@ -79,7 +79,7 @@ abstract class Menu {
 	protected static class MenuOption <T> {
 		private int cursor = 0;
 		private final List<Choice<T>> choices;
-		private final Timer waitToMoveTimer = new Timer(5);
+		private final Timer waitToMoveTimer = new Timer(3);
 
 		MenuOption(List<Choice<T>> lst){
 			this.choices = lst;
@@ -114,6 +114,11 @@ abstract class Menu {
 		public void setCursor(int i) {
 			cursor = i;
 		}
+
+		public void randomize() {
+			cursor = ((int) (Math.random() * choices.size()) );
+		}
+		
 	}
 	
 	static class Choice<T> {

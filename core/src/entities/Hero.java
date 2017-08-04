@@ -1,7 +1,6 @@
 package entities;
 
 import main.GlobalRepo;
-import main.SFX;
 import movelists.M_Hero;
 import movelists.MoveList;
 import movelists.MoveList_Advanced;
@@ -76,7 +75,6 @@ public class Hero extends Fighter {
 	@Override
 	public void perfectParry(){
 		endAttack();
-		new SFX.Victory().play();
 		invincibleTimer.reset();
 		startAttack(new IDMove(((MoveList_Advanced)moveList).perfectParry(), MoveList.noStaleMove));
 	}

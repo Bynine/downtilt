@@ -11,7 +11,7 @@ public class Stage_Space extends Stage {
 	public Stage_Space(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/spook.mp3"));
 		setup();
-		name = "SPACE SMACKDOWN";
+		name = "Space Smackdown";
 		dispX = GlobalRepo.TILE * 4;
 		gravity = 0.7f;
 	}
@@ -21,7 +21,7 @@ public class Stage_Space extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){

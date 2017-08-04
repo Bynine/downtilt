@@ -2,7 +2,6 @@ package challenges;
 
 import java.util.List;
 
-import entities.Fighter;
 import main.DowntiltEngine;
 import main.SFX;
 import maps.Stage;
@@ -12,17 +11,16 @@ public class ChallengeTimeTrial extends ChallengeTimed {
 	/**
 	 * Rotates waves until time is up.
 	 */
-	private static final int BASICALLYINFINITELIVES = 999;
+
 	ChallengeTimeTrial(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves, sec);
 		for (Wave w: waves) w.setEndless();
-		soloLives = BASICALLYINFINITELIVES;
-		coopLives = BASICALLYINFINITELIVES;
+		lifeSetting = BASICALLYINFINITELIVES;
 	}
 	
 	@Override
 	protected boolean inSuccessState(){
-		return (getTimeMinSec()[0] <= 0 && getTimeMinSec()[1] <= 0);
+		return (getTimeNum() <= 0);
 	}
 	
 	@Override
@@ -35,11 +33,7 @@ public class ChallengeTimeTrial extends ChallengeTimed {
 	
 	@Override
 	protected boolean inFailState(){
-		boolean shouldRestart = true;
-		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
-			if (player.getLives() > 0) shouldRestart = false;
-		}
-		return shouldRestart;
+		return lives <= 0;
 	}
 	
 	@Override

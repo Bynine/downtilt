@@ -3,11 +3,10 @@ package main;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
-
 import moves.ActionCircle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,10 +25,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import challenges.Challenge;
+import challenges.ChallengeTimed;
+import challenges.ChallengeTutorial;
+import challenges.ChallengeTutorial.ToolTip;
 import entities.Entity;
 import entities.Fighter;
 import entities.Hittable;
-import entities.Hurlable.Laser;
 
 public class GraphicsHandler {
 
@@ -40,9 +42,13 @@ public class GraphicsHandler {
 	private static OrthogonalTiledMapRenderer renderer;
 	private static final float screenAdjust = 2f;
 	private static final ShapeRenderer debugRenderer = new ShapeRenderer();
-	private static BitmapFont font = new BitmapFont();
+	private static BitmapFont font = new BitmapFont(), comboFont = new BitmapFont(), timeLimitFont = new BitmapFont();
+	private static final Color fontColor = Color.WHITE;
 	private static TextureRegion 
 	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
+	textBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/textbar.png"))),
+	textBarSatisfied = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/textbarcomplete.png"))),
+	selectButton = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/selectbutton.png"))),
 	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png"))),
 	specialfull = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialfull.png"))),
 	specialempty = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialempty.png"))),
@@ -71,13 +77,17 @@ public class GraphicsHandler {
 		parallaxCam.zoom = ZOOM;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/nes.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.color = fontColor;
 		parameter.size = 8;
+		parameter.spaceY = 2;
 		font = generator.generateFont(parameter);
+		parameter.borderWidth = 1;
+		comboFont = generator.generateFont(parameter);
+		parameter.borderWidth = 0;
+		parameter.size = 12;
+		parameter.gamma = 10;
+		timeLimitFont = generator.generateFont(parameter); 
 		generator.dispose();
-	}
-
-	public static Predicate<? super Fighter> isDead() {
-		return p -> p.getLives() <= 0;
 	}
 
 	static void updateCamera(){
@@ -132,9 +142,9 @@ public class GraphicsHandler {
 
 	static void updateGraphics(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		batch.setProjectionMatrix(cam.combined);
 		int[] arr;
 		renderer.setView(parallaxCam);
+		batch.setProjectionMatrix(cam.combined);
 
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
@@ -148,6 +158,7 @@ public class GraphicsHandler {
 		font.setColor(1, 1, 1, 1);
 
 		renderer.setView(cam);
+		//batch.setProjectionMatrix(cam.combined);
 		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
 		arr = new int[numLayers];
 		for (int i = 0; i < arr.length; ++i) {
@@ -221,7 +232,7 @@ public class GraphicsHandler {
 			}
 		}
 		batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
-		if (en instanceof Laser){
+		if (en.trails()){
 			batch.setColor(1, 1, 1, 0.5f);
 			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 2), en.getPosition().y - (en.getVelocity().y * 2));
 			batch.setColor(1, 1, 1, 0.25f);
@@ -274,44 +285,52 @@ public class GraphicsHandler {
 	}
 
 	private static void renderGUI(){
-		float lineHeight = 8;
 		float stockLocationMod = 1/4.3f;
 		batch.draw(guiBar, cameraBoundaries().get(0), cameraBoundaries().get(2));
-		for (Fighter player: DowntiltEngine.getPlayers()){
-			float posX = cam.position.x - 8 - SCREENWIDTH * stockLocationMod;
-			float posY = cam.position.y - SCREENHEIGHT * stockLocationMod + lineHeight;
-			int spacing = stock.getRegionWidth() + 1;
-			int spaceMod = 0;
+		float posY = cam.position.y - SCREENHEIGHT * stockLocationMod + 6;
+		float posX = cam.position.x - 8 - SCREENWIDTH * stockLocationMod;
+		int spacing = stock.getRegionWidth() + 1;
+		int spaceMod = 0;
 
-			int lives = player.getLives();
-			if (lives <= 5){
-				font.draw(batch, "lives: ", posX, posY);
-				for (int i = 0; i < lives; ++i){
-					batch.draw(stock, posX + 48 + spaceMod, posY - 8);
-					spaceMod += spacing; 
-				}
-			}
-
-			int special = (int) (player.getSpecialMeter() * 2);
-			spacing = specialfull.getRegionWidth();
-			spaceMod = 0;
-			posX = cam.position.x - SCREENWIDTH * (stockLocationMod/1.5f);
-			posY = cam.position.y - SCREENHEIGHT * stockLocationMod + 4;
-
-			batch.draw(specialbar, posX, posY + specialfull.getRegionHeight() - specialbar.getRegionHeight());
-			for (int i = 0; i < special; ++i){
-				batch.draw(specialfull, posX + spaceMod, posY);
+		int lives = DowntiltEngine.getChallenge().getLives();
+		if (lives <= 5){
+			font.draw(batch, "lives: ", posX, posY);
+			for (int i = 0; i < lives; ++i){
+				batch.draw(stock, posX + 48 + spaceMod, posY - 8);
 				spaceMod += spacing; 
 			}
-			for (int i = spaceMod/spacing; i < Fighter.SPECIALMETERMAX * 2; ++i){
-				batch.draw(specialempty, posX + spaceMod, posY);
-				spaceMod += spacing;
-			}
-			lineHeight *= -1/2;
-
 		}
-		float posY = cam.position.y + 8 - SCREENHEIGHT * stockLocationMod;
-		font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
+
+		int special = (int) (DowntiltEngine.getChallenge().getSpecialMeter() * 2);
+		int posYMod = -2;
+		spacing = specialfull.getRegionWidth();
+		spaceMod = 0;
+		posX = cam.position.x - SCREENWIDTH * (stockLocationMod/1.5f);
+
+		batch.draw(specialbar, posX, posY + posYMod + specialfull.getRegionHeight() - specialbar.getRegionHeight());
+		for (int i = 0; i < special; ++i){
+			batch.draw(specialfull, posX + spaceMod, posY + posYMod);
+			spaceMod += spacing; 
+		}
+		for (int i = spaceMod/spacing; i < Challenge.SPECIALMETERMAX * 2; ++i){
+			batch.draw(specialempty, posX + spaceMod, posY + posYMod);
+			spaceMod += spacing;
+		}
+		
+		if (DowntiltEngine.getChallenge() instanceof ChallengeTimed) {
+			int timeLeft = ((ChallengeTimed)DowntiltEngine.getChallenge()).getTimeLeftInSeconds();
+			int limitRed = 10;
+			int limitOrange = 30;
+			int limitYellow = 60;
+			if (timeLeft == limitRed || timeLeft == limitOrange || timeLeft == limitYellow) timeLimitFont.setColor(Color.WHITE);
+			else if (timeLeft < limitRed) timeLimitFont.setColor(Color.RED);
+			else if (timeLeft < limitOrange) timeLimitFont.setColor(Color.ORANGE);
+			else if (timeLeft < limitYellow) timeLimitFont.setColor(Color.YELLOW);
+			else timeLimitFont.setColor(Color.GREEN);
+			timeLimitFont.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x - 32, posY);
+		}
+		else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
+		
 		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
 		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
 
@@ -320,6 +339,8 @@ public class GraphicsHandler {
 			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
 			font.draw(batch, "(Press Y to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
+		
+		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 	}
 
 	private static List<Float> cameraBoundaries(){
@@ -341,20 +362,21 @@ public class GraphicsHandler {
 	}
 
 	private static void drawCombo(Fighter fi) {
-		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2;
+		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2 - 8;
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
 		float combo = (fi.getCombo().getRank() - 1)/8.0f;
-		final float powMod = 0.75f;
+		final float powMod = 0.8f;
 
 		if (combo > 1) combo = 1;
-		font.setColor((float) Math.pow(1 - combo, powMod), (float) Math.pow(combo, powMod), 0, 1);
-		font.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
+		comboFont.setColor((float) Math.pow(1 - combo, powMod), (float) Math.pow(combo, powMod), 0, 1);
+		comboFont.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
+		comboFont.setColor(fontColor);
 	}
 
 	private static void drawPercentage(Entity e) {
 		Fighter fi = (Fighter) e;
 		float xPos = fi.getPosition().x - 16 + fi.getImage().getWidth()/2;
-		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight() * 3;
+		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
 		font.draw(batch, (int)fi.getPercentage() + "%", xPos, yPos);
 	}
 
@@ -374,6 +396,19 @@ public class GraphicsHandler {
 	private static double shakeScreenHelper() { 
 		double posOrNeg = Math.signum(0.5 - Math.random());
 		return posOrNeg * 9.0 * (0.95 + (Math.random()/20.0));
+	}
+	
+	public static void drawToolTip(){
+		ToolTip tt = ((ChallengeTutorial)DowntiltEngine.getChallenge()).getToolTip();
+		String text = tt.getString();
+		float posX = cameraBoundaries().get(0) + 100;
+		float posY = cameraBoundaries().get(3) - textBar.getRegionHeight() - GlobalRepo.TILE / 2;
+		if (tt.isSatisfied()) {
+			batch.draw(textBarSatisfied, posX, posY);
+			batch.draw(selectButton, posX + textBar.getRegionWidth() - selectButton.getRegionWidth(), posY);
+		}
+		else batch.draw(textBar, posX, posY);
+		font.draw(batch, text, posX + GlobalRepo.TILE / 4, posY + 54);
 	}
 
 	public static void debugRender(){

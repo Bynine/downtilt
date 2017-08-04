@@ -24,13 +24,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Fighter extends Hittable{
 
 	protected final float unregisteredInputMax = 0.2f;
-	protected boolean blockHeld;
+	protected boolean blockHeld, dead;
 	protected int doubleJumpMax = 1;
 	int doubleJumps = doubleJumpMax;
 	public int queuedCommand = InputHandler.commandNone;
@@ -42,10 +41,6 @@ public abstract class Fighter extends Hittable{
 
 	private ShaderProgram palette = null;
 	private final Vector2 spawnPoint;
-	private int lives = 1;
-
-	public static final int SPECIALMETERMAX = 12, STARTINGSPECIAL = 2;
-	private float specialMeter = STARTINGSPECIAL;
 
 	protected Vector2 footStoolKB = new Vector2(0, 0);
 	protected int footStoolDuration = 30;
@@ -54,7 +49,7 @@ public abstract class Fighter extends Hittable{
 	protected TextureRegion defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconalien.png")));
 
 	private Hittable caughtTarget = null;
-	private IDMove activeMove = null, prevMove = null; 
+	private IDMove activeMove = null, preLandMove = null; 
 	private final Combo combo = new Combo();
 
 	private InputHandler inputHandler = new InputHandlerKeyboard(this);
@@ -102,6 +97,7 @@ public abstract class Fighter extends Hittable{
 			else if (!doesCollide(position.x - 2, position.y)) position.set(position.x - 2, position.y);
 		}
 		prevStickX = stickX;
+		preLandMove = null;
 	}
 
 	private boolean isTrembling(){
@@ -152,7 +148,8 @@ public abstract class Fighter extends Hittable{
 	private void handleMove(){
 		getActiveMove().move.update();
 		if (null == getActiveMove()) return;
-		if (getActiveMove().move.doesStopInAir() && (!isGrounded() || !inGroundedState()) ) getActiveMove().move.setDone();
+		boolean endAttack = false;
+		if (getActiveMove().move.doesStopInAir() && (!isGrounded() || !inGroundedState()) ) endAttack = true;
 		if (getActiveMove().move.isAerial() && isGrounded()) getActiveMove().move.setDone();
 		if (getActiveMove().move.done()) {
 			if (getActiveMove().move.causesHelpless()){ 
@@ -160,6 +157,7 @@ public abstract class Fighter extends Hittable{
 				endAttack();
 			}
 		}
+		if (endAttack) endAttack();
 	}
 
 	protected void handleBounce(Entity e){
@@ -188,7 +186,6 @@ public abstract class Fighter extends Hittable{
 			if (state != State.JUMPSQUAT) preJumpSquatState = state;
 			state = State.JUMPSQUAT;
 		}
-		//else if ((state == State.GUARD && !guardHoldTimer.timeUp() || blockHeld) && attackTimer.timeUp()) state = State.GUARD;
 		else if (Math.abs(stickX) < minRunHold && stickY > minCrouchHold) state = State.CROUCH;
 		else if (Math.abs(stickX) > minRunHold){
 			boolean fallToDash = !inGroundedState(prevState) && Math.abs(stickX) > minRunFromAirHold;
@@ -392,12 +389,13 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public void endAttack(){
+		if (null != getActiveMove() && !getActiveMove().move.done()) preLandMove = getActiveMove();
 		setActiveMove(null);
 		guardTimer.end();
 		attackTimer.end();
 	}
 
-	public void endSpecialAttack(){
+	public void interruptSpecialAttack(){
 		endAttack();
 		new SFX.Error().play();
 	}
@@ -468,7 +466,7 @@ public abstract class Fighter extends Hittable{
 		footStoolee.getFootStooled();
 		footStoolTimer.reset();
 	}
-	
+
 	protected void getFootStooled(){
 		addToCombo(Combo.footstoolID);
 		velocity.set(footStoolKB);
@@ -748,7 +746,6 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public void respawn() {
-		lives -= 1;
 		re();
 	}
 
@@ -763,7 +760,6 @@ public abstract class Fighter extends Hittable{
 
 	private void re(){
 		position.set(spawnPoint);
-		specialMeter = STARTINGSPECIAL;
 		percentage = 0;
 		velocity.x = 0;
 		velocity.y = 0;
@@ -774,7 +770,14 @@ public abstract class Fighter extends Hittable{
 		for (Timer t: timerList) t.end();
 		endAttack();
 		staleMoveQueue.clear();
-		if (team == GlobalRepo.GOODTEAM) setInvincible(120);
+		if (team == GlobalRepo.GOODTEAM) {
+			int stop = 30;
+			hitstopTimer.reset(stop);
+			setInvincible(120 + stop);
+		}
+	}
+	public void setDead(boolean b){
+		dead = b;
 	}
 
 	private final float minDirect = 0.85f;
@@ -813,7 +816,10 @@ public abstract class Fighter extends Hittable{
 	public boolean noKill(){
 		return !noKillTimer.timeUp();
 	}
-	
+	public boolean isDead(){
+		return dead;
+	}
+
 	public Combo getCombo() { return combo; }
 	public Rectangle groundBelowRect(){
 		int rectHeight = GlobalRepo.TILE * 32;
@@ -823,23 +829,17 @@ public abstract class Fighter extends Hittable{
 	public void setRespawnPoint(Vector2 startPosition) { spawnPoint.set(startPosition); }
 	public void restartInputQueue() { inputQueueTimer.reset(); }
 	public void countDownAttackTimer(){ attackTimer.countDown(); }
-	public void setLives(int i) { 
-		lives = i; 
+	public void kill() { 
+		setDead(true);
 		combo.finish();
 	}
 	public void setArmor(float armor) { this.baseArmor = armor; }
 	public void setActiveMove(IDMove activeMove) { 
-		prevMove = this.activeMove;
-		prevMoveTimer.reset();
-		if (null != prevMove && null != prevMove.move) {
-			if (prevMove.move.isAerial()) prevMove.move.clearHitboxes();
-		}
 		this.activeMove = activeMove; 
 	}
 	public void setToFall() { state = State.FALL; }
 	public void setInputHandler(InputHandler inputHandler) { this.inputHandler = inputHandler; }
 	public void setPalette(ShaderProgram pal) { palette = pal; }
-	public void changeSpecial(float change) { specialMeter = MathUtils.clamp(specialMeter + change, 0, SPECIALMETERMAX); }
 	public void setRespawnTimer() { respawnTimer.reset(); }
 	public void setInvincible(int i) { setTimer(invincibleTimer, i); }
 	public void setGuard(int i) { setTimer(guardTimer, i);}
@@ -859,7 +859,6 @@ public abstract class Fighter extends Hittable{
 
 	public float getStickX() { return stickX; }
 	public float getStickY() { return stickY; }
-	public float getSpecialMeter() { return specialMeter; }
 	public float getArmor() { 
 		float addedMoveArmor = 0;
 		if (null != getActiveMove()) {
@@ -868,13 +867,9 @@ public abstract class Fighter extends Hittable{
 		return super.getArmor() + addedMoveArmor; 
 	}
 	public int getTeam() { return team; }
-	public int getLives() { return lives; }
 	public InputHandler getInputHandler() { return inputHandler; }
 	public IDMove getActiveMove() { return activeMove; }
-	public IDMove getPrevMove() { 
-		if (prevMoveTimer.timeUp()) return null;
-		else return prevMove; 
-	}
+	public IDMove getPrevMove() { return preLandMove; }
 	public State getState() { return state; } 
 	public List<IDMove> getMoveQueue() { return staleMoveQueue; }
 	public InputPackage getInputPackage() { return new InputPackage(this); }

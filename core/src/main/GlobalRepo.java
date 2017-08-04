@@ -74,7 +74,7 @@ public class GlobalRepo {
 	}
 	
 	public static String getTimeString(int sec){
-		int minutes = (sec /60);
+		int minutes = (sec / 60);
 		int seconds = (sec) - (minutes * 60);
 		String secondsString = "" + seconds;
 		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);

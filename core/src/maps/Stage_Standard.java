@@ -11,7 +11,7 @@ public class Stage_Standard extends Stage {
 	public Stage_Standard(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/stroll.mp3"));
 		setup();
-		name = "RUINS RUMBLE";
+		name = "Ruins Rumble";
 	}
 
 	public TiledMap getMap() {
@@ -19,11 +19,11 @@ public class Stage_Standard extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){
-		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 4 * GlobalRepo.TILE);
 	}
 
 }

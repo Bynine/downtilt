@@ -204,8 +204,8 @@ public class M_Heavy extends MoveList {
 	public Move land() {
 		Move m = new Move(user, 30);
 		m.setAnimation("sprites/fighters/heavy/crouch.png", 1, 1);
-		if (null != user.getPrevMove())
-			if (user.getPrevMove().id == MoveList.uspecial) {
+		if (null != user.getActiveMove())
+			if (user.getActiveMove().id == MoveList.uspecial) {
 				m = new Move(user, 60);
 				m.setAnimation("sprites/fighters/heavy/landhead.png", 1, 1);
 			}

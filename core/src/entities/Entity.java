@@ -32,7 +32,7 @@ public abstract class Entity {
 	protected float gravity = -0.35f, friction = 0.85f, airFrictionX = 0.95f, airFrictionY = 0.93f; //fallSpeed = -7f;
 	final int tumbleBK = 10;
 
-	boolean toRemove = false;
+	protected boolean toRemove = false, trails = false;
 	protected final List<Rectangle> tempRectangleList = new ArrayList<Rectangle>();
 	final Timer jumpTimer = new Timer(8), inActionTimer = new Timer(0);
 	final Timer jumpSquatTimer = new Timer(4), bounceTimer = new Timer(10);
@@ -364,5 +364,6 @@ public abstract class Entity {
 	public float getAirFrictionX() { return airFrictionX; }
 	public float getAirFrictionY() { return airFrictionY; }
 	public Timer getHitstunTimer() { return hitstunTimer; }
+	public boolean trails() { return trails; }
 
 }

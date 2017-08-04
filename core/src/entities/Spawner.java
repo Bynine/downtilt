@@ -13,7 +13,7 @@ import timers.DurationTimer;
 public class Spawner extends ImmobileEntity {
 	
 	public static final int SPAWNTIME = 30;
-	private final DurationTimer life;;
+	private final DurationTimer life;
 	private final Animation anim;
 
 	public Spawner(float posX, float posY, int freq) {
@@ -29,7 +29,7 @@ public class Spawner extends ImmobileEntity {
 	@Override
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 		super.update(rectangleList, entityList, deltaTime);
-		if (life.timeUp()) setRemove();
+		//if (life.timeUp()) setRemove();
 		setImage(anim.getKeyFrame(life.getCounter()));
 	}
 

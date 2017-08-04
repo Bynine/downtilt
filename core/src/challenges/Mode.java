@@ -22,7 +22,10 @@ public abstract class Mode {
 	 * Starts a new challenge after finishing the old one.
 	 */
 	public void update(){
-		if (DowntiltEngine.musicOn()) getActiveChallenge().getStage().getMusic().play();
+		if (DowntiltEngine.musicOn()) {
+			getActiveChallenge().getStage().getMusic().setVolume(DowntiltEngine.getVolume() / 8.0f);
+			getActiveChallenge().getStage().getMusic().play();
+		}
 		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
 		getActiveChallenge().update();
 		if (getActiveChallenge().finished()) {

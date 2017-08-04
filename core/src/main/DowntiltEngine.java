@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import maps.Stage;
+import maps.Stage_Standard;
 import timers.Timer;
 import entities.*;
 import challenges.*;
@@ -38,7 +39,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static Mode activeMode;
 	private static GameState gameState = GameState.MENU;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
-	private static float volume	= 1f;
+	private static float volume	= 1.0f;
 	private static ShaderProgram p2Palette;
 
 	private static boolean musicToggle = false;
@@ -61,6 +62,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		Menu.initialize();
 		DebugMenu.initialize();
 		MainMenu.initialize();
+		activeMode = new Endless(new Stage_Standard());
 	}
 	
 	private static boolean isXBox360Controller(Controller c){

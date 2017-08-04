@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
+import challenges.Challenge;
 import entities.Fighter;
 import entities.Hittable;
 import main.DowntiltEngine;
@@ -49,6 +50,7 @@ public class Combo {
 		case 6: SOUND_6.play(); break;
 		case 7: SOUND_7.play(); break;
 		}
+		if (rank >= 8) SOUND_7.play();
 	}
 
 	public void end(){
@@ -66,7 +68,9 @@ public class Combo {
 		case 4: finishStrength = 2.0f; break;
 		case 5: finishStrength = 3.5f; break;
 		case 6: finishStrength = 5.5f; break;
-		default: finishStrength = 8.0f; break;
+		case 7: finishStrength = 8.0f; break;
+		case 8: finishStrength = 10.0f; break;
+		default: finishStrength = Challenge.SPECIALMETERMAX; break;
 		}
 
 		finishHelper(rank, finishStrength);
@@ -94,11 +98,12 @@ public class Combo {
 		case 8: SOUND_FINISH8.play(); break;
 		}
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
+		DowntiltEngine.getChallenge().changeSpecial(addedSpecial);
 		for (Fighter player: DowntiltEngine.getPlayers()) {
-			player.changeSpecial(addedSpecial);
 			if (rank == 5) player.addAll(Hittable.BOOSTTIMERRUSH/4);
 			else if (rank == 6) player.addAll(Hittable.BOOSTTIMERRUSH/2);
-			else if (rank >= 7) player.addAll(Hittable.BOOSTTIMERRUSH);
+			else if (rank == 7) player.addAll(Hittable.BOOSTTIMERRUSH);
+			else if (rank >= 8) player.addAll(Hittable.BOOSTTIMERRUSH * 2);
 		}
 	}
 

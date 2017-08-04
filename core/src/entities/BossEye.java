@@ -88,7 +88,7 @@ public abstract class BossEye extends Hittable {
 
 	@Override
 	void updatePosition(){
-		if (boss.getHealth() < 0) die();
+		if (boss.getHealth() <= 0) die();
 	}
 
 	TextureRegion getStandFrame(float deltaTime) { 

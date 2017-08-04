@@ -20,7 +20,7 @@ public class Stage_Rooftop extends Stage {
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
 		dispX = GlobalRepo.TILE * 4;
 		setup();
-		name = "LIGHTNING LOOKOUT";
+		name = "Lightning Lookout";
 	}
 
 	public TiledMap getMap() {
@@ -34,7 +34,7 @@ public class Stage_Rooftop extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){
@@ -60,6 +60,7 @@ public class Stage_Rooftop extends Stage {
 		private Vector2 makeNewLightningPos(){
 			Vector2 newLightningPos = getStartPosition();
 			newLightningPos.x += (0.5 - Math.random()) * (10 * GlobalRepo.TILE);
+			newLightningPos.y -= GlobalRepo.TILE;
 			return newLightningPos;
 		}
 		

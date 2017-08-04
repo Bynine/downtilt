@@ -14,8 +14,7 @@ public class ChallengeEndless extends Challenge {
 	 */
 	public ChallengeEndless(Stage stage, List<Wave> waves){
 		super(stage, waves);
-		soloLives = 1;
-		coopLives = 1;
+		lifeSetting = 1;
 	}
 
 	@Override

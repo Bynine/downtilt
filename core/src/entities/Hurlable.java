@@ -304,6 +304,7 @@ public abstract class Hurlable extends Hittable {
 			airFrictionX = 1;
 			airFrictionY = 1;
 			setImages(team);
+			trails = true;
 		}
 		
 		@Override

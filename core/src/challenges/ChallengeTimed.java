@@ -16,11 +16,12 @@ public class ChallengeTimed extends Challenge {
 	}
 	
 	@Override
-	protected int[] getTimeMinSec(){
-		int newDelta = time - DowntiltEngine.getDeltaTime();
-		int minutes = (newDelta /3600);
-		int seconds = (newDelta / 60) - (minutes * 60);
-		return new int[]{minutes, seconds};
+	protected int getTimeNum(){
+		return (time - DowntiltEngine.getDeltaTime())/60;
+	}
+	
+	public int getTimeLeftInSeconds(){
+		return getTimeNum();
 	}
 	
 	@Override
@@ -31,7 +32,7 @@ public class ChallengeTimed extends Challenge {
 	@Override
 	protected boolean inFailState(){
 		boolean fail = super.inFailState();
-		if (getTimeMinSec()[0] <= 0 && getTimeMinSec()[1] <= 0) fail = true;
+		if (getTimeNum() <= 0) fail = true;
 		return fail;
 	}
 

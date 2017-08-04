@@ -176,8 +176,8 @@ public class M_Basic extends MoveList {
 	@Override
 	public Move land() {
 		Move m = new Move(user, 8);
-		if (null != user.getPrevMove())
-			if (user.getPrevMove().id == MoveList.aerial) m = new Move(user, 16);
+		if (null != user.getActiveMove())
+			if (user.getActiveMove().id == MoveList.aerial) m = new Move(user, 16);
 		m.setAnimation("sprites/fighters/basic/crouch.png", 1, 1);
 		return m;
 	}

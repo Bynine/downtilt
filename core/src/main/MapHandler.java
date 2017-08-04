@@ -27,7 +27,6 @@ public class MapHandler {
 		activeRoom = new Stage_Standard();
 		activeMap = activeRoom.getMap();
 		DowntiltEngine.changeRoom(activeRoom);
-		activeRoom.getMusic().setVolume(DowntiltEngine.getVolume() / 6.0f);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 
@@ -87,21 +86,12 @@ public class MapHandler {
 		
 		drawDieGraphic(fi);
 		new SFX.Die().play();
-		if (fi.getLives() > 1) {
+		if (DowntiltEngine.entityIsPlayer(fi) && DowntiltEngine.getChallenge().getLives() >= 1) {
 			fi.respawn();
+			DowntiltEngine.getChallenge().removeLife();
 			return false;
 		}
-		if (DowntiltEngine.getPlayers().size() > 1){
-			for (Fighter player: DowntiltEngine.getPlayers()){
-				if (player.getLives() > 1 && player.getTeam() == GlobalRepo.GOODTEAM){
-					fi.respawn();
-					fi.setLives(1);
-					player.setLives(player.getLives() - 1);
-					return false;
-				}
-			}
-		}
-		fi.setLives(0);
+		fi.kill();
 		if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) {
 			addEntity(new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
 		}

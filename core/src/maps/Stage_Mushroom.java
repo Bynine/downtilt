@@ -14,7 +14,7 @@ public class Stage_Mushroom extends Stage {
 	public Stage_Mushroom(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/heartbeat.mp3"));
 		setup();
-		name = "MUSHROOM MAYHEM";
+		name = "Mushroom Mayhem";
 	}
 
 	public TiledMap getMap() {
@@ -30,7 +30,7 @@ public class Stage_Mushroom extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(23 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){

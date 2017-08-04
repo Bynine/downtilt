@@ -3,6 +3,7 @@ package challenges;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import entities.Fighter;
@@ -20,11 +21,14 @@ public abstract class Challenge {
 	protected final Stage stage;
 	protected long score = 0;
 	private int longestCombo = 0, timeSpent = 0;
+	protected float specialMeter = 0;
+	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, BASICALLYINFINITELIVES = 999;
+	protected int lives = 0;
+	protected int lifeSetting = 5;
+	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
 	protected boolean finished = false, started = false;
-	int soloLives = 5;
-	int coopLives = 3;
 
 	Challenge(Stage stage, List<Wave> waves){
 		this.currWaves = new ArrayList<Wave>();
@@ -37,10 +41,8 @@ public abstract class Challenge {
 	 * Called when a challenge begins.
 	 */
 	protected void startChallenge(){
-		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
-			if (DowntiltEngine.getPlayers().size() == 1) player.setLives(soloLives);
-			else player.setLives(coopLives);
-		}
+		lives = lifeSetting;
+		specialMeter = SPECIALMETERBEGINNING;
 		
 		currWaves.clear();
 		for (Wave wave: initWaves) wave.restart();
@@ -56,8 +58,11 @@ public abstract class Challenge {
 			DowntiltEngine.wait(waitBetween);
 		}
 		
+		float mod = 16;
 		for (Fighter player: DowntiltEngine.getPlayers()) {
 			player.refresh();
+			if (DowntiltEngine.getPlayers().size() > 1) player.getPosition().x += mod;
+			mod *= -1f;
 		}
 		started = true;
 	}
@@ -84,11 +89,7 @@ public abstract class Challenge {
 	}
 	
 	protected boolean inFailState(){
-		boolean shouldRestart = true;
-		for (Fighter player: (DowntiltEngine.getPlayers() ) ){
-			if (player.getLives() > 0) shouldRestart = false;
-		}
-		return shouldRestart;
+		return lives <= 0;
 	}
 
 	protected void nextWave(){
@@ -146,17 +147,11 @@ public abstract class Challenge {
 	}
 	
 	public final String getTime(){
-//		int minutes = getTimeMinSec()[0];
-		int seconds = getTimeMinSec()[1];
-//		String secondsString = "" + seconds;
-//		if (secondsString.length() == 1) secondsString = "0".concat(secondsString);
-		return getTimeString() + GlobalRepo.getTimeString(seconds);
+		return getTimeString() + GlobalRepo.getTimeString(getTimeNum());
 	}
 	
-	protected int[] getTimeMinSec(){
-		int minutes = (DowntiltEngine.getDeltaTime() /3600);
-		int seconds = (DowntiltEngine.getDeltaTime() /60) - (minutes * 60);
-		return new int[]{minutes, seconds};
+	protected int getTimeNum(){
+		return DowntiltEngine.getDeltaTime()/60;
 	}
 	
 	protected String getTimeString(){
@@ -177,6 +172,22 @@ public abstract class Challenge {
 	
 	public int getSeconds(){
 		return timeSpent * 60;
+	}
+	
+	public int getLives(){
+		return lives;
+	}
+	
+	public void removeLife(){
+		if (lives < BASICALLYINFINITELIVES) lives--;
+	}
+	
+	public float getSpecialMeter(){
+		return specialMeter;
+	}
+	
+	public void changeSpecial(float f){
+		specialMeter = MathUtils.clamp(specialMeter + f, 0, SPECIALMETERMAX);
 	}
 	
 	public void updateLongestCombo(int combo){

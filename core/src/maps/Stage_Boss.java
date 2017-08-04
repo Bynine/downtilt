@@ -10,7 +10,7 @@ public class Stage_Boss extends Stage {
 	public Stage_Boss(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
 		setup();
-		name = "BIG BAD BOSS BEATDOWN";
+		name = "Big Bad Boss Beatdown";
 	}
 
 	public TiledMap getMap() {
@@ -18,7 +18,7 @@ public class Stage_Boss extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 9 * GlobalRepo.TILE);
 	}
 	
 	@Override

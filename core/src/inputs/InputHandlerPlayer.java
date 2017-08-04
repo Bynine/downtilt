@@ -2,10 +2,13 @@ package inputs;
 
 import main.DowntiltEngine;
 import timers.Timer;
+import challenges.ChallengeTutorial;
+import challenges.ChallengeTutorial.Ping;
+import challenges.ChallengeTutorial.ToolTip;
 import entities.Fighter;
 
 public abstract class InputHandlerPlayer extends InputHandler {
-	
+
 	private final Timer techTimer = new Timer(20);
 
 	public InputHandlerPlayer(Fighter player) {
@@ -31,24 +34,37 @@ public abstract class InputHandlerPlayer extends InputHandler {
 		inputToCommand(flickCUp(), commandCStickUp);
 		inputToCommand(flickCDown(), commandCStickDown);
 		if (pause()) DowntiltEngine.pauseGame(); 
+		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial){
+			ChallengeTutorial challengeTutorial = (ChallengeTutorial) DowntiltEngine.getChallenge();
+			if (select()) challengeTutorial.advanceToolTip();
+			ToolTip tt = challengeTutorial.getToolTip();
+			if (flickLeft() || flickRight() || flickUp() || flickDown()) tt.checkPing(Ping.MOVE);
+			if (inputNormal()) tt.checkPing(Ping.NORMAL);
+			if (inputSpecial()) tt.checkPing(Ping.SPECIAL);
+			if (inputCharge()) tt.checkPing(Ping.CHARGE);
+			if (inputJump()) tt.checkPing(Ping.JUMP);
+			if (inputGrab()) tt.checkPing(Ping.GRAB);
+			if (inputGuard()) tt.checkPing(Ping.GUARD);
+		}
 		if (chargeHold() && DowntiltEngine.isPaused()) DowntiltEngine.startMenu();
-		//if (select() && DowntiltEngine.isPaused()) DowntiltEngine.startDebugMenu();
-		
+
 		player.handleJumpHeld(jumpHold());
 		player.handleBlockHeld(blockHold());
-		
+
 		if (dodge() && techTimer.timeUp()) techTimer.reset();
 		techTimer.countUp();
 	}
 
 	private void inputToCommand(boolean input, int command){
-		if (input) handleCommand(command);
+		if (input) {
+			handleCommand(command);
+		}
 	}
-	
+
 	public boolean isCharging(){
 		return chargeHold();
 	}
-	
+
 	public boolean isTeching(){
 		return !techTimer.timeUp();
 	}
@@ -70,6 +86,13 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	public abstract boolean flickCDown();
 	public abstract boolean pause();
 	public abstract boolean select();
+
+	public abstract boolean inputNormal();
+	public abstract boolean inputSpecial();
+	public abstract boolean inputCharge();
+	public abstract boolean inputJump();
+	public abstract boolean inputGrab();
+	public abstract boolean inputGuard();
 
 	public abstract boolean chargeHold();
 	public abstract boolean jumpHold();

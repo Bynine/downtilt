@@ -133,6 +133,25 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 		return "Keyboard";
 	}
 	
+	public boolean inputNormal(){
+		return attack();
+	}
+	public boolean inputSpecial(){
+		return special();
+	}
+	public boolean inputCharge(){
+		return charge();
+	}
+	public boolean inputJump(){
+		return jump();
+	}
+	public boolean inputGrab(){
+		return grab();
+	}
+	public boolean inputGuard(){
+		return blockHold();
+	}
+	
 	/* NOT USED */
 
 	@Override public boolean keyDown(int keycode) { return false; }
