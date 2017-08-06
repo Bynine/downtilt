@@ -2,6 +2,7 @@ package challenges;
 
 import java.util.List;
 
+import challenges.Challenge.Difficulty;
 import entities.Fighter;
 import main.DowntiltEngine;
 import main.SFX;
@@ -50,6 +51,10 @@ public abstract class Mode {
 			if (longestCombo < c.getLongestCombo()) longestCombo = c.getLongestCombo();
 		}
 		return longestCombo;
+	}
+	
+	public Difficulty getDifficulty(){
+		return Difficulty.Standard;
 	}
 
 	abstract List<Challenge> getChallengeList();

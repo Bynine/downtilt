@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 import challenges.Challenge;
-import entities.Fighter;
-import entities.Hittable;
 import main.DowntiltEngine;
 
 public class Combo {
@@ -89,22 +87,23 @@ public class Combo {
 	private void finishHelper(int rank, float addedSpecial){
 		if (!isACombo()) return;
 		switch(rank){
+		// implictly by checking for isACombo first, rank should not be 1 or less here
 		case 2: SOUND_FINISH2.play(); break;
 		case 3: SOUND_FINISH3.play(); break;
 		case 4: SOUND_FINISH4.play(); break;
 		case 5: SOUND_FINISH5.play(); break;
 		case 6: SOUND_FINISH6.play(); break;
 		case 7: SOUND_FINISH7.play(); break;
-		case 8: SOUND_FINISH8.play(); break;
+		default: SOUND_FINISH8.play(); break;
 		}
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		DowntiltEngine.getChallenge().changeSpecial(addedSpecial);
-		for (Fighter player: DowntiltEngine.getPlayers()) {
-			if (rank == 5) player.addAll(Hittable.BOOSTTIMERRUSH/4);
-			else if (rank == 6) player.addAll(Hittable.BOOSTTIMERRUSH/2);
-			else if (rank == 7) player.addAll(Hittable.BOOSTTIMERRUSH);
-			else if (rank >= 8) player.addAll(Hittable.BOOSTTIMERRUSH * 2);
-		}
+//		for (Fighter player: DowntiltEngine.getPlayers()) {
+//			if (rank == 5) player.addAll(Hittable.BOOSTTIMERRUSH/4);
+//			else if (rank == 6) player.addAll(Hittable.BOOSTTIMERRUSH/2);
+//			else if (rank == 7) player.addAll(Hittable.BOOSTTIMERRUSH);
+//			else if (rank >= 8) player.addAll(Hittable.BOOSTTIMERRUSH * 2);
+//		}
 	}
 
 }

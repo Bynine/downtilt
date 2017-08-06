@@ -56,11 +56,10 @@ public class ChallengeTutorial extends ChallengeEndless {
 					+ "- the more damaged they are, the redder they become,\n"
 					+ "and the farther they'll fly when you hit them. KAPOW!");
 	private final ToolTip tt_COMBO = new ToolTip( 
-			"To combo an enemy, keep them in the air\n"
-					+ "while hitting them with different moves.\n"
-					+ "When they touch the ground or get KO'd, \n"
-					+ "the combo finishes.\n"
-					+ "Combos replenish your Special meter, so do them often!");
+			"To combo an enemy, keep them in the air while hitting\n"
+					+ "them with different moves. When they touch the ground\n"
+					+ "or get KO'd, the combo finishes. Combos \n"
+					+ "replenish your Special meter, so be creative!");
 	private final ToolTip tt_END = new ToolTip(
 					"Now press Start to pause the game,\n"
 					+ "then press Y to finish the tutorial!");
@@ -81,6 +80,7 @@ public class ChallengeTutorial extends ChallengeEndless {
 
 	public void advanceToolTip(){
 		if (!getToolTip().satisfied) return;
+		new SFX.LightHit().play();
 		index++;
 		if (index >= toolTipList.size()) index--;
 	}

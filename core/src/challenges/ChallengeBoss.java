@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import challenges.Adventure.Difficulty;
 import entities.Boss;
 import entities.BossEye;
 import main.GlobalRepo;

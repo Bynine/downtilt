@@ -17,7 +17,7 @@ public class Stage_Rooftop extends Stage {
 	private final LightningHandler lh1 = new LightningHandler();
 
 	public Stage_Rooftop(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rave.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/spook.mp3"));
 		dispX = GlobalRepo.TILE * 4;
 		setup();
 		name = "Lightning Lookout";

@@ -2,12 +2,13 @@ package challenges;
 
 import java.util.List;
 
-import challenges.Adventure.Difficulty;
+import challenges.Challenge.Difficulty;
 
 public abstract class Victory {
 	protected int longestCombo;
 	protected int time;
 	protected int kos;
+	protected int deaths;
 
 	public static final int NOTUSED = -1;
 
@@ -26,6 +27,10 @@ public abstract class Victory {
 	public int getKOs(){
 		return kos;
 	}
+	
+	public int getDeaths(){
+		return deaths;
+	}
 
 	public abstract int getScore();
 	public abstract Ranking getRanking();
@@ -33,11 +38,12 @@ public abstract class Victory {
 	public static class AdventureVictory extends Victory{
 		final Difficulty difficulty;
 
-		AdventureVictory(List<Integer> longestCombos, int time, Difficulty difficulty){
+		AdventureVictory(List<Integer> longestCombos, int time, int deaths, Difficulty difficulty){
 			this.difficulty = difficulty;
 			for (int i: longestCombos) this.longestCombo += i;
 			this.time = time / 3600;
 			this.kos = NOTUSED;
+			this.deaths = deaths;
 		}
 
 		public int getScore(){
@@ -75,6 +81,7 @@ public abstract class Victory {
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
+			this.deaths = NOTUSED;
 		}
 
 		public int getScore(){
@@ -99,6 +106,7 @@ public abstract class Victory {
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
+			this.deaths = NOTUSED;
 		}
 
 		public int getScore(){

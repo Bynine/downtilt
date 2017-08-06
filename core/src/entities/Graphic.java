@@ -258,6 +258,7 @@ public abstract class Graphic extends Entity{
 			if (user.getDirection() == Direction.LEFT){
 				dispX = (int) (-6 - user.getImage().getWidth());
 			}
+			else dispX += 6;
 			updatePosition();
 		}
 		
@@ -266,9 +267,25 @@ public abstract class Graphic extends Entity{
 			position.x += dispX;
 			position.y += dispY;
 			image.setFlip(user.getImage().isFlipX(), false);
-			if (duration.timeUp() || !user.isAttacking()) setRemove();
+			if (duration.timeUp() || user.inHitstun()) setRemove();
 		}
 
+	}
+	
+	public static class BoostMessage extends Graphic {
+		final Fighter user;
+		float dispY = 0;
+		public BoostMessage(Fighter user, TextureRegion tex){
+			super(0, 0, 30);
+			this.user = user;
+			image = new Sprite(tex);
+			updatePosition();
+		}
+		void updatePosition(){
+			dispY += 1;
+			position.set(user.getCenter().x - image.getWidth()/2, user.getPosition().y + user.getImage().getHeight() + dispY);
+			if (duration.timeUp()) setRemove();
+		}
 	}
 
 }

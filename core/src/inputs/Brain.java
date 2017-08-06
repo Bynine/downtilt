@@ -7,10 +7,12 @@ import java.util.List;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import challenges.Challenge.Difficulty;
 import timers.DurationTimer;
 import timers.Timer;
 import entities.Entity.State;
 import entities.InputPackage;
+import main.DowntiltEngine;
 import main.GlobalRepo;
 
 public abstract class Brain{
@@ -24,8 +26,10 @@ public abstract class Brain{
 	protected final Timer dodgeTimer = new Timer(6);
 	protected final Timer attackTimer = new Timer(10);
 	protected InputPackage pack;
+	protected final Difficulty difficulty;
 	
 	public Brain (InputHandlerCPU body){
+		this.difficulty = DowntiltEngine.getActiveMode().getDifficulty();
 		this.body = body;
 		timerList.addAll(Arrays.asList(changeUpDown, waitToUseUpSpecial, tryJump, changeDirection, performJump, dodgeTimer, attackTimer) );
 	}
@@ -34,6 +38,16 @@ public abstract class Brain{
 		this.pack = pack;
 		float random = 0.9f;
 		for (Timer t: timerList) if (Math.random() < random) t.countUp();
+	}
+	
+	private float difficultyMod(){
+		switch(difficulty){
+		case Beginner: return 0.06f;
+		case Standard: return 0.9f;
+		case Advanced: return 1.2f;
+		case Nightmare: return 1.5f;
+		default: return 1f;
+		}
 	}
 	
 	/* BEHAVIORS */
@@ -127,7 +141,7 @@ public abstract class Brain{
 	}
 
 	boolean shouldAttack(double chance, int distance, boolean mustBeGrounded){
-		boolean shouldAttack = Math.random() < chance && Math.abs(pack.distanceXFromPlayer) < distance;
+		boolean shouldAttack = Math.random() < difficultyMod() * chance && Math.abs(pack.distanceXFromPlayer) < distance;
 		if (mustBeGrounded) shouldAttack = shouldAttack && pack.isGrounded;
 		return shouldAttack;
 	}
@@ -202,12 +216,9 @@ public abstract class Brain{
 	}
 	
 	public static class FlyBrain extends Brain{
-		
-		private final Timer dodgeTimer = new Timer(60);
 
 		public FlyBrain(InputHandlerCPU body) {
 			super(body);
-			timerList.add(dodgeTimer);
 		}
 
 		void update(InputPackage pack){
@@ -240,7 +251,7 @@ public abstract class Brain{
 
 		public ShootBrain(InputHandlerCPU body) {
 			super(body);
-			maxVerticalAttackRange = 400;
+			maxVerticalAttackRange = 300;
 		}
 
 		void update(InputPackage pack){

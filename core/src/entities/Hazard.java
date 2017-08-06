@@ -81,7 +81,7 @@ public abstract class Hazard extends Entity {
 			
 			int inc = 64;
 			for (Hitbox h: hitboxes){
-				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 45, 0, inc, 32, new SFX.SharpHit());
+				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 45, 0, inc, 30, new SFX.SharpHit());
 				h.setProperty(Property.STUN);
 				inc -= 64;
 				finale.add(h);

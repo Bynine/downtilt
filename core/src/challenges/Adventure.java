@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import challenges.Challenge.Difficulty;
 import main.DowntiltEngine;
 import maps.*;
 
@@ -14,9 +15,6 @@ import maps.*;
 
 public class Adventure extends Mode{
 
-	public enum Difficulty{
-		Beginner, Standard, Advanced, Nightmare
-	}
 	private final Difficulty difficulty;
 
 	/**
@@ -26,47 +24,47 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(0, new ChallengeNorm(new Stage_Blocks(), waveDebug));
+				challengeList.add(0, new ChallengeAdventure(new Stage_Blocks(), waveDebug));
 			}
 			else{
-				challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard1));
-				challengeList.add(new ChallengeNorm(new Stage_Rooftop(), waveRooftop1));
-				challengeList.add(new ChallengeNorm(new Stage_Truck(), waveTruck1));
-				challengeList.add(new ChallengeNorm(new Stage_Blocks(), waveBlocks1));
-				challengeList.add(new ChallengeNorm(new Stage_Mushroom(), waveMushroom1));
+				challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard1));
+				challengeList.add(new ChallengeAdventure(new Stage_Rooftop(), waveRooftop1));
+				challengeList.add(new ChallengeAdventure(new Stage_Truck(), waveTruck1));
+				challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks1));
+				challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom1));
 				//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, difficulty));
 			}
 		} break;
 		case Standard: {
-			challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard2));
-			challengeList.add(new ChallengeNorm(new Stage_Rooftop(), waveRooftop2));
-			challengeList.add(new ChallengeNorm(new Stage_Truck(), waveTruck2));
-			challengeList.add(new ChallengeNorm(new Stage_Blocks(), waveBlocks2));
-			challengeList.add(new ChallengeNorm(new Stage_Mushroom(), waveMushroom2));
+			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard2));
+			challengeList.add(new ChallengeAdventure(new Stage_Rooftop(), waveRooftop2));
+			challengeList.add(new ChallengeAdventure(new Stage_Truck(), waveTruck2));
+			challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks2));
+			challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom2));
 			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace2, 150));
-			challengeList.add(new ChallengeNorm(new Stage_Sky(), waveSky2));
+			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky2));
 			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
 		} break;
 		case Advanced: {
-			challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard3));
-			challengeList.add(new ChallengeNorm(new Stage_Truck(), waveTruck3));
-			challengeList.add(new ChallengeNorm(new Stage_Rooftop(), waveRooftop3));
-			challengeList.add(new ChallengeNorm(new Stage_Mushroom(), waveMushroom3));
-			challengeList.add(new ChallengeNorm(new Stage_Blocks(), waveBlocks3));
-			challengeList.add(new ChallengeNorm(new Stage_Sky(), waveSky3));
+			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard3));
+			challengeList.add(new ChallengeAdventure(new Stage_Truck(), waveTruck3));
+			challengeList.add(new ChallengeAdventure(new Stage_Rooftop(), waveRooftop3));
+			challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom3));
+			challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks3));
+			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky3));
 			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace3, 120));
 			Collections.shuffle(challengeList);
 			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss3, difficulty));
 		} break;
 		case Nightmare: {
 			challengeList.add(new ChallengeTimed(new Stage_Truck(), waveTruck4, 61));
-			challengeList.add(new ChallengeNorm(new Stage_Rooftop(), waveRooftop4));
-			challengeList.add(new ChallengeNorm(new Stage_Mushroom(), waveMushroom4));
-			challengeList.add(new ChallengeNorm(new Stage_Blocks(), waveBlocks4));
-			challengeList.add(new ChallengeNorm(new Stage_Sky(), waveSky4));
+			challengeList.add(new ChallengeAdventure(new Stage_Rooftop(), waveRooftop4));
+			challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom4));
+			challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks4));
+			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky4));
 			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace4, 120));
 			Collections.shuffle(challengeList);
-			challengeList.add(new ChallengeNorm(new Stage_Standard(), waveStandard4));
+			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard4));
 			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss4, difficulty));
 		} break;
 		default: break;
@@ -96,7 +94,13 @@ public class Adventure extends Mode{
 	 */
 
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 4, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
 			));
 
 	/* BEGINNER */
@@ -108,22 +112,22 @@ public class Adventure extends Mode{
 	private List<Wave> waveRooftop1 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 3, 2, 120))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 2, 2, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 3, 2, 80))
 			));
 	private List<Wave> waveTruck1 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 3, 2, 80))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 4, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.heavy, EnemyRepo.basic), 3, 2, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.heavy, EnemyRepo.basic), 4, 3, 80))
 			));
 	private List<Wave> waveBlocks1 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 3, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 3, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 2, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 4, 3, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 4, 3, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 3, 1, 60))
 			));
 	private List<Wave> waveMushroom1 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 4, 3, 80))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 5, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.heavy), 3, 2, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 6, 6, 20))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.heavy), 5, 3, 120))
 			));
 //	private List<Wave> waveBoss1 = new ArrayList<Wave>(Arrays.asList(
 //			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 2, 120))
@@ -218,8 +222,8 @@ public class Adventure extends Mode{
 	private List<Wave> waveRooftop4 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 8, 8, 120))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.fatfly), 8, 4, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot), 4, 4, 70))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbasic, EnemyRepo.fly), 6, 6, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 4, 4, 70))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.fly), 9, 6, 80))
 			));
 	private List<Wave> waveTruck4 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.weakbasic), 24, 12, 20))
@@ -227,26 +231,27 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.weakfly), 24, 12, 20))
 			));
 	private List<Wave> waveBlocks4 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbasic), 5, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly), 5, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbomb), 5, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot), 5, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatheavy), 3, 3, 180))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 5, 5, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 5, 5, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.fly, EnemyRepo.basic), 5, 5, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.fly, EnemyRepo.basic), 5, 5, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.shoot, EnemyRepo.bomb, EnemyRepo.fly, EnemyRepo.basic), 5, 5, 90))
 			));
 	private List<Wave> waveMushroom4 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 10, 10, 80))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 10, 4, 30))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.heavy), 6, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot), 4, 4, 70))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatbomb), 30, 30, 3))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 10, 10, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 30, 30, 3))
 			));
 	private List<Wave> waveSpace4 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.fatbasic), 6, 4, 20))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.basic), 6, 6, 20))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.basic), 6, 5, 20))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly, EnemyRepo.fatheavy, EnemyRepo.fatfly), 6, 3, 20))
 			));
 	private List<Wave> waveSky4 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatfly, EnemyRepo.fatheavy), 6, 2, 80))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.fatheavy), 6, 2, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.weakfly), 50, 20, 10))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 4, 4, 180))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot, EnemyRepo.fatbomb), 6, 6, 120))
 			));
 //	private List<Wave> waveBoss4 = new ArrayList<Wave>(Arrays.asList(
@@ -269,12 +274,24 @@ public class Adventure extends Mode{
 		return seconds;
 	}
 	
+	int getDeaths(){
+		int deaths = 0;
+		for (Challenge c: getChallengeList()){
+			deaths += c.getDeaths();
+		}
+		return deaths;
+	}
+	
 	Victory getVictory(){
 		List<Integer> longestComboList = new ArrayList<Integer>();
 		for (Challenge c: getChallengeList()){
 			longestComboList.add(c.getLongestCombo());
 		}
-		return new Victory.AdventureVictory(longestComboList, getTime(), difficulty);
+		return new Victory.AdventureVictory(longestComboList, getDeaths(), getTime(), difficulty);
+	}
+	
+	public Difficulty getDifficulty(){
+		return difficulty;
 	}
 
 }

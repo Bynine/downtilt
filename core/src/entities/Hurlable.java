@@ -394,6 +394,7 @@ public abstract class Hurlable extends Hittable {
 			gravity = -0.5f;
 			friction = 0.96f;
 			baseKBG = 0;
+			image = new Sprite(normImage);
 		}
 
 		@Override

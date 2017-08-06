@@ -446,7 +446,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
 		Grabbox g1 = new Grabbox(user, 18, 4, 12);
-		m.eventList.addActionCircle(g1, 6, 8);
+		m.eventList.addActionCircle(g1, 6, 10);
 		return m;
 	}
 
@@ -456,7 +456,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.eventList.addVelocityChange(user, 4, 6, Action.ChangeVelocity.noChange);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Grabbox g1 = new Grabbox(user, 18, 3, 14);
-		m.eventList.addActionCircle(g1, 6, 8);
+		m.eventList.addActionCircle(g1, 6, 10);
 		return m;
 	}
 
@@ -465,7 +465,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/airgrab.png", 1, 1);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Grabbox g1 = new Grabbox(user, 14, 0, 20);
-		m.eventList.addActionCircle(g1, 6, 8);
+		m.eventList.addActionCircle(g1, 6, 10);
 		return m;
 	}
 
@@ -541,7 +541,6 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move land(){
 		Move m = new Move(user, 3);
-		m.setAnimation("sprites/fighters/bomber/crouch.png", 1, 1);
 		if (null != user.getPrevMove()){
 			switch(user.getPrevMove().id){
 			case MoveList_Advanced.IDnair: m = new Move(user, 5); break;
@@ -557,7 +556,7 @@ public class M_Hero extends MoveList_Advanced{
 			default: break;
 			}
 		}
-		m.setStopsInAir();
+		if (!m.hasAnimation()) m.setAnimation("sprites/fighters/bomber/crouch.png", 1, 1);
 		m.dontTurn();
 		return m;
 	}

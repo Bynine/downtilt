@@ -95,7 +95,7 @@ public abstract class ActionCircle {
 	public boolean toRemove() { return duration.timeUp(); }
 	public boolean didHitTarget(Hittable target){ 
 		boolean attackTimeUp = true;
-		if (null != user) if (user instanceof Fighter) attackTimeUp = !((Fighter)user).isAttacking();
+		if (null != user) if (user instanceof Fighter) attackTimeUp = ((Fighter)user).isAttacking();
 		boolean teamCheck = teamCheck(target);
 		return 
 					teamCheck

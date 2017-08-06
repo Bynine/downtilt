@@ -19,7 +19,7 @@ public class Stage_Blocks extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 10 * GlobalRepo.TILE);
+		return new Vector2(22 * GlobalRepo.TILE, 9 * GlobalRepo.TILE);
 	}
 	
 

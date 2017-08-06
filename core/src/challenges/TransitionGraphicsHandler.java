@@ -24,7 +24,7 @@ public class TransitionGraphicsHandler {
 		
 		batch.begin();
 		if (!readyGoTimer.timeUp()){
-			batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 600, 400);
+			batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 500, 500);
 		}
 		batch.end();
 	}

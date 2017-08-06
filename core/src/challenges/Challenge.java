@@ -23,7 +23,8 @@ public abstract class Challenge {
 	private int longestCombo = 0, timeSpent = 0;
 	protected float specialMeter = 0;
 	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, BASICALLYINFINITELIVES = 999;
-	protected int lives = 0;
+	protected int specialBeginning = SPECIALMETERBEGINNING;
+	protected int lives = 0, deaths = 0;
 	protected int lifeSetting = 5;
 	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
@@ -42,7 +43,7 @@ public abstract class Challenge {
 	 */
 	protected void startChallenge(){
 		lives = lifeSetting;
-		specialMeter = SPECIALMETERBEGINNING;
+		specialMeter = specialBeginning;
 		
 		currWaves.clear();
 		for (Wave wave: initWaves) wave.restart();
@@ -52,7 +53,7 @@ public abstract class Challenge {
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
 		
-		if (!DowntiltEngine.debugOn()){
+		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ){
 			int waitBetween = 60;
 			TransitionGraphicsHandler.readyGo();
 			DowntiltEngine.wait(waitBetween);
@@ -101,6 +102,7 @@ public abstract class Challenge {
 	 * Called if all players die
 	 */
 	public void failChallenge(){
+		deaths++;
 		new SFX.Error().play();
 		startChallenge();
 	}
@@ -178,6 +180,10 @@ public abstract class Challenge {
 		return lives;
 	}
 	
+	public int getDeaths(){
+		return deaths;
+	}
+	
 	public void removeLife(){
 		if (lives < BASICALLYINFINITELIVES) lives--;
 	}
@@ -200,6 +206,10 @@ public abstract class Challenge {
 	
 	public void resolveCombo(float mod){
 		/* */
+	}
+	
+	public enum Difficulty{
+		Beginner, Standard, Advanced, Nightmare
 	}
 
 }

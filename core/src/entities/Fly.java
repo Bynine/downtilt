@@ -37,7 +37,7 @@ public class Fly extends Fighter {
 		friction = 0.98f;
 		gravity = -0.18f;
 		jumpStrength = 3.2f;
-		jumpAcc = 0.2f;
+		jumpAcc = 0.23f;
 		dashStrength = 0f;
 		doubleJumpStrength = 4.8f;
 		airFrictionY = 0.96f;

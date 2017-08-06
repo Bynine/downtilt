@@ -29,7 +29,7 @@ public class Spawner extends ImmobileEntity {
 	@Override
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 		super.update(rectangleList, entityList, deltaTime);
-		//if (life.timeUp()) setRemove();
+		if (life.timeUp()) setRemove();
 		setImage(anim.getKeyFrame(life.getCounter()));
 	}
 

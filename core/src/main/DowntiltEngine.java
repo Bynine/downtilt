@@ -43,10 +43,11 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static ShaderProgram p2Palette;
 
 	private static boolean musicToggle = false;
-	private static boolean debugToggle = true;
+	private static boolean debugToggle = false;
 	private static boolean fpsLoggle = false;
 
 	public void create () {
+		activeMode = new Endless(new Stage_Standard());
 		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
@@ -62,7 +63,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		Menu.initialize();
 		DebugMenu.initialize();
 		MainMenu.initialize();
-		activeMode = new Endless(new Stage_Standard());
 	}
 	
 	private static boolean isXBox360Controller(Controller c){
@@ -244,6 +244,9 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	public static void addTimer(Timer t){
 		timerList.add(t);
+	}
+	public static Mode getActiveMode(){
+		return activeMode;
 	}
 
 }

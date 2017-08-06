@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import challenges.Adventure;
-import challenges.Adventure.Difficulty;
+import challenges.Challenge.Difficulty;
 import challenges.Endless;
 import challenges.Mode;
 import challenges.TimeTrial;
@@ -95,18 +95,17 @@ class MainMenu extends Menu {
 	}
 
 	private static void draw(){
-		int posX = 220;
-		int startY = 500;
+		int posX = 230;
+		int startY = 510;
 		int dec = 30;
 		final float greyOut = 0.3f;
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.67f, 0.85f, 0.99f, 1);
+		Gdx.gl.glClearColor(112.0f/255.0f, 233.0f/255.0f, 0.99f, 1);
 		batch.begin();
 
 		batch.draw(menu, 0, 0);
-		int centerInc = 320;
-		batch.draw(title, posX + centerInc, startY + 100);
-		specialFont.draw(batch, startStr, posX + centerInc/2, startY);
+		batch.draw(title, posX + 120, startY + 50);
+		specialFont.draw(batch, startStr, posX + 180, startY);
 
 		startY -= dec;
 		font.draw(batch, appendCursors("MODE:   ", mode) + mode.selected().t, posX, startY -= dec);
@@ -141,7 +140,7 @@ class MainMenu extends Menu {
 			font.setColor(fontColor);
 		}
 
-		batch.draw(cursor, posX - 50, (420) - dec * (2 * choices.cursorPos()));
+		batch.draw(cursor, posX - 50, (430) - dec * (2 * choices.cursorPos()));
 		batch.end();
 	}
 	

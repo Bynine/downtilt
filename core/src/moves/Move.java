@@ -3,6 +3,9 @@ package moves;
 import main.GlobalRepo;
 import moves.Effect.Charge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,6 +26,7 @@ public class Move {
 	private int addedFrames = 0, id = -1;
 	public static final float HURTBOXNOTSET = -1;
 	private float hurtBoxWidth = HURTBOXNOTSET, hurtBoxHeight = HURTBOXNOTSET, hurtBoxX = HURTBOXNOTSET, hurtBoxY = HURTBOXNOTSET;
+	private final List<Fighter> comboedTheseFighters = new ArrayList<Fighter>();
 
 	public Move(Fighter user, int dur){
 		this.user = user;
@@ -35,9 +39,10 @@ public class Move {
 		for (ActionCircle ac: eventList.acList){
 			if (ac.hitTargetList.size() > 0) connected = true;
 			for (Hittable target: ac.getHitTargets()){
-				if (target instanceof Fighter){
+				if (target instanceof Fighter && !comboedTheseFighters.contains(target)){
 					Fighter fi = (Fighter) target;
-					fi.getCombo().addMoveID(id);
+					fi.addToCombo(id);
+					comboedTheseFighters.add(fi);
 				}
 			}
 		}
@@ -178,6 +183,10 @@ public class Move {
 	
 	public boolean doesTremble(){
 		return tremble;
+	}
+
+	public boolean hasAnimation() {
+		return animation != null;
 	}
 
 

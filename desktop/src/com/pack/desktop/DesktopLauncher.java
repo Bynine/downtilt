@@ -13,7 +13,7 @@ public class DesktopLauncher {
 	
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "Down Tilt";
+		cfg.title = "KNOCK 'EM OUT";
 		cfg.vSyncEnabled = false;
 		cfg.foregroundFPS = FPS;
 		cfg.backgroundFPS = DONTRENDER;

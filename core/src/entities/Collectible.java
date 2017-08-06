@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import timers.*;
 import main.GlobalRepo;
+import main.MapHandler;
 import main.SFX;
 import main.DowntiltEngine;
 
@@ -111,6 +112,7 @@ public abstract class Collectible extends Entity {
 		}
 		void addStat(Fighter fi){
 			fi.addPower(Hittable.BOOSTTIMERDEFAULT);
+			MapHandler.addEntity(new Graphic.BoostMessage(fi, (new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/upatk.png"))))));
 		}
 	}
 	public static class BoostDefense extends StatBooster {
@@ -120,6 +122,7 @@ public abstract class Collectible extends Entity {
 		}
 		void addStat(Fighter fi){
 			fi.addDefense(Hittable.BOOSTTIMERDEFAULT);
+			MapHandler.addEntity(new Graphic.BoostMessage(fi, (new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/updef.png"))))));
 		}
 	}
 	public static class BoostSpeed extends StatBooster {
@@ -129,6 +132,7 @@ public abstract class Collectible extends Entity {
 		}
 		void addStat(Fighter fi){
 			fi.addSpeed(Hittable.BOOSTTIMERDEFAULT);
+			MapHandler.addEntity(new Graphic.BoostMessage(fi, (new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/upspeed.png"))))));
 		}
 	}
 	public static class BoostAir extends StatBooster {
@@ -138,6 +142,7 @@ public abstract class Collectible extends Entity {
 		}
 		void addStat(Fighter fi){
 			fi.addAir(Hittable.BOOSTTIMERDEFAULT);
+			MapHandler.addEntity(new Graphic.BoostMessage(fi, (new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/upair.png"))))));
 		}
 	}
 	public static class BoostAll extends StatBooster {
@@ -147,6 +152,7 @@ public abstract class Collectible extends Entity {
 		}
 		void addStat(Fighter fi){
 			fi.addAll(Hittable.BOOSTTIMERRUSH);
+			MapHandler.addEntity(new Graphic.BoostMessage(fi, (new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/upall.png"))))));
 		}
 	}
 

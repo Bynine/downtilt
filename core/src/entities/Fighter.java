@@ -74,8 +74,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
-		int slowMod = 2;
-		if (!slowedTimer.timeUp() && deltaTime % slowMod != 0) return;
+		//if (team == GlobalRepo.BADTEAM && deltaTime % 5 == 0) return;
 		stickX = getInputHandler().getXInput();
 		stickY = getInputHandler().getYInput();
 
@@ -643,6 +642,7 @@ public abstract class Fighter extends Hittable{
 		int comboStunMod = 24;
 		int stunTime = (int) (combo.finish() * comboStunMod);
 		setStun(stunTime);
+		combo.end();
 	}
 
 	private void refreshDoubleJumps(){
@@ -741,7 +741,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	@Override
-	protected void addToCombo(int id){
+	public void addToCombo(int id){
 		combo.addMoveID(id);
 	}
 
@@ -793,7 +793,7 @@ public abstract class Fighter extends Hittable{
 	public boolean isRunning() { return state == State.RUN || state == State.DASH; }
 	public boolean isInvincible(){ return hitstunTimer.getCounter() == 0 || !invincibleTimer.timeUp(); }
 	public boolean inputQueueTimeUp(){ return inputQueueTimer.timeUp(); }
-	public boolean isAttacking(){ return attackTimer.timeUp(); }
+	public boolean isAttacking(){ return !attackTimer.timeUp(); }
 	public boolean isGuarding() { return isGrounded() && !guardTimer.timeUp(); }
 	public boolean isCharging() {
 		if (null == getInputHandler()) return false;

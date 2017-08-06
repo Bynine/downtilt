@@ -50,24 +50,26 @@ public class M_Fly extends MoveList {
 
 	@Override
 	public Move nCharge() {
-		int frames = 4;
-		int frame = 30;
-		int interframe = frame/3;
+		int frames = 7;
+		int frame = 20;
 
 		Move m = new Move(user, frames * frame);
 		m.setAerial();
 		m.setAnimation("sprites/fighters/fly/ncharge.png", frames, frame);
-		Hitbox hit = new Hitbox.AngleHitbox(user, 4.2f, 3.8f, 24, 8, -8, 18, new SFX.HeavyHit());
-		hit.setMovesAheadMod(1);
+		Hitbox early = new Hitbox.AngleHitbox(user, 4.2f, 3.8f, 24, 8, -8, 18, new SFX.HeavyHit());
+		Hitbox late = new Hitbox.AngleHitbox(user, 3.2f, 0.8f, 16, 8, -8, 16, new SFX.LightHit());
+		early.setMovesAheadMod(1);
 		m.setContinueOnLanding();
-		m.eventList.addTremble(m, 0, frame * 1);
-		m.eventList.addConstantVelocity(user, 0, frame, 0, 0);
-		m.eventList.addConstantVelocity(user, frame + (interframe * 0), frame + (interframe * 1), 7,-7);
-		m.eventList.addConstantVelocity(user, frame + (interframe * 1), frame + (interframe * 2), 7, 7);
-		m.eventList.addConstantVelocity(user, frame + (interframe * 2), frame + (interframe * 3),-7, 7);
-		m.eventList.addConstantVelocity(user, frame + (interframe * 3), frame + (interframe * 5),-6, -6);
-		m.eventList.addConstantVelocity(user, frame + (interframe * 5), frame + (interframe * 6), 7, 0);
-		m.eventList.addActionCircle(hit, frame * 1, frame * 3);
+		m.eventList.addTremble(m, 0, frame * 2);
+		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, 1.4f);
+		float speed = 3.1f;
+		m.eventList.addConstantVelocity(user, frame * 2, frame * 3,  speed, -speed);
+		m.eventList.addConstantVelocity(user, frame * 3, frame * 4,  speed,  speed);
+		m.eventList.addConstantVelocity(user, frame * 4, frame * 5, -speed,  speed);
+		m.eventList.addConstantVelocity(user, frame * 5, frame * 6, -speed, -speed);
+		m.eventList.addConstantVelocity(user, frame * 6, frame * 7, speed, 1);
+		m.eventList.addActionCircle(early, frame * 2, frame * 4);
+		m.eventList.addActionCircle(late,  frame * 4, frame * 7);
 		return m;
 	}
 
@@ -135,14 +137,14 @@ public class M_Fly extends MoveList {
 		Move m = new Move(user, frame * 5);
 		m.setAnimation("sprites/fighters/fly/nspecial.png", frames, frame);
 		Windbox wind1 = new Windbox(user, 0.9f, 0.3f, 60, 0, 30);
-		Windbox wind3 = new Windbox(user, 1.4f, 0.5f, 30, 0, 20);
+		Windbox wind3 = new Windbox(user, 1.2f, 0.4f, 30, 0, 20);
 		Windbox wind2 = new Windbox(user, 0.7f, 0.2f, 40, 0, 40);
 		wind1.setRefresh(4);
 		wind2.setRefresh(4);
 		m.eventList.addTremble(m, 0, frame * 1);
 		m.eventList.addConstantVelocity(user, 0, frame * 1, 0, 0);
 		m.eventList.addConstantVelocity(user, frame * 1, frame * 5, -1, 0);
-		m.eventList.addGraphic(user, frame * 1,  frame * 5, new Graphic.Gust(user, frame * 4));
+		m.eventList.addGraphic(user, frame * 1,  frame * 4, new Graphic.Gust(user, frame * 3));
 		m.eventList.addActionCircle(wind1, frame * 1, frame * 3);
 		m.eventList.addActionCircle(wind3, frame * 1, frame * 3);
 		m.eventList.addActionCircle(wind2, frame * 3, frame * 4);
