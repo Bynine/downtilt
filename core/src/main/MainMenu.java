@@ -27,8 +27,8 @@ class MainMenu extends Menu {
 	private static final String str_TUTORIAL = "Tutorial";
 	private static final String str_TRAINING = "Training";
 	private static MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
-			new Choice<String>(str_TUTORIAL, "Learn how to play!"),
 			new Choice<String>(str_TRAINING, "Test out your moves against dummies!"),
+			new Choice<String>(str_TUTORIAL, "Learn how to play!"),
 			new Choice<String>(str_ADVENTURE, "Battle through a variety of stages!"), 
 			new Choice<String>(str_TIMETRIAL, "Knock 'em out quick! Combos extend your time!"),  
 			new Choice<String>(str_ENDLESS, "Survive endless enemies! Combos restore your health!")

@@ -32,10 +32,12 @@ public class M_Fly extends MoveList {
 		int startSwoop = 26;
 		int iter = 8;
 		int endSwoop = startSwoop + (iter * 4);
+		int frames = 4;
+		int frame = 20;
 
 		Move m = new Move(user, end);
 		m.setAerial();
-		m.setAnimation("sprites/fighters/fly/nair.png", 3, 20);
+		m.setAnimation("sprites/fighters/fly/nair.png", frames, frame);
 		Hitbox hit = new Hitbox(user, 4.2f, 2.8f, 16, 80, 8, -8, 18, new SFX.MidHit());
 		hit.setMovesAheadMod(1);
 		m.setContinueOnLanding();
@@ -45,6 +47,8 @@ public class M_Fly extends MoveList {
 		m.eventList.addConstantVelocity(user, startSwoop + iter * 2, startSwoop + iter * 3, 6, 0);
 		m.eventList.addConstantVelocity(user, startSwoop + iter * 3, startSwoop + iter * 4, 2, 3);
 		m.eventList.addActionCircle(hit, startSwoop, endSwoop);
+		m.eventList.addSound(new SFX.SharpHit(), 3 * frame);
+		m.eventList.addConstantVelocity(user, 3 * frame, 4 * frame, 0, -user.getGravity());
 		return m;
 	}
 
@@ -142,8 +146,8 @@ public class M_Fly extends MoveList {
 		wind1.setRefresh(4);
 		wind2.setRefresh(4);
 		m.eventList.addTremble(m, 0, frame * 1);
-		m.eventList.addConstantVelocity(user, 0, frame * 1, 0, 0);
-		m.eventList.addConstantVelocity(user, frame * 1, frame * 5, -1, 0);
+		m.eventList.addConstantVelocity(user, 0, frame * 1, 0, -user.getGravity());
+		m.eventList.addConstantVelocity(user, frame * 1, frame * 5, -1, -user.getGravity());
 		m.eventList.addGraphic(user, frame * 1,  frame * 4, new Graphic.Gust(user, frame * 3));
 		m.eventList.addActionCircle(wind1, frame * 1, frame * 3);
 		m.eventList.addActionCircle(wind3, frame * 1, frame * 3);

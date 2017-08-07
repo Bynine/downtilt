@@ -155,6 +155,7 @@ public abstract class Hittable extends Entity {
 		knockIntoTimer.reset();
 		setKnockIntoVelocity(hurtler);
 		addToCombo(Combo.knockIntoID);
+		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));
 		hurtler.knockInto();
 	}
 

@@ -43,11 +43,14 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static ShaderProgram p2Palette;
 
 	private static boolean musicToggle = false;
-	private static boolean debugToggle = false;
+	private static boolean debugToggle = true;
+	private static boolean saveToggle = false;
 	private static boolean fpsLoggle = false;
 
 	public void create () {
 		activeMode = new Endless(new Stage_Standard());
+		SaveHandler.begin();
+		SaveHandler.loadSave();
 		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
@@ -164,7 +167,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void changeRoom (Stage stage) {
-		deltaTime = 0;
 		slowTimer.end();
 		for (Fighter player: getPlayers()){
 			player.setPosition(stage.getStartPosition());
@@ -218,6 +220,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public enum GameState{
 		GAME, DEBUG, MENU, VICTORY
 	}
+	
+	public static void resetDeltaTime() {
+		deltaTime = 0;
+	}
 
 	public static float getVolume(){ return volume; }
 	public static int getDeltaTime(){ return deltaTime; }
@@ -238,6 +244,9 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	public static boolean debugOn(){
 		return debugToggle && !release;
+	}
+	public static boolean saveOn(){
+		return saveToggle || release;
 	}
 	public static InputHandlerPlayer getPrimaryInputHandler() { 
 		return primaryInputHandler; 

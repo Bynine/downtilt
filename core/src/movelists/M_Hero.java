@@ -265,8 +265,8 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/bair.png", frames, frame);
 		Hitbox fist1 = new Hitbox(user, 3.1f, 2.6f,  13, 	62, -20,  1, 17, new SFX.MidHit());
 		Hitbox body1 = new Hitbox(user, 2.5f, 1.5f,  11, 	78,  -4, -6, 20, new SFX.MidHit());
-		Hitbox fist2 =  new Hitbox(user, 2.0f, 1.5f, 10, 	30, -18,  0, 12, new SFX.LightHit());
-		Hitbox body2 =  new Hitbox(user, 1.5f, 1.5f,  9, 	40,  -2, -3, 14, new SFX.LightHit());
+		Hitbox fist2 =  new Hitbox(user, 2.0f, 0.5f, 10, 	30, -18,  0, 12, new SFX.LightHit());
+		Hitbox body2 =  new Hitbox(user, 1.5f, 0.5f,  9, 	40,  -2, -3, 14, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(fist1, body1, fist2, body2));
 		m.eventList.addActionCircle(fist1, frame, frame*2);
 		m.eventList.addActionCircle(body1, frame, frame*2);

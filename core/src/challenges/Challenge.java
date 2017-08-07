@@ -42,6 +42,7 @@ public abstract class Challenge {
 	 * Called when a challenge begins.
 	 */
 	protected void startChallenge(){
+		DowntiltEngine.resetDeltaTime();
 		lives = lifeSetting;
 		specialMeter = specialBeginning;
 		

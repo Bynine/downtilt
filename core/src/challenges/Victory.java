@@ -38,7 +38,7 @@ public abstract class Victory {
 	public static class AdventureVictory extends Victory{
 		final Difficulty difficulty;
 
-		AdventureVictory(List<Integer> longestCombos, int time, int deaths, Difficulty difficulty){
+		AdventureVictory(List<Integer> longestCombos, int deaths, int time, Difficulty difficulty){
 			this.difficulty = difficulty;
 			for (int i: longestCombos) this.longestCombo += i;
 			this.time = time / 3600;
@@ -60,7 +60,7 @@ public abstract class Victory {
 			else 	if (getTime() < minute * 11)score = 25;
 			else 	if (getTime() < minute * 12)score = 15;
 			else 	if (getTime() < minute * 13)score = 5;
-			return score + longestCombo;
+			return score + longestCombo - deaths * 5;
 		}
 
 		public Ranking getRanking(){

@@ -148,7 +148,7 @@ public abstract class Hurlable extends Hittable {
 		public Nut(float posX, float posY) {
 			super(posX, posY);
 			normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nut.png")));
-			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/nutspin.png", 2, 1, 8, PlayMode.LOOP);
+			tumbleImage = GlobalRepo.makeAnimation("sprites/entities/nutspin.png", 4, 1, 6, PlayMode.LOOP);
 			image = new Sprite(normImage);
 			baseKnockIntoDamage = 3f;
 			hitstunDealtBonus = 12;

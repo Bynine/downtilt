@@ -1,6 +1,7 @@
 package entities;
 
 import main.GlobalRepo;
+import main.MapHandler;
 import movelists.M_Fly;
 import moves.IDMove;
 
@@ -15,14 +16,14 @@ public class Fly extends Fighter {
 
 	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/fly/stand.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/fly/run.png", 2, 1, 8, PlayMode.LOOP);
+	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 10, PlayMode.LOOP);
 	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/fly/jump.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/fly/crouch.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/fly/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 4, 1, 6, PlayMode.LOOP);
 	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fall.png")));
 	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fallen.png")));
-	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/dash.png")));
+	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/jump.png")));
 
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);
@@ -39,7 +40,7 @@ public class Fly extends Fighter {
 		jumpStrength = 3.2f;
 		jumpAcc = 0.23f;
 		dashStrength = 0f;
-		doubleJumpStrength = 4.8f;
+		doubleJumpStrength = 5.2f;
 		airFrictionY = 0.96f;
 		jumpSquatTimer.setEndTime(8);
 		moveList = new M_Fly(this);
@@ -79,6 +80,11 @@ public class Fly extends Fighter {
 	
 	protected boolean upThroughThinPlatform(Rectangle r){
 		return false;
+	}
+	
+	protected void hitGround(){
+		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + 8));
+		MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + 8));
 	}
 
 	TextureRegion getJumpFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }

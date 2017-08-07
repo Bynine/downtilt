@@ -38,6 +38,7 @@ public class GraphicsHandler {
 	private static SpriteBatch batch;
 	private static final OrthographicCamera cam = new OrthographicCamera();
 	private static final OrthographicCamera parallaxCam = new OrthographicCamera();
+	private static final OrthographicCamera dualParallaxCam = new OrthographicCamera();
 	private static final int camAdjustmentLimiter = 16;
 	private static OrthogonalTiledMapRenderer renderer;
 	private static final float screenAdjust = 2f;
@@ -75,6 +76,8 @@ public class GraphicsHandler {
 		cam.zoom = ZOOM;
 		parallaxCam.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		parallaxCam.zoom = ZOOM;
+		dualParallaxCam.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		dualParallaxCam.zoom = ZOOM;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/nes.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.color = fontColor;
@@ -107,23 +110,31 @@ public class GraphicsHandler {
 
 		if (DowntiltEngine.getChallenge().getStage().scrolls()){
 			final float blackBounds = SCREENWIDTH/4;
-			if (parallaxCam.position.x == 0) parallaxCam.position.x = blackBounds;
+			if (parallaxCam.position.x == 0) {
+				parallaxCam.position.x = blackBounds;
+				dualParallaxCam.position.x = blackBounds;
+			}
 			if (!DowntiltEngine.isPaused()) {
-				if (DowntiltEngine.isSlowed()) parallaxCam.position.x += 12/8;
-				else parallaxCam.position.x += 12;
+				float inc = 12.0f;
+				if (DowntiltEngine.isSlowed()) inc = inc/8.0f;
+				parallaxCam.position.x += inc;
+				dualParallaxCam.position.x += inc/2.0f;
 			}
 			if (parallaxCam.position.x + blackBounds > MapHandler.mapWidth) parallaxCam.position.x = blackBounds;
+			if (dualParallaxCam.position.x + blackBounds > MapHandler.mapWidth) dualParallaxCam.position.x = blackBounds;
 		}
 		else{
 			parallaxCam.position.x = cam.position.x;
-			int parallax = 2;
+			float parallax = 1;
 			int updateSpeed = 4;
 			float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
 			parallaxCam.position.x = 
 					(parallaxCam.position.x * (updateSpeed - 1) +
 							( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
+			dualParallaxCam.position.x = (parallaxCam.position.x + cam.position.x)/2;
 		}
 		parallaxCam.position.y = cam.position.y;
+		dualParallaxCam.position.y = cam.position.y;
 
 		if (!DowntiltEngine.outOfHitlag() && !DowntiltEngine.isPaused()) shakeScreen();
 		if (DowntiltEngine.justOutOfHitlag()) {
@@ -134,6 +145,7 @@ public class GraphicsHandler {
 
 		cam.update();
 		parallaxCam.update();
+		dualParallaxCam.update();
 	}
 
 	private static float screenBoundary(float dimension){
@@ -143,13 +155,17 @@ public class GraphicsHandler {
 	static void updateGraphics(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		int[] arr;
-		renderer.setView(parallaxCam);
+		renderer.setView(dualParallaxCam);
 		batch.setProjectionMatrix(cam.combined);
 
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
 
-		arr = new int[]{1};  // render back
+		arr = new int[]{1};  // render far back
+		renderer.render(arr);
+		
+		renderer.setView(parallaxCam);
+		arr = new int[]{2};  // render near back
 		renderer.render(arr);
 
 		batch.begin();  // render bg entities
@@ -162,7 +178,7 @@ public class GraphicsHandler {
 		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
 		arr = new int[numLayers];
 		for (int i = 0; i < arr.length; ++i) {
-			arr[i] = i + 2;
+			arr[i] = i + 3;
 		}
 		renderer.render(arr);
 		renderer.getBatch().setShader(null);

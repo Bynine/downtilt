@@ -24,7 +24,7 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(0, new ChallengeAdventure(new Stage_Blocks(), waveDebug));
+				challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
 			}
 			else{
 				challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard1));
@@ -94,13 +94,7 @@ public class Adventure extends Mode{
 	 */
 
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 8, 2, 60))
 			));
 
 	/* BEGINNER */

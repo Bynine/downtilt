@@ -17,6 +17,8 @@ public class VictoryScreen extends Menu{
 	
 	public static void start(Victory v){
 		currentVictory = v;
+		SaveHandler.writeScore(0, 0, v.getScore());
+		SaveHandler.save();
 	}
 	
 	private static void draw(){
@@ -35,7 +37,7 @@ public class VictoryScreen extends Menu{
 		if (currentVictory.getTime() != Victory.NOTUSED) font.draw(batch, "TIME TAKEN:    " + GlobalRepo.getTimeString(currentVictory.getTime()), startX, startY -= dec);
 		if (currentVictory.getCombo() != Victory.NOTUSED) font.draw(batch, "LONGEST COMBO: " + currentVictory.getCombo(), startX, startY -= dec);
 		if (currentVictory.getKOs() != Victory.NOTUSED) font.draw(batch, "ENEMIES KO'd:  " + currentVictory.getKOs(), startX, startY -= dec);
-		//if (currentVictory.getDeaths() != Victory.NOTUSED) font.draw(batch, "DEATHS: " + currentVictory.getDeaths(), startX, startY -= dec);
+		if (currentVictory.getDeaths() != Victory.NOTUSED) font.draw(batch, "DEATHS: " + currentVictory.getDeaths(), startX, startY -= dec);
 		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, startY -= dec);
 		specialFont.draw(batch, "Press Y to continue", startX, startY -= dec);
 		batch.end();
