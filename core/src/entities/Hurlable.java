@@ -21,8 +21,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Hurlable extends Hittable {
 
-	protected TextureRegion normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/trashcan.png")));
-	protected Animation tumbleImage = GlobalRepo.makeAnimation("sprites/entities/trashcanspin.png", 4, 1, 8, PlayMode.LOOP);
+	protected TextureRegion normImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nut.png")));
+	protected Animation tumbleImage = GlobalRepo.makeAnimation("sprites/entities/nutspin.png", 4, 1, 8, PlayMode.LOOP);
 	float staticPercent = 50;
 
 	public Hurlable(float posX, float posY) {

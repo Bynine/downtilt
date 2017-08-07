@@ -3,6 +3,7 @@ package challenges;
 import java.util.List;
 
 import challenges.Challenge.Difficulty;
+import maps.Stage;
 
 public abstract class Victory {
 	protected int longestCombo;
@@ -34,6 +35,8 @@ public abstract class Victory {
 
 	public abstract int getScore();
 	public abstract Ranking getRanking();
+	public abstract int getNumberX();
+	public abstract int getNumberY();
 
 	public static class AdventureVictory extends Victory{
 		final Difficulty difficulty;
@@ -72,16 +75,32 @@ public abstract class Victory {
 			if (getScore() < 90) return Ranking.S;
 			else return Ranking.X;
 		}
+		
+		public int getNumberX(){
+			return 0;
+		}
+		
+		public int getNumberY(){
+			switch(difficulty){
+			case Beginner: return 0;
+			case Standard: return 1;
+			case Advanced: return 2;
+			case Nightmare: return 3;
+			default: return 0;
+			}
+		}
 
 	}
 
 	public static class TrialVictory extends Victory{
+		private final Stage stage;
 
-		TrialVictory(int longestCombo, int kos){
+		TrialVictory(int longestCombo, int kos, Stage stage){
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
 			this.deaths = NOTUSED;
+			this.stage = stage;
 		}
 
 		public int getScore(){
@@ -97,16 +116,26 @@ public abstract class Victory {
 			if (getScore() < 55) return Ranking.S;
 			else return Ranking.X;
 		}
-
+		
+		public int getNumberX(){
+			return 1;
+		}
+		
+		public int getNumberY(){
+			return stage.getNumber();
+		}
+		
 	}
 
 	public static class EndlessVictory extends Victory{
+		private final Stage stage;
 
-		EndlessVictory(int longestCombo, int kos){
+		EndlessVictory(int longestCombo, int kos, Stage stage){
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
 			this.deaths = NOTUSED;
+			this.stage = stage;
 		}
 
 		public int getScore(){
@@ -122,7 +151,15 @@ public abstract class Victory {
 			if (getScore() < 100) return Ranking.S;
 			else return Ranking.X;
 		}
-
+		
+		public int getNumberX(){
+			return 2;
+		}
+		
+		public int getNumberY(){
+			return stage.getNumber();
+		}
+		
 	}
 
 }

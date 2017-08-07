@@ -141,7 +141,7 @@ public abstract class Entity {
 
 	void applyAirFrictionY(){
 		boolean meteor = inHitstun() && (prevAerialHitAngle > 240 && prevAerialHitAngle < 300);
-		if (velocity.y < 0 && !meteor) velocity.y *= airFrictionY;
+		if (velocity.y < 0 && !meteor) velocity.y *= airFrictionY * (Math.pow(MapHandler.getRoomGravity(), 0.02f));
 	}
 
 	void setupRectangles(List<Rectangle> mapRectangleList, List<Entity> entityList){

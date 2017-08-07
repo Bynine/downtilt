@@ -119,7 +119,6 @@ public abstract class Stage {
 	public Vector2 getCenterPosition(){
 		return getStartPosition();
 	}
-	
 
 	public List<Rectangle> getRectangleList(){ return rectangleList; }
 	public List<Entity> getEntityList(){ return entityList; }
@@ -133,5 +132,9 @@ public abstract class Stage {
 	public float getGravity() { return gravity; }
 	public float getDispX() { return dispX; }
 	public boolean scrolls() { return scrolls; }
+	
+	public int getNumber(){
+		return -1;
+	}
 
 }

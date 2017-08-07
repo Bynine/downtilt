@@ -39,9 +39,9 @@ public class Adventure extends Mode{
 			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard2));
 			challengeList.add(new ChallengeAdventure(new Stage_Rooftop(), waveRooftop2));
 			challengeList.add(new ChallengeAdventure(new Stage_Truck(), waveTruck2));
+			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace2, 150));
 			challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks2));
 			challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom2));
-			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace2, 150));
 			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky2));
 			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
 		} break;

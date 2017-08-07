@@ -27,5 +27,9 @@ public class Stage_Space extends Stage {
 	public Vector2 getCenterPosition(){
 		return new Vector2(22 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
+	
+	public int getNumber(){
+		return 5;
+	}
 
 }

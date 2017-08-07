@@ -52,5 +52,9 @@ public class Stage_Sky extends Stage {
 		if (gx > windTiming && gx < windTiming + windDuration) return windStrength;
 		else return 0;
 	}
+	
+	public int getNumber(){
+		return 6;
+	}
 
 }

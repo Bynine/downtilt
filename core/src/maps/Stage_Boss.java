@@ -25,5 +25,9 @@ public class Stage_Boss extends Stage {
 	public Vector2 getCenterPosition(){
 		return new Vector2(21.5f * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
 	}
+	
+	public int getNumber(){
+		return 7;
+	}
 
 }

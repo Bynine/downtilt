@@ -30,7 +30,7 @@ public class Stage_Rooftop extends Stage {
 	public void update(int deltaTime){
 		super.update(deltaTime);
 		lh1.update();
-		rain();
+		//rain();
 	}
 
 	public Vector2 getStartPosition() {
@@ -41,6 +41,10 @@ public class Stage_Rooftop extends Stage {
 		return new Vector2(22 * GlobalRepo.TILE, 3 * GlobalRepo.TILE);
 	}
 	
+	public int getNumber(){
+		return 1;
+	}
+
 	private class LightningHandler{
 		Timer lightningTimer = new Timer(100);
 		Vector2 lightningPos = new Vector2(0, 0);

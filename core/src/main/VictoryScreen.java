@@ -7,21 +7,21 @@ import challenges.Victory;
 
 public class VictoryScreen extends Menu{
 	
-	private static Victory currentVictory;
+	private Victory currentVictory;
 
-	static void update(){
-		Menu.update();
+	void update(){
+		super.update();
 		if (DowntiltEngine.getPrimaryInputHandler().chargeHold())	start();
 		draw();
 	}
 	
-	public static void start(Victory v){
+	public void start(Victory v){
 		currentVictory = v;
-		SaveHandler.writeScore(0, 0, v.getScore());
+		SaveHandler.writeScore(v.getNumberX(), v.getNumberY(), v.getScore());
 		SaveHandler.save();
 	}
 	
-	private static void draw(){
+	private void draw(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.67f, 0.85f, 0.99f, 1);
 		int startY = 500;

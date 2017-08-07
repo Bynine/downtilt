@@ -18,6 +18,7 @@ public class Raindrop extends Entity {
 		setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindrop.png"))));
 		gravity = -1.5f;
 		airFrictionX = 0.999f;
+		velocity.x = MapHandler.getRoomWind() * 36;
 		collision = Collision.CREATURE;
 	}
 	
@@ -32,7 +33,7 @@ public class Raindrop extends Entity {
 	}
 	
 	void handleWind(){
-		velocity.x = MapHandler.getRoomWind() * 30;
+		velocity.x = MapHandler.getRoomWind() * 120;
 	}
 	
 	private void splish(){

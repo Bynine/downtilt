@@ -161,11 +161,11 @@ public class GraphicsHandler {
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
 
-		arr = new int[]{1};  // render far back
+		arr = new int[]{1};  // render slow parallax
 		renderer.render(arr);
 		
 		renderer.setView(parallaxCam);
-		arr = new int[]{2};  // render near back
+		arr = new int[]{2};  // render fast parallax
 		renderer.render(arr);
 
 		batch.begin();  // render bg entities
@@ -174,12 +174,7 @@ public class GraphicsHandler {
 		font.setColor(1, 1, 1, 1);
 
 		renderer.setView(cam);
-		//batch.setProjectionMatrix(cam.combined);
-		int numLayers = MapHandler.activeMap.getLayers().getCount() - 3;  // render tiles
-		arr = new int[numLayers];
-		for (int i = 0; i < arr.length; ++i) {
-			arr[i] = i + 3;
-		}
+		arr = new int[]{3}; // render middle back
 		renderer.render(arr);
 		renderer.getBatch().setShader(null);
 
@@ -189,7 +184,7 @@ public class GraphicsHandler {
 		font.setColor(1, 1, 1, 1);
 
 		batch.begin(); 
-		arr = new int[]{numLayers - 0, numLayers - 1};  // render front
+		arr = new int[]{4, 5};  // render middle front, front
 		renderer.render(arr);
 		batch.end();
 

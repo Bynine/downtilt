@@ -7,6 +7,8 @@ import java.util.List;
 import maps.*;
 
 public class Endless extends Mode {
+	
+	private final Stage stage;
 
 	private List<Wave> wave = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 4, 2, 10))
@@ -39,6 +41,7 @@ public class Endless extends Mode {
 	List<Challenge> challengeList = new ArrayList<Challenge>();
 
 	public Endless(Stage stage){
+		this.stage = stage;
 		challengeList.add(new ChallengeEndless(stage, wave));
 	}
 	
@@ -54,7 +57,7 @@ public class Endless extends Mode {
 	}
 
 	Victory getVictory(){
-		return new Victory.EndlessVictory(getCombo(), getKOs());
+		return new Victory.EndlessVictory(getCombo(), getKOs(), stage);
 	}
 
 }

@@ -41,15 +41,16 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
 	private static float volume	= 1.0f;
 	private static ShaderProgram p2Palette;
+	private static GameMenu gameMenu;
+	private static VictoryScreen victoryScreen;
 
 	private static boolean musicToggle = false;
 	private static boolean debugToggle = true;
-	private static boolean saveToggle = false;
+	private static boolean saveToggle = true;
 	private static boolean fpsLoggle = false;
 
 	public void create () {
 		activeMode = new Endless(new Stage_Standard());
-		SaveHandler.begin();
 		SaveHandler.loadSave();
 		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
 		for (Controller c: Controllers.getControllers()) {
@@ -63,9 +64,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.begin();
 		MapHandler.begin();
 
-		Menu.initialize();
-		DebugMenu.initialize();
-		MainMenu.initialize();
+		gameMenu = new GameMenu();
 	}
 	
 	private static boolean isXBox360Controller(Controller c){
@@ -124,9 +123,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 		if (fpsLoggle && !release) fpsLogger.log();
 		switch(gameState){
 		case GAME:		updateGame();			break;
-		case DEBUG: 	DebugMenu.update();		break;
-		case MENU:		MainMenu.update();		break;
-		case VICTORY: 	VictoryScreen.update();	break;
+		case MENU:		gameMenu.update();		break;
+		case VICTORY: 	victoryScreen.update();	break;
 		}
 	}
 
@@ -192,16 +190,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 		MapHandler.begin();
 	}
 
-	public static void startDebugMenu(){
-		toMenu(GameState.DEBUG);
-	}
-
 	public static void startMenu(){
 		toMenu(GameState.MENU);
 	}
 	
 	public static void startVictoryScreen(Victory v){
-		VictoryScreen.start(v);
+		victoryScreen = new VictoryScreen();
+		victoryScreen.start(v);
 		toMenu(GameState.VICTORY);
 	}
 	
@@ -209,7 +204,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		paused = false;
 		beginFighters(true);
 		getChallenge().getStage().getMusic().stop();
-		MainMenu.begin();
+		gameMenu.begin();
 		gameState = gs;
 	}
 
@@ -218,7 +213,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public enum GameState{
-		GAME, DEBUG, MENU, VICTORY
+		GAME, MENU, VICTORY
 	}
 	
 	public static void resetDeltaTime() {

@@ -19,14 +19,14 @@ import challenges.Training;
 import challenges.Tutorial;
 import maps.*;
 
-class MainMenu extends Menu {
+class GameMenu extends Menu {
 
-	private static final String str_ADVENTURE = "Adventure";
-	private static final String str_TIMETRIAL = "Time Trial";
-	private static final String str_ENDLESS = "Endless";
-	private static final String str_TUTORIAL = "Tutorial";
-	private static final String str_TRAINING = "Training";
-	private static MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
+	private  final String str_ADVENTURE = "Adventure";
+	private  final String str_TIMETRIAL = "Time Trial";
+	private  final String str_ENDLESS = "Endless";
+	private  final String str_TUTORIAL = "Tutorial";
+	private  final String str_TRAINING = "Training";
+	private  MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
 			new Choice<String>(str_TRAINING, "Test out your moves against dummies!"),
 			new Choice<String>(str_TUTORIAL, "Learn how to play!"),
 			new Choice<String>(str_ADVENTURE, "Battle through a variety of stages!"), 
@@ -34,7 +34,7 @@ class MainMenu extends Menu {
 			new Choice<String>(str_ENDLESS, "Survive endless enemies! Combos restore your health!")
 			));
 
-	private static MenuOption<Class<? extends Stage>> stages = new MenuOption<Class<? extends Stage>>(Arrays.asList(
+	private  MenuOption<Class<? extends Stage>> stages = new MenuOption<Class<? extends Stage>>(Arrays.asList(
 			new Choice<Class<? extends Stage>>(Stage_Standard.class, ""),
 			new Choice<Class<? extends Stage>>(Stage_Rooftop.class, ""),
 			new Choice<Class<? extends Stage>>(Stage_Truck.class, ""),
@@ -44,38 +44,38 @@ class MainMenu extends Menu {
 			new Choice<Class<? extends Stage>>(Stage_Sky.class, "")
 			));
 
-	private static MenuOption<Difficulty> difficulty = new MenuOption<Difficulty>(Arrays.asList(
+	private  MenuOption<Difficulty> difficulty = new MenuOption<Difficulty>(Arrays.asList(
 			new Choice<Difficulty>(Difficulty.Beginner, "Easygoing, perfect for a first time."),
 			new Choice<Difficulty>(Difficulty.Standard, "A solid standard experience."),
 			new Choice<Difficulty>(Difficulty.Advanced, "Random stages and extra challenge."),
 			new Choice<Difficulty>(Difficulty.Nightmare, "Good luck!")
 			));
 
-	private static MenuOption<Integer> players = new MenuOption<Integer>(Arrays.asList(
+	private  MenuOption<Integer> players = new MenuOption<Integer>(Arrays.asList(
 			new Choice<Integer>(1, ""),
 			new Choice<Integer>(2, "")
 			));
 
-	private static MenuOption<Integer> choices = new MenuOption<Integer>(Arrays.asList(
+	private  MenuOption<Integer> choices = new MenuOption<Integer>(Arrays.asList(
 			new Choice<Integer>(0, ""),
 			new Choice<Integer>(0, ""),
 			new Choice<Integer>(0, ""),
 			new Choice<Integer>(0, "")
 			));
-	private static List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, mode, difficulty, stages, players));
+	private  List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, mode, difficulty, stages, players));
 
-	private static TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/cursor.png")));
-	private static TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/title.png")));
-	private static final Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+	private  TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/cursor.png")));
+	private  TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/title.png")));
+	private  final Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
 
-	public static void initialize(){
-		Menu.initialize();
+	GameMenu(){
+		super();
 		stages.randomize();
 		menuMusic.setLooping(true);
 		begin();
 	}
 
-	public static void begin(){
+	public  void begin(){
 		if (DowntiltEngine.musicOn()) menuMusic.play();
 	}
 
@@ -83,8 +83,8 @@ class MainMenu extends Menu {
 		CHARACTER, PLAYERS
 	}
 
-	static void update() {
-		Menu.update();
+	 void update() {
+		super.update();
 		if (DowntiltEngine.getPrimaryInputHandler().flickLeft())	handleCursor(-1, options, choices);
 		if (DowntiltEngine.getPrimaryInputHandler().flickRight())	handleCursor(1, options,choices);
 		if (DowntiltEngine.getPrimaryInputHandler().flickUp())		choices.moveCursor(-1);
@@ -94,7 +94,7 @@ class MainMenu extends Menu {
 		draw();
 	}
 
-	private static void draw(){
+	private void draw(){
 		int posX = 230;
 		int startY = 510;
 		int dec = 30;
@@ -144,15 +144,15 @@ class MainMenu extends Menu {
 		batch.end();
 	}
 	
-	private static boolean greyOutDifficultySelect(){
+	private  boolean greyOutDifficultySelect(){
 		return mode.selected().t != str_ADVENTURE;
 	}
 	
-	private static boolean greyOutStageSelect(){
+	private  boolean greyOutStageSelect(){
 		return mode.selected().t == str_ADVENTURE || mode.selected().t == str_TUTORIAL;
 	}
 
-	private static String appendCursors(String str, MenuOption<?> menuOption){
+	private  String appendCursors(String str, MenuOption<?> menuOption){
 		if (menuOption.cursorPos() == 0) str = "  ".concat(str);
 		else str = "< ".concat(str);
 		if (menuOption.cursorPos() == menuOption.getSize() - 1) str = str.concat("   ");
@@ -160,7 +160,7 @@ class MainMenu extends Menu {
 		return str;
 	}
 
-	private static void start(){
+	private  void start(){
 		Mode selectMode = null;
 		Stage stage = getStage();
 
@@ -187,7 +187,7 @@ class MainMenu extends Menu {
 		menuMusic.stop();
 	}
 
-	private static Stage getStage(){
+	private  Stage getStage(){
 		try {
 			return stages.selected().t.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {

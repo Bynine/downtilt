@@ -25,5 +25,9 @@ public class Stage_Standard extends Stage {
 	public Vector2 getCenterPosition(){
 		return new Vector2(22 * GlobalRepo.TILE, 4 * GlobalRepo.TILE);
 	}
+	
+	public int getNumber(){
+		return 0;
+	}
 
 }

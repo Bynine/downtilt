@@ -36,5 +36,9 @@ public class Stage_Mushroom extends Stage {
 	public Vector2 getCenterPosition(){
 		return new Vector2(22 * GlobalRepo.TILE, 5 * GlobalRepo.TILE);
 	}
+	
+	public int getNumber(){
+		return 4;
+	}
 
 }

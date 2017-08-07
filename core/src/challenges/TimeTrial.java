@@ -7,6 +7,8 @@ import java.util.List;
 import maps.Stage;
 
 public class TimeTrial extends Mode {
+	
+	private final Stage stage;
 
 	private List<Wave> wave = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb, EnemyRepo.heavy), 0, 10, 180))
@@ -14,6 +16,7 @@ public class TimeTrial extends Mode {
 	List<Challenge> challengeList = new ArrayList<Challenge>();
 	
 	public TimeTrial(Stage stage){
+		this.stage = stage;
 		challengeList.add(new ChallengeTimeTrial(stage, wave, 60));
 	}
 	
@@ -27,7 +30,7 @@ public class TimeTrial extends Mode {
 	}
 	
 	Victory getVictory(){
-		return new Victory.TrialVictory(getCombo(), getKOs());
+		return new Victory.TrialVictory(getCombo(), getKOs(), stage);
 	}
 
 }

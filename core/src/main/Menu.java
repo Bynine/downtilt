@@ -18,13 +18,13 @@ import timers.Timer;
 
 abstract class Menu {
 	
-	protected static BitmapFont font = new BitmapFont(), specialFont = new BitmapFont();
-	protected static SpriteBatch batch;
-	protected final static String startStr = "Press A to begin!";
-	protected final static Color fontColor = Color.WHITE;
-	protected static TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/menu.png")));
+	protected  BitmapFont font = new BitmapFont(), specialFont = new BitmapFont();
+	protected  SpriteBatch batch;
+	protected final  String startStr = "Press A to begin!";
+	protected final  Color fontColor = Color.WHITE;
+	protected  TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/menu.png")));
 	
-	static void initialize(){
+	Menu(){
 		batch = new SpriteBatch();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/nes.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -37,15 +37,15 @@ abstract class Menu {
 		generator.dispose();
 	}
 	
-	static void update(){
+	void update(){
 		DowntiltEngine.getPrimaryInputHandler().update();
 	}
 
-	protected static void handleCursor(int mov, List<MenuOption<?>> options, MenuOption<Integer> choices){
+	protected  void handleCursor(int mov, List<MenuOption<?>> options, MenuOption<Integer> choices){
 		options.get(choices.cursorPos() + 1).moveCursor(mov);
 	}
 	
-	protected static List<Fighter> makePlayers(int num, ArrayList<PlayerType> newPlayers){
+	protected  List<Fighter> makePlayers(int num, ArrayList<PlayerType> newPlayers){
 		List<Fighter> playerList = new ArrayList<Fighter>();
 		for (int i = 0; i < num; ++i){
 			Fighter player = new Basic(0, 0, 0);
@@ -61,7 +61,7 @@ abstract class Menu {
 		return playerList;
 	}
 
-	protected static class PlayerType{
+	protected  class PlayerType{
 		final Class<? extends Fighter> type;
 		final String name;
 		
@@ -76,7 +76,7 @@ abstract class Menu {
 		}
 	}
 
-	protected static class MenuOption <T> {
+	protected  class MenuOption <T> {
 		private int cursor = 0;
 		private final List<Choice<T>> choices;
 		private final Timer waitToMoveTimer = new Timer(3);
@@ -121,7 +121,7 @@ abstract class Menu {
 		
 	}
 	
-	static class Choice<T> {
+	 class Choice<T> {
 		final T t;
 		final String desc;
 		

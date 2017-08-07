@@ -136,7 +136,7 @@ public class Hitbox extends ActionCircle{
 	}
 	
 	private int graphicLengthFormula(float knockback){
-		return (int) (1.5f * hitlagFormula(knockback));
+		return (int) (1.6f * hitlagFormula(knockback));
 	}
 	
 	private boolean isGuarding(){

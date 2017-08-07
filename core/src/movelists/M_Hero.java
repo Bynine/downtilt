@@ -54,7 +54,7 @@ public class M_Hero extends MoveList_Advanced{
 	public Move dWeak() {
 		int frame = 8;
 		int frames = 3;
-		
+
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/dweak.png", frames, frame);
 		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
@@ -96,7 +96,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.dontTurn();
 		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/bomber/slideattack.png", 2, 16);
-		
+
 		Hitbox early1 = new Hitbox(user, 5.6f, 1.7f, 10,  75,  0, -4, 12, new SFX.MidHit());
 		Hitbox early2 = new Hitbox(user, 5.6f, 1.7f, 10,  75, 16, -6,  8, new SFX.MidHit());
 		Hitbox late1  = new Hitbox(user, 4.0f, 1.0f, 07, 100,  0, -8, 10, new SFX.LightHit());
@@ -165,7 +165,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setStopsInAir();
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
 		m.eventList.addCharge(user, c);
-		
+
 		int x = 18;
 		int y = -14;
 		int size = 14;
@@ -541,22 +541,23 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move land(){
 		Move m = new Move(user, 3);
-		if (null != user.getPrevMove()){
+		if (null != user.getPrevMove() && !user.airActive()){
 			switch(user.getPrevMove().id){
 			case MoveList_Advanced.IDnair: m = new Move(user, 5); break;
 			case MoveList_Advanced.IDfair: m = new Move(user, 12); break;
 			case MoveList_Advanced.IDbair: m = new Move(user, 8); break;
 			case MoveList_Advanced.IDuair: m = new Move(user, 8); break;
-			case MoveList_Advanced.IDdair: {
-				m = new Move(user, 12); 
-				m.setAnimation("sprites/fighters/bomber/landdair.png", 1, 1);
-				Hitbox finish = new Hitbox(user, 4.0f, 1.3f, 4, 85, 0, 0, 30, new SFX.MidHit());
-				m.eventList.addActionCircle(finish, 0, 2);
-			} break;
 			default: break;
 			}
 		}
-		if (!m.hasAnimation()) m.setAnimation("sprites/fighters/bomber/crouch.png", 1, 1);
+		m.setAnimation("sprites/fighters/bomber/crouch.png", 1, 1);
+		if (null != user.getPrevMove() && user.getPrevMove().id == MoveList_Advanced.IDdair){
+			m = new Move(user, 12); 
+			if (user.airActive()) m = new Move(user, 3); 
+			m.setAnimation("sprites/fighters/bomber/landdair.png", 1, 1);
+			Hitbox finish = new Hitbox(user, 4.0f, 1.3f, 4, 85, 0, 0, 30, new SFX.MidHit());
+			m.eventList.addActionCircle(finish, 0, 4);
+		}
 		m.dontTurn();
 		return m;
 	}

@@ -22,6 +22,8 @@ public class Stage_Blocks extends Stage {
 		return new Vector2(22 * GlobalRepo.TILE, 9 * GlobalRepo.TILE);
 	}
 	
-
+	public int getNumber(){
+		return 3;
+	}
 
 }

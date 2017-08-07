@@ -26,7 +26,7 @@ public class Tutorial extends Mode {
 
 	@Override
 	Victory getVictory(){
-		return new Victory.EndlessVictory(Victory.NOTUSED, Victory.NOTUSED);
+		return null;
 	}
 
 }

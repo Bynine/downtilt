@@ -1,11 +1,15 @@
 package entities;
 
+import main.GlobalRepo;
 import main.SFX;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.MathUtils;
 
 import timers.DurationTimer;
 
@@ -37,56 +41,60 @@ public abstract class Graphic extends Entity{
 	}
 	
 	private static abstract class HitGraphic extends Graphic{
-		private TextureRegion halfSize;
+		private final int frame = 6;
+		private final int frames = 3;
+		private final int startFrame;
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/hitanimation.png", frames, 1, frame, PlayMode.NORMAL);
 
 		public HitGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
+			startFrame = MathUtils.clamp((frame * frames) - duration.getEndTime() - 4, 0, frame * frames);
 		}
 		
-		protected void setup(TextureRegion fullSize, TextureRegion halfSize){
-			this.halfSize = halfSize;
-			if (duration.getEndTime() < 4) image = new Sprite(halfSize);
-			else image = new Sprite(fullSize);
+		protected void setAnimation(Animation anim){
+			this.anim = anim;
+		}
+		
+		protected void setup(){
+			setImage(anim.getKeyFrame(startFrame));
 			position.x -= image.getWidth()/2;
 			position.y -= image.getHeight()/2;
 		}
 
 		void updatePosition(){
-			if (duration.getCounter() > 4) setSmall(halfSize);
+			//System.out.println("Graphic is on frame " + (startFrame + duration.getCounter()) );
+			setImage(anim.getKeyFrame(startFrame + duration.getCounter()));
 			if (duration.timeUp()) setRemove();
 		}
 		
 	}
 
 	public static class HitGoodGraphic extends HitGraphic{
-		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit.png")));
-		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitsmall.png")));
 
 		public HitGoodGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			setup(fullSize, halfSize);
+			setup();
 		}
 
 	}
 	
 	public static class HitBadGraphic extends HitGraphic{
-		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit2.png")));
-		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hit2small.png")));
 
 		public HitBadGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			setup(fullSize, halfSize);
+			setup();
 		}
 
 	}
 	
 	public static class HitGuardGraphic extends HitGraphic{
-		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguard.png")));
-		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguardsmall.png")));
+//		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguard.png")));
+//		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguardsmall.png")));
 
 		public HitGuardGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			setup(fullSize, halfSize);
+			setAnimation(GlobalRepo.makeAnimation("sprites/graphics/hitguardanimation.png", 3, 1, 8, PlayMode.LOOP));
+			setup();
 		}
 
 	}
