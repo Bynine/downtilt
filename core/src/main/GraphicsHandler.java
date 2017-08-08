@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import moves.ActionCircle;
 
@@ -151,6 +152,26 @@ public class GraphicsHandler {
 	private static float screenBoundary(float dimension){
 		return dimension/(screenAdjust/ZOOM) + GlobalRepo.TILE * 1;
 	}
+	
+	private static class FighterSort implements Comparator<Entity> {
+
+		@Override
+		public int compare(Entity o1, Entity o2) {
+			int o1Num = setNum(o1);
+			int o2Num = setNum(o2);
+			
+			if (o1Num > o2Num) return 1;
+			if (o1Num < o2Num) return -1;
+			else return 0;
+		}
+		
+		private int setNum(Entity o){
+			if (o instanceof Hittable && ((Hittable)o).isCaught()) return 2;
+			if (DowntiltEngine.entityIsPlayer(o)) return 1;
+			else return 0;
+		}
+		
+	}
 
 	static void updateGraphics(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -186,8 +207,10 @@ public class GraphicsHandler {
 		renderer.render(arr);
 		renderer.getBatch().setShader(null);
 
-		batch.begin();  // render fg entities
-		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.MIDDLEFRONT) renderEntity(e);
+		batch.begin();  // render normal entities
+		List<Entity> normEntityList = MapHandler.activeRoom.getEntityList();
+		normEntityList.sort(new FighterSort());
+		for (Entity e: normEntityList) if (e.getLayer() == Entity.Layer.MIDDLEFRONT) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 

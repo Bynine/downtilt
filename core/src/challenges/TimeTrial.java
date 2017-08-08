@@ -11,7 +11,7 @@ public class TimeTrial extends Mode {
 	private final Stage stage;
 
 	private List<Wave> wave = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.bomb, EnemyRepo.heavy), 0, 10, 180))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.fly, EnemyRepo.heavy), 0, 8, 180))
 			));
 	List<Challenge> challengeList = new ArrayList<Challenge>();
 	

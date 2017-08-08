@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import main.DowntiltEngine;
 import main.MapHandler;
 import main.SFX;
 import moves.ActionCircle;
@@ -75,7 +76,7 @@ public abstract class Hazard extends Entity {
 
 		public Lightning(float posX, float posY) {
 			super(posX, posY);
-			new SFX.Lightning().play();
+			if (DowntiltEngine.musicOn()) new SFX.Lightning().play();
 			timerList.add(life);
 			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/lightning.png"))));
 			

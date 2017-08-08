@@ -46,7 +46,9 @@ public abstract class InputHandlerPlayer extends InputHandler {
 			if (inputGrab()) tt.checkPing(Ping.GRAB);
 			if (inputGuard()) tt.checkPing(Ping.GUARD);
 		}
-		if (chargeHold() && DowntiltEngine.isPaused()) DowntiltEngine.startMenu();
+		if (chargeHold() && DowntiltEngine.isPaused()) DowntiltEngine.startGameMenu();
+		if (!inputNormal()) isAdvanceHeld = false;
+		if (!inputSpecial()) isBackHeld = false;
 
 		player.handleJumpHeld(jumpHold());
 		player.handleBlockHeld(blockHold());
@@ -87,6 +89,24 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	public abstract boolean pause();
 	public abstract boolean select();
 
+	private boolean isAdvanceHeld = false;
+	public boolean menuAdvance(){
+		if (inputNormal() && !isAdvanceHeld){
+			isAdvanceHeld = true;
+			return true;
+		}
+		else return false;
+	}
+	
+	private boolean isBackHeld = false;
+	public boolean menuBack(){
+		if (inputSpecial() && !isBackHeld){
+			isBackHeld = true;
+			return true;
+		}
+		else return false;
+	}
+	
 	public abstract boolean inputNormal();
 	public abstract boolean inputSpecial();
 	public abstract boolean inputCharge();

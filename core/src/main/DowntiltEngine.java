@@ -28,7 +28,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 * MUST BE ON before making a jar/releasing!
 	 */
 	private static boolean release = false;
-	
+
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
@@ -37,12 +37,16 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
 	private static Mode activeMode;
-	private static GameState gameState = GameState.MENU;
+	private static GameState gameState = GameState.GAMEMENU;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
 	private static float volume	= 1.0f;
 	private static ShaderProgram p2Palette;
+	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
-	private static VictoryScreen victoryScreen;
+	private static OptionMenu optionMenu;
+	private static CreditScreen creditScreen;
+	private static RankingScreen rankingScreen;
+	private static VictoryScreen activeVictory;
 
 	private static boolean musicToggle = false;
 	private static boolean debugToggle = true;
@@ -56,28 +60,32 @@ public class DowntiltEngine extends ApplicationAdapter {
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
 		}
-		
+
 		primaryInputHandler = setupInputHandler(0);
 		secondaryInputHandler = setupInputHandler(1);
-		
+
 		beginFighters(true);
 		GraphicsHandler.begin();
 		MapHandler.begin();
 
+		homeMenu = new HomeMenu();
 		gameMenu = new GameMenu();
+		optionMenu = new OptionMenu();
+		creditScreen = new CreditScreen();
+		rankingScreen = new RankingScreen();
 	}
-	
+
 	private static boolean isXBox360Controller(Controller c){
 		return (c.getName().toLowerCase().contains("xbox") && c.getName().contains("360"));
 	}
-	
+
 	private static boolean isPS3Controller(Controller c){
 		return (c.getName().toLowerCase().contains("ps3") || c.getName().contains("playstation"));
 	}
-	
+
 	private static InputHandlerPlayer setupInputHandler(int i){
 		if (i >= controllerList.size()) return new InputHandlerKeyboard(null);
-		
+
 		Controller c = controllerList.get(i);
 		if (null == c) return new InputHandlerKeyboard(null);
 		if (isXBox360Controller(c)) {
@@ -92,7 +100,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		}
 		else return new InputHandlerKeyboard(null);
 	}
-	
+
 	private static void beginFighters(boolean coop){
 		Fighter p1 = new Hero(0, 0, 0);
 		beginFighter(p1, primaryInputHandler);
@@ -123,8 +131,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 		if (fpsLoggle && !release) fpsLogger.log();
 		switch(gameState){
 		case GAME:		updateGame();			break;
-		case MENU:		gameMenu.update();		break;
-		case VICTORY: 	victoryScreen.update();	break;
+		case HOME: 		homeMenu.update(); 		break;
+		case GAMEMENU:	gameMenu.update();		break;
+		case CREDIT: 	creditScreen.update();	break;
+		case OPTIONS: 	optionMenu.update();	break;
+		case RANKING:	rankingScreen.update(); break;
+		case VICTORY: 	activeVictory.update();	break;
 		}
 	}
 
@@ -152,7 +164,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static void wait(int length){
 		waitTimer.reset(length);
 	}
-	
+
 	public static void slow(int length){
 		slowTimer.reset(length);
 	}
@@ -173,33 +185,44 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.updateRoomGraphics(getPlayers().get(0));
 	}
 
-	public static void startDebugChallenge(List<Fighter> newPlayers, int startChallenge, boolean debug){
-//		startMode(newPlayers, startChallenge);
-//		debugToggle = debug;
-	}
-
 	public static void startMode(Mode mode, int numPlayers, int initialChallenge){
 		activeMode = mode;
 		gameState = GameState.GAME;
 		playerList.clear();
 		paused = false;
-		
+
 		if (numPlayers == 2) beginFighters(true);
 		else beginFighters(false);
 		GraphicsHandler.begin();
 		MapHandler.begin();
 	}
 
-	public static void startMenu(){
-		toMenu(GameState.MENU);
+	public static void startGameMenu(){
+		toMenu(GameState.GAMEMENU);
 	}
 	
+	public static void startHomeMenu(){
+		toMenu(GameState.HOME);
+	}
+	
+	public static void startOptionMenu(){
+		toMenu(GameState.OPTIONS);
+	}
+	
+	public static void startRankingScreen(){
+		toMenu(GameState.RANKING);
+	}
+	
+	public static void startCreditScreen(){
+		toMenu(GameState.CREDIT);
+	}
+
 	public static void startVictoryScreen(Victory v){
-		victoryScreen = new VictoryScreen();
-		victoryScreen.start(v);
+		activeVictory = new VictoryScreen();
+		activeVictory.start(v);
 		toMenu(GameState.VICTORY);
 	}
-	
+
 	private static void toMenu(GameState gs){
 		paused = false;
 		beginFighters(true);
@@ -213,9 +236,9 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public enum GameState{
-		GAME, MENU, VICTORY
+		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY
 	}
-	
+
 	public static void resetDeltaTime() {
 		deltaTime = 0;
 	}

@@ -12,8 +12,8 @@ public class SaveHandler {
 
 	private static final String scoreKey = "avocado toast", saveFile = "saveFile";
 	private static final Preferences save = Gdx.app.getPreferences(saveFile);
-	private static final int arrayX = 3, arrayY = 8;
-	private static int[][] scores = new int[arrayX][arrayY]; // have a score table for each mode instead?
+	public static final int arrayX = 3, arrayY = 7;
+	private static int[][] scores = new int[arrayX][arrayY];
 
 	static void writeScore(int x, int y, int score){
 		if (!DowntiltEngine.saveOn()) return;
@@ -40,12 +40,6 @@ public class SaveHandler {
 			return;
 		}
 		scores = json.fromJson(int[][].class, serializedInts);
-		//System.out.println(scores[0][0]);
-		for (int i = 0; i < arrayX; ++i){
-			for (int j = 0; j < arrayY; ++j){
-				//System.out.println(scores[i][j]);
-			}
-		}
 	}
 
 	static void wipeSave(){

@@ -1,5 +1,6 @@
 package entities;
 
+import main.DowntiltEngine;
 import main.GlobalRepo;
 import main.SFX;
 
@@ -189,7 +190,7 @@ public abstract class Graphic extends Entity{
 		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/sparks.png")));
 		public Sparks(float posX, float posY, int dur) {
 			super(posX, posY, dur);
-			new SFX.Sparks().play();
+			if (DowntiltEngine.musicOn()) new SFX.Sparks().play();
 			image = new Sprite(tex);
 			updatePosition();
 		}

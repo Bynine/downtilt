@@ -241,8 +241,10 @@ public abstract class Hittable extends Entity {
 		user.isNowGrabbing(target, caughtTime);
 		caughtTimer.setEndTime(caughtTime);
 		caughtTimer.reset();
-		float newPosX = user.getCenter().x - target.getImage().getWidth()/4;
-		if (user.getDirection() == Direction.LEFT) newPosX -= target.getImage().getWidth()/2;
+		float newPosX = user.getCenter().x - target.getImage().getWidth()/2;
+		float dispX = target.getImage().getWidth()*(2.2f/4.0f);
+		if (user.getDirection() == Direction.LEFT) newPosX -= dispX;
+		if (user.getDirection() == Direction.RIGHT) newPosX += dispX;
 		float newPosY = user.position.y + image.getHeight()/4;
 		if (!doesCollide(newPosX, newPosY)) position.set(newPosX, newPosY);
 		else if (!doesCollide(position.x, newPosY)) position.set(position.x, newPosY);
@@ -387,6 +389,7 @@ public abstract class Hittable extends Entity {
 	public boolean defenseActive() { return !defenseTimer.timeUp() || permaDefense; }
 	public boolean speedActive() { return !speedTimer.timeUp() || permaSpeed; }
 	public boolean airActive() { return !airTimer.timeUp() || permaAir; }
+	public boolean isCaught() { return !caughtTimer.timeUp(); }
 
 	abstract TextureRegion getStandFrame(float deltaTime);
 	abstract TextureRegion getTumbleFrame(float deltaTime);

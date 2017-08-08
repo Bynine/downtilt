@@ -39,7 +39,7 @@ public class ChallengeTimeTrial extends ChallengeTimed {
 	@Override
 	public void failChallenge(){
 		new SFX.Error().play();
-		DowntiltEngine.startMenu();
+		DowntiltEngine.startGameMenu();
 	}
 	
 	@Override

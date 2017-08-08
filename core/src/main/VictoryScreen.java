@@ -1,34 +1,30 @@
 package main;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-
 import challenges.Victory;
 
 public class VictoryScreen extends Menu{
-	
+
 	private Victory currentVictory;
 
 	void update(){
 		super.update();
-		if (DowntiltEngine.getPrimaryInputHandler().chargeHold())	start();
 		draw();
 	}
-	
+
 	public void start(Victory v){
 		currentVictory = v;
 		SaveHandler.writeScore(v.getNumberX(), v.getNumberY(), v.getScore());
 		SaveHandler.save();
 	}
-	
-	private void draw(){
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.67f, 0.85f, 0.99f, 1);
+
+	@Override
+	protected void draw(){
 		int startY = 500;
 		int startX = 300;
 		int centerX = 260;
 		int dec = 50;
-		
+
+		super.draw();
 		batch.begin();
 		batch.draw(menu, 0, 0);
 		specialFont.draw(batch, "VICTORY!", startX + centerX, startY);
@@ -39,12 +35,13 @@ public class VictoryScreen extends Menu{
 		if (currentVictory.getKOs() != Victory.NOTUSED) font.draw(batch, "ENEMIES KO'd:  " + currentVictory.getKOs(), startX, startY -= dec);
 		if (currentVictory.getDeaths() != Victory.NOTUSED) font.draw(batch, "DEATHS: " + currentVictory.getDeaths(), startX, startY -= dec);
 		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, startY -= dec);
-		specialFont.draw(batch, "Press Y to continue", startX, startY -= dec);
+		specialFont.draw(batch, "Press A to continue", startX, startY -= dec);
 		batch.end();
 	}
 	
-	private static void start(){
-		DowntiltEngine.startMenu();
+	@Override
+	protected void advance(){
+		DowntiltEngine.startGameMenu();
 	}
-	
+
 }
