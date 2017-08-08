@@ -14,7 +14,7 @@ public class FallingEnemy extends Entity {
 
 	public FallingEnemy(float posX, float posY) {
 		super(posX, posY);
-		layer = Layer.BACKGROUND;
+		layer = Layer.PARALLAXFAST;
 		collision = Collision.GHOST;
 		velocity.y = (float) (-3.5 + (Math.random() * 1.5));
 	}

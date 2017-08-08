@@ -223,7 +223,7 @@ public abstract class Graphic extends Entity{
 			this.user = user;
 			image = new Sprite(tex);
 			updatePosition();
-			layer = Layer.BACKGROUND;
+			layer = Layer.MIDDLEBACK;
 		}
 		
 		void updatePosition(){
@@ -243,7 +243,7 @@ public abstract class Graphic extends Entity{
 			this.user = user;
 			image = new Sprite(tex);
 			updatePosition();
-			layer = Layer.BACKGROUND;
+			layer = Layer.MIDDLEBACK;
 		}
 		
 		void updatePosition(){

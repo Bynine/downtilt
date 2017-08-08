@@ -23,7 +23,7 @@ public class Spawner extends ImmobileEntity {
 		collision = Collision.GHOST;
 		life = new DurationTimer(freq);
 		timerList.add(life);
-		layer = Layer.BACKGROUND;
+		layer = Layer.MIDDLEBACK;
 	}
 	
 	@Override

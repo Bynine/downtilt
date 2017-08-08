@@ -33,7 +33,7 @@ public class Raindrop extends Entity {
 	}
 	
 	void handleWind(){
-		velocity.x = MapHandler.getRoomWind() * 120;
+		velocity.x += MapHandler.getRoomWind() * 6;
 	}
 	
 	private void splish(){

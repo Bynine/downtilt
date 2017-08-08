@@ -25,7 +25,7 @@ public abstract class Challenge {
 	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, BASICALLYINFINITELIVES = 999;
 	protected int specialBeginning = SPECIALMETERBEGINNING;
 	protected int lives = 0, deaths = 0;
-	protected int lifeSetting = 5;
+	protected int lifeSetting = 4;
 	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);

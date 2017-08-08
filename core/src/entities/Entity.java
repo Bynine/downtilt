@@ -23,7 +23,7 @@ public abstract class Entity {
 	final Vector2 position = new Vector2(), velocity = new Vector2(), startPosition = new Vector2();
 	State state, prevState, preJumpSquatState;
 	Direction direction = Direction.RIGHT;
-	Layer layer = Layer.FOREGROUND;
+	Layer layer = Layer.MIDDLEFRONT;
 	protected Sprite image, defaultSprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/nothing.png"))));
 	protected float prevAerialHitAngle = 0;
 	protected final Timer hitstunTimer = new Timer(10);
@@ -356,7 +356,7 @@ public abstract class Entity {
 	private final List<State> groundedStates = new ArrayList<State>(Arrays.asList(State.STAND, State.WALK, State.RUN, State.DASH, State.CROUCH));
 
 	public static enum Direction{ LEFT, RIGHT }
-	public static enum Layer{ FRONT, FOREGROUND, BACKGROUND }
+	public static enum Layer{ PARALLAXFAST, MIDDLEBACK, MIDDLEFRONT, FRONT }
 	public static enum State{ STAND, WALK, DASH, RUN, CROUCH, JUMPSQUAT, FALLEN, JUMP, FALL, WALLSLIDE, HELPLESS }
 	public static enum Collision{ SOLID, CREATURE, GHOST }
 	public float getGravity() { return gravity; }

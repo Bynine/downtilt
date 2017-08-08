@@ -155,21 +155,29 @@ public class GraphicsHandler {
 	static void updateGraphics(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		int[] arr;
-		renderer.setView(dualParallaxCam);
 		batch.setProjectionMatrix(cam.combined);
 
+		renderer.setView(cam);
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
-
+		
+		renderer.setView(dualParallaxCam);
 		arr = new int[]{1};  // render slow parallax
 		renderer.render(arr);
+		
+		batch.begin();  // render bg entities
+		batch.setProjectionMatrix(parallaxCam.combined);
+		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.PARALLAXFAST) renderEntity(e);
+		batch.end();
+		font.setColor(1, 1, 1, 1);
 		
 		renderer.setView(parallaxCam);
 		arr = new int[]{2};  // render fast parallax
 		renderer.render(arr);
 
 		batch.begin();  // render bg entities
-		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.BACKGROUND) renderEntity(e);
+		batch.setProjectionMatrix(cam.combined);
+		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.MIDDLEBACK) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
@@ -179,7 +187,7 @@ public class GraphicsHandler {
 		renderer.getBatch().setShader(null);
 
 		batch.begin();  // render fg entities
-		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.FOREGROUND) renderEntity(e);
+		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.MIDDLEFRONT) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
 
@@ -406,7 +414,7 @@ public class GraphicsHandler {
 
 	private static double shakeScreenHelper() { 
 		double posOrNeg = Math.signum(0.5 - Math.random());
-		return posOrNeg * 9.0 * (0.95 + (Math.random()/20.0));
+		return posOrNeg * 9.0 * (0.95 + (Math.random()/10.0));
 	}
 	
 	public static void drawToolTip(){

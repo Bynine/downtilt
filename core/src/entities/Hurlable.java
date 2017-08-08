@@ -395,6 +395,7 @@ public abstract class Hurlable extends Hittable {
 			friction = 0.96f;
 			baseKBG = 0;
 			image = new Sprite(normImage);
+			if (doesCollide(position.x, position.y)) explode();
 		}
 
 		@Override

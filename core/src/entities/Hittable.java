@@ -273,6 +273,15 @@ public abstract class Hittable extends Entity {
 		if (!t.timeUp() || b) return 1.4f;
 		else return 1f;
 	}
+	
+	@Override
+	void bounceOff(){
+		super.bounceOff();
+		hitstopTimer.reset(5);
+		float mod = -3f;
+		MapHandler.addEntity(new Graphic.HitGoodGraphic(getCenter().x + velocity.x * mod, getCenter().y + velocity.y * mod, (int)(knockbackIntensity(velocity) / 2)));
+		velocity.x *= 1.1f;
+	}
 
 	public float getPower(){ return basePower * checkTimerForBonus(powerTimer, permaPower) * equipment.getPowerMod(); }
 	public float getWeight() { return baseWeight * checkTimerForBonus(defenseTimer, permaDefense) * equipment.getWeightMod(); }

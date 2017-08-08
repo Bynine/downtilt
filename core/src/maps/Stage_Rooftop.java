@@ -30,7 +30,7 @@ public class Stage_Rooftop extends Stage {
 	public void update(int deltaTime){
 		super.update(deltaTime);
 		lh1.update();
-		//rain();
+		rain();
 	}
 
 	public Vector2 getStartPosition() {
