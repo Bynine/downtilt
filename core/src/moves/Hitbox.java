@@ -101,7 +101,7 @@ public class Hitbox extends ActionCircle{
 		knockback.set(knockbackFormula(target) * staleness, knockbackFormula(target) * staleness);
 		if (ANG == SAMURAI) setSamuraiAngle(target, knockback);
 		else 	if (ANG == REVERSE) setReverseAngle(target, knockback);
-		else 						knockback = setAngle(knockback);
+		else 						knockback = setAngle(knockback, target);
 		if (isGuarding() || staleness == overuseStaleness) knockback.set(0, 0);
 		knockback.x *= applyReverseHitbox(target);
 		if (knockbackFormula(target) > 8 && null != user) user.takeRecoil(recoilFormula(knockback, target));
@@ -143,7 +143,7 @@ public class Hitbox extends ActionCircle{
 		return guarding || perfectGuarding;
 	}
 	
-	protected Vector2 setAngle(Vector2 knockback){
+	protected Vector2 setAngle(Vector2 knockback, Hittable target){
 		return knockback.setAngle(ANG);
 	}
 
@@ -268,7 +268,8 @@ public class Hitbox extends ActionCircle{
 			super(user, BKB, KBG, DAM, 0, dispX, dispY, size, sfx);
 		}
 		
-		protected Vector2 setAngle(Vector2 knockback){
+		@Override
+		protected Vector2 setAngle(Vector2 knockback, Hittable target){
 			Vector2 vel = user.getVelocity();
 			vel.set(vel.x * user.direct(), vel.y);
 			return knockback.setAngle(vel.angle());
@@ -286,13 +287,22 @@ public class Hitbox extends ActionCircle{
 		public boolean didHitTarget(Hittable target){ 
 			return target.isGrounded() && user.getPosition().y >= (target.getPosition().y - 4) && super.didHitTarget(target);
 		}
-//		
-//		@Override
-//		public boolean teamCheck(Hittable target){
-//			if (target == user) return false;
-//			else return true;
-//		}
-//		
+	}
+	
+	public static class ParryHitbox extends Hitbox{
+		final float parryANG;
+		
+		public ParryHitbox(Hittable user, float BKB, float KBG, float DAM, float ANG, float parryANG, float dispX, float dispY, int size, SFX sfx) {
+			super(user, BKB, KBG, DAM, ANG, dispX, dispY, size, sfx);
+			this.parryANG = parryANG;
+		}
+		
+		@Override
+		protected Vector2 setAngle(Vector2 knockback, Hittable target){
+			if (target instanceof Fighter) return knockback.setAngle(ANG);
+			else return knockback.setAngle(parryANG);
+		}
+		
 	}
 
 }

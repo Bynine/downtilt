@@ -124,5 +124,13 @@ public class EventList {
 	public void addTremble(Move move, int start, int end) {
 		effectList.add(new Effect.Tremble(move, start, end));
 	}
+	
+	public void addGenerateGraphic(int start, int end, int timing, Fighter user, Class<? extends Graphic> graphicClass) {
+		effectList.add(new Effect.GenerateGraphic(start, end, timing, user, graphicClass));
+	}
+	
+	public void addGenerateGraphic(int start, int end, int timing, Fighter user, Class<? extends Graphic> graphicClass, float posX, float posY) {
+		effectList.add(new Effect.GenerateGraphic(start, end, timing, user, graphicClass, posX, posY));
+	}
 
 }

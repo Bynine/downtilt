@@ -540,7 +540,7 @@ public abstract class Fighter extends Hittable{
 		}
 		if (!caughtTimer.timeUp() || !stunTimer.timeUp()) setImage(getHitstunFrame(0));
 		if (inHitstun()) {
-			if (hitstunType == HitstunType.SUPER || hitstunType == HitstunType.ULTRA) setImage(getTumbleFrame(deltaTime));
+			if (hitstunType == HitstunType.SUPER) setImage(getTumbleFrame(deltaTime));
 			else setImage(getHitstunFrame(deltaTime));
 		}
 		if (!grabbingTimer.timeUp()) setImage(getGrabFrame(deltaTime));

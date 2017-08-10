@@ -28,7 +28,7 @@ public class VictoryScreen extends Menu{
 		batch.begin();
 		batch.draw(menu, 0, 0);
 		specialFont.draw(batch, "VICTORY!", startX + centerX, startY);
-		specialFont.draw(batch, "RANK: " + currentVictory.getRanking(), startX + centerX, startY -= dec * 2);
+		specialFont.draw(batch, "RANK: " + currentVictory.getRanking(currentVictory.getScore()), startX + centerX, startY -= dec * 2);
 		startY -= dec;
 		if (currentVictory.getTime() != Victory.NOTUSED) font.draw(batch, "TIME TAKEN:    " + GlobalRepo.getTimeString(currentVictory.getTime()), startX, startY -= dec);
 		if (currentVictory.getCombo() != Victory.NOTUSED) font.draw(batch, "LONGEST COMBO: " + currentVictory.getCombo(), startX, startY -= dec);

@@ -85,9 +85,10 @@ public abstract class Hittable extends Entity {
 	}
 
 	void checkPushAway(Hittable hi){
-		int pushDistance = 8 + 2 * ((int) image.getWidth() - defaultTexture.getRegionWidth());
-		boolean toPush = shouldPushAway(pushDistance, hi);
-		if (getTeam() == hi.getTeam()) toPush = isTouching(hi, 16);
+//		int pushDistance = 8 + 2 * ((int) image.getWidth() - defaultTexture.getRegionWidth());
+//		boolean toPush = shouldPushAway(pushDistance, hi);
+//		if (getTeam() == hi.getTeam()) 
+		boolean toPush = shouldPushAway(6, hi);
 		if (toPush) pushAway(hi);
 	}
 
@@ -98,6 +99,7 @@ public abstract class Hittable extends Entity {
 	protected void pushAway(Entity e){
 		float pushForce = 0.03f;
 		float dirPush = Math.signum(e.position.x - this.position.x);
+		if (dirPush == 0) dirPush = (float) Math.random();
 		velocity.x -= dirPush * pushForce;
 		e.velocity.x += dirPush * pushForce;
 	}
@@ -124,44 +126,42 @@ public abstract class Hittable extends Entity {
 		else parry();
 	}
 
-	public void getHitByHurtlingObject(Hittable hurtler){ // heheheh
+	public void getHitByHurtlingObject(Hittable hurtler){
 		Vector2 knockIntoVector = new Vector2(hurtler.velocity.x, hurtler.velocity.y);
 		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.6);
-		float bkb = baseBKB * knockbackIntensity(knockIntoVector) * 0.8f * weightMod;
+		float bkb = baseBKB * knockbackIntensity(knockIntoVector) * weightMod;
 		float dam = knockbackIntensity(knockIntoVector) * hurtler.baseKnockIntoDamage;
+		
 		Hitbox h;
-		if (hurtler.hitstunType != HitstunType.NORMAL) {
-			if (hurtler.hitstunType == HitstunType.ULTRA){ // ultra hitstun
-				bkb *= 1.05f;
-				h = new Hitbox(hurtler, bkb, baseKBG, dam * 3, knockIntoVector.angle(), 0, 0, 0, null);
-			}
-			else { // super hitstun
-				bkb *= .8f;
-				h = new Hitbox(hurtler, bkb, baseKBG, dam * 2, knockIntoVector.angle(), 0, 0, 0, null);
-			}
+		if (hurtler.hitstunType == HitstunType.SUPER){
+			h = new Hitbox(hurtler, bkb * .7f, baseKBG, dam * 2, knockIntoVector.angle(), 0, 0, 0, null);
 			knockIntoVector.set(h.knockbackFormula(this), h.knockbackFormula(this));
 			float newAngle = h.getAngle();
 			knockIntoVector.setAngle(newAngle);
 		}
-		else { // normal hitstun
-			bkb *= .45f;
-			h = new Hitbox(hurtler, bkb, baseKBG, dam * 1.2f, knockIntoVector.angle(), 0, 0, 0, null);
+		else {
+			h = new Hitbox(hurtler, bkb * .37f, baseKBG, dam * 1.2f, knockIntoVector.angle(), 0, 0, 0, null);
 			knockIntoVector.set(h.knockbackFormula(this), h.knockbackFormula(this));
 			knockIntoVector.setAngle( (h.getAngle() + 90) / 2);
 		}
+		
 		SFX.proportionalHit(h.getDamage()).play();
 		takeKnockIntoKnockback(knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
+		handleCollision(hurtler);
+		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));
+	}
+	
+	private void handleCollision(Hittable hurtler){
 		hurtler.knockIntoTimer.reset();
 		knockIntoTimer.reset();
 		setKnockIntoVelocity(hurtler);
-		addToCombo(Combo.knockIntoID);
-		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));
 		hurtler.knockInto();
+		addToCombo(Combo.knockIntoID);
 	}
 
 	protected void setKnockIntoVelocity(Hittable hurtler){
-		float weightMod = (float) Math.pow(hurtler.getWeight()/getWeight(), 0.350);
-		hurtler.velocity.set(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
+		float weightMod = 1.5f * (float) Math.pow(getWeight()/hurtler.getWeight(), 0.5);
+		hurtler.velocity.add(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
 
 	@Override
@@ -275,7 +275,7 @@ public abstract class Hittable extends Entity {
 		if (!t.timeUp() || b) return 1.4f;
 		else return 1f;
 	}
-	
+
 	@Override
 	void bounceOff(){
 		super.bounceOff();
@@ -300,7 +300,7 @@ public abstract class Hittable extends Entity {
 	public float getGravity() { return gravity * equipment.getGravityMod(); }
 	public float getFriction() { return (float) Math.pow(friction, equipment.getFrictionMod()); }
 	public float getAirFrictionX() { return (float) Math.pow(airFrictionX, equipment.getAirFrictionMod()); }
-	public float getDoubleJumpStrength() { return doubleJumpStrength * checkTimerForBonus(airTimer, permaAir); }
+	public float getDoubleJumpStrength() { return doubleJumpStrength; }
 	public float getWallJumpStrengthX() { return wallJumpStrengthX; }
 	public float getWallJumpStrengthY() { return wallJumpStrengthY; }
 	public float getWallSlideSpeed() { return wallSlideSpeed * equipment.getWallSlideMod(); }
@@ -394,6 +394,6 @@ public abstract class Hittable extends Entity {
 	abstract TextureRegion getStandFrame(float deltaTime);
 	abstract TextureRegion getTumbleFrame(float deltaTime);
 
-	public enum HitstunType{ NORMAL, SUPER, ULTRA }
+	public enum HitstunType{ NORMAL, SUPER }
 
 }

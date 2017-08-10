@@ -109,7 +109,9 @@ public abstract class Challenge {
 	}
 	
 	public void succeedChallenge(){
+		if (finished) return;
 		timeSpent = DowntiltEngine.getDeltaTime();
+		DowntiltEngine.resetDeltaTime();
 		finished = true;
 	}
 

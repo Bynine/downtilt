@@ -14,7 +14,7 @@ public abstract class Victory {
 	public static final int NOTUSED = -1;
 
 	public enum Ranking{
-		F, D, C, B, A, S, X
+		N, F, D, C, B, A, S, X
 	}
 
 	public int getCombo(){
@@ -33,15 +33,17 @@ public abstract class Victory {
 		return deaths;
 	}
 
+	public Ranking getRanking(float score){
+		return Ranking.F;
+	}
 	public abstract int getScore();
-	public abstract Ranking getRanking();
 	public abstract int getNumberX();
 	public abstract int getNumberY();
 
 	public static class AdventureVictory extends Victory{
 		final Difficulty difficulty;
 
-		AdventureVictory(List<Integer> longestCombos, int deaths, int time, Difficulty difficulty){
+		public AdventureVictory(List<Integer> longestCombos, int deaths, int time, Difficulty difficulty){
 			this.difficulty = difficulty;
 			for (int i: longestCombos) this.longestCombo += i;
 			this.time = time / 3600;
@@ -66,13 +68,13 @@ public abstract class Victory {
 			return score + longestCombo - deaths * 5;
 		}
 
-		public Ranking getRanking(){
-			if (getScore() < 30) return Ranking.F;
-			if (getScore() < 40) return Ranking.D;
-			if (getScore() < 55) return Ranking.C;
-			if (getScore() < 70) return Ranking.B;
-			if (getScore() < 80) return Ranking.A;
-			if (getScore() < 90) return Ranking.S;
+		public Ranking getRanking(float score){
+			if (score < 30) return Ranking.F;
+			if (score < 40) return Ranking.D;
+			if (score < 55) return Ranking.C;
+			if (score < 70) return Ranking.B;
+			if (score < 80) return Ranking.A;
+			if (score < 90) return Ranking.S;
 			else return Ranking.X;
 		}
 		
@@ -95,7 +97,7 @@ public abstract class Victory {
 	public static class TrialVictory extends Victory{
 		private final Stage stage;
 
-		TrialVictory(int longestCombo, int kos, Stage stage){
+		public TrialVictory(int longestCombo, int kos, Stage stage){
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
@@ -107,13 +109,13 @@ public abstract class Victory {
 			return kos + longestCombo * 3;
 		}
 
-		public Ranking getRanking(){
-			if (getScore() < 15) return Ranking.F;
-			if (getScore() < 25) return Ranking.D;
-			if (getScore() < 35) return Ranking.C;
-			if (getScore() < 43) return Ranking.B;
-			if (getScore() < 50) return Ranking.A;
-			if (getScore() < 55) return Ranking.S;
+		public Ranking getRanking(float score){
+			if (score < 15) return Ranking.F;
+			if (score < 25) return Ranking.D;
+			if (score < 35) return Ranking.C;
+			if (score < 43) return Ranking.B;
+			if (score < 50) return Ranking.A;
+			if (score < 55) return Ranking.S;
 			else return Ranking.X;
 		}
 		
@@ -130,7 +132,7 @@ public abstract class Victory {
 	public static class EndlessVictory extends Victory{
 		private final Stage stage;
 
-		EndlessVictory(int longestCombo, int kos, Stage stage){
+		public EndlessVictory(int longestCombo, int kos, Stage stage){
 			this.longestCombo = longestCombo;
 			this.time = NOTUSED;
 			this.kos = kos;
@@ -142,13 +144,13 @@ public abstract class Victory {
 			return kos + longestCombo * 4;
 		}
 
-		public Ranking getRanking(){
-			if (getScore() < 15) return Ranking.F;
-			if (getScore() < 25) return Ranking.D;
-			if (getScore() < 40) return Ranking.C;
-			if (getScore() < 55) return Ranking.B;
-			if (getScore() < 70) return Ranking.A;
-			if (getScore() < 100) return Ranking.S;
+		public Ranking getRanking(float score){
+			if (score < 15) return Ranking.F;
+			if (score < 25) return Ranking.D;
+			if (score < 40) return Ranking.C;
+			if (score < 55) return Ranking.B;
+			if (score < 70) return Ranking.A;
+			if (score < 100) return Ranking.S;
 			else return Ranking.X;
 		}
 		

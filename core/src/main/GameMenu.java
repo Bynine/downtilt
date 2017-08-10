@@ -183,7 +183,7 @@ class GameMenu extends Menu {
 		try {
 			return stages.selected().t.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			System.out.println("Couldn't get stage" + stages.selected().t + "! Reason: " + e);
+			System.out.println("Couldn't get stage " + stages.selected().t + "! Reason: " + e);
 			return null;
 		}
 	}

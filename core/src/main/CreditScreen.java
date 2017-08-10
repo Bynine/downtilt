@@ -7,7 +7,7 @@ public class CreditScreen extends Menu {
 		super.draw();
 		batch.begin();
 		font.draw(batch, ""
-				+ "\nDIRECTORY, PROGRAMMER, ARTIST: TYLER \"BYNINE\" MCMASTER"
+				+ "\nDIRECTOR, PROGRAMMER, ARTIST: TYLER \"BYNINE\" MCMASTER"
 				+ "\n\nDESIGNER: JARROD \"DOCNINJ\" ROBERTS"
 				+ "\n\nSTAGE MUSIC: RUNBOW"
 				+ "\n\nSFX: BFXR, NINTENDO"

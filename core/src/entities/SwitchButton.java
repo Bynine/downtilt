@@ -21,6 +21,7 @@ public class SwitchButton extends Hittable {
 		timerList.add(cantBeHit);
 		touchRadius = 0;
 		grabbable = false;
+		layer = Layer.MIDDLEFRONT;
 	}
 
 	void updatePosition(){

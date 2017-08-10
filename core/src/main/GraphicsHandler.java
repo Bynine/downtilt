@@ -144,6 +144,8 @@ public class GraphicsHandler {
 		}
 		else origCamPosition.set(cam.position.x, cam.position.y);
 
+		parallaxCam.position.x = (int) parallaxCam.position.x;
+		dualParallaxCam.position.x = (int) dualParallaxCam.position.x;
 		cam.update();
 		parallaxCam.update();
 		dualParallaxCam.update();
@@ -273,6 +275,11 @@ public class GraphicsHandler {
 				batch.setShader(hitstunShader);
 			}
 		}
+		batch.setColor(
+				MathUtils.clamp(batch.getColor().r, 0, 1),
+				MathUtils.clamp(batch.getColor().b, 0, 1),
+				MathUtils.clamp(batch.getColor().g, 0, 1),
+				batch.getColor().a);
 		batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
 		if (en.trails()){
 			batch.setColor(1, 1, 1, 0.5f);

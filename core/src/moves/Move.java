@@ -20,7 +20,8 @@ public class Move {
 	final Fighter user;
 	final Timer duration;
 	public final EventList eventList = new EventList();
-	private boolean helpless = false, continueOnLanding = false, noTurn = false, connected = false, stopsInAir = false, isAerial = false, tremble = false;
+	private boolean helpless = false, continueOnLanding = false, noTurn = false, connected = false, stopsInAir = false, isAerial = false, tremble = false,
+			heroUSpecial = false;
 	float armor = 0;
 	private Animation animation = null;
 	private int addedFrames = 0, id = -1;
@@ -110,6 +111,10 @@ public class Move {
 		tremble = b;
 	}
 	
+	public void setHeroUSpecial(){
+		heroUSpecial = true;
+	}
+	
 	/* GETTERS */
 	
 	public Rectangle getMoveHurtBox(Fighter user, Rectangle r){
@@ -132,8 +137,18 @@ public class Move {
 		return duration.getEndTime(); 
 	}
 
+	private static final Animation animUp = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspecialu.png", 1, 1, 1, PlayMode.LOOP);
+	private static final Animation animForward = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspecialf.png", 1, 1, 1, PlayMode.LOOP);
+	private static final Animation animDown = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspeciald.png", 1, 1, 1, PlayMode.LOOP);
 	public Animation getAnimation() { 
-		return animation; 
+		if (heroUSpecial && duration.getCounter() > 20){
+			if (Math.abs(user.getVelocity().y) > Math.abs(user.getVelocity().x)){
+				if (user.getVelocity().y < 0) return animDown;
+				else return animUp;
+			}
+			else return animForward;
+		}
+		else return animation; 
 	}
 
 	public int getFrame() { 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 
+import main.DowntiltEngine;
 import main.MapHandler;
 import entities.Fighter;
 import entities.Graphic;
@@ -155,6 +156,45 @@ public abstract class Effect extends Action{
 
 		void performAction() {
 
+		}	
+	}
+	
+	public static class GenerateGraphic extends Effect {
+		private final Class<? extends Graphic> graphicClass;
+		private final Fighter user;
+		private final float posX, posY;
+		private final int timing;
+
+		GenerateGraphic(int start, int end, int timing, Fighter user, Class<? extends Graphic> graphicClass) {
+			super(start, end);
+			this.timing = timing;
+			this.graphicClass = graphicClass;
+			this.user = user;
+			posX = 0;
+			posY = 0;
+		}
+		
+		GenerateGraphic(int start, int end, int timing, Fighter user, Class<? extends Graphic> graphicClass, float posX, float posY) {
+			super(start, end);
+			this.timing = timing;
+			this.graphicClass = graphicClass;
+			this.user = user;
+			this.posX = posX;
+			this.posY = posY;
+		}
+
+		void finish() { 
+			/**/
+		}
+
+		void performAction() {
+			if (DowntiltEngine.getDeltaTime() % timing != 0) return;
+			try {
+				MapHandler.addEntity(graphicClass.getDeclaredConstructor(float.class, float.class).newInstance(user.getCenter().x + posX, user.getCenter().y + posY));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}	
 	}
 

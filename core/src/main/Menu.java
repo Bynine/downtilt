@@ -50,8 +50,8 @@ abstract class Menu {
 		if (DowntiltEngine.getPrimaryInputHandler().flickRight())	handleCursor(1, opt,cho);
 		if (DowntiltEngine.getPrimaryInputHandler().flickUp())		cho.moveCursor(-1);
 		if (DowntiltEngine.getPrimaryInputHandler().flickDown())	cho.moveCursor(1);
-		if (DowntiltEngine.getPrimaryInputHandler().menuAdvance())	advance();
-		if (DowntiltEngine.getPrimaryInputHandler().menuBack())		back();
+		if (DowntiltEngine.getPrimaryInputHandler().menuAdvance() && DowntiltEngine.getDeltaTime() > 5)	advance();
+		if (DowntiltEngine.getPrimaryInputHandler().menuBack() && DowntiltEngine.getDeltaTime() > 5)		back();
 		draw();
 	}
 

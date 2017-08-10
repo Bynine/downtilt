@@ -94,7 +94,7 @@ public class Adventure extends Mode{
 	 */
 
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly), 8, 2, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.fly), 8, 2, 60))
 			));
 
 	/* BEGINNER */
