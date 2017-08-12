@@ -141,16 +141,18 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	private void updateGame(){
-		activeMode.update();
-		if (waitTimer.timeUp()) MapHandler.updateInputs();
+		if (waitTimer.timeUp()) {
+			activeMode.update();
+			MapHandler.updateInputs();
+		}
 		if (!paused){
 			MapHandler.activeRoom.update(deltaTime);
 			MapHandler.updateActionCircleInteractions();
 			if (outOfHitlag()) MapHandler.updateEntities();
 		}
 		GraphicsHandler.updateGraphics();
-		TransitionGraphicsHandler.update();
 		GraphicsHandler.updateCamera();
+		TransitionGraphicsHandler.update();
 	}
 
 	private void updateTimers(){
@@ -162,6 +164,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void wait(int length){
+		primaryInputHandler.refresh();
+		secondaryInputHandler.refresh();
 		waitTimer.reset(length);
 	}
 
@@ -200,19 +204,19 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static void startGameMenu(){
 		toMenu(GameState.GAMEMENU);
 	}
-	
+
 	public static void startHomeMenu(){
 		toMenu(GameState.HOME);
 	}
-	
+
 	public static void startOptionMenu(){
 		toMenu(GameState.OPTIONS);
 	}
-	
+
 	public static void startRankingScreen(){
 		toMenu(GameState.RANKING);
 	}
-	
+
 	public static void startCreditScreen(){
 		toMenu(GameState.CREDIT);
 	}

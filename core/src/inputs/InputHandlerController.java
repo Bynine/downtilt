@@ -88,6 +88,9 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public void refresh(){
 		xInput = 0;
 		yInput = 0;
+		for (StickDir s: stickDirs) s.clear();
+		player.stickX = 0;
+		player.stickY = 0;
 	}
 
 	public boolean buttonDown(Controller controller, int buttonCode) {
@@ -199,6 +202,12 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 
 		boolean flick(int flickTo){
 			return Math.abs(curr - prev) > flick && Math.signum(curr) == flickTo;
+		}
+		
+		void clear(){
+			for (int i = 0; i < lastSize; ++i) lastPositions.set(i, (float) 0);
+			curr = 0;
+			prev = 0;
 		}
 	}
 

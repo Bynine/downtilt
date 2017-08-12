@@ -117,7 +117,7 @@ public class GraphicsHandler {
 			}
 			if (!DowntiltEngine.isPaused()) {
 				float inc = 12.0f;
-				if (DowntiltEngine.isSlowed()) inc = inc/8.0f;
+				if (DowntiltEngine.isSlowed()) inc = inc/6.0f;
 				parallaxCam.position.x += inc;
 				dualParallaxCam.position.x += inc/2.0f;
 			}

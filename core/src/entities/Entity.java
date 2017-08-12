@@ -134,8 +134,9 @@ public abstract class Entity {
 	}
 
 	void handleFriction(){
-		if (!isGrounded() && inHitstun() || state == State.JUMPSQUAT) {}
-		else if (!isGrounded()) velocity.x *= getAirFrictionX();
+		if (!isGrounded() && inHitstun() || state == State.JUMPSQUAT) return;
+		else if (!isGrounded() && !inGroundedState()) velocity.x *= getAirFrictionX();
+		else if (state == State.CROUCH) velocity.x *= Math.pow(getFriction(), 2);
 		else velocity.x *= getFriction();
 	}
 

@@ -163,7 +163,7 @@ public abstract class Hurlable extends Hittable {
 		protected TextureRegion stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
 		protected TextureRegion stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
 		protected Animation moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
-		protected Animation moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 4, 1, 6, PlayMode.LOOP);
+		protected Animation moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/ballgoodspin.png", 2, 1, 6, PlayMode.LOOP);
 
 		protected float minSpeedForHit = 2.2f;
 		public ShootBall(Fighter user, int team, float posX, float posY) {
@@ -270,7 +270,7 @@ public abstract class Hurlable extends Hittable {
 			stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/boulderbad.png")));
 			stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/bouldergood.png")));
 			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/boulderbadspin.png", 4, 1, 6, PlayMode.LOOP);
-			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/bouldergoodspin.png", 4, 1, 6, PlayMode.LOOP);
+			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/bouldergoodspin.png", 2, 1, 6, PlayMode.LOOP);
 			setImages(team);
 			bounceMod = -0.2f;
 			baseHitSpeed = -0.1f;

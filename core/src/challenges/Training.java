@@ -11,7 +11,7 @@ public class Training extends Mode {
 	List<Challenge> challengeList = new ArrayList<Challenge>();
 	
 	private List<Wave> wave = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.zen), 2, 2, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.zenbasic, EnemyRepo.zenshoot, EnemyRepo.zenfly, EnemyRepo.zenheavy), 2, 2, 60))
 			));
 	
 	public Training(Stage stage){

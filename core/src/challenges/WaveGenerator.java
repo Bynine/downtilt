@@ -16,7 +16,7 @@ public class WaveGenerator {
 	public static final int DIFF_OHNO	= 4;
 
 	protected static List<EnemySpawner> zenList = new ArrayList<EnemySpawner>(Arrays.asList(
-			new EnemySpawner(Arrays.asList(EnemyRepo.zen), 999, 2, 10)
+			new EnemySpawner(Arrays.asList(EnemyRepo.zenbasic), 999, 2, 10)
 			));
 
 	static Wave generate(int difficulty){

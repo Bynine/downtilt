@@ -37,7 +37,8 @@ public abstract class Fighter extends Hittable{
 			dashTimer = new Timer(20), invincibleTimer = new Timer(0), guardHoldTimer = new Timer(1), footStoolTimer = new Timer(20), slowedTimer = new Timer(0),
 			doubleJumpGraphicTimer = new Timer (12), doubleJumpUseTimer = new Timer (20), respawnTimer = new Timer(3), prevMoveTimer = new Timer(5),
 			noKillTimer = new Timer(5);
-	protected float prevStickX = 0, stickX = 0, stickY = 0;
+	protected float prevStickX = 0;
+	public float stickX = 0, stickY = 0;
 
 	private ShaderProgram palette = null;
 	private final Vector2 spawnPoint;

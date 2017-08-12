@@ -94,14 +94,14 @@ public class Adventure extends Mode{
 	 */
 
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.fly), 8, 2, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
 			));
 
 	/* BEGINNER */
 	private List<Wave> waveStandard1 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 2, 2, 90))
+			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
+			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 2, 2, 90))
 			));
 	private List<Wave> waveRooftop1 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 3, 2, 120))

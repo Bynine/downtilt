@@ -42,8 +42,8 @@ public abstract class Graphic extends Entity{
 	}
 	
 	private static abstract class HitGraphic extends Graphic{
-		private final int frame = 6;
-		private final int frames = 3;
+		private final int frame = 8;
+		private final int frames = 2;
 		private final int startFrame;
 		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/hitanimation.png", frames, 1, frame, PlayMode.NORMAL);
 
@@ -141,22 +141,6 @@ public abstract class Graphic extends Entity{
 		}
 	}
 
-	public static class UFO extends Graphic {
-		private TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/ufo.png")));
-		private final Fighter user;
-		public UFO(Fighter user, float posX, float posY){
-			super(posX, posY, 4);
-			this.user = user;
-			image = new Sprite(texture);
-			updatePosition();
-		}
-		void updatePosition(){
-			position.x = user.getPosition().x;
-			position.y = user.getPosition().y - 12;
-			if (duration.timeUp() || user.isGrounded()) setRemove();
-		}
-	}
-
 	public static class DoubleJumpRing extends Graphic {
 		private TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejump.png")));
 		private TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejumpsmall.png")));
@@ -187,15 +171,17 @@ public abstract class Graphic extends Entity{
 	
 
 	public static class Sparks extends Graphic {
-		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/sparks.png")));
+		private Animation anim = GlobalRepo.makeAnimation("sprites/entities/sparks.png", 2, 1, 40, PlayMode.NORMAL);
 		public Sparks(float posX, float posY, int dur) {
 			super(posX, posY, dur);
 			if (DowntiltEngine.musicOn()) new SFX.Sparks().play();
-			image = new Sprite(tex);
+			image = new Sprite(anim.getKeyFrame(0));
 			updatePosition();
+			layer = Layer.FRONT;
 		}
 		
 		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
 		}
 
