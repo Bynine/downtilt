@@ -69,7 +69,7 @@ public abstract class Fighter extends Hittable{
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
 				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer, prevMoveTimer,
 				noKillTimer));
-		state = State.STAND;
+		state = State.FALL;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
 	}
@@ -492,7 +492,7 @@ public abstract class Fighter extends Hittable{
 
 	private boolean isAbove(Fighter en){
 		boolean xCorrect = Math.abs(en.getCenter().x - getCenter().x) < en.getImage().getWidth()/1.5f;
-		boolean yCorrect = Math.abs(en.getCenter().y - position.y) < en.getImage().getHeight()/1.5f;
+		boolean yCorrect = Math.abs(en.getCenter().y - position.y) < en.getImage().getHeight()/2f;
 		return xCorrect && yCorrect;
 	}
 
@@ -564,9 +564,16 @@ public abstract class Fighter extends Hittable{
 		if (doesCollide(position.x, position.y) && !doesCollide(position.x, position.y + dispY)) position.y += dispY;
 
 		if (doesCollide(position.x, position.y)) {
-			System.out.println("Had to reset image of " + this);
-			position.y += 8;
-			setImage(prevImage);
+			final int disp = 32;
+			if (!doesCollide(position.x - disp, position.y)) position.x -= disp;
+			else if (!doesCollide(position.x + disp, position.y)) position.x += disp;
+			else if (!doesCollide(position.x, position.y - disp)) position.y -= disp;
+			else if (!doesCollide(position.x, position.y + disp)) position.y += disp;
+			else{
+				System.out.println("Had to reset " + this + " due to image clipping");
+				reset();
+				setImage(prevImage);
+			}
 		}
 	}
 
@@ -772,9 +779,7 @@ public abstract class Fighter extends Hittable{
 		endAttack();
 		staleMoveQueue.clear();
 		if (team == GlobalRepo.GOODTEAM) {
-			int stop = 30;
-			hitstopTimer.reset(stop);
-			setInvincible(120 + stop);
+			setInvincible(120);
 		}
 	}
 	public void setDead(boolean b){

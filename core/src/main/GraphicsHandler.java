@@ -50,8 +50,8 @@ public class GraphicsHandler {
 	guiBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/guibar.png"))),
 	textBar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/textbar.png"))),
 	textBarSatisfied = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/textbarcomplete.png"))),
-	selectButton = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/selectbutton.png"))),
 	defend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defend.png"))),
+	perfectdefend = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/defendperfect.png"))),
 	specialfull = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialfull.png"))),
 	specialempty = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialempty.png"))),
 	specialbar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialbar.png"))),
@@ -229,12 +229,12 @@ public class GraphicsHandler {
 		if (DowntiltEngine.debugOn()) debugRender();
 
 		batch.begin();
-		renderGUI();
+		if (!DowntiltEngine.isWaiting()) renderGUI();
 		batch.end();
 	}
 
 	private static void renderEntity(Entity en){
-		boolean drawShield = false;
+		boolean drawShield = false, drawPerfectShield = false;
 		batch.setColor(en.getColor());
 		if (en instanceof Fighter) {
 			Fighter fi = (Fighter) en;
@@ -249,10 +249,7 @@ public class GraphicsHandler {
 			batch.setColor(rColor, gbColor, gbColor, 1);
 
 			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
-			if (fi.getArmor() > 0) {
-				float armorAddition = fi.getArmor()/12;
-				batch.setColor(batch.getColor().r - armorAddition, batch.getColor().g - armorAddition, batch.getColor().b, batch.getColor().a);
-			}
+			if (fi.getArmor() > 1) drawAfterImage(fi, batch.getShader(), defenseShader);
 
 			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
 
@@ -265,7 +262,8 @@ public class GraphicsHandler {
 				if (fi.speedActive()) drawAfterImage(fi, batch.getShader(), speedShader);
 				if (fi.airActive()) drawAfterImage(fi,  batch.getShader(), airShader);
 			}
-			if (fi.isGuarding() || fi.isPerfectGuarding()) drawShield = true;
+			if (fi.isPerfectGuarding()) drawPerfectShield = true;
+			else if (fi.isGuarding()) drawShield = true;
 		}
 		if (en instanceof Hittable){
 			Hittable h = (Hittable) en;
@@ -287,7 +285,10 @@ public class GraphicsHandler {
 			batch.setColor(1, 1, 1, 0.25f);
 			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 4), en.getPosition().y - (en.getVelocity().y * 4));
 		}
-		if (drawShield) batch.draw(defend, en.getCenter().x - 16, en.getCenter().y - 16);
+		float posX = en.getCenter().x - 16 + en.direct() * 6;
+		float posY = en.getCenter().y - 8;
+		if (drawShield) batch.draw(defend, posX, posY);
+		if (drawPerfectShield) batch.draw(perfectdefend, posX, posY);
 		batch.setColor(1, 1, 1, 1);
 		batch.setShader(null);
 	}
@@ -313,8 +314,10 @@ public class GraphicsHandler {
 	}
 
 	private static void drawAfterImageHelper(Fighter fi, float posX, float posY, int repeat){
+		TextureRegion image = fi.getImage();
+		int disp = 8;
 		for (int i = 0; i < repeat; ++i){
-			batch.draw(fi.getImage(), posX, posY);
+			batch.draw(image, posX - disp/2, posY - disp/2, image.getRegionWidth() + disp, image.getRegionHeight() + disp);
 		}
 	}
 
@@ -386,7 +389,7 @@ public class GraphicsHandler {
 		if (DowntiltEngine.isPaused()) {
 			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
 			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
-			font.draw(batch, "(Press Y to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
+			font.draw(batch, "(Press " + DowntiltEngine.getPrimaryInputHandler().getChargeString() + " to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
 		
 		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
@@ -444,7 +447,7 @@ public class GraphicsHandler {
 
 	private static double shakeScreenHelper() { 
 		double posOrNeg = Math.signum(0.5 - Math.random());
-		return posOrNeg * 9.0 * (0.95 + (Math.random()/10.0));
+		return DowntiltEngine.getScreenShakeMod() * posOrNeg * 9.0 * (0.95 + (Math.random()/10.0));
 	}
 	
 	public static void drawToolTip(){
@@ -454,7 +457,7 @@ public class GraphicsHandler {
 		float posY = cameraBoundaries().get(3) - textBar.getRegionHeight() - GlobalRepo.TILE / 2;
 		if (tt.isSatisfied()) {
 			batch.draw(textBarSatisfied, posX, posY);
-			batch.draw(selectButton, posX + textBar.getRegionWidth() - selectButton.getRegionWidth(), posY);
+			comboFont.draw(batch, DowntiltEngine.getPrimaryInputHandler().getSelectString() + ">", posX + textBar.getRegionWidth() - 64, posY + 12);
 		}
 		else batch.draw(textBar, posX, posY);
 		font.draw(batch, text, posX + GlobalRepo.TILE / 4, posY + 54);

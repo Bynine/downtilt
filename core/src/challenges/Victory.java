@@ -67,13 +67,15 @@ public abstract class Victory {
 			else 	if (getTime() < minute * 13)score = 5;
 			return score + longestCombo - deaths * 5;
 		}
+		
+		public static final int A = 80;
 
 		public Ranking getRanking(float score){
 			if (score < 30) return Ranking.F;
 			if (score < 40) return Ranking.D;
 			if (score < 55) return Ranking.C;
 			if (score < 70) return Ranking.B;
-			if (score < 80) return Ranking.A;
+			if (score < A)  return Ranking.A;
 			if (score < 90) return Ranking.S;
 			else return Ranking.X;
 		}

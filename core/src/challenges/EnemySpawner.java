@@ -19,7 +19,8 @@ public class EnemySpawner {
 	private int initAmount, amount, capacity, killed;
 	private float frequency;
 	private final List<Fighter> spawnedEntities = new ArrayList<Fighter>();
-	private final Vector2 spawnPoint = new Vector2();
+	private final Vector2 spawnPointA = new Vector2(), spawnPointB = new Vector2();
+	boolean setup = false;
 
 	public static final int ENDLESS = -5;
 
@@ -40,8 +41,8 @@ public class EnemySpawner {
 	}
 
 	void update(float deltaTime){
+		if (!setup) setSpawnPoints();
 		if (amount > 0 && spawnedEntities.size() < capacity) {
-			if (deltaTime % frequency == 1) createNewSpawner((int)frequency);
 			if (deltaTime % frequency == frequency - 1) spawnNewEnemy();
 		}
 		else if (amount == ENDLESS && spawnedEntities.size() < capacity){
@@ -58,25 +59,23 @@ public class EnemySpawner {
 		}
 	}
 	
-	private void createNewSpawner(int frequency){
-		setSpawnPoint();
-		MapHandler.addEntity(new Spawner(spawnPoint.x, spawnPoint.y, (int) (frequency * 1.25) ));
-	}
-	
-	private void setSpawnPoint(){
-		spawnPoint.set(DowntiltEngine.getChallenge().getStartPosition());
+	private void setSpawnPoints(){
+		setup = true;
+		spawnPointA.set(DowntiltEngine.getChallenge().getStartPosition());
+		spawnPointB.set(DowntiltEngine.getChallenge().getStartPosition());
 		float dispX = DowntiltEngine.getChallenge().getStartDispX();
 		float dispY = GlobalRepo.TILE * 2;
-		if (Math.random() < 0.5f) spawnPoint.set(spawnPoint.x - dispX, spawnPoint.y + dispY);
-		else spawnPoint.set(spawnPoint.x + dispX, spawnPoint.y + dispY);
+		spawnPointA.set(spawnPointA.x - dispX, spawnPointA.y + dispY);
+		spawnPointB.set(spawnPointB.x + dispX, spawnPointB.y + dispY);
+		MapHandler.addEntity(new Spawner(spawnPointA.x, spawnPointA.y));
+		MapHandler.addEntity(new Spawner(spawnPointB.x, spawnPointB.y));
 	}
 
 	private void spawnNewEnemy(){
-		if (spawnPoint.x == 0) setSpawnPoint();
 		Fighter enemy = null;
 		EnemyType enemyType = getEnemy();
 		try {
-			enemy = enemyType.type.getDeclaredConstructor(float.class, float.class, int.class).newInstance(spawnPoint.x, spawnPoint.y, 1);
+			enemy = enemyType.type.getDeclaredConstructor(float.class, float.class, int.class).newInstance(getSpawnPoint().x, getSpawnPoint().y, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -130,6 +129,11 @@ public class EnemySpawner {
 
 	public int getKilled(){
 		return killed;
+	}
+	
+	private Vector2 getSpawnPoint(){
+		if (Math.random() < 0.5) return spawnPointA;
+		else return spawnPointB;
 	}
 
 	public class RandomSpawner extends EnemySpawner{

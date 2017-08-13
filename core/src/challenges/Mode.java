@@ -24,12 +24,12 @@ public abstract class Mode {
 	 */
 	public void update(){
 		if (DowntiltEngine.musicOn()) {
-			getActiveChallenge().getStage().getMusic().setVolume(DowntiltEngine.getVolume() / 8.0f);
+			getActiveChallenge().getStage().getMusic().setVolume(DowntiltEngine.getMusicVolume() / 8.0f);
 			getActiveChallenge().getStage().getMusic().play();
 		}
 		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
 		getActiveChallenge().update();
-		if (getActiveChallenge().finished()) {
+		if (!DowntiltEngine.isWaiting()  && getActiveChallenge().finished()) {
 			for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
 			getActiveChallenge().getStage().getMusic().stop();
 			activeChallengeIndex++;

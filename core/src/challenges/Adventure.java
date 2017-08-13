@@ -16,6 +16,12 @@ import maps.*;
 public class Adventure extends Mode{
 
 	private final Difficulty difficulty;
+	
+	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.basic), 2, 2, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
+			));
 
 	/**
 	 * Adds challenges depending on difficulty and debug mode.
@@ -92,10 +98,6 @@ public class Adventure extends Mode{
 	/**
 	 * Selection of wave lists for each challenge.
 	 */
-
-	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
-			));
 
 	/* BEGINNER */
 	private List<Wave> waveStandard1 = new ArrayList<Wave>(Arrays.asList(

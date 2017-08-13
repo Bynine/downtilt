@@ -182,15 +182,11 @@ public class M_Heavy extends MoveList {
 
 	@Override
 	public Move rollBack() {
-		return roll();
+		return dodge();
 	}
 
 	private Move roll(){
-		Move m = new Move(user, 60);
-		m.setStopsInAir();
-		m.setAnimation("sprites/fighters/heavy/sgetup.png", 2, 16);
-		m.eventList.addConstantVelocity(user, 2, 20, -3, Action.ChangeVelocity.noChange);
-		return m;
+		return dodge();
 	}
 
 	@Override

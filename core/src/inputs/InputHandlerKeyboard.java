@@ -109,7 +109,7 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	
 	public boolean select(){
-		return Gdx.input.isKeyPressed(Keys.LEFT_BRACKET);
+		return Gdx.input.isKeyJustPressed(Keys.LEFT_BRACKET);
 	}
 	
 	public boolean flickCLeft(){
@@ -150,6 +150,51 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	public boolean inputGuard(){
 		return blockHold();
+	}
+	
+	@Override
+	public String getMoveString(){
+		return "WASD";
+	}
+	
+	@Override
+	public String getNormalString() {
+		return "J";
+	}
+
+	@Override
+	public String getSpecialString() {
+		return "K";
+	}
+
+	@Override
+	public String getChargeString() {
+		return "L";
+	}
+
+	@Override
+	public String getJumpString() {
+		return "SPACE";
+	}
+
+	@Override
+	public String getGrabString() {
+		return "O";
+	}
+
+	@Override
+	public String getGuardString() {
+		return "I";
+	}
+
+	@Override
+	public String getStartString() {
+		return "P";
+	}
+
+	@Override
+	public String getSelectString() {
+		return "[";
 	}
 	
 	/* NOT USED */

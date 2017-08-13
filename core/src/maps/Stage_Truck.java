@@ -12,7 +12,6 @@ public class Stage_Truck extends Stage {
 	public Stage_Truck(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/lock.mp3"));
 		setup();
-		name = "High-speed Highway Hoedown";
 		scrolls = true;
 	}
 
@@ -24,7 +23,6 @@ public class Stage_Truck extends Stage {
 		super.update(deltaTime);
 	}
 
-
 	public Vector2 getStartPosition() {
 		return new Vector2(24 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
@@ -33,12 +31,21 @@ public class Stage_Truck extends Stage {
 		return new Vector2(24 * GlobalRepo.TILE, 4 * GlobalRepo.TILE);
 	}
 	
-	public int getNumber(){
-		return 2;
-	}
 
 	public float getWind(){
 		return -0.08f;
+	}
+	
+	private static final int num = 2;
+	public static int getStaticNumber(){
+		return num;
+	}
+	public int getNumber(){
+		return num;
+	}
+	
+	public static String getName(){
+		return "High-speed Highway Hoedown";
 	}
 
 }

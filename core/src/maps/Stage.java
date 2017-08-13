@@ -35,7 +35,6 @@ public abstract class Stage {
 	protected float wind = 0;
 	protected float gravity = 1;
 	protected float dispX = GlobalRepo.TILE * 2;
-	protected String name = "DEFAULT STAGE";
 	protected boolean scrolls = false;
 
 	public Stage(){
@@ -101,10 +100,6 @@ public abstract class Stage {
 		getRectangleList().remove(en.getImage().getBoundingRectangle());
 	}
 	
-	public String getName(){
-		return name;
-	}
-	
 	protected void rain(){
 		float raindropY = 16f * GlobalRepo.TILE;
 		if (DowntiltEngine.getDeltaTime() % 6 == 0 || DowntiltEngine.getDeltaTime() % 5 == 3) MapHandler.addEntity(new Raindrop(getRaindropLocation(), raindropY));
@@ -133,8 +128,14 @@ public abstract class Stage {
 	public float getDispX() { return dispX; }
 	public boolean scrolls() { return scrolls; }
 	
-	public int getNumber(){
+	public static int getStaticNumber(){
 		return -1;
+	}
+	
+	public abstract int getNumber();
+	
+	public static String getName(){
+		return "OOPS";
 	}
 
 }

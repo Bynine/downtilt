@@ -113,7 +113,7 @@ public abstract class Challenge {
 		timeSpent = DowntiltEngine.getDeltaTime();
 		DowntiltEngine.resetDeltaTime();
 		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ){
-			int waitBetween = 60;
+			int waitBetween = 90;
 			TransitionGraphicsHandler.finish();
 			DowntiltEngine.wait(waitBetween);
 		}

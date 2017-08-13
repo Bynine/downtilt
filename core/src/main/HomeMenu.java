@@ -2,6 +2,10 @@ package main;
 
 import java.util.Arrays;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 public class HomeMenu extends Menu {
 
 	private MenuOption<Integer> choices = new MenuOption<Integer>(Arrays.asList(
@@ -13,6 +17,8 @@ public class HomeMenu extends Menu {
 	
 	HomeMenu(){
 		cho = choices;
+		canBack = false;
+		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_home.png")));
 	}
 	
 	@Override
@@ -20,7 +26,7 @@ public class HomeMenu extends Menu {
 		int posX = 230;
 		int startY = 510;
 		int posY = startY;
-		final int dec = 30;
+		final int dec = 60;
 		super.draw();
 		batch.begin();
 
@@ -28,7 +34,7 @@ public class HomeMenu extends Menu {
 		font.draw(batch, "Options", posX, posY -= dec);
 		font.draw(batch, "Rankings", posX, posY -= dec);
 		font.draw(batch, "Credits", posX, posY -= dec);
-		batch.draw(cursor, posX - 48, startY - 48 - cho.cursorPos() * (dec + 1));
+		batch.draw(cursor, posX - 48, startY - dec - 16 - cho.cursorPos() * (dec + 1));
 		
 		batch.end();
 	}

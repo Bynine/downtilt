@@ -170,7 +170,7 @@ public class M_Hero extends MoveList_Advanced{
 		int x = 18;
 		int y = -14;
 		int size = 14;
-		int earlyAngle = 260;
+		int earlyAngle = 273;
 		int lateAngle = 110;
 		Hitbox earlyL = new Hitbox(user, 5.0f, 3.8f, 15, earlyAngle,  x,  y, size,		new SFX.MeatyHit(), c);
 		Hitbox earlyR = new Hitbox(user, 5.0f, 3.8f, 15, earlyAngle, -x,  y, size,		new SFX.MeatyHit(), c);
@@ -566,6 +566,7 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move skid(){
+		if (user.speedActive()) return new Move(user, 0);
 		Move m = new Move(user, 10);
 		m.dontTurn();
 		m.setAnimation("sprites/fighters/bomber/skid.png", 1, 1);

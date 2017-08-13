@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.MathUtils;
 
 import inputs.InputHandlerCPU;
 import inputs.Brain.MookBrain;
@@ -58,18 +59,14 @@ public class Heavy extends Fighter {
 
 	protected void hitGround(){
 		super.hitGround();
-		new SFX.Break().play();
-		DowntiltEngine.causeHitlag(2);
+		int hitlag = (int) MathUtils.clamp(-velocity.y, 0, 3);
+		if (hitlag > 0) new SFX.Break().play();
+		DowntiltEngine.causeHitlag(hitlag);
 	}
 	
 	protected void getFootStooled(){
 		if (getArmor() <= HEAVY_ARMOR) super.getFootStooled();
 	}
-
-//	public float getArmor() { 
-//		if (inHitstun()) return 0;
-//		else return super.getArmor(); 
-//	}
 
 	TextureRegion getJumpFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }
 	TextureRegion getStandFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }

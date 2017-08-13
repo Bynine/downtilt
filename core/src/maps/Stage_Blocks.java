@@ -11,7 +11,6 @@ public class Stage_Blocks extends Stage {
 	public Stage_Blocks(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/leaf.mp3"));
 		setup();
-		name = "Puzzle Palace";
 	}
 
 	public TiledMap getMap() {
@@ -22,8 +21,16 @@ public class Stage_Blocks extends Stage {
 		return new Vector2(22 * GlobalRepo.TILE, 9 * GlobalRepo.TILE);
 	}
 	
+	private static final int num = 3;
+	public static int getStaticNumber(){
+		return num;
+	}
 	public int getNumber(){
-		return 3;
+		return num;
+	}
+	
+	public static String getName(){
+		return "Puzzle Palace";
 	}
 
 }

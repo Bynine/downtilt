@@ -20,27 +20,32 @@ import timers.Timer;
 
 abstract class Menu {
 
-	protected BitmapFont font = new BitmapFont(), specialFont = new BitmapFont();
+	protected BitmapFont font = new BitmapFont(), navFont = new BitmapFont(), bigFont = new BitmapFont();
 	protected SpriteBatch batch;
-	protected final String startStr = "Press A to begin!";
+	protected String startStr;
 	protected final Color fontColor = Color.WHITE;
-	protected TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/menu.png")));
-	protected TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/cursor.png")));
+	protected TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menu.png")));
+	protected TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/cursor.png")));
 	protected final float greyOut = 0.3f;
+	protected boolean canAdvance = true, canBack = true;
+	protected TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/title.png")));
+	protected TextureRegion tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_sample.png")));
 
 	protected List<MenuOption<?>> opt = new ArrayList<MenuOption<?>>();
 	protected MenuOption<Integer> cho = new MenuOption<Integer>(Arrays.asList(new Choice<Integer>(0, "")));
 
 	Menu(){
+		startStr = "Press " + DowntiltEngine.getPrimaryInputHandler().getNormalString() + " to begin!";
 		batch = new SpriteBatch();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/nes.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 16;
 		parameter.color = fontColor;
 		font = generator.generateFont(parameter);
-		parameter.size = 32;
 		parameter.color = Color.GOLDENROD;
-		specialFont = generator.generateFont(parameter);
+		navFont = generator.generateFont(parameter);
+		parameter.size = 32;
+		bigFont = generator.generateFont(parameter);
 		generator.dispose();
 	}
 
@@ -59,14 +64,27 @@ abstract class Menu {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glClearColor(112.0f/255.0f, 233.0f/255.0f, 0.99f, 1);
 		batch.begin();
+
+		int dispX = DowntiltEngine.getDeltaTime() % tile.getRegionWidth();
+		int dispY = DowntiltEngine.getDeltaTime() % tile.getRegionHeight();
+		for (int i = 0; i < 21; ++i){
+			for (int j = 0; j < 11; ++j){
+				batch.draw(tile, i * tile.getRegionWidth() - dispX, j * tile.getRegionHeight() - dispY) ;
+			}
+		}
+
 		batch.draw(menu, 0, 0);
+		batch.draw(title, 350, 560);
+		final int posY = 50;
+		if (canAdvance) navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY);
+		if (canBack) navFont.draw(batch, "BACK: " + DowntiltEngine.getPrimaryInputHandler().getSpecialString(), 200, posY);
 		batch.end();
 	}
 
 	protected void advance(){
 		/**/
 	}
-	
+
 	protected void back(){
 		/**/
 	}
@@ -74,6 +92,14 @@ abstract class Menu {
 	protected void handleCursor(int mov, List<MenuOption<?>> options, MenuOption<Integer> choices){
 		if (options.size() < choices.cursorPos() + 1) return;
 		options.get(choices.cursorPos() + 1).moveCursor(mov);
+	}
+	
+	protected String appendCursors(String str, MenuOption<?> menuOption){
+		if (menuOption.cursorPos() == 0) str = "  ".concat(str);
+		else str = "< ".concat(str);
+		if (menuOption.cursorPos() == menuOption.getSize() - 1) str = str.concat("   ");
+		else str = str.concat(" > ");
+		return str;
 	}
 
 	protected List<Fighter> makePlayers(int num, ArrayList<PlayerType> newPlayers){
@@ -110,7 +136,7 @@ abstract class Menu {
 	protected class MenuOption <T> {
 		private int cursor = 0;
 		private final List<Choice<T>> choices;
-		private final Timer waitToMoveTimer = new Timer(3);
+		private final Timer waitToMoveTimer = new Timer(1);
 
 		MenuOption(List<Choice<T>> lst){
 			this.choices = lst;
@@ -149,16 +175,24 @@ abstract class Menu {
 		public void randomize() {
 			cursor = ((int) (Math.random() * choices.size()) );
 		}
+		
+		public List<Choice<T>> getChoices(){
+			return choices;
+		}
 
 	}
 
 	protected class Choice<T> {
+		
 		final T t;
-		final String desc;
+		String desc;
+		boolean selectable = true;
+		
 		Choice(T t, String desc){
 			this.t = t;
 			this.desc = desc;
 		}	
+		
 	}
 
 }

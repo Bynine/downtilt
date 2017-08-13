@@ -28,6 +28,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 * MUST BE ON before making a jar/releasing!
 	 */
 	private static boolean release = false;
+	
+	private static boolean demoBuild = false;
+	
+	private static boolean musicToggle = false;
+	private static boolean debugToggle = true;
+	private static boolean saveToggle = true;
+	private static boolean fpsLoggle = false;
 
 	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer));
@@ -39,7 +46,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static Mode activeMode;
 	private static GameState gameState = GameState.GAMEMENU;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
-	private static float volume	= 1.0f;
+	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f;
 	private static ShaderProgram p2Palette;
 	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
@@ -47,12 +54,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static CreditScreen creditScreen;
 	private static RankingScreen rankingScreen;
 	private static VictoryScreen activeVictory;
-
-	private static boolean musicToggle = false;
-	private static boolean debugToggle = true;
-	private static boolean saveToggle = true;
-	private static boolean fpsLoggle = false;
-
+	
 	public void create () {
 		activeMode = new Endless(new Stage_Standard());
 		SaveHandler.loadSave();
@@ -60,6 +62,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
 		}
+		if (release) gameState = GameState.HOME;
 
 		primaryInputHandler = setupInputHandler(0);
 		secondaryInputHandler = setupInputHandler(1);
@@ -67,10 +70,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 		beginFighters(true);
 		GraphicsHandler.begin();
 		MapHandler.begin();
+		
+		int[] options = SaveHandler.getOptions();
+		optionMenu = new OptionMenu(options);
+		optionMenu.setOptions(); 
 
 		homeMenu = new HomeMenu();
 		gameMenu = new GameMenu();
-		optionMenu = new OptionMenu();
 		creditScreen = new CreditScreen();
 		rankingScreen = new RankingScreen();
 	}
@@ -141,14 +147,14 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	private void updateGame(){
-		if (waitTimer.timeUp()) {
-			activeMode.update();
+		activeMode.update();
+		if (!isWaiting()){
 			MapHandler.updateInputs();
-		}
-		if (!paused){
-			MapHandler.activeRoom.update(deltaTime);
-			MapHandler.updateActionCircleInteractions();
-			if (outOfHitlag()) MapHandler.updateEntities();
+			if (!paused){
+				MapHandler.activeRoom.update(deltaTime);
+				MapHandler.updateActionCircleInteractions();
+				if (outOfHitlag()) MapHandler.updateEntities();
+			}
 		}
 		GraphicsHandler.updateGraphics();
 		GraphicsHandler.updateCamera();
@@ -247,13 +253,21 @@ public class DowntiltEngine extends ApplicationAdapter {
 		deltaTime = 0;
 	}
 
-	public static float getVolume(){ return volume; }
+	public static float getMusicVolume(){ return masterVolume * musicVolume; }
+	public static float getSFXVolume(){ return masterVolume * sfxVolume; }
+	public static float getScreenShakeMod(){ return screenShakeMod; }
+	
+	public static void setMusicVolume(float v){ musicVolume = v; }
+	public static void setSFXVolume(float v){ sfxVolume = v; }
+	public static void setScreenShake(float ss) { screenShakeMod = ss; }
+	
 	public static int getDeltaTime(){ return deltaTime; }
 	public static boolean isPaused() { return paused; }
 	public static List<Fighter> getPlayers(){ return playerList; }
 	public static boolean outOfHitlag(){ return hitlagTimer.timeUp(); }
 	public static boolean isSlowed(){ return !slowTimer.timeUp(); }
 	public static boolean justOutOfHitlag() { return hitlagTimer.timeJustUp(); }
+	public static boolean isWaiting() { return !waitTimer.timeUp(); }
 	public static GameState getGameState() { return gameState; }
 	public static boolean entityIsPlayer(Entity en){
 		for (Fighter player: DowntiltEngine.getPlayers()){
@@ -270,8 +284,14 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static boolean saveOn(){
 		return saveToggle || release;
 	}
+	public static boolean isDemoBuild(){
+		return demoBuild;
+	}
 	public static InputHandlerPlayer getPrimaryInputHandler() { 
 		return primaryInputHandler; 
+	}
+	public static InputHandlerPlayer getSecondaryInputHandler() { 
+		return secondaryInputHandler; 
 	}
 	public static void addTimer(Timer t){
 		timerList.add(t);

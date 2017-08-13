@@ -20,7 +20,6 @@ public class Stage_Rooftop extends Stage {
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/spook.mp3"));
 		dispX = GlobalRepo.TILE * 4;
 		setup();
-		name = "Lightning Lookout";
 	}
 
 	public TiledMap getMap() {
@@ -41,8 +40,16 @@ public class Stage_Rooftop extends Stage {
 		return new Vector2(22 * GlobalRepo.TILE, 3 * GlobalRepo.TILE);
 	}
 	
+	private static final int num = 1;
+	public static int getStaticNumber(){
+		return num;
+	}
 	public int getNumber(){
-		return 1;
+		return num;
+	}
+	
+	public static String getName(){
+		return "Lightning Lookout";
 	}
 
 	private class LightningHandler{

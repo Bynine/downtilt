@@ -39,16 +39,17 @@ public class Combo {
 	}
 
 	private void playCorrespondingSound(){
+		float vol = DowntiltEngine.getSFXVolume();
 		switch(rank){
-		case 1: SOUND_1.play(); break;
-		case 2: SOUND_2.play(); break;
-		case 3: SOUND_3.play(); break;
-		case 4: SOUND_4.play(); break;
-		case 5: SOUND_5.play(); break;
-		case 6: SOUND_6.play(); break;
-		case 7: SOUND_7.play(); break;
+		case 1: SOUND_1.play(vol); break;
+		case 2: SOUND_2.play(vol); break;
+		case 3: SOUND_3.play(vol); break;
+		case 4: SOUND_4.play(vol); break;
+		case 5: SOUND_5.play(vol); break;
+		case 6: SOUND_6.play(vol); break;
+		case 7: SOUND_7.play(vol); break;
 		}
-		if (rank >= 8) SOUND_7.play();
+		if (rank >= 8) SOUND_7.play(vol);
 	}
 
 	public void end(){
@@ -86,15 +87,16 @@ public class Combo {
 
 	private void finishHelper(int rank, float addedSpecial){
 		if (!isACombo()) return;
+		float vol = DowntiltEngine.getSFXVolume();
 		switch(rank){
 		// implictly by checking for isACombo first, rank should not be 1 or less here
-		case 2: SOUND_FINISH2.play(); break;
-		case 3: SOUND_FINISH3.play(); break;
-		case 4: SOUND_FINISH4.play(); break;
-		case 5: SOUND_FINISH5.play(); break;
-		case 6: SOUND_FINISH6.play(); break;
-		case 7: SOUND_FINISH7.play(); break;
-		default: SOUND_FINISH8.play(); break;
+		case 2: SOUND_FINISH2.play(vol); break;
+		case 3: SOUND_FINISH3.play(vol); break;
+		case 4: SOUND_FINISH4.play(vol); break;
+		case 5: SOUND_FINISH5.play(vol); break;
+		case 6: SOUND_FINISH6.play(vol); break;
+		case 7: SOUND_FINISH7.play(vol); break;
+		default: SOUND_FINISH8.play(vol); break;
 		}
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		DowntiltEngine.getChallenge().changeSpecial(addedSpecial);

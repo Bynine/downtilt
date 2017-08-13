@@ -233,6 +233,51 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	public boolean inputGuard(){
 		return blockHold();
 	}
+	
+	@Override
+	public String getMoveString(){
+		return "the control stick";
+	}
+	
+	@Override
+	public String getNormalString() {
+		return "A";
+	}
+
+	@Override
+	public String getSpecialString() {
+		return "B";
+	}
+
+	@Override
+	public String getChargeString() {
+		return "Y";
+	}
+
+	@Override
+	public String getJumpString() {
+		return "X";
+	}
+
+	@Override
+	public String getGrabString() {
+		return "RB";
+	}
+
+	@Override
+	public String getGuardString() {
+		return "L or R";
+	}
+
+	@Override
+	public String getStartString() {
+		return "START";
+	}
+
+	@Override
+	public String getSelectString() {
+		return "SELECT";
+	}
 
 	/* handled by buttonDown */
 

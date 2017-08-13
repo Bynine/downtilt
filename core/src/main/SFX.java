@@ -8,17 +8,17 @@ public abstract class SFX {
 	String url = null;
 
 	public void play() {
-		if (null != url) Gdx.audio.newSound(Gdx.files.internal(url)).play(DowntiltEngine.getVolume());
+		if (null != url) Gdx.audio.newSound(Gdx.files.internal(url)).play(DowntiltEngine.getSFXVolume());
 	}
 
 	public void play(float vol) {
-		if (null != url) Gdx.audio.newSound(Gdx.files.internal(url)).play(vol * DowntiltEngine.getVolume());
+		if (null != url) Gdx.audio.newSound(Gdx.files.internal(url)).play(vol * DowntiltEngine.getSFXVolume());
 	}
 
 	public void playDirectional(float pan){
 		if (null != url) {
 			Sound sfx = Gdx.audio.newSound(Gdx.files.internal(url));
-			sfx.setPan(sfx.play(), pan, DowntiltEngine.getVolume());
+			sfx.setPan(sfx.play(), pan, DowntiltEngine.getSFXVolume());
 		}
 	}
 
@@ -49,7 +49,7 @@ public abstract class SFX {
 	public static class FootStool extends SFX{ public FootStool(){ setSFX("/footstool.wav"); } }
 	public static class Ground extends SFX{ public Ground(){ setSFX("/land.mp3"); } }
 	public static class Tech extends SFX{ public Tech(){ setSFX("/tech.mp3"); } }
-	public static class Collect extends SFX{ public Collect(){ setSFX("/melee/itemdrop.wav"); } }
+	public static class Collect extends SFX{ public Collect(){ setSFX("/powerup.wav"); } }
 	public static class Victory extends SFX{ public Victory(){ setSFX("/tada.mp3"); } }
 	public static class Break extends SFX{ public Break(){ setSFX("/melee/bury.wav"); } }
 	public static class Sparks extends SFX{ public Sparks(){ setSFX("/lightningstart.mp3"); } }

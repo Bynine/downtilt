@@ -118,5 +118,15 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	public abstract boolean jumpHold();
 	public abstract boolean blockHold();
 	public abstract boolean attackHold();
+	
+	public abstract String getMoveString();
+	public abstract String getNormalString();
+	public abstract String getSpecialString();
+	public abstract String getChargeString();
+	public abstract String getJumpString(); 
+	public abstract String getGrabString();
+	public abstract String getGuardString();
+	public abstract String getStartString();
+	public abstract String getSelectString(); 
 
 }

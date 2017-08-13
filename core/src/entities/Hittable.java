@@ -55,11 +55,19 @@ public abstract class Hittable extends Entity {
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 		super.update(rectangleList, entityList, deltaTime);
 		updateImage(deltaTime);
+		if (getPercentage() > getWeight() * 0.5 && deltaTime % 20 == 0 && Math.random() < getPercentage()/500.0){
+			Graphic g = new Graphic.SmokeTrail(this, 16);
+			float mod = 32;
+			g.position.x += (0.5f - Math.random()) * mod;
+			g.position.y += (0.5f - Math.random()) * mod;
+			MapHandler.addEntity(g);
+		}
 	}
 
 	void updateImage(float deltaTime){
 		if (inHitstun()) setImage(getTumbleFrame(deltaTime));
 		else setImage(getStandFrame(deltaTime));
+		if (doesCollide(position.x, position.y)) position.set(500, 600);
 	}
 
 	void updatePosition(){
@@ -242,7 +250,7 @@ public abstract class Hittable extends Entity {
 		caughtTimer.setEndTime(caughtTime);
 		caughtTimer.reset();
 		float newPosX = user.getCenter().x - target.getImage().getWidth()/2;
-		float dispX = target.getImage().getWidth()*(2.2f/4.0f);
+		float dispX = target.getImage().getWidth()*(1.7f/4.0f);
 		if (user.getDirection() == Direction.LEFT) newPosX -= dispX;
 		if (user.getDirection() == Direction.RIGHT) newPosX += dispX;
 		float newPosY = user.position.y + image.getHeight()/4;

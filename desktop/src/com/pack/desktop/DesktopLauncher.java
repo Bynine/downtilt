@@ -9,7 +9,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class DesktopLauncher {
 	
-	private static final int FPS = 55;
+	private static final int FPS = 56;
 	private static final int DONTRENDER = -1;
 	
 	public static void main (String[] arg) {
