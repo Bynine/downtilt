@@ -79,12 +79,72 @@ public class SaveHandler {
 		return options;
 	}
 	
+	/* Stages & Modes */
+	
 	public static boolean AdvancedUnlocked(){
-		return !DowntiltEngine.debugOn() && getScores()[0][1] >= Victory.AdventureVictory.A;
+		return isUnlocked(getScores()[0][1], Victory.AdventureVictory.A);
 	}
 	
 	public static boolean NightmareUnlocked(){
-		return !DowntiltEngine.debugOn() && getScores()[0][2] >= Victory.AdventureVictory.A;
+		return isUnlocked(getScores()[0][2], Victory.AdventureVictory.A);
+	}
+	
+	public static boolean BlocksUnlocked(){
+		return isUnlocked(getScores()[1][0], Victory.TrialVictory.C);
+	}
+
+	public static boolean MushroomUnlocked(){
+		return isUnlocked(getScores()[1][1], Victory.TrialVictory.B);
+	}
+	
+	public static boolean SpaceUnlocked(){
+		return isUnlocked(getScores()[2][2], Victory.EndlessVictory.C);
+	}
+
+	public static boolean SkyUnlocked(){
+		return isUnlocked(getScores()[2][3], Victory.EndlessVictory.B);
+	}
+	
+	/* Palettes */
+	
+	public static boolean PaletteMushroomUnlocked(){
+		return isUnlocked(getScores()[1][4], Victory.AdventureVictory.A);
+	}
+	
+	public static boolean PaletteSpaceUnlocked(){
+		return isUnlocked(getScores()[2][5], Victory.AdventureVictory.A);
+	}
+	
+	public static boolean PaletteSkyUnlocked(){
+		return isUnlocked(getScores()[1][6], Victory.AdventureVictory.A);
+	}
+	
+	public static boolean PaletteNightmareUnlocked(){
+		return isUnlocked(getScores()[0][3], Victory.AdventureVictory.A);
+	}
+	
+	public static boolean PaletteSAdventureUnlocked(){
+		return isUnlockedRange(0, 4, Victory.AdventureVictory.S);
+	}
+	
+	public static boolean PaletteSTimeTrialUnlocked(){
+		return isUnlockedRange(1, 7, Victory.TrialVictory.S);
+	}
+	
+	public static boolean PaletteSEndlessUnlocked(){
+		return isUnlockedRange(2, 7, Victory.EndlessVictory.S);
+	}
+	
+	private static boolean isUnlocked(int scoreA, int scoreB){
+		return DowntiltEngine.debugOn() || scoreA >= scoreB;
+	}
+	
+	private static boolean isUnlockedRange(int x, int y, int scoreB){
+		boolean unlocked = false;
+		for (int i = 0; i < y; ++i){
+			if (isUnlocked(getScores()[x][i], scoreB)) unlocked = true;
+		}
+		return unlocked;
 	}
 
 }

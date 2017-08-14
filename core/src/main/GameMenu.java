@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -26,6 +25,8 @@ class GameMenu extends Menu {
 	private final String str_ENDLESS = "Endless";
 	private final String str_TUTORIAL = "Tutorial";
 	private final String str_TRAINING = "Training";
+	private final String str_ADVANCEDDESC = "Random stages and extra challenge.";
+	private final String str_NIGHTMAREDESC = "Good luck!";
 	private MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
 			new Choice<String>(str_TRAINING, "Test out your moves against dummies!"),
 			new Choice<String>(str_TUTORIAL, "Learn how to play!"),
@@ -80,14 +81,12 @@ class GameMenu extends Menu {
 			menuMusic.setVolume(DowntiltEngine.getMusicVolume() / 8.0f);
 			menuMusic.play();
 		}
-		if (!SaveHandler.AdvancedUnlocked()) {
-			difficulty.getChoices().get(2).selectable = false;
-			difficulty.getChoices().get(2).desc = "Unlock by A-ranking Standard difficulty!";
-		}
-		if (!SaveHandler.NightmareUnlocked()) {
-			difficulty.getChoices().get(3).selectable = false;
-			difficulty.getChoices().get(3).desc = "Unlock by A-ranking Advanced difficulty!";
-		}
+		checkLocked(SaveHandler.AdvancedUnlocked(), difficulty.getChoices().get(2), "Unlock by A-ranking Standard difficulty!", str_ADVANCEDDESC);
+		checkLocked(SaveHandler.NightmareUnlocked(), difficulty.getChoices().get(3), "Unlock by A-ranking Advanced difficulty!", str_NIGHTMAREDESC);
+		checkLocked(SaveHandler.BlocksUnlocked(), stages.getChoices().get(3), "Unlock by C-ranking " + Stage_Standard.getName() + " Time Trial!", "");
+		checkLocked(SaveHandler.MushroomUnlocked(), stages.getChoices().get(4), "Unlock by B-ranking " + Stage_Rooftop.getName() + " Time Trial!", "");
+		checkLocked(SaveHandler.SpaceUnlocked(), stages.getChoices().get(5), "Unlock by C-ranking " + Stage_Truck.getName() + " Endless!", "");
+		checkLocked(SaveHandler.SkyUnlocked(), stages.getChoices().get(6), "Unlock by B-ranking " + Stage_Blocks.getName() + " Endless!", "");
 	}
 
 	enum MenuChoice{
@@ -112,13 +111,14 @@ class GameMenu extends Menu {
 		if (greyOutDifficultySelect()) font.setColor(greyOut, greyOut, greyOut, greyOut);
 		font.draw(batch, appendCursors("RANK:   ", difficulty) + GlobalRepo.getDifficultyName(difficulty.cursorPos()), posX, posY -= dec);
 		if (greyOutDifficultySelect()) font.setColor(greyOut, greyOut, greyOut, 0);
-		if (!difficulty.selected().selectable) font.setColor(Color.RED);
+		if (!difficulty.selected().unlocked) font.setColor(lockedColor);
 		font.draw(batch, difficulty.getDesc(), posX, posY -= dec);
 		font.setColor(fontColor);
 		
 		if (greyOutStageSelect()) font.setColor(greyOut, greyOut, greyOut, greyOut);
 		font.draw(batch, appendCursors("STAGE:  ", stages) + GlobalRepo.getStageName(stages.cursorPos()), posX, posY -= dec);
 		if (greyOutStageSelect()) font.setColor(greyOut, greyOut, greyOut, 0);
+		if (!stages.selected().unlocked) font.setColor(lockedColor);
 		font.draw(batch, stages.getDesc(), posX, posY -= dec);
 		font.setColor(fontColor);
 
@@ -153,7 +153,7 @@ class GameMenu extends Menu {
 	@Override
 	protected void advance(){
 		
-		for (MenuOption<?> mo: options) if (!mo.selected().selectable) {
+		for (MenuOption<?> mo: options) if (!mo.selected().unlocked) {
 			new SFX.Error().play();
 			return;
 		}

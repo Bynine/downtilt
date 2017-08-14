@@ -1,5 +1,6 @@
 package challenges;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import challenges.Challenge.Difficulty;
@@ -10,6 +11,7 @@ import main.SFX;
 public abstract class Mode {
 	
 	protected int activeChallengeIndex = 0;
+	protected final List<Bonus> bonuses = new ArrayList<Bonus>();
 
 	/**
 	 * Returns the current challenge being played.
@@ -55,6 +57,10 @@ public abstract class Mode {
 	
 	public Difficulty getDifficulty(){
 		return Difficulty.Standard;
+	}
+	
+	public void addBonus(Bonus b){
+		bonuses.add(b);
 	}
 
 	abstract List<Challenge> getChallengeList();

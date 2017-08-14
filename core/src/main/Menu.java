@@ -23,13 +23,14 @@ abstract class Menu {
 	protected BitmapFont font = new BitmapFont(), navFont = new BitmapFont(), bigFont = new BitmapFont();
 	protected SpriteBatch batch;
 	protected String startStr;
-	protected final Color fontColor = Color.WHITE;
-	protected TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menu.png")));
-	protected TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/cursor.png")));
+	protected final Color fontColor = Color.WHITE, lockedColor = Color.RED;
 	protected final float greyOut = 0.3f;
 	protected boolean canAdvance = true, canBack = true;
+	protected TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menu.png")));
+	protected TextureRegion cursor = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/cursor.png")));
 	protected TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/title.png")));
 	protected TextureRegion tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_sample.png")));
+	protected TextureRegion logo = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/logo.png")));
 
 	protected List<MenuOption<?>> opt = new ArrayList<MenuOption<?>>();
 	protected MenuOption<Integer> cho = new MenuOption<Integer>(Arrays.asList(new Choice<Integer>(0, "")));
@@ -60,6 +61,17 @@ abstract class Menu {
 		draw();
 	}
 
+	protected void checkLocked(boolean b, Choice<?> choice, String descLock, String descUnlock){
+		if (!b){
+			choice.unlocked = false;
+			choice.desc = descLock;
+		}
+		else {
+			choice.unlocked = true;
+			choice.desc = descUnlock;
+		}
+	}
+
 	protected void draw(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glClearColor(112.0f/255.0f, 233.0f/255.0f, 0.99f, 1);
@@ -74,6 +86,8 @@ abstract class Menu {
 		}
 
 		batch.draw(menu, 0, 0);
+		int logomod = 2;
+		batch.draw(logo, 0, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
 		batch.draw(title, 350, 560);
 		final int posY = 50;
 		if (canAdvance) navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY);
@@ -93,7 +107,7 @@ abstract class Menu {
 		if (options.size() < choices.cursorPos() + 1) return;
 		options.get(choices.cursorPos() + 1).moveCursor(mov);
 	}
-	
+
 	protected String appendCursors(String str, MenuOption<?> menuOption){
 		if (menuOption.cursorPos() == 0) str = "  ".concat(str);
 		else str = "< ".concat(str);
@@ -175,7 +189,7 @@ abstract class Menu {
 		public void randomize() {
 			cursor = ((int) (Math.random() * choices.size()) );
 		}
-		
+
 		public List<Choice<T>> getChoices(){
 			return choices;
 		}
@@ -183,16 +197,16 @@ abstract class Menu {
 	}
 
 	protected class Choice<T> {
-		
+
 		final T t;
 		String desc;
-		boolean selectable = true;
-		
+		boolean unlocked = true;
+
 		Choice(T t, String desc){
 			this.t = t;
 			this.desc = desc;
 		}	
-		
+
 	}
 
 }

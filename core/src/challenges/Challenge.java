@@ -219,5 +219,5 @@ public abstract class Challenge {
 	public enum Difficulty{
 		Beginner, Standard, Advanced, Nightmare
 	}
-
+	
 }

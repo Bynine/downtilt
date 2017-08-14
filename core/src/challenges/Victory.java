@@ -68,15 +68,17 @@ public abstract class Victory {
 			return score + longestCombo - deaths * 5;
 		}
 		
-		public static final int A = 80;
+		public static final int A = 70;
+		public static final int S = 80;
+		public static final int X = 90;
 
 		public Ranking getRanking(float score){
 			if (score < 30) return Ranking.F;
 			if (score < 40) return Ranking.D;
 			if (score < 55) return Ranking.C;
-			if (score < 70) return Ranking.B;
-			if (score < A)  return Ranking.A;
-			if (score < 90) return Ranking.S;
+			if (score < A) return Ranking.B;
+			if (score < S)  return Ranking.A;
+			if (score < X) return Ranking.S;
 			else return Ranking.X;
 		}
 		
@@ -111,12 +113,16 @@ public abstract class Victory {
 			return kos + longestCombo * 3;
 		}
 
+		public static final int C = 25;
+		public static final int B = 35;
+		public static final int S = 50;
+		
 		public Ranking getRanking(float score){
 			if (score < 15) return Ranking.F;
-			if (score < 25) return Ranking.D;
-			if (score < 35) return Ranking.C;
-			if (score < 43) return Ranking.B;
-			if (score < 50) return Ranking.A;
+			if (score < C) return Ranking.D;
+			if (score < B)  return Ranking.C;
+			if (score < 43)  return Ranking.B;
+			if (score < S) return Ranking.A;
 			if (score < 55) return Ranking.S;
 			else return Ranking.X;
 		}
@@ -145,13 +151,17 @@ public abstract class Victory {
 		public int getScore(){
 			return kos + longestCombo * 4;
 		}
+		
+		public static final int C = 25;
+		public static final int B = 40;
+		public static final int S = 70;
 
 		public Ranking getRanking(float score){
 			if (score < 15) return Ranking.F;
-			if (score < 25) return Ranking.D;
-			if (score < 40) return Ranking.C;
-			if (score < 55) return Ranking.B;
-			if (score < 70) return Ranking.A;
+			if (score < C) return Ranking.D;
+			if (score < B)  return Ranking.C;
+			if (score < 55)  return Ranking.B;
+			if (score < S) return Ranking.A;
 			if (score < 100) return Ranking.S;
 			else return Ranking.X;
 		}

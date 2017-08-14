@@ -47,18 +47,27 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static GameState gameState = GameState.GAMEMENU;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
 	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f;
-	private static ShaderProgram p2Palette;
+	private static ShaderProgram shaderP2, shaderMushroom, shaderSpace, shaderSky, shaderNightmare, shaderAdventure, shaderEndless, shaderTimeTrial;
 	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
 	private static OptionMenu optionMenu;
 	private static CreditScreen creditScreen;
 	private static RankingScreen rankingScreen;
 	private static VictoryScreen activeVictory;
+	private static Palette activePalette = Palette.NORMAL;
 	
 	public void create () {
+		shaderP2 = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/p2.glsl"));
+		shaderMushroom = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/wild.glsl"));
+		shaderSpace = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/solemn.glsl"));
+		shaderSky = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/color.glsl"));
+		shaderNightmare = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/spoopy.glsl"));
+		shaderAdventure = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/dark.glsl"));
+		shaderEndless = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/endless.glsl"));
+		shaderTimeTrial = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/heroic.glsl"));
+		
 		activeMode = new Endless(new Stage_Standard());
 		SaveHandler.loadSave();
-		p2Palette = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/p2.glsl"));
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
 		}
@@ -112,7 +121,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		beginFighter(p1, primaryInputHandler);
 		if (!coop) return;
 		Fighter p2 = new Hero(0, 0, 0);
-		p2.setPalette(p2Palette);
+		p2.setPalette(shaderP2);
 		beginFighter(p2, secondaryInputHandler);
 	}
 
@@ -122,6 +131,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static void beginFighter(Fighter player, InputHandlerPlayer inputHandlerPlayer){
 		inputHandlerPlayer.setPlayer(player);
 		player.setInputHandler(inputHandlerPlayer);
+		player.setPalette(getShaderFromPalette(activePalette));
 		playerList.add(player);
 	}
 
@@ -208,6 +218,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startGameMenu(){
+		gameMenu.begin();
 		toMenu(GameState.GAMEMENU);
 	}
 
@@ -216,6 +227,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startOptionMenu(){
+		optionMenu.begin();
 		toMenu(GameState.OPTIONS);
 	}
 
@@ -237,7 +249,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		paused = false;
 		beginFighters(true);
 		getChallenge().getStage().getMusic().stop();
-		gameMenu.begin();
 		gameState = gs;
 	}
 
@@ -260,6 +271,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static void setMusicVolume(float v){ musicVolume = v; }
 	public static void setSFXVolume(float v){ sfxVolume = v; }
 	public static void setScreenShake(float ss) { screenShakeMod = ss; }
+	public static void setActivePalette(Palette p){ activePalette = p; }
 	
 	public static int getDeltaTime(){ return deltaTime; }
 	public static boolean isPaused() { return paused; }
@@ -298,6 +310,24 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	public static Mode getActiveMode(){
 		return activeMode;
+	}
+	
+	public enum Palette{
+		NORMAL, MUSHROOM, SPACE, SKY, NIGHTMARE, ADVENTURE, TIMETRIAL, ENDLESS
+	}
+	
+	private static ShaderProgram getShaderFromPalette(Palette ap) {
+		switch(ap){
+		case NORMAL: return null;
+		case MUSHROOM: return shaderMushroom;
+		case SPACE: return shaderSpace;
+		case SKY: return shaderSky;
+		case NIGHTMARE: return shaderNightmare;
+		case ADVENTURE: return shaderAdventure;
+		case TIMETRIAL: return shaderTimeTrial;
+		case ENDLESS: return shaderEndless;
+		default: return null;
+		}
 	}
 
 }
