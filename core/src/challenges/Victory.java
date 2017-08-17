@@ -1,15 +1,13 @@
 package challenges;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import challenges.Challenge.Difficulty;
 import maps.Stage;
 
 public abstract class Victory {
-	protected int longestCombo;
-	protected int time;
-	protected int kos;
-	protected int deaths;
+	protected final List<Bonus> bonuses = new ArrayList<Bonus>();
 
 	public static final int NOTUSED = -1;
 
@@ -17,75 +15,57 @@ public abstract class Victory {
 		N, F, D, C, B, A, S, X
 	}
 
-	public int getCombo(){
-		return longestCombo;
-	}
-
-	public int getTime(){
-		return time;
-	}
-
-	public int getKOs(){
-		return kos;
-	}
-	
-	public int getDeaths(){
-		return deaths;
-	}
-
 	public Ranking getRanking(float score){
 		return Ranking.F;
 	}
-	public abstract int getScore();
+	
+	public List<Bonus> getBonuses() {
+		return bonuses;
+	}
+	
+	public int getScore(){
+		int score = 0;
+		for (Bonus b: bonuses){
+			if (!(b instanceof Bonus.FactorBonus)) score += (b.getScore());
+		}
+		for (Bonus b: bonuses){
+			if (b instanceof Bonus.FactorBonus) score *= (((Bonus.FactorBonus)b).getFactor());
+		}
+		return score;
+	}
+	
 	public abstract int getNumberX();
 	public abstract int getNumberY();
 
 	public static class AdventureVictory extends Victory{
 		final Difficulty difficulty;
 
-		public AdventureVictory(List<Integer> longestCombos, int deaths, int time, Difficulty difficulty){
+		public AdventureVictory(Difficulty difficulty, List<Bonus> bonuses){
 			this.difficulty = difficulty;
-			for (int i: longestCombos) this.longestCombo += i;
-			this.time = time / 3600;
-			this.kos = NOTUSED;
-			this.deaths = deaths;
+			this.bonuses.addAll(bonuses);
 		}
 
-		public int getScore(){
-			int score = 0;
-			int minute = 60;
-					if (getTime() < minute * 3) score = 150;
-			else	if (getTime() < minute * 4) score = 120;
-			else	if (getTime() < minute * 5) score = 100;
-			else	if (getTime() < minute * 6) score = 80;
-			else	if (getTime() < minute * 7) score = 50;
-			else	if (getTime() < minute * 8) score = 40;
-			else 	if (getTime() < minute * 9)	score = 35;
-			else 	if (getTime() < minute * 10)score = 30;
-			else 	if (getTime() < minute * 11)score = 25;
-			else 	if (getTime() < minute * 12)score = 15;
-			else 	if (getTime() < minute * 13)score = 5;
-			return score + longestCombo - deaths * 5;
-		}
-		
+		public static final int D = 30;
+		public static final int C = 40;
+		public static final int B = 55;
 		public static final int A = 70;
 		public static final int S = 80;
 		public static final int X = 90;
 
 		public Ranking getRanking(float score){
-			if (score < 30) return Ranking.F;
-			if (score < 40) return Ranking.D;
-			if (score < 55) return Ranking.C;
+			if (score < D) return Ranking.F;
+			if (score < C) return Ranking.D;
+			if (score < B) return Ranking.C;
 			if (score < A) return Ranking.B;
-			if (score < S)  return Ranking.A;
+			if (score < S) return Ranking.A;
 			if (score < X) return Ranking.S;
 			else return Ranking.X;
 		}
-		
+
 		public int getNumberX(){
 			return 0;
 		}
-		
+
 		public int getNumberY(){
 			switch(difficulty){
 			case Beginner: return 0;
@@ -101,79 +81,69 @@ public abstract class Victory {
 	public static class TrialVictory extends Victory{
 		private final Stage stage;
 
-		public TrialVictory(int longestCombo, int kos, Stage stage){
-			this.longestCombo = longestCombo;
-			this.time = NOTUSED;
-			this.kos = kos;
-			this.deaths = NOTUSED;
+		public TrialVictory(Stage stage, List<Bonus> bonuses){
+			this.bonuses.addAll(bonuses);
 			this.stage = stage;
 		}
 
-		public int getScore(){
-			return kos + longestCombo * 3;
-		}
+		public static final int D = 12;
+		public static final int C = 18;
+		public static final int B = 24;
+		public static final int A = 30;
+		public static final int S = 36;
+		public static final int X = 44;
 
-		public static final int C = 25;
-		public static final int B = 35;
-		public static final int S = 50;
-		
 		public Ranking getRanking(float score){
-			if (score < 15) return Ranking.F;
+			if (score < D) return Ranking.F;
 			if (score < C) return Ranking.D;
-			if (score < B)  return Ranking.C;
-			if (score < 43)  return Ranking.B;
+			if (score < B) return Ranking.C;
+			if (score < A) return Ranking.B;
 			if (score < S) return Ranking.A;
-			if (score < 55) return Ranking.S;
+			if (score < X) return Ranking.S;
 			else return Ranking.X;
 		}
-		
+
 		public int getNumberX(){
 			return 1;
 		}
-		
+
 		public int getNumberY(){
 			return stage.getNumber();
 		}
-		
+
 	}
 
 	public static class EndlessVictory extends Victory{
 		private final Stage stage;
 
-		public EndlessVictory(int longestCombo, int kos, Stage stage){
-			this.longestCombo = longestCombo;
-			this.time = NOTUSED;
-			this.kos = kos;
-			this.deaths = NOTUSED;
+		public EndlessVictory(Stage stage, List<Bonus> bonuses){
+			this.bonuses.addAll(bonuses);
 			this.stage = stage;
 		}
 
-		public int getScore(){
-			return kos + longestCombo * 4;
-		}
-		
 		public static final int C = 25;
 		public static final int B = 40;
+		public static final int A = 55;
 		public static final int S = 70;
 
 		public Ranking getRanking(float score){
 			if (score < 15) return Ranking.F;
-			if (score < C) return Ranking.D;
+			if (score < C)  return Ranking.D;
 			if (score < B)  return Ranking.C;
-			if (score < 55)  return Ranking.B;
-			if (score < S) return Ranking.A;
+			if (score < A)  return Ranking.B;
+			if (score < S)  return Ranking.A;
 			if (score < 100) return Ranking.S;
 			else return Ranking.X;
 		}
-		
+
 		public int getNumberX(){
 			return 2;
 		}
-		
+
 		public int getNumberY(){
 			return stage.getNumber();
 		}
-		
+
 	}
 
 }

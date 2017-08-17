@@ -102,8 +102,8 @@ public class Adventure extends Mode{
 	/* BEGINNER */
 	private List<Wave> waveStandard1 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 60))
-			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
-			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 2, 2, 90))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 2, 2, 90))
 			));
 	private List<Wave> waveRooftop1 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 3, 2, 120))
@@ -279,15 +279,22 @@ public class Adventure extends Mode{
 	}
 	
 	Victory getVictory(){
+		bonuses.add(new Bonus.TimeBonus(getTime()));
 		List<Integer> longestComboList = new ArrayList<Integer>();
 		for (Challenge c: getChallengeList()){
 			longestComboList.add(c.getLongestCombo());
 		}
-		return new Victory.AdventureVictory(longestComboList, getDeaths(), getTime(), difficulty);
+		return new Victory.AdventureVictory(difficulty, bonuses);
 	}
 	
+	@Override
 	public Difficulty getDifficulty(){
 		return difficulty;
+	}
+	
+	@Override
+	protected void addValidBonus(Bonus newBonus){
+		if (!newBonus.singleOnly) bonuses.add(newBonus);
 	}
 
 }

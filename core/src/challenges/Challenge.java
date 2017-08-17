@@ -22,14 +22,14 @@ public abstract class Challenge {
 	protected long score = 0;
 	private int longestCombo = 0, timeSpent = 0;
 	protected float specialMeter = 0;
-	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, BASICALLYINFINITELIVES = 999;
+	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, INFINITELIVES = 999;
 	protected int specialBeginning = SPECIALMETERBEGINNING;
 	protected int lives = 0, deaths = 0;
 	protected int lifeSetting = 4;
 	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
-	protected boolean finished = false, started = false;
+	protected boolean finished = false, started = false, everRetried = false, everFailed = false;
 
 	Challenge(Stage stage, List<Wave> waves){
 		this.currWaves = new ArrayList<Wave>();
@@ -106,6 +106,7 @@ public abstract class Challenge {
 		deaths++;
 		new SFX.Error().play();
 		startChallenge();
+		everFailed = true;
 	}
 	
 	public void succeedChallenge(){
@@ -193,7 +194,10 @@ public abstract class Challenge {
 	}
 	
 	public void removeLife(){
-		if (lives < BASICALLYINFINITELIVES) lives--;
+		if (lives < INFINITELIVES) {
+			everRetried = true;
+			lives--;
+		}
 	}
 	
 	public float getSpecialMeter(){
@@ -208,14 +212,10 @@ public abstract class Challenge {
 		if (combo > longestCombo) longestCombo = combo;
 	}
 	
-	public void rotateEyes(){
-		/* */
-	}
-	
 	public void resolveCombo(float mod){
 		/* */
 	}
-	
+
 	public enum Difficulty{
 		Beginner, Standard, Advanced, Nightmare
 	}

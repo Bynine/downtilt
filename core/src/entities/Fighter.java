@@ -819,6 +819,11 @@ public abstract class Fighter extends Hittable{
 	public boolean shouldDie(Rectangle boundary, Rectangle cameraBoundary){
 		return super.shouldDie(boundary, cameraBoundary) || isOOB(cameraBoundary);
 	}
+	@Override
+	public boolean isOffTop(Rectangle boundary){
+		return super.isOffTop(boundary) || 
+				((position.y > (boundary.y + boundary.height + (image.getHeight()) + OOBGrace)) && team == GlobalRepo.BADTEAM && !isAttacking());
+	}
 	public boolean noKill(){
 		return !noKillTimer.timeUp();
 	}

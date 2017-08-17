@@ -115,6 +115,7 @@ public abstract class Action {
 		}
 
 		void performAction() {
+			DowntiltEngine.getMode().setUsedSpecial();
 			if (DowntiltEngine.getChallenge().getSpecialMeter() < -drain) user.interruptSpecialAttack();
 			else DowntiltEngine.getChallenge().changeSpecial(drain);
 		}

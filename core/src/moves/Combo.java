@@ -100,13 +100,13 @@ public class Combo {
 		default: SOUND_FINISH8.play(vol); break;
 		}
 		
-		if (rank >= 7) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboMultHigh());
-		else if (rank >= 5) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboMultMid());
-		else if (rank >= 3) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboMultLow());
+		if (rank >= 7) DowntiltEngine.getMode().addBonus(new Bonus.ComboMultHigh());
+		else if (rank >= 5) DowntiltEngine.getMode().addBonus(new Bonus.ComboMultMid());
+		else if (rank >= 3) DowntiltEngine.getMode().addBonus(new Bonus.ComboMultLow());
 		
-		if (rank >= 11) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboHigh());
-		else if (rank >= 9) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboMid());
-		else if (rank >= 7) DowntiltEngine.getActiveMode().addBonus(new Bonus.ComboLow());
+		if (rank >= 11) DowntiltEngine.getMode().addBonus(new Bonus.ComboHigh());
+		else if (rank >= 9) DowntiltEngine.getMode().addBonus(new Bonus.ComboMid());
+		else if (rank >= 7) DowntiltEngine.getMode().addBonus(new Bonus.ComboLow());
 		
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		DowntiltEngine.getChallenge().changeSpecial(addedSpecial);

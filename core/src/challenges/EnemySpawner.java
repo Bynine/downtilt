@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import inputs.InputHandlerCPU;
 import main.GlobalRepo;
 import main.MapHandler;
+import main.SFX;
 import main.DowntiltEngine;
 import entities.Fighter;
 import entities.Spawner;
@@ -96,6 +97,7 @@ public class EnemySpawner {
 		}
 		MapHandler.addEntity(enemy);
 		spawnedEntities.add(enemy);
+		new SFX.Spawn().play();
 		if (amount != ENDLESS) amount--;
 	}
 

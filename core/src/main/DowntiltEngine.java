@@ -308,7 +308,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static void addTimer(Timer t){
 		timerList.add(t);
 	}
-	public static Mode getActiveMode(){
+	public static Mode getMode(){
 		return activeMode;
 	}
 	
@@ -316,7 +316,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		NORMAL, MUSHROOM, SPACE, SKY, NIGHTMARE, ADVENTURE, TIMETRIAL, ENDLESS
 	}
 	
-	private static ShaderProgram getShaderFromPalette(Palette ap) {
+	public static ShaderProgram getShaderFromPalette(Palette ap) {
 		switch(ap){
 		case NORMAL: return null;
 		case MUSHROOM: return shaderMushroom;

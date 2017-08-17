@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.GlobalRepo;
+import main.SFX;
 import timers.Timer;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -24,16 +25,18 @@ public class TransitionGraphicsHandler {
 		for (Timer t: timerList) t.countUp();
 		
 		batch.begin();
-		if (!finishTimer.timeUp()) batch.draw(finish.getKeyFrame(finishTimer.getCounter()), 500, 500);
-		else if (!readyGoTimer.timeUp()) batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 500, 500);
+		if (!finishTimer.timeUp()) batch.draw(finish.getKeyFrame(finishTimer.getCounter()), 320, 500);
+		else if (!readyGoTimer.timeUp()) batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 400, 500);
 		batch.end();
 	}
 	
 	static void readyGo(){
+		new SFX.ReadySetGo().play();
 		readyGoTimer.reset();
 	}
 	
 	static void finish(){
+		new SFX.Finish().play();
 		finishTimer.reset();
 	}
 	

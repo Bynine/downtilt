@@ -346,7 +346,7 @@ public class GraphicsHandler {
 
 		int lives = DowntiltEngine.getChallenge().getLives();
 		if (lives <= 5){
-			font.draw(batch, "lives: ", posX, posY);
+			font.draw(batch, "tries: ", posX, posY);
 			for (int i = 0; i < lives; ++i){
 				batch.draw(stock, posX + 48 + spaceMod, posY - 8);
 				spaceMod += spacing; 

@@ -59,5 +59,10 @@ public abstract class SFX {
 	public static class Pause extends SFX{ public Pause(){ setSFX("/pause.mp3"); } }
 	public static class Unpause extends SFX{ public Unpause(){ setSFX("/unpause.mp3"); } }
 	public static class Screech extends SFX{ public Screech(){ setSFX("/screech.wav"); } }
+	public static class Advance extends SFX{ public Advance(){ setSFX("/menuadvance.wav"); } }
+	public static class Back extends SFX{ public Back(){ setSFX("/menuback.wav"); } }
+	public static class ReadySetGo extends SFX{ public ReadySetGo(){ setSFX("/readysetgo.wav"); } }
+	public static class Finish extends SFX{ public Finish(){ setSFX("/finish.wav"); } }
+	public static class Spawn extends SFX{ public Spawn(){ setSFX("/melee/pew.wav"); } }
 	
 }

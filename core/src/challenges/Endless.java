@@ -57,7 +57,12 @@ public class Endless extends Mode {
 	}
 
 	Victory getVictory(){
-		return new Victory.EndlessVictory(getCombo(), getKOs(), stage);
+		return new Victory.EndlessVictory(stage, bonuses);
+	}
+	
+	@Override
+	protected void addValidBonus(Bonus newBonus){
+		if (!newBonus.adventureOnly) bonuses.add(newBonus);
 	}
 
 }

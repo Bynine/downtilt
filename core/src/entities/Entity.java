@@ -29,7 +29,7 @@ public abstract class Entity {
 	protected final Timer hitstunTimer = new Timer(10);
 	Collision collision;
 
-	protected float gravity = -0.35f, friction = 0.85f, airFrictionX = 0.95f, airFrictionY = 0.93f; //fallSpeed = -7f;
+	protected float gravity = -0.35f, friction = 0.85f, airFrictionX = 0.95f, airFrictionY = 0.93f;
 	final int tumbleBK = 10;
 
 	protected boolean toRemove = false, trails = false;
@@ -308,7 +308,7 @@ public abstract class Entity {
 		return !hitstunTimer.timeUp();
 	}
 
-	private final int OOBGrace = 64;
+	protected final int OOBGrace = 64;
 	public boolean isOOB(Rectangle boundary) {
 		if (
 				(position.x < (boundary.x - image.getWidth() - OOBGrace)) ||

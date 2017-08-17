@@ -31,8 +31,8 @@ public class HomeMenu extends Menu {
 		batch.begin();
 
 		font.draw(batch, "Play!", posX, posY -= dec);
-		font.draw(batch, "Options", posX, posY -= dec);
-		font.draw(batch, "Rankings", posX, posY -= dec);
+		font.draw(batch, "Customize/Options", posX, posY -= dec);
+		font.draw(batch, "Records", posX, posY -= dec);
 		font.draw(batch, "Credits", posX, posY -= dec);
 		batch.draw(cursor, posX - 48, startY - dec - 16 - cho.cursorPos() * (dec + 1));
 		
@@ -41,6 +41,7 @@ public class HomeMenu extends Menu {
 	
 	@Override
 	protected void advance(){
+		new SFX.Advance().play();
 		switch(choices.cursorPos()){
 		case 0: DowntiltEngine.startGameMenu(); break;
 		case 1: DowntiltEngine.startOptionMenu(); break;

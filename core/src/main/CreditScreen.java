@@ -27,6 +27,7 @@ public class CreditScreen extends Menu {
 
 	@Override
 	protected void back(){
+		new SFX.Back().play();
 		DowntiltEngine.startHomeMenu();
 	}
 	

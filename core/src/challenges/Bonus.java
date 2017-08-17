@@ -3,6 +3,8 @@ package challenges;
 public abstract class Bonus {
 	protected int points = 0;
 	protected String name = "DUMMY";
+	protected boolean adventureOnly = false;
+	protected boolean singleOnly = false;
 
 	public String getName(){
 		return name;
@@ -11,26 +13,44 @@ public abstract class Bonus {
 	public int getScore(){
 		return points;
 	}
+	
+	public int getMult(){
+		return 1;
+	}
 
 	/* ALL */
 
-	public static abstract class MultBonus extends Bonus{}
+	public static abstract class MultBonus extends Bonus{
+		int mult = 1;
+		
+		public void increase() {
+			mult++;
+		}
+		
+		public int getScore(){
+			return points * mult;
+		}
+		
+		public int getMult(){
+			return mult;
+		}
+	}
 
 	public static class ComboMultLow extends MultBonus{
 		public ComboMultLow() {
-			points = 2;
+			points = 1;
 			name = "Rad Combo";
 		}	
 	}
 	public static class ComboMultMid extends MultBonus{
 		public ComboMultMid() {
-			points = 4;
+			points = 2;
 			name = "Gnarly Combo";
 		}	
 	}
 	public static class ComboMultHigh extends MultBonus{
 		public ComboMultHigh() {
-			points = 8;
+			points = 4;
 			name = "Tubular Combo";
 		}	
 	}
@@ -43,7 +63,7 @@ public abstract class Bonus {
 	}
 	public static class ComboMid extends Bonus{
 		public ComboMid() {
-			points = 30;
+			points = 25;
 			name = "Combo Legend";
 		}	
 	}
@@ -53,34 +73,53 @@ public abstract class Bonus {
 			name = "Combo God";
 		}	
 	}
+	
+	public static abstract class FactorBonus extends Bonus{
+		protected float factor = 1;
+		public float getFactor(){
+			return factor;
+		}
+	}
+	
+	public static class NoSpecialBonus extends FactorBonus{
+		public NoSpecialBonus() {
+			factor = 1.5f;
+			name = "Special-Free Multiplier";
+		}
+	}
 
 	/* ADVENTURE */
 
 	public static class TimeBonus extends Bonus{
 		public TimeBonus(int sec){
-			
+			adventureOnly = true;
+			points = 0;
+			name = "Time Bonus";
 		}
 	}
 
 	public static class ImmortalBonus extends Bonus{
 		public ImmortalBonus(){
-			points = 100;
+			adventureOnly = true;
+			points = 50;
 			name = "Immortal";
 		}
 	}
 
 	public static class UnstoppableBonus extends Bonus{
-		public UnstoppableBonus(int difficultyMod){
-			points = 15 * difficultyMod;
+		public UnstoppableBonus(){
+			adventureOnly = true;
+			points = 15;
 			name = "Unstoppable";
 		}
 	}
-	
+
 	/* SINGLE */
 
 	public static class KOBonus extends MultBonus{
 		public KOBonus(){
-			points = 2;
+			singleOnly = true;
+			points = 1;
 			name = "KO Bonus";
 		}
 	}

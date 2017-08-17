@@ -8,7 +8,7 @@ public class ChallengeTraining extends ChallengeEndless {
 
 	public ChallengeTraining(Stage stage, List<Wave> waves){
 		super(stage, waves);
-		lifeSetting = Challenge.BASICALLYINFINITELIVES;
+		lifeSetting = Challenge.INFINITELIVES;
 		specialBeginning = SPECIALMETERMAX;
 	}
 	

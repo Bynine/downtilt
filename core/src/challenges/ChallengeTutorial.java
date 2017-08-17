@@ -71,7 +71,7 @@ public class ChallengeTutorial extends ChallengeEndless {
 						+ "then press " + ihp.getChargeString() + " to finish the tutorial!");
 		toolTipList.addAll(Arrays.asList(tt_INTRO, tt_MOVE, tt_NORMAL, tt_CHARGE, tt_SPECIAL, tt_JUMP, tt_GRAB, tt_GUARD,
 				tt_KNOCKBACK, tt_COMBO, tt_END));
-		lifeSetting = BASICALLYINFINITELIVES;
+		lifeSetting = INFINITELIVES;
 	}
 
 	public ToolTip getToolTip(){

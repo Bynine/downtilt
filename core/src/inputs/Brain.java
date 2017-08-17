@@ -29,7 +29,7 @@ public abstract class Brain{
 	protected final Difficulty difficulty;
 	
 	public Brain (InputHandlerCPU body){
-		this.difficulty = DowntiltEngine.getActiveMode().getDifficulty();
+		this.difficulty = DowntiltEngine.getMode().getDifficulty();
 		this.body = body;
 		timerList.addAll(Arrays.asList(changeUpDown, waitToUseUpSpecial, tryJump, changeDirection, performJump, dodgeTimer, attackTimer) );
 	}

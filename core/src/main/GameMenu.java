@@ -28,8 +28,8 @@ class GameMenu extends Menu {
 	private final String str_ADVANCEDDESC = "Random stages and extra challenge.";
 	private final String str_NIGHTMAREDESC = "Good luck!";
 	private MenuOption<String> mode = new MenuOption<String>(Arrays.asList(
-			new Choice<String>(str_TRAINING, "Test out your moves against dummies!"),
 			new Choice<String>(str_TUTORIAL, "Learn how to play!"),
+			new Choice<String>(str_TRAINING, "Test out your moves against dummies!"),
 			new Choice<String>(str_ADVENTURE, "Battle through a variety of stages!"),
 			new Choice<String>(str_TIMETRIAL, "Knock 'em out quick! Combos extend your time!"),  
 			new Choice<String>(str_ENDLESS, "Survive endless enemies! Combos restore your health!")
@@ -65,12 +65,12 @@ class GameMenu extends Menu {
 			));
 	private List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, mode, difficulty, stages, players));
 	private final Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+	private boolean randomized = false;
 
 	GameMenu(){
 		super();
 		opt = options;
 		cho = choices;
-		stages.randomize();
 		menuMusic.setLooping(true);
 		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_basic.png")));
 		begin();
@@ -87,6 +87,12 @@ class GameMenu extends Menu {
 		checkLocked(SaveHandler.MushroomUnlocked(), stages.getChoices().get(4), "Unlock by B-ranking " + Stage_Rooftop.getName() + " Time Trial!", "");
 		checkLocked(SaveHandler.SpaceUnlocked(), stages.getChoices().get(5), "Unlock by C-ranking " + Stage_Truck.getName() + " Endless!", "");
 		checkLocked(SaveHandler.SkyUnlocked(), stages.getChoices().get(6), "Unlock by B-ranking " + Stage_Blocks.getName() + " Endless!", "");
+		if (!randomized) {
+			randomized = true;
+			stages.randomize();
+		}
+		if (SaveHandler.saveFileExists()) mode.setCursor(1);
+		else mode.setCursor(0);
 	}
 
 	enum MenuChoice{
@@ -111,14 +117,14 @@ class GameMenu extends Menu {
 		if (greyOutDifficultySelect()) font.setColor(greyOut, greyOut, greyOut, greyOut);
 		font.draw(batch, appendCursors("RANK:   ", difficulty) + GlobalRepo.getDifficultyName(difficulty.cursorPos()), posX, posY -= dec);
 		if (greyOutDifficultySelect()) font.setColor(greyOut, greyOut, greyOut, 0);
-		if (!difficulty.selected().unlocked) font.setColor(lockedColor);
+		if (!difficulty.selected().unlocked && !greyOutDifficultySelect()) font.setColor(lockedColor);
 		font.draw(batch, difficulty.getDesc(), posX, posY -= dec);
 		font.setColor(fontColor);
-		
+
 		if (greyOutStageSelect()) font.setColor(greyOut, greyOut, greyOut, greyOut);
 		font.draw(batch, appendCursors("STAGE:  ", stages) + GlobalRepo.getStageName(stages.cursorPos()), posX, posY -= dec);
 		if (greyOutStageSelect()) font.setColor(greyOut, greyOut, greyOut, 0);
-		if (!stages.selected().unlocked) font.setColor(lockedColor);
+		if (!stages.selected().unlocked && !greyOutStageSelect()) font.setColor(lockedColor);
 		font.draw(batch, stages.getDesc(), posX, posY -= dec);
 		font.setColor(fontColor);
 
@@ -141,51 +147,57 @@ class GameMenu extends Menu {
 		batch.draw(cursor, posX - 48, startY - dec - 48 - cho.cursorPos() * 2 * (dec + 1));
 		batch.end();
 	}
-	
+
 	private boolean greyOutDifficultySelect(){
 		return mode.selected().t != str_ADVENTURE;
 	}
-	
+
 	private boolean greyOutStageSelect(){
 		return mode.selected().t == str_ADVENTURE || mode.selected().t == str_TUTORIAL;
 	}
 
 	@Override
 	protected void advance(){
-		
-		for (MenuOption<?> mo: options) if (!mo.selected().unlocked) {
-			new SFX.Error().play();
-			return;
-		}
-		
+
+		boolean locked = false;
+
 		Mode selectMode = null;
 		Stage stage = getStage();
 
 		switch(mode.selected().t){
 		case str_ADVENTURE: {
 			selectMode = new Adventure(difficulty.selected().t);
+			if (!difficulty.selected().unlocked) locked = true;
 		} break;
 		case str_TIMETRIAL: {
 			selectMode = new TimeTrial(stage);
+			if (!stages.selected().unlocked) locked = true;
 		} break;
 		case str_ENDLESS: {
 			selectMode = new Endless(stage);
+			if (!stages.selected().unlocked) locked = true;
 		} break;
 		case str_TUTORIAL: {
 			selectMode = new Tutorial();
 		} break;
 		case str_TRAINING: {
 			selectMode = new Training(stage);
+			if (!stages.selected().unlocked) locked = true;
 		} break;
 		default: break;
 		}
 
-		DowntiltEngine.startMode(selectMode, players.selected().t, 0);
-		menuMusic.stop();
+		if (locked) new SFX.Error().play();
+		else{
+			new SFX.Advance().play();
+			DowntiltEngine.startMode(selectMode, players.selected().t, 0);
+			menuMusic.stop();
+		}
 	}
-	
+
 	@Override
 	protected void back(){
+		new SFX.Back().play();
 		DowntiltEngine.startHomeMenu();
 	}
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import challenges.Bonus;
 import challenges.Victory;
 import challenges.Victory.Ranking;
 
@@ -24,9 +25,9 @@ public class RankingScreen extends Menu{
 	private List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, modes));
 
 	private static final Victory
-	av = new Victory.AdventureVictory(new ArrayList<Integer>(), 0, 0, null),
-	tv = new Victory.TrialVictory(0, 0, null),
-	ev = new Victory.EndlessVictory(0, 0, null);
+	av = new Victory.AdventureVictory(null, new ArrayList<Bonus>()),
+	tv = new Victory.TrialVictory(null, new ArrayList<Bonus>()),
+	ev = new Victory.EndlessVictory(null, new ArrayList<Bonus>());
 
 	RankingScreen(){
 		cho = choices;
@@ -76,6 +77,7 @@ public class RankingScreen extends Menu{
 
 	@Override
 	protected void back(){
+		new SFX.Back().play();
 		DowntiltEngine.startHomeMenu();
 	}
 

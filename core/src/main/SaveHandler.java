@@ -16,18 +16,20 @@ public class SaveHandler {
 	private static final Preferences save = Gdx.app.getPreferences(saveFile);
 	public static final int arrayX = 3, arrayY = 7;
 	private static int[][] scores = new int[arrayX][arrayY];
-	private static int[] options = new int[3];
+	private static int[] options = new int[8];
+	private static boolean saveFileExists = true;
 
 	static void writeScore(int x, int y, int score){
 		if (!DowntiltEngine.saveOn()) return;
 		if (scores[x][y] < score) scores[x][y] = score;
 	}
 	
-	static void writeOptions(int music, int sfx, int shake){
+	static void writeOptions(int music, int sfx, int shake, int palette){
 		if (!DowntiltEngine.saveOn()) return;
 		options[0] = music;
 		options[1] = sfx;
 		options[2] = shake;
+		options[3] = palette;
 	}
 
 	static void save(){
@@ -50,7 +52,10 @@ public class SaveHandler {
 	private static void loadScores(Json json){
 		String serializedScores = Gdx.app.getPreferences(saveFile).getString(scoreKey);
 		int[][] loadedScores = json.fromJson(int[][].class, serializedScores);
-		if (loadedScores == null) return;
+		if (loadedScores == null) {
+			saveFileExists = false;
+			return;
+		}
 		scores = json.fromJson(int[][].class, serializedScores);
 	}
 	
@@ -61,6 +66,7 @@ public class SaveHandler {
 			options[0] = 2; // normal music volume
 			options[1] = 2; // normal sfx volume
 			options[2] = 2; // normal screenshake
+			options[3] = 0; // normal palette
 			return;
 		}
 		options = json.fromJson(int[].class, serializedOptions);
@@ -108,15 +114,15 @@ public class SaveHandler {
 	/* Palettes */
 	
 	public static boolean PaletteMushroomUnlocked(){
-		return isUnlocked(getScores()[1][4], Victory.AdventureVictory.A);
+		return isUnlocked(getScores()[1][4], Victory.TrialVictory.A);
 	}
 	
 	public static boolean PaletteSpaceUnlocked(){
-		return isUnlocked(getScores()[2][5], Victory.AdventureVictory.A);
+		return isUnlocked(getScores()[2][5], Victory.EndlessVictory.A);
 	}
 	
 	public static boolean PaletteSkyUnlocked(){
-		return isUnlocked(getScores()[1][6], Victory.AdventureVictory.A);
+		return isUnlocked(getScores()[1][6], Victory.TrialVictory.A);
 	}
 	
 	public static boolean PaletteNightmareUnlocked(){
@@ -145,6 +151,10 @@ public class SaveHandler {
 			if (isUnlocked(getScores()[x][i], scoreB)) unlocked = true;
 		}
 		return unlocked;
+	}
+	
+	public static boolean saveFileExists(){
+		return saveFileExists;
 	}
 
 }

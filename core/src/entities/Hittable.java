@@ -55,7 +55,7 @@ public abstract class Hittable extends Entity {
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 		super.update(rectangleList, entityList, deltaTime);
 		updateImage(deltaTime);
-		if (getPercentage() > getWeight() * 0.5 && deltaTime % 20 == 0 && Math.random() < getPercentage()/500.0){
+		if (getPercentage() > getWeight() * 0.5 && deltaTime % 10 == 0 && Math.random() < getPercentage()/400.0){
 			Graphic g = new Graphic.SmokeTrail(this, 16);
 			float mod = 32;
 			g.position.x += (0.5f - Math.random()) * mod;
@@ -114,12 +114,15 @@ public abstract class Hittable extends Entity {
 
 	protected int touchRadius = 8;
 	protected void checkHitByHurtlingObject(Hittable hurtler){
-		boolean fighterGoingFastEnough = knockbackIntensity(hurtler.velocity) > hurtler.baseHurtleBK;
-		if (hurtler.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
+		boolean fighterGoingFastEnough = true;
+//				knockbackIntensity(hurtler.velocity) > hurtler.baseHurtleBK;
+//		if (hurtler.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
+		boolean higherVelocity = true;
+		// knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity)
 		boolean correctTeam = teamCheck(hurtler);
-		boolean angleFarEnough = (Math.abs(hurtler.getVelocity().angle() - getVelocity().angle()) > 10) || knockbackIntensity(velocity) == 0;
-		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && correctTeam && hurtler.inHitstun();
-		if (angleFarEnough && knockInto && isTouching(hurtler, touchRadius) && knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity) && !isInvincible()) {
+		boolean angleFarEnough = (Math.abs(hurtler.getVelocity().angle() - getVelocity().angle()) > 15) || knockbackIntensity(velocity) == 0;
+		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && higherVelocity && correctTeam && hurtler.inHitstun();
+		if (angleFarEnough && knockInto && isTouching(hurtler, touchRadius) && !isInvincible()) {
 			if (isGuarding()) blockHurtlingObject(hurtler);
 			else getHitByHurtlingObject(hurtler);
 		}
@@ -168,7 +171,10 @@ public abstract class Hittable extends Entity {
 	}
 
 	protected void setKnockIntoVelocity(Hittable hurtler){
-		float weightMod = 1.5f * (float) Math.pow(getWeight()/hurtler.getWeight(), 0.5);
+		float weightMod = 1.1f * (float) Math.pow(getWeight()/hurtler.getWeight(), 0.5);
+		final int spike = 270;
+		final int range = 30;
+		if (hurtler.velocity.angle() > (spike - range) && hurtler.velocity.angle() < (spike + range) && isGrounded()) weightMod = 2.15f;
 		hurtler.velocity.add(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
 

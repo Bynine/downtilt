@@ -22,13 +22,13 @@ public class OptionMenu extends Menu {
 			new Choice<Integer>(0, "screenshake")
 			));
 	
-	private final String str_MUSHROOMNAME = "High";
-	private final String str_SPACENAME = "Spess boy";
-	private final String str_SKYNAME = "Actually high";
-	private final String str_NIGHTMARENAME = "Uh oh";
-	private final String str_ADVENTURENAME = "jerney";
-	private final String str_TIMETRIALNAME = "clocks by coldplayE";
-	private final String str_ENDLESSNAME = "ENDLESS GARBAGE";
+	private final String str_MUSHROOMNAME = "Wild";
+	private final String str_SPACENAME = "Dark";
+	private final String str_SKYNAME = "Sunset";
+	private final String str_NIGHTMARENAME = "Spooky";
+	private final String str_ADVENTURENAME = "Professional";
+	private final String str_TIMETRIALNAME = "Radioactive";
+	private final String str_ENDLESSNAME = "Hornet";
 	private MenuOption<Palette> palettes = new MenuOption<Palette>(Arrays.asList(
 			new Choice<Palette>(Palette.NORMAL, "Standard"),
 			new Choice<Palette>(Palette.MUSHROOM, str_MUSHROOMNAME),
@@ -55,6 +55,8 @@ public class OptionMenu extends Menu {
 			new Choice<Float>(1.5f, "YIKES!!")
 			));
 	private List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, palettes, musicVolume, sfxVolume, screenShake));
+	private final TextureRegion playerImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/stand.png")));
+	private final TextureRegion background = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/background.png")));
 
 	OptionMenu(int[] opts){
 		cho = choices;
@@ -64,7 +66,7 @@ public class OptionMenu extends Menu {
 		musicVolume.setCursor(opts[0]);
 		sfxVolume.setCursor(opts[1]);
 		screenShake.setCursor(opts[2]);
-		palettes.setCursor(0);
+		palettes.setCursor(opts[3]);
 	}
 	
 	public void begin(){
@@ -87,7 +89,7 @@ public class OptionMenu extends Menu {
 	@Override
 	protected void draw(){
 		int posX = 230;
-		int startY = 500;
+		int startY = 460;
 		int posY = startY;
 		final int dec = 60;
 		super.draw();
@@ -96,6 +98,15 @@ public class OptionMenu extends Menu {
 		if (!palettes.selected().unlocked) font.setColor(lockedColor);
 		font.draw(batch, appendCursors("Palette:      ", palettes) + palettes.selected().desc, posX, posY -= dec);
 		font.setColor(fontColor);
+		
+		int playerMod = 2;
+		float imagePosX = posX + 800;
+		float imagePosY = posY + 28;
+		batch.draw(background, imagePosX - 36, imagePosY - 8);
+		batch.setShader(DowntiltEngine.getShaderFromPalette(palettes.selected().t));
+		batch.draw(playerImage, imagePosX, imagePosY, playerImage.getRegionWidth() * playerMod, playerImage.getRegionHeight() * playerMod);
+		batch.setShader(null);
+		
 		font.draw(batch, appendCursors("Music Volume: ", musicVolume) + musicVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("SFX Volume:   ", sfxVolume) + sfxVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("Screen Shake: ", screenShake) + screenShake.selected().desc, posX, posY -= dec);
@@ -114,8 +125,9 @@ public class OptionMenu extends Menu {
 
 	@Override
 	protected void back(){
+		new SFX.Back().play();
 		setOptions();
-		SaveHandler.writeOptions(musicVolume.cursorPos(), sfxVolume.cursorPos(), screenShake.cursorPos());
+		SaveHandler.writeOptions(musicVolume.cursorPos(), sfxVolume.cursorPos(), screenShake.cursorPos(), palettes.cursorPos());
 		SaveHandler.save();
 		DowntiltEngine.startHomeMenu();
 	}

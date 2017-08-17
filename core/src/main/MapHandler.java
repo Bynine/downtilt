@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 
+import challenges.Bonus;
 import entities.*;
 
 public class MapHandler {
@@ -95,6 +96,8 @@ public class MapHandler {
 		if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) {
 			addEntity(new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
 		}
+		
+		if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getMode().addBonus(new Bonus.KOBonus());
 		entityToRemoveList.add(fi);
 		return true;
 	}

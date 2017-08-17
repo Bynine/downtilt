@@ -87,7 +87,7 @@ abstract class Menu {
 
 		batch.draw(menu, 0, 0);
 		int logomod = 2;
-		batch.draw(logo, 0, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
+		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
 		batch.draw(title, 350, 560);
 		final int posY = 50;
 		if (canAdvance) navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY);
@@ -188,6 +188,9 @@ abstract class Menu {
 
 		public void randomize() {
 			cursor = ((int) (Math.random() * choices.size()) );
+			while(!selected().unlocked){
+				cursor = ((int) (Math.random() * choices.size()) );
+			}
 		}
 
 		public List<Choice<T>> getChoices(){

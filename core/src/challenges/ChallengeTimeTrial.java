@@ -15,7 +15,7 @@ public class ChallengeTimeTrial extends ChallengeTimed {
 	ChallengeTimeTrial(Stage stage, List<Wave> waves, double sec) {
 		super(stage, waves, sec);
 		for (Wave w: waves) w.setEndless();
-		lifeSetting = BASICALLYINFINITELIVES;
+		lifeSetting = INFINITELIVES;
 	}
 	
 	@Override

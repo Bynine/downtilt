@@ -9,9 +9,10 @@ import main.DowntiltEngine;
 import main.SFX;
 
 public abstract class Mode {
-	
+
 	protected int activeChallengeIndex = 0;
-	protected final List<Bonus> bonuses = new ArrayList<Bonus>();
+	protected final List<Bonus> upcomingBonuses = new ArrayList<Bonus>(), bonuses = new ArrayList<Bonus>();
+	protected boolean usedSpecial = false;
 
 	/**
 	 * Returns the current challenge being played.
@@ -26,8 +27,10 @@ public abstract class Mode {
 	 */
 	public void update(){
 		if (DowntiltEngine.musicOn()) {
-			getActiveChallenge().getStage().getMusic().setVolume(DowntiltEngine.getMusicVolume() / 8.0f);
+			float vol = (DowntiltEngine.getMusicVolume()) / 8.0f;
+			getActiveChallenge().getStage().getMusic().setVolume(vol);
 			getActiveChallenge().getStage().getMusic().play();
+			if (DowntiltEngine.isWaiting()) getActiveChallenge().getStage().getMusic().stop();
 		}
 		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
 		getActiveChallenge().update();
@@ -44,9 +47,18 @@ public abstract class Mode {
 	 */
 	void win(){
 		new SFX.Victory().play();
+		boolean unstoppable = true;
+		boolean immortal = true;
+		for (Challenge c: getChallengeList()){
+			if (c.everRetried) immortal = false;
+			if (c.everFailed) unstoppable = false;
+		}
+		if (unstoppable) addBonus(new Bonus.UnstoppableBonus());
+		if (immortal) addBonus(new Bonus.ImmortalBonus());
+		if (!usedSpecial) addBonus(new Bonus.NoSpecialBonus());
 		DowntiltEngine.startVictoryScreen(getVictory());
 	}
-	
+
 	int getCombo(){
 		int longestCombo = 0;
 		for (Challenge c: getChallengeList()){
@@ -54,16 +66,31 @@ public abstract class Mode {
 		}
 		return longestCombo;
 	}
-	
+
 	public Difficulty getDifficulty(){
 		return Difficulty.Standard;
 	}
+
+	public void addBonus(Bonus newBonus){
+		boolean shouldAdd = true;
+		for (Bonus bonus: bonuses){
+			if (bonus.getClass() == newBonus.getClass()) {
+				if (newBonus instanceof Bonus.MultBonus) ((Bonus.MultBonus)bonus).increase();
+				shouldAdd = false;
+			}
+		}
+		if (shouldAdd) addValidBonus(newBonus);
+	}
 	
-	public void addBonus(Bonus b){
-		bonuses.add(b);
+	protected void addValidBonus(Bonus newBonus){
+		bonuses.add(newBonus);
+	}
+	
+	public void setUsedSpecial(){
+		usedSpecial = true;
 	}
 
 	abstract List<Challenge> getChallengeList();
 	abstract Victory getVictory();
-	
+
 }

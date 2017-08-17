@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import challenges.Bonus;
 import challenges.Victory;
 import challenges.Victory.Ranking;
 
@@ -21,45 +22,59 @@ public class VictoryScreen extends Menu{
 		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_victory.png")));
 	}
 
+	final int startY = 500;
+	final int startX = 200;
+	
 	@Override
 	protected void draw(){
-		int startY = 500;
-		int startX = 300;
-		int centerX = 260;
+		int posY = startY;
 		int dec = 50;
 
 		super.draw();
 		batch.begin();
-		batch.draw(menu, 0, 0);
-		bigFont.draw(batch, "VICTORY!", startX + centerX, startY);
+		bigFont.draw(batch, "VICTORY!", startX, posY);
 		
-		bigFont.draw(batch, "RANK: ", startX + centerX, startY -= dec * 2);
+		bigFont.draw(batch, "RANK: ", startX, posY -= dec * 2);
 		
 		Ranking r = currentVictory.getRanking(currentVictory.getScore());
 		bigFont.setColor(GlobalRepo.getColorByRanking(r));
-		bigFont.draw(batch, r.toString(), startX + centerX + 200, startY);
+		bigFont.draw(batch, r.toString(), startX + 200, posY);
 		bigFont.setColor(Color.GOLDENROD);
+		drawBonusList();
 		
-		if (currentVictory.getScore() >= Victory.AdventureVictory.A && currentVictory.getNumberX() == 0){
-			if (currentVictory.getNumberY() == 1 && !SaveHandler.AdvancedUnlocked()) {
-				font.draw(batch, "Unlocked Advanced difficulty!", startX + centerX, startY -= dec);
-			}
-			else if (currentVictory.getNumberY() == 2 && !SaveHandler.NightmareUnlocked()) {
-				font.draw(batch, "Unlocked Nightmare difficulty!", startX + centerX, startY -= dec);
-			}
-		}
-		else startY -= dec;
-		if (currentVictory.getTime() != Victory.NOTUSED) font.draw(batch, "TIME TAKEN:    " + GlobalRepo.getTimeString(currentVictory.getTime()), startX, startY -= dec);
-		if (currentVictory.getCombo() != Victory.NOTUSED) font.draw(batch, "LONGEST COMBO: " + currentVictory.getCombo(), startX, startY -= dec);
-		if (currentVictory.getKOs() != Victory.NOTUSED) font.draw(batch, "ENEMIES KO'd:  " + currentVictory.getKOs(), startX, startY -= dec);
-		if (currentVictory.getDeaths() != Victory.NOTUSED) font.draw(batch, "DEATHS: " + currentVictory.getDeaths(), startX, startY -= dec);
-		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, startY -= dec);
-		bigFont.draw(batch, "Press " + DowntiltEngine.getPrimaryInputHandler().getNormalString() + " to continue", startX, startY -= dec);
+		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, posY -= dec);
 		batch.end();
+	}
+	
+	private void drawBonusList(){
+		final int stringLocationX = startX + 600;
+		final int bonusLineHeight = 24;
+		final int maxListHeight = 400;
+		
+		int listHeight = bonusLineHeight * currentVictory.getBonuses().size();
+		int scrollDownDistance = 0;
+		if (listHeight != 0) scrollDownDistance = -DowntiltEngine.getDeltaTime()/2 % listHeight;
+		int i = 1;
+
+		for (Bonus b: currentVictory.getBonuses()){
+			
+			String bonusString = b.getName();
+			if (b.getMult() > 1) bonusString = b.getName() + " x" + b.getMult();
+			if (b.getScore() > 0) bonusString = bonusString.concat(": " + b.getScore());
+			
+			int stringLocationY = 0;
+			if (listHeight > maxListHeight) stringLocationY = startY + (scrollDownDistance - (i * bonusLineHeight)) % listHeight;
+			else stringLocationY = startY + - (i * bonusLineHeight);
+			if (stringLocationY < startY && stringLocationY > startY - maxListHeight) {
+				font.draw(batch, bonusString, stringLocationX, stringLocationY);
+			}
+			i++;
+		}
 	}
 
 	@Override
 	protected void advance(){
+		new SFX.Advance().play();
 		DowntiltEngine.startGameMenu();
 	}
 
