@@ -202,7 +202,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 			player.setPosition(stage.getStartPosition());
 		}
 		MapHandler.updateRoomMap(stage);
-		GraphicsHandler.updateRoomGraphics(getPlayers().get(0));
+		GraphicsHandler.updateRoomGraphics();
 	}
 
 	public static void startMode(Mode mode, int numPlayers, int initialChallenge){

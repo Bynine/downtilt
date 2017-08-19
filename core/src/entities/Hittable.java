@@ -31,6 +31,7 @@ public abstract class Hittable extends Entity {
 	boolean permaPower, permaSpeed, permaDefense, permaAir;
 	protected HitstunType hitstunType = HitstunType.NORMAL;
 	protected int team = GlobalRepo.BADTEAM;
+	protected SFX onHitSFX = null;
 
 	protected float baseHurtleBK = 4.0f, baseKBG = 2.0f, baseBKB = 1.0f;
 	protected float baseHitSpeed = -0.8f;
@@ -76,16 +77,6 @@ public abstract class Hittable extends Entity {
 
 	void handleTouchHelper(Entity en){
 		super.handleTouchHelper(en);
-		if (isTouching(en, 16) && en instanceof BossEye) {
-			BossEye bossEye = (BossEye)en;
-			if (bossEye.isOpen()){
-				if (!inHitstun()) takeKnockIntoKnockback(new Vector2(-velocity.x * 2, -velocity.y * 2), 10, 10);
-			}
-			else{
-				if (this instanceof Fighter) MapHandler.kill((Fighter)this);
-				else setRemove();
-			}
-		}
 		if (en instanceof Hittable){
 			checkHitByHurtlingObject((Hittable) en);
 			checkPushAway((Hittable) en);
@@ -156,7 +147,12 @@ public abstract class Hittable extends Entity {
 			knockIntoVector.setAngle( (h.getAngle() + 90) / 2);
 		}
 		
-		SFX.proportionalHit(h.getDamage()).play();
+		if (null == onHitSFX) {
+			SFX.proportionalHit(h.getDamage()).play();
+		}
+		else {
+			onHitSFX.play();
+		}
 		takeKnockIntoKnockback(knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
 		handleCollision(hurtler);
 		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));

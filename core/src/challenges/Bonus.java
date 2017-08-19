@@ -94,6 +94,13 @@ public abstract class Bonus {
 		public TimeBonus(int sec){
 			adventureOnly = true;
 			points = 0;
+			
+			final int minute = 60;
+			final int possibleBonus = 18;
+			for (int i = possibleBonus; i > 0; --i){
+				if (sec < minute * i) points = (possibleBonus - i) * 5;
+			}
+			
 			name = "Time Bonus";
 		}
 	}

@@ -133,7 +133,7 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move uCharge() {
-		int frame = 14;
+		int frame = 15;
 		int frames = 3;
 
 		Move m = new Move(user, frame * frames);
@@ -141,9 +141,9 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(25, 50, 0, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
-		Hitbox h1 = new Hitbox(user, 4.0f, 2.8f, 13, 100,18,-22, 16, new SFX.MidHit(), 	 c);
-		Hitbox h2 = new Hitbox(user, 4.5f, 3.2f, 15, 95, 18, 21, 16, new SFX.HeavyHit(), 	 c);
-		Hitbox h3 = new Hitbox(user, 5.5f, 3.9f, 17, 90,  0, 30, 18, new SFX.MeatyHit(), 	 c);
+		Hitbox h1 = new Hitbox(user, 5.5f, 3.8f, 17, 95, 18,-22, 16, new SFX.MeatyHit(), c);
+		Hitbox h2 = new Hitbox(user, 4.5f, 3.2f, 15, 90, 18, 21, 16, new SFX.HeavyHit(), c);
+		Hitbox h3 = new Hitbox(user, 4.0f, 3.0f, 13, 85,  0, 30, 16, new SFX.HeavyHit(), c);
 		Hitbox h4 = new Hitbox(user, 3.4f, 2.0f, 12, 70,-18, 21, 16, new SFX.MidHit(), 	 c);
 		Hitbox h5 = new Hitbox(user, 2.5f, 1.5f, 10, 30,-18,-16, 16, new SFX.MidHit(),	 c);
 		new ActionCircleGroup(Arrays.asList(h1, h2, h3, h4, h5));

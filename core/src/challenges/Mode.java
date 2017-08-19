@@ -89,6 +89,10 @@ public abstract class Mode {
 	public void setUsedSpecial(){
 		usedSpecial = true;
 	}
+	
+	public int getTime(){
+		return 0;
+	}
 
 	abstract List<Challenge> getChallengeList();
 	abstract Victory getVictory();

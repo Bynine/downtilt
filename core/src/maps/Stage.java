@@ -7,6 +7,8 @@ import main.DowntiltEngine;
 import main.GlobalRepo;
 import main.MapHandler;
 import moves.ActionCircle;
+import timers.DurationTimer;
+import timers.Timer;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.maps.MapLayers;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.math.Vector2;
 import entities.ChangeBlock;
 import entities.Entity;
 import entities.Fighter;
+import entities.Graphic;
+import entities.Hazard;
 import entities.Raindrop;
 
 public abstract class Stage {
@@ -35,7 +39,9 @@ public abstract class Stage {
 	protected float wind = 0;
 	protected float gravity = 1;
 	protected float dispX = GlobalRepo.TILE * 2;
-	protected boolean scrolls = false;
+	protected boolean scrolls = false, crazy = false;
+	protected int scrollSpeed = 12;
+	protected LightningHandler activeLightningHandler;
 
 	public Stage(){
 		clearOut();
@@ -73,6 +79,7 @@ public abstract class Stage {
 	}
 
 	public void update(int deltaTime){
+		if (null != activeLightningHandler) activeLightningHandler.update();
 		for (Entity e: newEntityList) {
 			entityList.add(e);
 		}
@@ -93,6 +100,10 @@ public abstract class Stage {
 	void setStartPosition(float x, float y){
 		getStartPosition().x = x;
 		getStartPosition().y = y;
+	}
+	
+	public int getScrollSpeed(){
+		return scrollSpeed;
 	}
 
 	public void removeEntity(Entity en){
@@ -127,6 +138,7 @@ public abstract class Stage {
 	public float getGravity() { return gravity; }
 	public float getDispX() { return dispX; }
 	public boolean scrolls() { return scrolls; }
+	public boolean crazy() { return crazy; }
 	
 	public static int getStaticNumber(){
 		return -1;
@@ -136,6 +148,53 @@ public abstract class Stage {
 	
 	public static String getName(){
 		return "OOPS";
+	}
+	
+	public static class LightningHandler{
+		private Timer lightningTimer = new Timer(100);
+		private Vector2 lightningPos = new Vector2(0, 0);
+		private int timing = 30;
+		private double chance = 0.13;
+		private boolean hasDuration = false;
+		private final Timer duration = new DurationTimer(0);
+		
+		LightningHandler(){
+			
+		}
+		
+		public LightningHandler(int dur, int timer, int timing, double chance){
+			this.duration.setEndTime(dur);
+			lightningTimer.setEndTime(timer);
+			this.chance = chance;
+			this.timing = timing;
+			hasDuration = true;
+		}
+		
+		void update(){
+			duration.countUp();
+			if (duration.timeUp() && hasDuration) return;
+			lightningTimer.countUp();
+			if (lightningTimer.timeUp() && DowntiltEngine.getDeltaTime() % timing == 0 && Math.random() < chance){
+				lightningTimer.reset();
+				lightningPos = makeNewLightningPos();
+				MapHandler.addEntity(new Graphic.Sparks(lightningPos.x, lightningPos.y, lightningTimer.getEndTime() ));
+			}
+			if (lightningTimer.timeJustUp()){
+				MapHandler.addEntity(new Hazard.Lightning(lightningPos.x, lightningPos.y));
+			}
+		}
+		
+		private Vector2 makeNewLightningPos(){
+			Vector2 newLightningPos = DowntiltEngine.getChallenge().getStage().getStartPosition();
+			newLightningPos.x += (0.5 - Math.random()) * (10 * GlobalRepo.TILE);
+			newLightningPos.y -= GlobalRepo.TILE;
+			return newLightningPos;
+		}
+		
+	}
+
+	public void addLightningHandler(LightningHandler lh) {
+		activeLightningHandler = lh;
 	}
 
 }

@@ -303,6 +303,7 @@ public abstract class Hurlable extends Hittable {
 			gravity = 0;
 			airFrictionX = 1;
 			airFrictionY = 1;
+			onHitSFX = new SFX.SharpHit();
 			setImages(team);
 			trails = true;
 		}

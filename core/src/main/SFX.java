@@ -64,5 +64,7 @@ public abstract class SFX {
 	public static class ReadySetGo extends SFX{ public ReadySetGo(){ setSFX("/readysetgo.wav"); } }
 	public static class Finish extends SFX{ public Finish(){ setSFX("/finish.wav"); } }
 	public static class Spawn extends SFX{ public Spawn(){ setSFX("/melee/pew.wav"); } }
+	public static class PrepAttack extends SFX{ public PrepAttack(){ setSFX("/prepattack.mp3"); } }
+	public static class CastSpell extends SFX{ public CastSpell(){ setSFX("/castspell.mp3"); } }
 	
 }

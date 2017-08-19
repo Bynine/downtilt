@@ -8,7 +8,6 @@ import main.DowntiltEngine;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-import entities.BossEye;
 import entities.Entity.State;
 import entities.Fighter;
 import entities.Graphic;
@@ -121,7 +120,7 @@ public class Hitbox extends ActionCircle{
 		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
 		
 		startHitlag(target);
-		if (guarding || ( knockback.x == 0 && knockback.y == 0) || target instanceof BossEye) {
+		if (guarding || ( knockback.x == 0 && knockback.y == 0)) {
 			sfx = new SFX.EmptyHit();
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
@@ -136,7 +135,7 @@ public class Hitbox extends ActionCircle{
 	}
 	
 	private int graphicLengthFormula(float knockback){
-		return (int) (1.6f * hitlagFormula(knockback));
+		return (int) (2 * hitlagFormula(knockback));
 	}
 	
 	private boolean isGuarding(){
@@ -215,7 +214,7 @@ public class Hitbox extends ActionCircle{
 	}
 
 	public float knockbackFormula(Hittable target){
-		final float crouchCancelMod = .75f;;
+		final float crouchCancelMod = .65f;
 		final float kbgMod = 0.023f;
 		final float weightMod = 0.01f;
 		final float minKnockback = 0.2f;
@@ -224,7 +223,7 @@ public class Hitbox extends ActionCircle{
 		float knockback = heldCharge * (BKB + ( (KBG * target.getPercentage() * kbgMod) / (target.getWeight() * weightMod) ));
 		if (!ignoreArmor) knockback -= target.getArmor();
 		if (target instanceof Fighter){
-			if (( (Fighter) target ).getState() == State.CROUCH)  knockback *= crouchCancelMod;
+			if (( (Fighter) target ).getState() == State.CROUCH) knockback *= crouchCancelMod;
 		}
 		if (knockback < minKnockback) return 0;
 		else return knockback;

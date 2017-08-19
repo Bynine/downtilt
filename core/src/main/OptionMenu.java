@@ -104,7 +104,7 @@ public class OptionMenu extends Menu {
 		float imagePosY = posY + 28;
 		batch.draw(background, imagePosX - 36, imagePosY - 8);
 		batch.setShader(DowntiltEngine.getShaderFromPalette(palettes.selected().t));
-		batch.draw(playerImage, imagePosX, imagePosY, playerImage.getRegionWidth() * playerMod, playerImage.getRegionHeight() * playerMod);
+		batch.draw(playerImage, imagePosX - 4, imagePosY - 1, playerImage.getRegionWidth() * playerMod, playerImage.getRegionHeight() * playerMod);
 		batch.setShader(null);
 		
 		font.draw(batch, appendCursors("Music Volume: ", musicVolume) + musicVolume.selected().desc, posX, posY -= dec);

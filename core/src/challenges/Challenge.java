@@ -24,7 +24,7 @@ public abstract class Challenge {
 	protected float specialMeter = 0;
 	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, INFINITELIVES = 999;
 	protected int specialBeginning = SPECIALMETERBEGINNING;
-	protected int lives = 0, deaths = 0;
+	protected int lives = 0;
 	protected int lifeSetting = 4;
 	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
@@ -54,11 +54,7 @@ public abstract class Challenge {
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
 		
-		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ){
-			int waitBetween = 60;
-			TransitionGraphicsHandler.readyGo();
-			DowntiltEngine.wait(waitBetween);
-		}
+		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) )	TransitionGraphicsHandler.readyGo();
 		
 		float mod = 16;
 		for (Fighter player: DowntiltEngine.getPlayers()) {
@@ -103,8 +99,8 @@ public abstract class Challenge {
 	 * Called if all players die
 	 */
 	public void failChallenge(){
-		deaths++;
 		new SFX.Error().play();
+		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ) TransitionGraphicsHandler.failure();
 		startChallenge();
 		everFailed = true;
 	}
@@ -113,11 +109,7 @@ public abstract class Challenge {
 		if (finished) return;
 		timeSpent = DowntiltEngine.getDeltaTime();
 		DowntiltEngine.resetDeltaTime();
-		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ){
-			int waitBetween = 90;
-			TransitionGraphicsHandler.finish();
-			DowntiltEngine.wait(waitBetween);
-		}
+		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ) TransitionGraphicsHandler.finish();
 		finished = true;
 	}
 
@@ -187,10 +179,6 @@ public abstract class Challenge {
 	
 	public int getLives(){
 		return lives;
-	}
-	
-	public int getDeaths(){
-		return deaths;
 	}
 	
 	public void removeLife(){

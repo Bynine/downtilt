@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
 public class Hero extends Fighter {
 
-	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/stand.png", 1, 1, 1, PlayMode.LOOP);
+	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/idle.png", 2, 1, 20, PlayMode.LOOP);
 	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/walk.png", 2, 1, 16, PlayMode.LOOP);
 	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/run.png", 1, 1, 1, PlayMode.LOOP);
 	private Animation tumbleImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/tumble.png", 4, 1, 8, PlayMode.LOOP);

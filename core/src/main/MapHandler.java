@@ -1,13 +1,16 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import maps.Stage;
+import maps.Stage.LightningHandler;
 import maps.Stage_Standard;
 import moves.ActionCircle;
 import moves.Grabbox;
+import timers.Timer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -23,12 +26,15 @@ public class MapHandler {
 	private static final List<Rectangle> rectangleList = new ArrayList<>();
 	static int mapWidth;
 	static int mapHeight; 
+	private static Timer lowGTimer = new Timer(300), highGTimer = new Timer(300);
+	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(lowGTimer, highGTimer));
 
 	static void begin(){
 		activeRoom = new Stage_Standard();
 		activeMap = activeRoom.getMap();
 		DowntiltEngine.changeRoom(activeRoom);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+		
 	}
 
 	static void updateInputs(){
@@ -43,6 +49,7 @@ public class MapHandler {
 	private static Iterator<Entity> entityIter;
 	private static final List<Entity> entityToRemoveList = new ArrayList<Entity>();
 	static void updateEntities(){
+		for (Timer t: timerList) t.countUp();
 		entityIter = activeRoom.getEntityList().iterator();
 
 		while (entityIter.hasNext()) {
@@ -179,22 +186,30 @@ public class MapHandler {
 
 	public static float getRoomGravity(){
 		if (activeRoom == null) return 1;
-		else return activeRoom.getGravity();
+		float gravity = activeRoom.getGravity();
+		if (!lowGTimer.timeUp()) gravity *= 0.66f;
+		if (!highGTimer.timeUp()) gravity *= 1.5f;
+		return gravity;
 	}
 
 	public static List<ActionCircle> getActionCircles(){
 		if (activeRoom == null) return new ArrayList<ActionCircle>();
 		else return activeRoom.getActionCircleList();
 	}
-	//
-	//	public static void playMusic() {
-	//		//System.out.println("Playing music");
-	//		if (null != activeRoom) activeRoom.getMusic().setVolume(DowntiltEngine.getVolume());
-	//	}
-	//	
-	//	public static void stopMusic() {
-	//		//System.out.println("Stopping music");
-	//		if (null != activeRoom) activeRoom.getMusic().setVolume(0);
-	//	}
+	
+	public static void setLowGravity(){
+		lowGTimer.reset();
+		highGTimer.end();
+	}
+	
+	public static void setHighGravity(){
+		highGTimer.reset();
+		lowGTimer.end();
+	}
+	
+	public static void addLightningHandler(LightningHandler lh){
+		if (activeRoom == null) return;
+		else activeRoom.addLightningHandler(lh);
+	}
 
 }

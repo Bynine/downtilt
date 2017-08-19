@@ -282,5 +282,57 @@ public abstract class Graphic extends Entity{
 			if (duration.timeUp()) setRemove();
 		}
 	}
+	
+	public static class Teleport extends Graphic {
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/teleport.png", 2, 1, 20, PlayMode.NORMAL);
+		public Teleport(float posX, float posY){
+			super(posX, posY, 40);
+			image = new Sprite(anim.getKeyFrame(0));
+			updatePosition();
+		}
+		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
+			if (duration.timeUp()) setRemove();
+		}
+	}
+	
+	public static class HighGravity extends Graphic {
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/highgrav.png", 1, 1, 20, PlayMode.NORMAL);
+		public HighGravity(float posX, float posY){
+			super(posX, posY + 40, 40);
+			image = new Sprite(anim.getKeyFrame(0));
+			updatePosition();
+		}
+		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
+			if (duration.timeUp()) setRemove();
+		}
+	}
+	
+	public static class LowGravity extends Graphic {
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lowgrav.png", 1, 1, 20, PlayMode.NORMAL);
+		public LowGravity(float posX, float posY){
+			super(posX, posY + 40, 40);
+			image = new Sprite(anim.getKeyFrame(0));
+			updatePosition();
+		}
+		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
+			if (duration.timeUp()) setRemove();
+		}
+	}
+	
+	public static class LightningSpell extends Graphic {
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lightningspell.png", 1, 1, 20, PlayMode.NORMAL);
+		public LightningSpell(float posX, float posY){
+			super(posX, posY + 40, 40);
+			image = new Sprite(anim.getKeyFrame(0));
+			updatePosition();
+		}
+		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
+			if (duration.timeUp()) setRemove();
+		}
+	}
 
 }

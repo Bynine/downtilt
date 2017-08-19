@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Stage_Boss extends Stage {
 
 	public Stage_Boss(){
-		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/glow.mp3"));
+		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/beast.mp3"));
+		crazy = true;
 		setup();
 	}
 
@@ -17,12 +18,12 @@ public class Stage_Boss extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(22 * GlobalRepo.TILE, 9 * GlobalRepo.TILE);
+		return new Vector2(21.5f * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	@Override
 	public Vector2 getCenterPosition(){
-		return new Vector2(21.5f * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
+		return new Vector2(22f * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	private static final int num = 7;
@@ -34,7 +35,7 @@ public class Stage_Boss extends Stage {
 	}
 	
 	public static String getName(){
-		return "Big Bad Boss Beatdown";
+		return "K.L.O.W.N.";
 	}
 
 }

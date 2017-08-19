@@ -56,8 +56,9 @@ public class GraphicsHandler {
 	specialempty = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialempty.png"))),
 	specialbar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialbar.png"))),
 	stock = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/stock.png"))),
-	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/pauseoverlay.png")));
-	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader;
+	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/pauseoverlay.png"))),
+	ripplebg = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/ripplebg.png")));
+	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader, wavyShader;
 
 	public static final int SCREENWIDTH  = (int) ((42 * GlobalRepo.TILE)), SCREENHEIGHT = (int) ((24 * GlobalRepo.TILE));
 	public static final float ZOOM4X = 1/4f, ZOOM2X = 1/2f, ZOOM1X = 1/1f;
@@ -72,6 +73,7 @@ public class GraphicsHandler {
 		powerShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/power.glsl"));
 		speedShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/speed.glsl"));
 		slowShader = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/slow.glsl"));
+		wavyShader = new ShaderProgram(Gdx.files.internal("shaders/vertwavy.glsl"), Gdx.files.internal("shaders/wavy.glsl"));
 		batch = new SpriteBatch();
 		cam.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		cam.zoom = ZOOM;
@@ -116,7 +118,7 @@ public class GraphicsHandler {
 				dualParallaxCam.position.x = blackBounds;
 			}
 			if (!DowntiltEngine.isPaused()) {
-				float inc = 12.0f;
+				float inc = DowntiltEngine.getChallenge().getStage().getScrollSpeed();
 				if (DowntiltEngine.isSlowed()) inc = inc/6.0f;
 				parallaxCam.position.x += inc;
 				dualParallaxCam.position.x += inc/2.0f;
@@ -154,25 +156,25 @@ public class GraphicsHandler {
 	private static float screenBoundary(float dimension){
 		return dimension/(screenAdjust/ZOOM) + GlobalRepo.TILE * 1;
 	}
-	
+
 	private static class FighterSort implements Comparator<Entity> {
 
 		@Override
 		public int compare(Entity o1, Entity o2) {
 			int o1Num = setNum(o1);
 			int o2Num = setNum(o2);
-			
+
 			if (o1Num > o2Num) return 1;
 			if (o1Num < o2Num) return -1;
 			else return 0;
 		}
-		
+
 		private int setNum(Entity o){
 			if (o instanceof Hittable && ((Hittable)o).isCaught()) return 2;
 			if (DowntiltEngine.entityIsPlayer(o)) return 1;
 			else return 0;
 		}
-		
+
 	}
 
 	static void updateGraphics(){
@@ -183,21 +185,25 @@ public class GraphicsHandler {
 		renderer.setView(cam);
 		arr = new int[]{0};  // render sky
 		renderer.render(arr);
-		
+
+		if (DowntiltEngine.getChallenge().getStage().crazy()) drawCrazyBG();
+
 		renderer.setView(dualParallaxCam);
 		arr = new int[]{1};  // render slow parallax
 		renderer.render(arr);
-		
+
 		batch.begin();  // render bg entities
 		batch.setProjectionMatrix(parallaxCam.combined);
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.PARALLAXFAST) renderEntity(e);
 		batch.end();
 		font.setColor(1, 1, 1, 1);
-		
+
 		renderer.setView(parallaxCam);
 		arr = new int[]{2};  // render fast parallax
 		renderer.render(arr);
 
+		renderer.getBatch().getShader().end();
+		renderer.getBatch().setShader(null);
 		batch.begin();  // render bg entities
 		batch.setProjectionMatrix(cam.combined);
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.MIDDLEBACK) renderEntity(e);
@@ -230,6 +236,20 @@ public class GraphicsHandler {
 
 		batch.begin();
 		if (!DowntiltEngine.isWaiting()) renderGUI();
+		batch.end();
+	}
+	
+	private static void drawCrazyBG(){ 
+		batch.begin();
+		float time = (float) Math.sin(DowntiltEngine.getDeltaTime()/200.0f);
+		wavyShader.begin();
+		wavyShader.setUniformf("time", time);
+		wavyShader.setUniformf("resolutionx", SCREENWIDTH);
+		wavyShader.setUniformf("resolutiony", SCREENHEIGHT);
+		wavyShader.end();
+		batch.setShader(wavyShader);
+		batch.draw(ripplebg, cameraBoundaries().get(0), cameraBoundaries().get(2));
+		batch.setShader(null);
 		batch.end();
 	}
 
@@ -368,7 +388,7 @@ public class GraphicsHandler {
 			batch.draw(specialempty, posX + spaceMod, posY + posYMod);
 			spaceMod += spacing;
 		}
-		
+
 		if (DowntiltEngine.getChallenge() instanceof ChallengeTimed) {
 			int timeLeft = ((ChallengeTimed)DowntiltEngine.getChallenge()).getTimeLeftInSeconds();
 			int limitRed = 10;
@@ -382,7 +402,7 @@ public class GraphicsHandler {
 			timeLimitFont.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x - 32, posY);
 		}
 		else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
-		
+
 		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
 		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
 
@@ -391,7 +411,7 @@ public class GraphicsHandler {
 			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
 			font.draw(batch, "(Press " + DowntiltEngine.getPrimaryInputHandler().getChargeString() + " to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
-		
+
 		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 	}
 
@@ -432,10 +452,10 @@ public class GraphicsHandler {
 		font.draw(batch, (int)fi.getPercentage() + "%", xPos, yPos);
 	}
 
-	public static void updateRoomGraphics(Fighter player) {
+	public static void updateRoomGraphics() {
 		renderer = new OrthogonalTiledMapRenderer(MapHandler.activeMap, 1);
-		cam.position.x = player.getPosition().x;
-		cam.position.y = player.getPosition().y;
+		cam.position.x = DowntiltEngine.getPlayers().get(0).getPosition().x;
+		cam.position.y = DowntiltEngine.getPlayers().get(0).getPosition().y;
 		cam.update();
 		renderer.setView(cam);
 	}
@@ -449,7 +469,7 @@ public class GraphicsHandler {
 		double posOrNeg = Math.signum(0.5 - Math.random());
 		return DowntiltEngine.getScreenShakeMod() * posOrNeg * 9.0 * (0.95 + (Math.random()/10.0));
 	}
-	
+
 	public static void drawToolTip(){
 		ToolTip tt = ((ChallengeTutorial)DowntiltEngine.getChallenge()).getToolTip();
 		String text = tt.getString();

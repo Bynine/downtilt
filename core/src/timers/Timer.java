@@ -31,7 +31,7 @@ public class Timer {
 
 	public int getEndTime(){ return endTime; }
 
-	public void end(){ counter = endTime + 1; }
+	public void end(){ counter = endTime + 2; }
 
 	public void moveCounterForward(int i) { counter += i; }
 

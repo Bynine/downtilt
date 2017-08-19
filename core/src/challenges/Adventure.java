@@ -18,9 +18,7 @@ public class Adventure extends Mode{
 	private final Difficulty difficulty;
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.basic), 2, 2, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 1, 1, 60))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 10))
 			));
 
 	/**
@@ -30,7 +28,8 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
+				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveDebug, Difficulty.Standard));
+				//challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
 			}
 			else{
 				challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard1));
@@ -38,7 +37,7 @@ public class Adventure extends Mode{
 				challengeList.add(new ChallengeAdventure(new Stage_Truck(), waveTruck1));
 				challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks1));
 				challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom1));
-				//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, difficulty));
+				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, difficulty));
 			}
 		} break;
 		case Standard: {
@@ -49,7 +48,7 @@ public class Adventure extends Mode{
 			challengeList.add(new ChallengeAdventure(new Stage_Blocks(), waveBlocks2));
 			challengeList.add(new ChallengeAdventure(new Stage_Mushroom(), waveMushroom2));
 			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky2));
-			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
+			challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, difficulty));
 		} break;
 		case Advanced: {
 			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard3));
@@ -60,7 +59,7 @@ public class Adventure extends Mode{
 			challengeList.add(new ChallengeAdventure(new Stage_Sky(), waveSky3));
 			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace3, 120));
 			Collections.shuffle(challengeList);
-			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss3, difficulty));
+			challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss3, difficulty));
 		} break;
 		case Nightmare: {
 			challengeList.add(new ChallengeTimed(new Stage_Truck(), waveTruck4, 61));
@@ -71,7 +70,7 @@ public class Adventure extends Mode{
 			challengeList.add(new ChallengeTimed(new Stage_Space(), waveSpace4, 120));
 			Collections.shuffle(challengeList);
 			challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard4));
-			//challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss4, difficulty));
+			challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss4, difficulty));
 		} break;
 		default: break;
 		}
@@ -125,9 +124,9 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.heavy), 3, 2, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.heavy), 5, 3, 120))
 			));
-//	private List<Wave> waveBoss1 = new ArrayList<Wave>(Arrays.asList(
-//			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 2, 120))
-//			));
+	private List<Wave> waveBoss1 = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 2, 120))
+			));
 
 	/* STANDARD */
 	private List<Wave> waveStandard2 = new ArrayList<Wave>(Arrays.asList(
@@ -166,9 +165,9 @@ public class Adventure extends Mode{
 			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 3, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 8, 8, 180))
 			));
-//	private List<Wave> waveBoss2 = new ArrayList<Wave>(Arrays.asList(
-//			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 1, 3, 120))
-//			));
+	private List<Wave> waveBoss2 = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 1, 3, 120))
+			));
 
 	/* ADVANCED */
 	private List<Wave> waveStandard3 = new ArrayList<Wave>(Arrays.asList(
@@ -207,9 +206,9 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy, EnemyRepo.fatheavy), 4, 2, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 7, 20))
 			));
-//	private List<Wave> waveBoss3 = new ArrayList<Wave>(Arrays.asList(
-//			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.basic, EnemyRepo.shoot), 1, 3, 90))
-//			));
+	private List<Wave> waveBoss3 = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.basic, EnemyRepo.shoot), 1, 3, 90))
+			));
 
 	/* NIGHTMARE */
 	private List<Wave> waveStandard4 = new ArrayList<Wave>(Arrays.asList(
@@ -250,9 +249,9 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 4, 4, 180))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatshoot, EnemyRepo.fatbomb), 6, 6, 120))
 			));
-//	private List<Wave> waveBoss4 = new ArrayList<Wave>(Arrays.asList(
-//			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot, EnemyRepo.heavy, EnemyRepo.bomb), 1, 4, 10))
-//			));
+	private List<Wave> waveBoss4 = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot, EnemyRepo.heavy, EnemyRepo.bomb), 1, 4, 10))
+			));
 
 
 	List<Challenge> challengeList = new ArrayList<Challenge>(Arrays.asList());
@@ -262,20 +261,13 @@ public class Adventure extends Mode{
 		return challengeList;
 	}
 	
-	int getTime(){
+	@Override
+	public int getTime(){
 		int seconds = 0;
 		for (Challenge c: getChallengeList()){
 			seconds += c.getSeconds();
 		}
-		return seconds;
-	}
-	
-	int getDeaths(){
-		int deaths = 0;
-		for (Challenge c: getChallengeList()){
-			deaths += c.getDeaths();
-		}
-		return deaths;
+		return seconds/3600;
 	}
 	
 	Victory getVictory(){

@@ -40,21 +40,24 @@ public class VictoryScreen extends Menu{
 		bigFont.setColor(GlobalRepo.getColorByRanking(r));
 		bigFont.draw(batch, r.toString(), startX + 200, posY);
 		bigFont.setColor(Color.GOLDENROD);
+		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, posY -= dec);
+		if (DowntiltEngine.getMode().getTime() > 0) {
+			font.draw(batch, "TIME TOTAL:   " + GlobalRepo.getTimeString(DowntiltEngine.getMode().getTime()), startX, posY -= dec);
+		}
 		drawBonusList();
 		
-		font.draw(batch, "SCORE TOTAL:   " + currentVictory.getScore(), startX, posY -= dec);
 		batch.end();
 	}
 	
 	private void drawBonusList(){
 		final int stringLocationX = startX + 600;
-		final int bonusLineHeight = 24;
-		final int maxListHeight = 400;
+		final int lineHeight = 24;
+		final int maxListHeight = lineHeight * 16;
 		
-		int listHeight = bonusLineHeight * currentVictory.getBonuses().size();
+		int listHeight = lineHeight * currentVictory.getBonuses().size();
 		int scrollDownDistance = 0;
 		if (listHeight != 0) scrollDownDistance = -DowntiltEngine.getDeltaTime()/2 % listHeight;
-		int i = 1;
+		int listPosition = 1;
 
 		for (Bonus b: currentVictory.getBonuses()){
 			
@@ -63,12 +66,12 @@ public class VictoryScreen extends Menu{
 			if (b.getScore() > 0) bonusString = bonusString.concat(": " + b.getScore());
 			
 			int stringLocationY = 0;
-			if (listHeight > maxListHeight) stringLocationY = startY + (scrollDownDistance - (i * bonusLineHeight)) % listHeight;
-			else stringLocationY = startY + - (i * bonusLineHeight);
+			if (listHeight > maxListHeight) stringLocationY = startY + (scrollDownDistance - (listPosition * lineHeight)) % listHeight;
+			else stringLocationY = startY + - (listPosition * lineHeight);
 			if (stringLocationY < startY && stringLocationY > startY - maxListHeight) {
 				font.draw(batch, bonusString, stringLocationX, stringLocationY);
 			}
-			i++;
+			listPosition++;
 		}
 	}
 
