@@ -47,7 +47,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static GameState gameState = GameState.HOME;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
 	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f;
-	private static ShaderProgram shaderP2, shaderMushroom, shaderSpace, shaderSky, shaderNightmare, shaderAdventure, shaderEndless, shaderTimeTrial;
+	private static ShaderProgram shaderMushroom, shaderSpace, shaderSky, shaderNightmare, shaderAdventure, shaderEndless, shaderTimeTrial;
 	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
 	private static OptionMenu optionMenu;
@@ -57,7 +57,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static Palette activePalette = Palette.NORMAL;
 	
 	public void create () {
-		shaderP2 = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/p2.glsl"));
 		shaderMushroom = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/wild.glsl"));
 		shaderSpace = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/solemn.glsl"));
 		shaderSky = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/color.glsl"));
@@ -121,8 +120,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 		beginFighter(p1, primaryInputHandler);
 		if (!coop) return;
 		Fighter p2 = new Hero(0, 0, 0);
-		p2.setPalette(shaderP2);
 		beginFighter(p2, secondaryInputHandler);
+		p2.setPalette(shaderSpace);
 	}
 
 	/**
@@ -165,6 +164,9 @@ public class DowntiltEngine extends ApplicationAdapter {
 				MapHandler.updateActionCircleInteractions();
 				if (outOfHitlag()) MapHandler.updateEntities();
 			}
+		}
+		else{
+			getChallenge().getStage().getMusic().stop();
 		}
 		GraphicsHandler.updateGraphics();
 		GraphicsHandler.updateCamera();
@@ -246,6 +248,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	private static void toMenu(GameState gs){
+		optionMenu.resetPalettes();
 		paused = false;
 		beginFighters(true);
 		getChallenge().getStage().getMusic().stop();

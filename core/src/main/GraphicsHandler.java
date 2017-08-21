@@ -262,16 +262,28 @@ public class GraphicsHandler {
 			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
 			if (DowntiltEngine.debugOn()) drawPercentage(en);
 
-			batch.setColor(fi.getColor());
+			
 			float colorMod = 0.5f * fi.getPercentage() / fi.getWeight();
 			float rColor = MathUtils.clamp(fi.getColor().r - colorMod / 2, 0.45f, 1);
 			float gbColor = MathUtils.clamp(fi.getColor().g - colorMod, 0.15f, 1);
-			batch.setColor(rColor, gbColor, gbColor, 1);
 
-			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
 			if (fi.getArmor() > 1) drawAfterImage(fi, batch.getShader(), defenseShader);
 
-			if (null != fi.getPalette()) batch.setShader(fi.getPalette());
+			if (null != fi.getPalette()) {
+				ShaderProgram palette = fi.getPalette();
+				palette.begin();
+				if (fi.isInvincible()) palette.setUniformf(GlobalRepo.alpha, 0.5f);
+				else palette.setUniformf(GlobalRepo.alpha, 1f);
+				palette.setUniformf(GlobalRepo.red, rColor);
+				palette.setUniformf(GlobalRepo.gb, gbColor);
+				palette.end();
+				batch.setShader(palette);
+			}
+			else {
+				batch.setColor(fi.getColor());
+				batch.setColor(rColor, gbColor, gbColor, 1);
+				if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
+			}
 
 			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
 				drawRainbowAfterImage(fi, batch.getShader());
@@ -405,16 +417,15 @@ public class GraphicsHandler {
 		}
 		else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
 
-		font.draw(batch,  "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
-		font.draw(batch,  DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
+		font.draw(batch, "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
+		font.draw(batch, DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
+		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 
 		if (DowntiltEngine.isPaused()) {
 			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
-			font.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
+			comboFont.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
 			font.draw(batch, "(Press " + DowntiltEngine.getPrimaryInputHandler().getChargeString() + " to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
-
-		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 	}
 
 	private static List<Float> cameraBoundaries(){

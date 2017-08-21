@@ -31,7 +31,6 @@ public abstract class Mode {
 			float vol = (DowntiltEngine.getMusicVolume()) / 8.0f;
 			getActiveChallenge().getStage().getMusic().setVolume(vol);
 			getActiveChallenge().getStage().getMusic().play();
-			if (DowntiltEngine.isWaiting()) getActiveChallenge().getStage().getMusic().stop();
 		}
 		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
 		getActiveChallenge().update();

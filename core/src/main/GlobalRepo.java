@@ -34,6 +34,9 @@ public class GlobalRepo {
 	public static final float ENEMYHITSTUNMOD = 0.9f;
 	public static final int WHITEFREEZE = 1;
 	private static BlockColor blockColor = BlockColor.G;
+	public final static String alpha = "alpha";
+	public final static String red = "red";
+	public final static String gb = "gb";
 
 	/* GLOBAL METHODS */
 

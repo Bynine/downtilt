@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import main.DowntiltEngine.Palette;
 import maps.Stage_Mushroom;
@@ -23,11 +24,11 @@ public class OptionMenu extends Menu {
 			));
 	
 	private final String str_MUSHROOMNAME = "Wild";
-	private final String str_SPACENAME = "Solemn";
-	private final String str_SKYNAME = "Sunset";
+	private final String str_SPACENAME = "Punk";
+	private final String str_SKYNAME = "Sun";
 	private final String str_NIGHTMARENAME = "Spooky";
-	private final String str_ADVENTURENAME = "Professional";
-	private final String str_TIMETRIALNAME = "Radioactive";
+	private final String str_ADVENTURENAME = "Pro";
+	private final String str_TIMETRIALNAME = "Toxic";
 	private final String str_ENDLESSNAME = "Hornet";
 	private MenuOption<Palette> palettes = new MenuOption<Palette>(Arrays.asList(
 			new Choice<Palette>(Palette.NORMAL, "Standard"),
@@ -67,6 +68,17 @@ public class OptionMenu extends Menu {
 		sfxVolume.setCursor(opts[1]);
 		screenShake.setCursor(opts[2]);
 		palettes.setCursor(opts[3]);
+		resetPalettes();
+	}
+	
+	public void resetPalettes(){
+		for (Choice<Palette> i: palettes.getChoices()) {
+			ShaderProgram sg = DowntiltEngine.getShaderFromPalette(i.t);
+			if (null == sg) return;
+			sg.setUniformf(GlobalRepo.alpha, 1f);
+			sg.setUniformf(GlobalRepo.red, 1f);
+			sg.setUniformf(GlobalRepo.gb, 1f);
+		}
 	}
 	
 	public void begin(){

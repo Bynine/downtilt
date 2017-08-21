@@ -23,7 +23,7 @@ abstract class Menu {
 	protected BitmapFont font = new BitmapFont(), navFont = new BitmapFont(), bigFont = new BitmapFont();
 	protected SpriteBatch batch;
 	protected String startStr;
-	protected final Color fontColor = Color.WHITE, lockedColor = Color.RED;
+	protected final Color fontColor = Color.WHITE, lockedColor = new Color(0.5f, 0.0f, 0.5f, 1);
 	protected final float greyOut = 0.3f;
 	protected boolean canAdvance = true, canBack = true;
 	protected TextureRegion menu = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menu.png")));

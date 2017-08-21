@@ -32,7 +32,7 @@ public class Hero extends Fighter {
 	private TextureRegion helplessImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/helpless.png")));
 	private TextureRegion grabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/grab.png")));
 	private TextureRegion airGrabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airgrab.png")));
-	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fallen.png")));
+	private Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/fallen.png", 2, 1, 24, PlayMode.LOOP);
 
 	public Hero(float posX, float posY, int team) {
 		super(posX, posY, team);
@@ -103,6 +103,6 @@ public class Hero extends Fighter {
 	TextureRegion getJumpSquatFrame(float deltaTime) { return jumpSquatImage; }
 	TextureRegion getTumbleFrame(float deltaTime) { return tumbleImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return helplessImage; }
-	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(deltaTime); }
 
 }
