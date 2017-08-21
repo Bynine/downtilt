@@ -94,7 +94,7 @@ public abstract class Graphic extends Entity{
 
 		public HitGuardGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
-			setAnimation(GlobalRepo.makeAnimation("sprites/graphics/hitguardanimation.png", 3, 1, 8, PlayMode.LOOP));
+			setAnimation(GlobalRepo.makeAnimation("sprites/graphics/hitguardanimation.png", 2, 1, 8, PlayMode.LOOP));
 			setup();
 		}
 
@@ -166,6 +166,18 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			if (duration.timeUp()) setRemove();
 			if (duration.getCounter() > dur/2) setSmall(small);
+		}
+	}
+	
+	public static class Disappear extends Graphic {
+		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/disappear.png")));
+		public Disappear(float posX, float posY){
+			super(posX - tex.getRegionWidth()/2, posY - tex.getRegionHeight()/2, 16);
+			image = new Sprite(tex);
+			updatePosition();
+		}
+		void updatePosition(){
+			if (duration.timeUp()) setRemove();
 		}
 	}
 	

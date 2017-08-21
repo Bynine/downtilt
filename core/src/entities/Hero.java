@@ -23,7 +23,7 @@ public class Hero extends Fighter {
 	private TextureRegion bJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/bjump.png")));
 	private TextureRegion dJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/doublejump.png")));
 	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fall.png")));
-	private TextureRegion ascendImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/ascend.png")));
+	private TextureRegion ascendImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fall.png")));
 	private TextureRegion crouchImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/crouch.png")));
 	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dash.png")));
 	private TextureRegion dodgeImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dodgebegin.png")));
@@ -31,6 +31,7 @@ public class Hero extends Fighter {
 	private TextureRegion slideImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/slide.png")));
 	private TextureRegion helplessImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/helpless.png")));
 	private TextureRegion grabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/grab.png")));
+	private TextureRegion airGrabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airgrab.png")));
 	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fallen.png")));
 
 	public Hero(float posX, float posY, int team) {
@@ -47,8 +48,8 @@ public class Hero extends Fighter {
 		jumpAcc = 0.92f;
 		dashStrength = 0.5f;
 		doubleJumpStrength = 9.7f;
-		wallJumpStrengthX = 6.5f;
-		wallJumpStrengthY = 8.4f;
+		wallJumpStrengthX = 7.5f;
+		wallJumpStrengthY = 8.8f;
 		jumpSquatTimer.setEndTime(3);
 		footStoolDuration = 25;
 		dashTimer.setEndTime(20);
@@ -90,7 +91,10 @@ public class Hero extends Fighter {
 	TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 	TextureRegion getWallSlideFrame(float deltaTime) { return slideImage; }
 	TextureRegion getHelplessFrame(float deltaTime) { return helplessImage; }
-	TextureRegion getGrabFrame(float deltaTime) { return grabImage; }
+	TextureRegion getGrabFrame(float deltaTime) { 
+		if (isGrounded()) return grabImage; 
+		else return airGrabImage;
+		}
 	TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 	TextureRegion getAscendFrame(float deltaTime) { return ascendImage; }
 	TextureRegion getCrouchFrame(float deltaTime) { return crouchImage; }

@@ -23,7 +23,7 @@ public class OptionMenu extends Menu {
 			));
 	
 	private final String str_MUSHROOMNAME = "Wild";
-	private final String str_SPACENAME = "Dark";
+	private final String str_SPACENAME = "Solemn";
 	private final String str_SKYNAME = "Sunset";
 	private final String str_NIGHTMARENAME = "Spooky";
 	private final String str_ADVENTURENAME = "Professional";
@@ -94,6 +94,7 @@ public class OptionMenu extends Menu {
 		final int dec = 60;
 		super.draw();
 		batch.begin();
+		batch.draw(cursor, posX + cursorMod, startY - dec - 16 - cho.cursorPos() * (dec));
 
 		if (!palettes.selected().unlocked) font.setColor(lockedColor);
 		font.draw(batch, appendCursors("Palette:      ", palettes) + palettes.selected().desc, posX, posY -= dec);
@@ -110,7 +111,6 @@ public class OptionMenu extends Menu {
 		font.draw(batch, appendCursors("Music Volume: ", musicVolume) + musicVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("SFX Volume:   ", sfxVolume) + sfxVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("Screen Shake: ", screenShake) + screenShake.selected().desc, posX, posY -= dec);
-		batch.draw(cursor, posX - 48, startY - dec - 16 - cho.cursorPos() * (dec + 1));
 
 		batch.end();
 	}

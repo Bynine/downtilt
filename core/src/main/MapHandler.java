@@ -28,6 +28,7 @@ public class MapHandler {
 	static int mapHeight; 
 	private static Timer lowGTimer = new Timer(300), highGTimer = new Timer(300);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(lowGTimer, highGTimer));
+	private static final List<TimedEntity> timedEntityList = new ArrayList<TimedEntity>();
 
 	static void begin(){
 		activeRoom = new Stage_Standard();
@@ -47,11 +48,22 @@ public class MapHandler {
 	}
 
 	private static Iterator<Entity> entityIter;
+	private static Iterator<TimedEntity> timedEntityIter;
 	private static final List<Entity> entityToRemoveList = new ArrayList<Entity>();
 	static void updateEntities(){
 		for (Timer t: timerList) t.countUp();
+		
+		timedEntityIter = timedEntityList.iterator();
+		while (timedEntityIter.hasNext()){
+			TimedEntity te = timedEntityIter.next();
+			te.timeBeforeSpawn.countUp();
+			if (te.timeBeforeSpawn.timeUp()){
+				addEntity(te.entity);
+				timedEntityIter.remove();
+			}
+		}
+		
 		entityIter = activeRoom.getEntityList().iterator();
-
 		while (entityIter.hasNext()) {
 			Entity en = entityIter.next();
 			if (shouldUpdate(en)) {
@@ -92,7 +104,8 @@ public class MapHandler {
 		if (fi.noKill()) return false;
 		fi.setNoKill();
 		
-		drawDieGraphic(fi);
+		if (fi.isOOB(cameraBoundary)) drawOOBDieGraphic(fi);
+		else drawDisappearGraphic(fi);
 		new SFX.Die().play();
 		if (DowntiltEngine.entityIsPlayer(fi) && DowntiltEngine.getChallenge().getLives() >= 1) {
 			fi.respawn();
@@ -104,20 +117,21 @@ public class MapHandler {
 			addEntity(new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
 		}
 		
-		if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getMode().addBonus(new Bonus.KOBonus());
+		if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getMode().pendValidBonus(new Bonus.KOBonus());
 		entityToRemoveList.add(fi);
 		return true;
 	}
 
-	private static void drawDieGraphic(Fighter fi){
-		if (fi instanceof Basic.Bomb) {
-			if ( ((Basic.Bomb)fi).isExploded() ) return;
-		}
-		int mod = 6;
+	private static void drawOOBDieGraphic(Fighter fi){
+		int mod = 5;
 		addEntity(new Graphic.Die(
-				(fi.getCenter().x * (mod-1) + GraphicsHandler.getCameraPos().x) / mod, 
-				(fi.getCenter().y * (mod-1) + GraphicsHandler.getCameraPos().y) / mod
+				(fi.getCenter().x * (mod - 1) + GraphicsHandler.getCameraPos().x) / mod, 
+				(fi.getCenter().y * (mod - 1) + GraphicsHandler.getCameraPos().y) / mod
 				));
+	}
+	
+	private static void drawDisappearGraphic(Fighter fi){
+		addEntity(new Graphic.Disappear(fi.getCenter().x + fi.getVelocity().x, fi.getCenter().y + fi.getVelocity().y));
 	}
 
 	static void updateActionCircleInteractions(){
@@ -170,6 +184,11 @@ public class MapHandler {
 	public static void addEntity(Entity e){ 
 		activeRoom.addEntity(e); 
 	}
+	
+	public static void addTimedEntity(Entity e, int x){ 
+		timedEntityList.add(new TimedEntity(e, x));
+	}
+	
 	public static ActionCircle addActionCircle(ActionCircle ac){ 
 		return activeRoom.addActionCircle(ac); 
 	}
@@ -210,6 +229,15 @@ public class MapHandler {
 	public static void addLightningHandler(LightningHandler lh){
 		if (activeRoom == null) return;
 		else activeRoom.addLightningHandler(lh);
+	}
+	
+	private static class TimedEntity{
+		final Timer timeBeforeSpawn;
+		final Entity entity;
+		TimedEntity(Entity e, int dur){
+			timeBeforeSpawn = new Timer(dur);
+			this.entity = e;
+		}
 	}
 
 }

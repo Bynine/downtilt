@@ -28,7 +28,7 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveDebug, Difficulty.Standard));
+				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, Difficulty.Standard));
 				//challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
 			}
 			else{
@@ -285,8 +285,8 @@ public class Adventure extends Mode{
 	}
 	
 	@Override
-	protected void addValidBonus(Bonus newBonus){
-		if (!newBonus.singleOnly) bonuses.add(newBonus);
+	public void pendValidBonus(Bonus newBonus){
+		if (!newBonus.singleOnly) super.pendValidBonus(newBonus);
 	}
 
 }

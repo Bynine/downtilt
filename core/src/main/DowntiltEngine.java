@@ -44,7 +44,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
 	private static Mode activeMode;
-	private static GameState gameState = GameState.GAMEMENU;
+	private static GameState gameState = GameState.HOME;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
 	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f;
 	private static ShaderProgram shaderP2, shaderMushroom, shaderSpace, shaderSky, shaderNightmare, shaderAdventure, shaderEndless, shaderTimeTrial;
@@ -71,7 +71,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		for (Controller c: Controllers.getControllers()) {
 			if (isXBox360Controller(c) || isPS3Controller(c)) controllerList.add(c);
 		}
-		if (release) gameState = GameState.HOME;
+		if (!release) gameState = GameState.GAMEMENU;
 
 		primaryInputHandler = setupInputHandler(0);
 		secondaryInputHandler = setupInputHandler(1);
@@ -157,8 +157,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	private void updateGame(){
-		activeMode.update();
 		if (!isWaiting()){
+			activeMode.update();
 			MapHandler.updateInputs();
 			if (!paused){
 				MapHandler.activeRoom.update(deltaTime);

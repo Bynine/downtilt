@@ -54,6 +54,7 @@ public class Boss extends Hittable {
 		position.x += teleportRange;
 		teleportRange *= -1;
 		flip();
+		new SFX.Teleport().play();
 	}
 
 	private void castSpell(){
@@ -63,14 +64,14 @@ public class Boss extends Hittable {
 		if (random < 0.25/3.0) {
 			teleport();
 		}
-		else if (random < (1.25/3.0)){
-			makeLaser();
-			makeLaser();
-			makeLaser();
+		else if (random < (2.0/3.0)){
+			makeLaser(0);
+			makeLaser(10);
+			makeLaser(20);
 		}
 		else if (random < (2.5/3.0)){
 			MapHandler.addEntity(new Graphic.LightningSpell(position.x, position.y));
-			MapHandler.addLightningHandler(new LightningHandler(360, 45, lightning, 1));
+			MapHandler.addLightningHandler(new LightningHandler(360, 60, lightning, 1));
 		}
 		else{
 			if (Math.random() < 0.5) {
@@ -84,14 +85,14 @@ public class Boss extends Hittable {
 		}
 	}
 
-	private void makeLaser(){
+	private void makeLaser(int x){
 		float posX = position.x - 32;
 		if (direction == Direction.RIGHT) posX = position.x + image.getWidth() + 32;
 		float posY = position.y - 32;
 		Hurlable.Laser laser = new Hurlable.Laser(GlobalRepo.GOODTEAM, posX, posY);
 		laser.getVelocity().x = laserSpeedX * direct();
 		laser.getVelocity().y = (float) (Math.random() * laserSpeedY);
-		MapHandler.addEntity(laser);
+		MapHandler.addTimedEntity(laser, x);
 	}
 
 	public void set(Difficulty difficulty){
@@ -128,7 +129,8 @@ public class Boss extends Hittable {
 		return health;
 	}
 
-	protected void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
+	@Override
+	protected void takeKnockIntoKnockback(Hittable hurtler, Vector2 knockback, float DAM, int hitstun){
 		if (DAM > 0 && !isHurt()) {
 			DowntiltEngine.causeHitlag(8);
 			health--;
@@ -138,6 +140,7 @@ public class Boss extends Hittable {
 				castTimer.setEndTime(castTimer.getEndTime()/2);
 				modulo = modulo/2;
 			}
+			hurtler.setRemove();
 		}
 	}
 

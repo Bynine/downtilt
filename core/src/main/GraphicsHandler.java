@@ -298,7 +298,9 @@ public class GraphicsHandler {
 				MathUtils.clamp(batch.getColor().b, 0, 1),
 				MathUtils.clamp(batch.getColor().g, 0, 1),
 				batch.getColor().a);
-		batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
+		
+		if (!(DowntiltEngine.entityIsPlayer(en) && DowntiltEngine.getChallenge().isFailed())) batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
+		
 		if (en.trails()){
 			batch.setColor(1, 1, 1, 0.5f);
 			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 2), en.getPosition().y - (en.getVelocity().y * 2));

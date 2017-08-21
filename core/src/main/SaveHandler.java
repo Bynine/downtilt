@@ -12,7 +12,7 @@ import challenges.Victory;
  */
 public class SaveHandler {
 
-	private static final String scoreKey = "skoss", optionsKey = "yuptens", saveFile = "keosv";
+	private static final String scoreKey = "skoss", optionsKey = "yuptens", saveFile = "keosv.xml";
 	private static final Preferences save = Gdx.app.getPreferences(saveFile);
 	public static final int arrayX = 3, arrayY = 7;
 	private static int[][] scores = new int[arrayX][arrayY];

@@ -33,7 +33,7 @@ public class RankingScreen extends Menu{
 		cho = choices;
 		opt = options;
 		canAdvance = false;
-		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_flex.png")));
+		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_plaid.png")));
 	}
 
 	@Override
@@ -47,6 +47,7 @@ public class RankingScreen extends Menu{
 
 		super.draw();
 		batch.begin();
+		batch.draw(cursor, posX - 20 + cursorMod, startY - 16);
 
 		int x = modes.cursorPos();
 		font.draw(batch, appendCursors("MODE: ", modes) + modes.selected().desc, posX - (dec * 2), posY);

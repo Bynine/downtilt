@@ -6,6 +6,7 @@ import java.util.List;
 
 import main.DowntiltEngine;
 import main.GlobalRepo;
+import main.GraphicsHandler;
 import main.SFX;
 import timers.Timer;
 
@@ -21,13 +22,17 @@ public class TransitionGraphicsHandler {
 	private static Animation readyGo = GlobalRepo.makeAnimation("sprites/graphics/readygo.png", 2, 1, 60, PlayMode.LOOP);
 	private static Animation finish = GlobalRepo.makeAnimation("sprites/graphics/finish.png", 1, 1, 60, PlayMode.LOOP);
 	private static Animation failure = GlobalRepo.makeAnimation("sprites/graphics/ko.png", 1, 1, 60, PlayMode.LOOP);
+	private static Animation black = GlobalRepo.makeAnimation("sprites/graphics/blackoverlay.png", 1, 1, 60, PlayMode.LOOP);
 	
 	public static void update(){
 		if (batch == null) batch = new SpriteBatch();
 		for (Timer t: timerList) t.countUp();
 		
 		batch.begin();
-		if (!failureTimer.timeUp()) batch.draw(failure.getKeyFrame(failureTimer.getCounter()), 400, 500);
+		if (finishTimer.getCounter() > 60 && !finishTimer.timeUp()) {
+			batch.draw(black.getKeyFrame(0), 0, 0, GraphicsHandler.SCREENWIDTH, GraphicsHandler.SCREENHEIGHT);
+		}
+		else if (!failureTimer.timeUp()) batch.draw(failure.getKeyFrame(failureTimer.getCounter()), 400, 500);
 		else if (!finishTimer.timeUp()) batch.draw(finish.getKeyFrame(finishTimer.getCounter()), 320, 500);
 		else if (!readyGoTimer.timeUp()) batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 400, 500);
 		batch.end();

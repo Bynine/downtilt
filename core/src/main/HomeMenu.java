@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class HomeMenu extends Menu {
 
+	protected TextureRegion bg = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/homebg.png")));
 	private MenuOption<Integer> choices = new MenuOption<Integer>(Arrays.asList(
 			new Choice<Integer>(0, "gamemenu"),
 			new Choice<Integer>(0, "options"),
@@ -18,7 +19,6 @@ public class HomeMenu extends Menu {
 	HomeMenu(){
 		cho = choices;
 		canBack = false;
-		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_home.png")));
 	}
 	
 	@Override
@@ -27,14 +27,16 @@ public class HomeMenu extends Menu {
 		int startY = 510;
 		int posY = startY;
 		final int dec = 60;
-		super.draw();
+		
 		batch.begin();
-
+		batch.draw(bg, 0, 0);
+		batch.draw(title, 350, 560);
+		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
+		batch.draw(cursor, posX + cursorMod, startY - dec - 18 - cho.cursorPos() * (dec));
 		font.draw(batch, "Play!", posX, posY -= dec);
 		font.draw(batch, "Customize/Options", posX, posY -= dec);
 		font.draw(batch, "Records", posX, posY -= dec);
 		font.draw(batch, "Credits", posX, posY -= dec);
-		batch.draw(cursor, posX - 48, startY - dec - 16 - cho.cursorPos() * (dec + 1));
 		
 		batch.end();
 	}

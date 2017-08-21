@@ -29,7 +29,7 @@ public abstract class Challenge {
 	
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
-	protected boolean finished = false, started = false, everRetried = false, everFailed = false;
+	protected boolean finished = false, failed = false, started = false, everRetried = false, everFailed = false;
 
 	Challenge(Stage stage, List<Wave> waves){
 		this.currWaves = new ArrayList<Wave>();
@@ -37,11 +37,16 @@ public abstract class Challenge {
 		initWaves.addAll(waves);
 		this.stage = stage;
 	}
+	
+	private boolean shouldRunTransitionGraphics(){
+		return (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) );
+	}
 
 	/**
 	 * Called when a challenge begins.
 	 */
 	protected void startChallenge(){
+		failed = false;
 		DowntiltEngine.resetDeltaTime();
 		lives = lifeSetting;
 		specialMeter = specialBeginning;
@@ -54,7 +59,7 @@ public abstract class Challenge {
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
 		
-		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) )	TransitionGraphicsHandler.readyGo();
+		if (shouldRunTransitionGraphics())	TransitionGraphicsHandler.readyGo();
 		
 		float mod = 16;
 		for (Fighter player: DowntiltEngine.getPlayers()) {
@@ -70,6 +75,7 @@ public abstract class Challenge {
 	}
 
 	public void update(){
+		if (failed) startChallenge();
 		activeWave.update(DowntiltEngine.getDeltaTime());
 		nextWaveChecker();
 		if (inFailState()) failChallenge();
@@ -99,17 +105,20 @@ public abstract class Challenge {
 	 * Called if all players die
 	 */
 	public void failChallenge(){
+		if (failed) return;
 		new SFX.Error().play();
-		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ) TransitionGraphicsHandler.failure();
-		startChallenge();
+		timeSpent += DowntiltEngine.getDeltaTime();
+		DowntiltEngine.getMode().wipePendingBonuses();
+		if (shouldRunTransitionGraphics()) TransitionGraphicsHandler.failure();
+		failed = true;
 		everFailed = true;
 	}
 	
 	public void succeedChallenge(){
 		if (finished) return;
-		timeSpent = DowntiltEngine.getDeltaTime();
+		timeSpent += DowntiltEngine.getDeltaTime();
 		DowntiltEngine.resetDeltaTime();
-		if (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) ) TransitionGraphicsHandler.finish();
+		if (shouldRunTransitionGraphics()) TransitionGraphicsHandler.finish();
 		finished = true;
 	}
 
@@ -202,6 +211,10 @@ public abstract class Challenge {
 	
 	public void resolveCombo(float mod){
 		/* */
+	}
+	
+	public boolean isFailed(){
+		return failed;
 	}
 
 	public enum Difficulty{

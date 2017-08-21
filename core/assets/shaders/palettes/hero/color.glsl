@@ -23,8 +23,13 @@ float setColor(float x){
 
 void main() {
         vec3 color = texture2D(u_texture, v_texCoords).rgb * v_color;
+        float max = color.r + color.g + color.b;
         color.r = setColor(color.r + color.g) * 0.8;
 		color.g = setColor(color.g) * 1.1;
 		color.b = setColor(color.b) * 0.6;
+		if (max > 2.0 && max < 2.8) {
+			color.r = color.r - 0.5;
+			color.g = color.g - 0.5;
+		}
         gl_FragColor = vec4(color, texture2D(u_texture, v_texCoords).a);
 }

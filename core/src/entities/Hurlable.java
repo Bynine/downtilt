@@ -111,6 +111,7 @@ public abstract class Hurlable extends Hittable {
 
 		protected final DurationTimer life = new DurationTimer(400);
 		protected float frailtyMod = 0;
+		protected int health = 2;
 
 		public Breakable(float posX, float posY){
 			super(posX, posY);
@@ -119,7 +120,7 @@ public abstract class Hurlable extends Hittable {
 
 		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 			super.update(rectangleList, entityList, deltaTime);
-			if (life.timeUp()) shatter();
+			if (life.timeUp() || health <= 0) shatter();
 		}
 
 		private void shatter(){
@@ -138,7 +139,7 @@ public abstract class Hurlable extends Hittable {
 		
 		@Override
 		public void knockInto(){
-			shatter();
+			health--;
 		}
 
 	}
@@ -274,6 +275,7 @@ public abstract class Hurlable extends Hittable {
 			setImages(team);
 			bounceMod = -0.2f;
 			baseHitSpeed = -0.1f;
+			health = 4;
 		}
 		
 	}
@@ -297,7 +299,10 @@ public abstract class Hurlable extends Hittable {
 		public Laser(int team, float posX, float posY) {
 			super(team, posX, posY);
 			new SFX.LaserFire().play();
-			hitstunDealtBonus = 10;
+			hitstunDealtBonus = 6;
+			baseKnockIntoDamage = 10;
+			baseKBG = 8.0f;
+			baseBKB = 8.0f;
 			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/laserbad.png", 1, 1, 6, PlayMode.LOOP);
 			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/lasergood.png", 1, 1, 6, PlayMode.LOOP);
 			gravity = 0;
@@ -306,7 +311,28 @@ public abstract class Hurlable extends Hittable {
 			onHitSFX = new SFX.SharpHit();
 			setImages(team);
 			trails = true;
+			health = 1;
 		}
+		
+		@Override
+		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
+			super.update(rectangleList, entityList, deltaTime);
+			float angle = velocity.angle();
+			velocity.setLength(8);
+			velocity.setAngle(angle);
+		}
+	
+//		@Override
+//		public boolean doesCollide(float x, float y){
+//			for (Rectangle r : tempRectangleList){
+//				Rectangle thisR = getCollisionBox(x, y);
+//				if (Intersector.overlaps(thisR, r) && thisR != r) {
+//					setRemove();
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
 		
 		@Override
 		public boolean inHitstun(){

@@ -45,12 +45,12 @@ public abstract class Victory {
 			this.bonuses.addAll(bonuses);
 		}
 
-		public static final int D = 30;
+		public static final int D = 20;
 		public static final int C = 40;
-		public static final int B = 55;
-		public static final int A = 70;
-		public static final int S = 80;
-		public static final int X = 90;
+		public static final int B = 60;
+		public static final int A = 80;
+		public static final int S = 100;
+		public static final int X = 150;
 
 		public Ranking getRanking(float score){
 			if (score < D) return Ranking.F;
@@ -86,12 +86,12 @@ public abstract class Victory {
 			this.stage = stage;
 		}
 
-		public static final int D = 12;
-		public static final int C = 18;
-		public static final int B = 24;
-		public static final int A = 30;
-		public static final int S = 36;
-		public static final int X = 44;
+		public static final int D = 15;
+		public static final int C = 30;
+		public static final int B = 40;
+		public static final int A = 60;
+		public static final int S = 90;
+		public static final int X = 120;
 
 		public Ranking getRanking(float score){
 			if (score < D) return Ranking.F;
@@ -121,18 +121,20 @@ public abstract class Victory {
 			this.stage = stage;
 		}
 
+		public static final int D = 15;
 		public static final int C = 25;
 		public static final int B = 40;
-		public static final int A = 55;
-		public static final int S = 70;
+		public static final int A = 60;
+		public static final int S = 80;
+		public static final int X = 150;
 
 		public Ranking getRanking(float score){
-			if (score < 15) return Ranking.F;
+			if (score < D) return Ranking.F;
 			if (score < C)  return Ranking.D;
 			if (score < B)  return Ranking.C;
 			if (score < A)  return Ranking.B;
 			if (score < S)  return Ranking.A;
-			if (score < 100) return Ranking.S;
+			if (score < X) return Ranking.S;
 			else return Ranking.X;
 		}
 

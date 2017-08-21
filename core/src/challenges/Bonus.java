@@ -84,7 +84,7 @@ public abstract class Bonus {
 	public static class NoSpecialBonus extends FactorBonus{
 		public NoSpecialBonus() {
 			factor = 1.5f;
-			name = "Special-Free Multiplier";
+			name = "Special-Free: 1.5x";
 		}
 	}
 

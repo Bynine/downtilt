@@ -31,8 +31,11 @@ public class M_Hero extends MoveList_Advanced{
 		m.setHurtBox(25, 50, 0, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/bomber/nweak.png", 1, 1);
 		m.setStopsInAir();
-		Hitbox h1 = new Hitbox(user, 3.1f, 0.6f, 6, 84, 19, 0, 12, new SFX.MidHit());
+		Hitbox h1 = new Hitbox(user, 3.2f, 0.6f, 6, 84, 24, 0, 14, new SFX.MidHit());
+		Hitbox h2 = new Hitbox(user, 3.2f, 0.6f, 6, 84, 8, 4, 6, new SFX.MidHit());
+		new ActionCircleGroup(Arrays.asList(h1, h2));
 		m.eventList.addActionCircle(h1, 2, 7);
+		m.eventList.addActionCircle(h2, 2, 7);
 		return m;
 	}
 
@@ -444,22 +447,25 @@ public class M_Hero extends MoveList_Advanced{
 	/* GRABS */
 
 	public Move grab() {
-		Move m = new Move(user, 26);
+		Move m = new Move(user, 30);
 		m.setAnimation("sprites/fighters/bomber/grab.png", 1, 1);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
-		Grabbox g1 = new Grabbox(user, 18, 4, 12);
-		m.eventList.addActionCircle(g1, 6, 10);
+		Grabbox g1 = new Grabbox(user, 22, 4, 13);
+		Grabbox g2 = new Grabbox(user, 8, 8, 4);
+		new ActionCircleGroup(Arrays.asList(g1, g2));
+		m.eventList.addActionCircle(g1, 4, 7);
+		m.eventList.addActionCircle(g2, 4, 7);
 		return m;
 	}
 
 	public Move dashGrab() {
-		Move m = new Move(user, 36);
+		Move m = new Move(user, 40);
 		m.setAnimation("sprites/fighters/bomber/dashgrab.png", 1, 1);
 		m.eventList.addVelocityChange(user, 4, 6, Action.ChangeVelocity.noChange);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
-		Grabbox g1 = new Grabbox(user, 18, 3, 14);
-		m.eventList.addActionCircle(g1, 6, 10);
+		Grabbox g1 = new Grabbox(user, 18, 4, 13);
+		m.eventList.addActionCircle(g1, 4, 7);
 		return m;
 	}
 
@@ -467,8 +473,11 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, 32);
 		m.setAnimation("sprites/fighters/bomber/airgrab.png", 1, 1);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
-		Grabbox g1 = new Grabbox(user, 14, 0, 20);
-		m.eventList.addActionCircle(g1, 6, 10);
+		Grabbox g1 = new Grabbox(user, 22, 4, 13);
+		Grabbox g2 = new Grabbox(user, 8, 8, 4);
+		new ActionCircleGroup(Arrays.asList(g1, g2));
+		m.eventList.addActionCircle(g1, 4, 7);
+		m.eventList.addActionCircle(g2, 4, 7);
 		return m;
 	}
 
@@ -543,10 +552,10 @@ public class M_Hero extends MoveList_Advanced{
 	/* MISC */
 
 	public Move land(){
-		Move m = new Move(user, 3);
+		Move m = new Move(user, 4);
 		if (null != user.getPrevMove() && !user.airActive()){
 			switch(user.getPrevMove().id){
-			case MoveList_Advanced.IDnair: m = new Move(user, 5); break;
+			case MoveList_Advanced.IDnair: m = new Move(user, 6); break;
 			case MoveList_Advanced.IDfair: m = new Move(user, 12); break;
 			case MoveList_Advanced.IDbair: m = new Move(user, 8); break;
 			case MoveList_Advanced.IDuair: m = new Move(user, 8); break;

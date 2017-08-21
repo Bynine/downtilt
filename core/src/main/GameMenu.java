@@ -72,7 +72,7 @@ class GameMenu extends Menu {
 		opt = options;
 		cho = choices;
 		menuMusic.setLooping(true);
-		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_basic.png")));
+		tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_punch.png")));
 		begin();
 	}
 
@@ -108,6 +108,7 @@ class GameMenu extends Menu {
 		batch.begin();
 
 		bigFont.draw(batch, startStr, posX + 180, posY);
+		batch.draw(cursor, posX + cursorMod, startY - dec - 48 - cho.cursorPos() * 2 * (dec));
 
 		posY -= dec;
 		font.draw(batch, appendCursors("MODE:   ", mode) + mode.selected().t, posX, posY -= dec);
@@ -143,7 +144,6 @@ class GameMenu extends Menu {
 			font.setColor(fontColor);
 		}
 
-		batch.draw(cursor, posX - 48, startY - dec - 48 - cho.cursorPos() * 2 * (dec + 1));
 		batch.end();
 	}
 

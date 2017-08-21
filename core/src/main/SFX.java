@@ -66,5 +66,7 @@ public abstract class SFX {
 	public static class Spawn extends SFX{ public Spawn(){ setSFX("/melee/pew.wav"); } }
 	public static class PrepAttack extends SFX{ public PrepAttack(){ setSFX("/prepattack.mp3"); } }
 	public static class CastSpell extends SFX{ public CastSpell(){ setSFX("/castspell.mp3"); } }
+	public static class Teleport extends SFX{ public Teleport(){ setSFX("/melee/vwoop.wav"); } }
+	//public static class FastFall extends SFX{ public FastFall(){ setSFX("/melee/drum.wav"); } }
 	
 }

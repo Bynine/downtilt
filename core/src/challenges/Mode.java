@@ -11,7 +11,8 @@ import main.SFX;
 public abstract class Mode {
 
 	protected int activeChallengeIndex = 0;
-	protected final List<Bonus> upcomingBonuses = new ArrayList<Bonus>(), bonuses = new ArrayList<Bonus>();
+	protected final List<Bonus> pendingBonuses = new ArrayList<Bonus>();
+	protected final List<Bonus> bonuses = new ArrayList<Bonus>();
 	protected boolean usedSpecial = false;
 
 	/**
@@ -34,7 +35,8 @@ public abstract class Mode {
 		}
 		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
 		getActiveChallenge().update();
-		if (!DowntiltEngine.isWaiting()  && getActiveChallenge().finished()) {
+		if (!DowntiltEngine.isWaiting() && getActiveChallenge().finished()) {
+			if (!pendingBonuses.isEmpty()) addPendingBonuses();
 			for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
 			getActiveChallenge().getStage().getMusic().stop();
 			activeChallengeIndex++;
@@ -53,9 +55,10 @@ public abstract class Mode {
 			if (c.everRetried) immortal = false;
 			if (c.everFailed) unstoppable = false;
 		}
-		if (unstoppable) addBonus(new Bonus.UnstoppableBonus());
-		if (immortal) addBonus(new Bonus.ImmortalBonus());
-		if (!usedSpecial) addBonus(new Bonus.NoSpecialBonus());
+		if (unstoppable) pendValidBonus(new Bonus.UnstoppableBonus());
+		if (immortal) pendValidBonus(new Bonus.ImmortalBonus());
+		if (!usedSpecial) pendValidBonus(new Bonus.NoSpecialBonus());
+		addPendingBonuses();
 		DowntiltEngine.startVictoryScreen(getVictory());
 	}
 
@@ -70,20 +73,27 @@ public abstract class Mode {
 	public Difficulty getDifficulty(){
 		return Difficulty.Standard;
 	}
-
-	public void addBonus(Bonus newBonus){
-		boolean shouldAdd = true;
-		for (Bonus bonus: bonuses){
-			if (bonus.getClass() == newBonus.getClass()) {
-				if (newBonus instanceof Bonus.MultBonus) ((Bonus.MultBonus)bonus).increase();
-				shouldAdd = false;
-			}
-		}
-		if (shouldAdd) addValidBonus(newBonus);
+	
+	public void pendValidBonus(Bonus newBonus){
+		pendingBonuses.add(newBonus);
 	}
 	
-	protected void addValidBonus(Bonus newBonus){
-		bonuses.add(newBonus);
+	private void addPendingBonuses(){
+		for (Bonus newBonus: pendingBonuses){
+			boolean shouldAdd = true;
+			for (Bonus bonus: bonuses){
+				if (bonus.getClass() == newBonus.getClass()) {
+					if (newBonus instanceof Bonus.MultBonus) ((Bonus.MultBonus)bonus).increase();
+					shouldAdd = false;
+				}
+			}
+			if (shouldAdd) addBonus(newBonus);
+		}
+		pendingBonuses.clear();
+	}
+	
+	private void addBonus(Bonus b){
+		bonuses.add(b);
 	}
 	
 	public void setUsedSpecial(){
@@ -92,6 +102,10 @@ public abstract class Mode {
 	
 	public int getTime(){
 		return 0;
+	}
+	
+	public void wipePendingBonuses(){
+		pendingBonuses.clear();
 	}
 
 	abstract List<Challenge> getChallengeList();

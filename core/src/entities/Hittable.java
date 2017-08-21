@@ -153,7 +153,7 @@ public abstract class Hittable extends Entity {
 		else {
 			onHitSFX.play();
 		}
-		takeKnockIntoKnockback(knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
+		takeKnockIntoKnockback(hurtler, knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
 		handleCollision(hurtler);
 		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));
 	}
@@ -188,7 +188,7 @@ public abstract class Hittable extends Entity {
 		/* */
 	}
 
-	protected void takeKnockIntoKnockback(Vector2 knockback, float DAM, int hitstun){
+	protected void takeKnockIntoKnockback(Hittable hurtler, Vector2 knockback, float DAM, int hitstun){
 		knockbackHelper(knockback, DAM, hitstun, knockbackIntensity(velocity) < knockbackIntensity(knockback), HitstunType.NORMAL);
 	}
 
@@ -251,11 +251,13 @@ public abstract class Hittable extends Entity {
 		user.isNowGrabbing(target, caughtTime);
 		caughtTimer.setEndTime(caughtTime);
 		caughtTimer.reset();
-		float newPosX = user.getCenter().x - target.getImage().getWidth()/2;
-		float dispX = target.getImage().getWidth()*(1.7f/4.0f);
-		if (user.getDirection() == Direction.LEFT) newPosX -= dispX;
-		if (user.getDirection() == Direction.RIGHT) newPosX += dispX;
+		
+		float newPosX = 0;
+		float dispX = 15;
+		if (user.getDirection() == Direction.LEFT) newPosX = user.getCenter().x - (dispX + (target.getImage().getWidth() * 0.8f));
+		if (user.getDirection() == Direction.RIGHT) newPosX = user.getCenter().x + dispX;
 		float newPosY = user.position.y + image.getHeight()/4;
+		
 		if (!doesCollide(newPosX, newPosY)) position.set(newPosX, newPosY);
 		else if (!doesCollide(position.x, newPosY)) position.set(position.x, newPosY);
 		else if (!doesCollide(newPosX, position.y)) position.set(newPosX, position.y);

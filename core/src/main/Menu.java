@@ -31,6 +31,7 @@ abstract class Menu {
 	protected TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/title.png")));
 	protected TextureRegion tile = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/tile_sample.png")));
 	protected TextureRegion logo = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/logo.png")));
+	protected final int cursorMod = -128;
 
 	protected List<MenuOption<?>> opt = new ArrayList<MenuOption<?>>();
 	protected MenuOption<Integer> cho = new MenuOption<Integer>(Arrays.asList(new Choice<Integer>(0, "")));
@@ -43,7 +44,7 @@ abstract class Menu {
 		parameter.size = 16;
 		parameter.color = fontColor;
 		font = generator.generateFont(parameter);
-		parameter.color = Color.GOLDENROD;
+		parameter.color = new Color(245.0f/255.0f, 98.0f/255.0f, 5.0f/255.0f, 1);
 		navFont = generator.generateFont(parameter);
 		parameter.size = 32;
 		bigFont = generator.generateFont(parameter);
@@ -72,9 +73,9 @@ abstract class Menu {
 		}
 	}
 
+	protected final int logomod = 2;
 	protected void draw(){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		Gdx.gl.glClearColor(112.0f/255.0f, 233.0f/255.0f, 0.99f, 1);
 		batch.begin();
 
 		int dispX = DowntiltEngine.getDeltaTime() % tile.getRegionWidth();
@@ -86,7 +87,6 @@ abstract class Menu {
 		}
 
 		batch.draw(menu, 0, 0);
-		int logomod = 2;
 		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
 		batch.draw(title, 350, 560);
 		final int posY = 50;

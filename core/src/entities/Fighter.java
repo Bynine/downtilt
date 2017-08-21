@@ -43,7 +43,7 @@ public abstract class Fighter extends Hittable{
 	private ShaderProgram palette = null;
 	private final Vector2 spawnPoint;
 
-	protected Vector2 footStoolKB = new Vector2(0, 0);
+	protected Vector2 footStoolKB = new Vector2(0, -1);
 	protected int footStoolDuration = 30;
 	protected int footStoolDamage = 0;
 
@@ -312,6 +312,10 @@ public abstract class Fighter extends Hittable{
 			setActiveMove(advMoveList.selectDownThrow());
 		}
 		else if (isGrounded() && canAct()) fallThroughThinFloor();
+		else if (!isGrounded() && velocity.y < 0 && velocity.y > -8) {
+			//new SFX.FastFall().play();
+			velocity.y = -10;
+		}
 		else tryStickVertical();
 		return true; 
 	}
@@ -434,12 +438,14 @@ public abstract class Fighter extends Hittable{
 		return canWS;
 	}
 
+	private final int hitstopOnReboundJump = 3;
 	private void wallJump(){
 		wallJumpTimer.reset();
 		flip();
 		velocity.x = getWallJumpStrengthX() * direct();
 		velocity.y = getWallJumpStrengthY();
 		tumbling = false;
+		hitstopTimer.reset(hitstopOnReboundJump);
 	}
 
 	protected void doubleJump(){
@@ -460,11 +466,12 @@ public abstract class Fighter extends Hittable{
 
 	private void footStool(Fighter footStoolee){
 		doubleJump();
-		doubleJumps ++;
+		doubleJumps++;
 		doubleJumpGraphicTimer.end();
 		new SFX.FootStool().play();
 		footStoolee.getFootStooled();
 		footStoolTimer.reset();
+		hitstopTimer.reset(hitstopOnReboundJump);
 	}
 
 	protected void getFootStooled(){
@@ -544,7 +551,9 @@ public abstract class Fighter extends Hittable{
 			if (hitstunType == HitstunType.SUPER) setImage(getTumbleFrame(deltaTime));
 			else setImage(getHitstunFrame(deltaTime));
 		}
-		if (!grabbingTimer.timeUp()) setImage(getGrabFrame(deltaTime));
+		if (!grabbingTimer.timeUp()) {
+			setImage(getGrabFrame(deltaTime));
+		}
 
 		currX = image.getWidth();
 		currY = image.getHeight();

@@ -35,7 +35,7 @@ public abstract class Entity {
 	protected boolean toRemove = false, trails = false;
 	protected final List<Rectangle> tempRectangleList = new ArrayList<Rectangle>();
 	final Timer jumpTimer = new Timer(8), inActionTimer = new Timer(0);
-	final Timer jumpSquatTimer = new Timer(4), bounceTimer = new Timer(10);
+	final Timer jumpSquatTimer = new Timer(6), bounceTimer = new Timer(10);
 	final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer, bounceTimer));
 
 	public Entity(float posX, float posY){
