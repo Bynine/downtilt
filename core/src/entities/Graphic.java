@@ -308,10 +308,13 @@ public abstract class Graphic extends Entity{
 		}
 	}
 	
+	private final static int spellLength = 40;
+	private final static float spellHeightMod = 80;
+	
 	public static class HighGravity extends Graphic {
-		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/highgrav.png", 1, 1, 20, PlayMode.NORMAL);
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/highgrav.png", 2, 1, 10, PlayMode.LOOP);
 		public HighGravity(float posX, float posY){
-			super(posX, posY + 40, 40);
+			super(posX, posY + spellHeightMod, spellLength);
 			image = new Sprite(anim.getKeyFrame(0));
 			updatePosition();
 		}
@@ -322,9 +325,9 @@ public abstract class Graphic extends Entity{
 	}
 	
 	public static class LowGravity extends Graphic {
-		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lowgrav.png", 1, 1, 20, PlayMode.NORMAL);
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lowgrav.png", 2, 1, 10, PlayMode.LOOP);
 		public LowGravity(float posX, float posY){
-			super(posX, posY + 40, 40);
+			super(posX, posY + spellHeightMod, spellLength);
 			image = new Sprite(anim.getKeyFrame(0));
 			updatePosition();
 		}
@@ -335,10 +338,24 @@ public abstract class Graphic extends Entity{
 	}
 	
 	public static class LightningSpell extends Graphic {
-		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lightningspell.png", 1, 1, 20, PlayMode.NORMAL);
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/lightningspell.png", 2, 1, 10, PlayMode.LOOP);
 		public LightningSpell(float posX, float posY){
-			super(posX, posY + 40, 40);
+			super(posX, posY + spellHeightMod, spellLength);
 			image = new Sprite(anim.getKeyFrame(0));
+			updatePosition();
+		}
+		void updatePosition(){
+			setImage(anim.getKeyFrame(duration.getCounter()));
+			if (duration.timeUp()) setRemove();
+		}
+	}
+	
+	public static class BossSheet extends Graphic {
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/boss_sheet.png", 1, 1, 1, PlayMode.LOOP);
+		public BossSheet(float posX, float posY){
+			super(posX, posY, 180);
+			image = new Sprite(anim.getKeyFrame(0));
+			layer = Layer.MIDDLEFRONT;
 			updatePosition();
 		}
 		void updatePosition(){

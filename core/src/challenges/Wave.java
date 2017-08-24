@@ -57,4 +57,8 @@ public class Wave {
 		for (EnemySpawner fs: fSList) fs.setToEndless();
 	}
 
+	public void stop() {
+		for (EnemySpawner fs: fSList) fs.stop();
+	}
+
 }

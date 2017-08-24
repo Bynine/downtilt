@@ -82,11 +82,11 @@ public abstract class MoveList_Advanced extends MoveList{
 
 	/* Move Selection */
 
-	static final int IDslide = 0;
 	static final int IDuweak = 1;
 	static final int IDdweak = 2;
 	static final int IDnweak = 3;
 	static final int IDsweak = 4;
+	public static final int IDslide = 5;
 	static final int IDuspecial = 10;
 	static final int IDdspecial = 11;
 	static final int IDnspecial = 12;

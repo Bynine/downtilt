@@ -28,10 +28,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 * MUST BE ON before making a jar/releasing!
 	 */
 	private static boolean release = false;
-	
+
 	private static boolean demoBuild = false;
-	
-	private static boolean musicToggle = false;
+
+	private static boolean musicToggle = true;
 	private static boolean debugToggle = true;
 	private static boolean saveToggle = true;
 	private static boolean fpsLoggle = false;
@@ -40,6 +40,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
 	private static final List<Controller> controllerList = new ArrayList<Controller>();
+	private static final List<Bonus> transitionBonuses = new ArrayList<Bonus>();
+	private static int transitionTotal = 0;
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
@@ -55,7 +57,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static RankingScreen rankingScreen;
 	private static VictoryScreen activeVictory;
 	private static Palette activePalette = Palette.NORMAL;
-	
+	private static String errorMessage = null;
+
 	public void create () {
 		shaderMushroom = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/wild.glsl"));
 		shaderSpace = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/solemn.glsl"));
@@ -64,7 +67,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		shaderAdventure = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/dark.glsl"));
 		shaderEndless = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/endless.glsl"));
 		shaderTimeTrial = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/heroic.glsl"));
-		
+
 		activeMode = new Endless(new Stage_Standard());
 		SaveHandler.loadSave();
 		for (Controller c: Controllers.getControllers()) {
@@ -78,7 +81,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		beginFighters(true);
 		GraphicsHandler.begin();
 		MapHandler.begin();
-		
+
 		int[] options = SaveHandler.getOptions();
 		optionMenu = new OptionMenu(options);
 		optionMenu.setOptions(); 
@@ -152,10 +155,27 @@ public class DowntiltEngine extends ApplicationAdapter {
 		case OPTIONS: 	optionMenu.update();	break;
 		case RANKING:	rankingScreen.update(); break;
 		case VICTORY: 	activeVictory.update();	break;
-		}
+		case TRANSITION:updateTransition();		break;
+		} 
+		if (null != errorMessage) GraphicsHandler.drawMessage(errorMessage);
 	}
 
 	private void updateGame(){
+		if (debugOn()) updateGameHelper();
+		else {
+			try{
+				updateGameHelper();
+			}
+			catch (Exception e){
+				e.printStackTrace();
+				new SFX.Error().play();
+				startGameMenu();
+				errorMessage = e.getMessage();
+			}
+		}
+	}
+
+	private void updateGameHelper(){
 		if (!isWaiting()){
 			activeMode.update();
 			MapHandler.updateInputs();
@@ -168,8 +188,20 @@ public class DowntiltEngine extends ApplicationAdapter {
 		else{
 			getChallenge().getStage().getMusic().stop();
 		}
-		GraphicsHandler.updateGraphics();
+		updateGraphics();
+		GraphicsHandler.renderGUI();
 		GraphicsHandler.updateCamera();
+	}
+
+	private void updateTransition(){
+		MapHandler.updateInputs();
+		if (primaryInputHandler.menuAdvance()) endTransition();
+		updateGraphics();
+		TransitionGraphicsHandler.drawTransition(transitionBonuses, transitionTotal);
+	}
+
+	private void updateGraphics(){
+		GraphicsHandler.updateGraphics();
 		TransitionGraphicsHandler.update();
 	}
 
@@ -208,6 +240,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startMode(Mode mode, int numPlayers, int initialChallenge){
+		errorMessage = null;
 		activeMode = mode;
 		gameState = GameState.GAME;
 		playerList.clear();
@@ -255,12 +288,41 @@ public class DowntiltEngine extends ApplicationAdapter {
 		gameState = gs;
 	}
 
+	public static void startTransition(List<Bonus> bonuses, int total){
+		gameState = GameState.TRANSITION;
+		transitionBonuses.clear();
+		transitionBonuses.addAll(bonuses);
+		transitionTotal = total;
+	}
+
+	private static void endTransition(){
+		gameState = GameState.GAME;
+	}
+
 	public static Challenge getChallenge(){
 		return activeMode.getActiveChallenge();
 	}
 
 	public enum GameState{
-		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY
+		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY, TRANSITION
+	}
+
+	public enum Palette{
+		NORMAL, MUSHROOM, SPACE, SKY, NIGHTMARE, ADVENTURE, TIMETRIAL, ENDLESS
+	}
+
+	public static ShaderProgram getShaderFromPalette(Palette ap) {
+		switch(ap){
+		case NORMAL: return null;
+		case MUSHROOM: return shaderMushroom;
+		case SPACE: return shaderSpace;
+		case SKY: return shaderSky;
+		case NIGHTMARE: return shaderNightmare;
+		case ADVENTURE: return shaderAdventure;
+		case TIMETRIAL: return shaderTimeTrial;
+		case ENDLESS: return shaderEndless;
+		default: return null;
+		}
 	}
 
 	public static void resetDeltaTime() {
@@ -270,12 +332,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static float getMusicVolume(){ return masterVolume * musicVolume; }
 	public static float getSFXVolume(){ return masterVolume * sfxVolume; }
 	public static float getScreenShakeMod(){ return screenShakeMod; }
-	
+
 	public static void setMusicVolume(float v){ musicVolume = v; }
 	public static void setSFXVolume(float v){ sfxVolume = v; }
 	public static void setScreenShake(float ss) { screenShakeMod = ss; }
 	public static void setActivePalette(Palette p){ activePalette = p; }
-	
+
 	public static int getDeltaTime(){ return deltaTime; }
 	public static boolean isPaused() { return paused; }
 	public static List<Fighter> getPlayers(){ return playerList; }
@@ -313,24 +375,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	public static Mode getMode(){
 		return activeMode;
-	}
-	
-	public enum Palette{
-		NORMAL, MUSHROOM, SPACE, SKY, NIGHTMARE, ADVENTURE, TIMETRIAL, ENDLESS
-	}
-	
-	public static ShaderProgram getShaderFromPalette(Palette ap) {
-		switch(ap){
-		case NORMAL: return null;
-		case MUSHROOM: return shaderMushroom;
-		case SPACE: return shaderSpace;
-		case SKY: return shaderSky;
-		case NIGHTMARE: return shaderNightmare;
-		case ADVENTURE: return shaderAdventure;
-		case TIMETRIAL: return shaderTimeTrial;
-		case ENDLESS: return shaderEndless;
-		default: return null;
-		}
 	}
 
 }

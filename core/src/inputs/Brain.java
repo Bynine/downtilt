@@ -306,4 +306,21 @@ public abstract class Brain{
 		}
 
 	}
+	
+	public static class PostBossBrain extends Brain{
+
+		public PostBossBrain(InputHandlerCPU body) {
+			super(body);
+		}
+
+		void update(InputPackage pack){
+			super.update(pack);
+			body.yInput = 0;
+			headTowardPlayer(changeDirection);
+			if (shouldGetUp(0.002)) getUp();
+			if (pack.isOffStage) attemptRecovery(waitToUseUpSpecial);
+			else if (pack.isGrounded) body.xInput *= -1;
+		}
+
+	}
 }

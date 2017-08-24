@@ -24,6 +24,10 @@ public abstract class Victory {
 	}
 	
 	public int getScore(){
+		return getBonusScore(bonuses);
+	}
+	
+	public static int getBonusScore(List<Bonus> bonuses){
 		int score = 0;
 		for (Bonus b: bonuses){
 			if (!(b instanceof Bonus.FactorBonus)) score += (b.getScore());

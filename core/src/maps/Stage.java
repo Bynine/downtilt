@@ -153,20 +153,18 @@ public abstract class Stage {
 	public static class LightningHandler{
 		private Timer lightningTimer = new Timer(100);
 		private Vector2 lightningPos = new Vector2(0, 0);
-		private int timing = 30;
+		private int timing = 45;
 		private double chance = 0.13;
 		private boolean hasDuration = false;
 		private final Timer duration = new DurationTimer(0);
 		
-		LightningHandler(){
+		public LightningHandler(){
 			
 		}
 		
-		public LightningHandler(int dur, int timer, int timing, double chance){
-			this.duration.setEndTime(dur);
-			lightningTimer.setEndTime(timer);
-			this.chance = chance;
-			this.timing = timing;
+		public LightningHandler(int dur){
+			chance = 1;
+			duration.setEndTime(dur);
 			hasDuration = true;
 		}
 		

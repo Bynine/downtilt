@@ -47,9 +47,8 @@ public class M_Hero extends MoveList_Advanced{
 		m.setAnimation("sprites/fighters/bomber/uweak.png", frames, frame);
 		m.setHurtBox(25, 45, -8, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
-		Hitbox swing = new Hitbox(user, 3.0f, 2.1f, 7, 90, 9,  5, 16, new SFX.MidHit());
-		Hitbox punch = new Hitbox(user, 3.0f, 2.1f, 8, 85, 0, 27, 14, new SFX.MidHit());
-		new ActionCircleGroup(Arrays.asList(swing, punch));
+		Hitbox swing = new Hitbox(user, 4.2f, 0.6f, 5, 90, 9,  5, 16, new SFX.LightHit());
+		Hitbox punch = new Hitbox(user, 5.4f, 0.6f, 6, 85, 0, 27, 14, new SFX.MidHit());
 		m.eventList.addActionCircle(swing, frame, frame * 2);
 		m.eventList.addActionCircle(punch, frame + 2, frame * 2 + 2);
 		return m;
@@ -61,14 +60,14 @@ public class M_Hero extends MoveList_Advanced{
 
 		Move m = new Move(user, frame * frames);
 		m.setAnimation("sprites/fighters/bomber/dweak.png", frames, frame);
-		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
+		m.setHurtBox(30, 40, -8, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
-		Hitbox inner = new Hitbox(user, 4.2f, 0.7f, 6, 82,  2, -8, 12, new SFX.MidHit());
-		Hitbox midd =  new Hitbox(user, 4.1f, 0.8f, 7, 88, 13,-11, 10, new SFX.MidHit());
-		Hitbox outer = new Hitbox(user, 4.0f, 0.9f, 8, 96, 27,-11, 10, new SFX.MidHit());
+		Hitbox inner = new Hitbox(user, 5.2f, 0.7f, 6, 82,  2, -8, 12, new SFX.MidHit());
+		Hitbox midd =  new Hitbox(user, 5.1f, 0.8f, 7, 88, 13,-11, 10, new SFX.MidHit());
+		Hitbox outer = new Hitbox(user, 5.0f, 0.9f, 8, 96, 27,-11, 10, new SFX.MidHit());
 		new ActionCircleGroup(Arrays.asList(inner, midd, outer));
 		m.eventList.addActionCircle(inner, frame * 1, frame * 2);
-		m.eventList.addActionCircle(midd, frame * 1, frame * 2);
+		m.eventList.addActionCircle(midd,  frame * 1, frame * 2);
 		m.eventList.addActionCircle(outer, frame * 1, frame * 2);
 		return m;
 	}
@@ -97,14 +96,15 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move slide() { 
 		Move m = new Move(user, 32);
+		if (user.speedActive()) m = new Move(user, 20);
 		m.dontTurn();
 		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/bomber/slideattack.png", 2, 16);
 
-		Hitbox early1 = new Hitbox(user, 5.6f, 1.7f, 10,  75,  0, -4, 12, new SFX.MidHit());
-		Hitbox early2 = new Hitbox(user, 5.6f, 1.7f, 10,  75, 16, -6,  8, new SFX.MidHit());
-		Hitbox late1  = new Hitbox(user, 4.0f, 1.0f, 07, 100,  0, -8, 10, new SFX.LightHit());
-		Hitbox late2  = new Hitbox(user, 4.0f, 1.0f, 07, 100, 16, -4,  6, new SFX.LightHit());
+		Hitbox early1 = new Hitbox(user, 6.6f, 1.7f, 10,  75, -4, -4, 16, new SFX.MidHit());
+		Hitbox early2 = new Hitbox(user, 6.6f, 1.7f, 10,  75, 24, -6, 12, new SFX.MidHit());
+		Hitbox late1  = new Hitbox(user, 5.0f, 1.0f,  7, 100, -4, -8, 12, new SFX.LightHit());
+		Hitbox late2  = new Hitbox(user, 5.0f, 1.0f,  7, 100, 24, -4,  8, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early1, early2, late1, late2));
 		m.eventList.addConstantVelocity(user, 4, 16, user.getSpeedMod() * 9, Action.ChangeVelocity.noChange);
 		m.eventList.addActionCircle(early1, 3, 10);
@@ -129,6 +129,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox late  = new Hitbox(user, 3.0f, 2.0f, 12, Hitbox.SAMURAI, 19, 2, 20, new SFX.MidHit(), c);
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
+		m.eventList.addTremble(m, 0, 4);
 		m.eventList.addConstantVelocity(user, frame * 2, frame * 3, user.getSpeedMod() * 8, 0);
 		m.eventList.addActionCircle(early, frame * 2, frame * 3);
 		m.eventList.addActionCircle(late, frame * 3, frame * 4);
@@ -151,6 +152,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox h5 = new Hitbox(user, 2.5f, 1.5f, 10, 30,-18,-16, 16, new SFX.MidHit(),	 c);
 		new ActionCircleGroup(Arrays.asList(h1, h2, h3, h4, h5));
 		m.eventList.addCharge(user, c);
+		m.eventList.addTremble(m, 0, 4);
 		m.eventList.addActionCircle(h1, frame + 0, frame + 2);
 		m.eventList.addActionCircle(h2, frame + 2, frame + 4);
 		m.eventList.addActionCircle(h3, frame + 4, frame + 6);
@@ -169,6 +171,7 @@ public class M_Hero extends MoveList_Advanced{
 		m.setStopsInAir();
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
 		m.eventList.addCharge(user, c);
+		m.eventList.addTremble(m, 0, 4);
 
 		int x = 18;
 		int y = -14;
@@ -180,6 +183,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox lateL =  new Hitbox(user, 3.5f, 2.0f, 12, lateAngle,   x,  y, size - 1,	new SFX.MidHit(), c);
 		Hitbox lateR =  new Hitbox(user, 3.5f, 2.0f, 12, lateAngle,  -x,  y, size - 1,	new SFX.MidHit(), c);
 		new ActionCircleGroup(Arrays.asList(earlyL, lateL, earlyR, lateR));
+		m.eventList.addSound(new SFX.Break(), frame * 2);
 		m.eventList.addActionCircle(earlyL, frame*2, frame*3);
 		m.eventList.addActionCircle(earlyR, frame*2, frame*3);
 		m.eventList.addActionCircle(lateL, frame*3, frame*4);
@@ -191,7 +195,7 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move nAir() {
 		Move m = new Move(user, 27);
-		m.setAnimation("sprites/fighters/bomber/nair.png", 2, 14);
+		m.setAnimation("sprites/fighters/bomber/nair.png", 1, 14);
 		Hitbox earlyBody = new Hitbox(user, 4.0f, 1.3f, 10, 75, -10, 0, 17, new SFX.MidHit());
 		Hitbox earlyFoot = new Hitbox(user, 4.0f, 1.2f, 11, 90, 20, -6, 15, new SFX.MidHit());
 		Hitbox lateBody = new Hitbox(user,  2.0f, 1.0f, 7, 80, -10, 0, 13, new SFX.LightHit());
@@ -267,10 +271,10 @@ public class M_Hero extends MoveList_Advanced{
 		Move m = new Move(user, frame * frames);
 		m.setHurtBox(25, 50, 10, Move.HURTBOXNOTSET);
 		m.setAnimation("sprites/fighters/bomber/bair.png", frames, frame);
-		Hitbox fist1 = new Hitbox(user, 3.1f, 2.6f,  13, 	62, -20,  1, 17, new SFX.MidHit());
-		Hitbox body1 = new Hitbox(user, 2.5f, 1.5f,  11, 	78,  -4, -6, 20, new SFX.MidHit());
-		Hitbox fist2 =  new Hitbox(user, 2.0f, 0.5f, 10, 	30, -18,  0, 12, new SFX.LightHit());
-		Hitbox body2 =  new Hitbox(user, 1.5f, 0.5f,  9, 	40,  -2, -3, 14, new SFX.LightHit());
+		Hitbox fist1 = new Hitbox(user, 3.1f, 2.6f,  13, 62, -20, 10, 18, new SFX.HeavyHit());
+		Hitbox body1 = new Hitbox(user, 2.5f, 1.5f,  11, 78,  -4,  4, 20, new SFX.MidHit());
+		Hitbox fist2 = new Hitbox(user, 2.0f, 0.5f, 10,  30, -18, 11, 12, new SFX.MidHit());
+		Hitbox body2 = new Hitbox(user, 1.5f, 0.5f,  9,  40,  -2,  7, 14, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(fist1, body1, fist2, body2));
 		m.eventList.addActionCircle(fist1, frame, frame*2);
 		m.eventList.addActionCircle(body1, frame, frame*2);
@@ -285,7 +289,7 @@ public class M_Hero extends MoveList_Advanced{
 		int start = 20;
 		int end = start + 16;
 		Move m = new Move(user, end + 1);
-		m.setAnimation("sprites/fighters/bomber/uspecial.png", 1, 1);
+		m.setAnimation("sprites/fighters/bomber/uspecialu.png", 1, 1);
 		m.setHeroUSpecial();
 
 		Hitbox push = new Hitbox.AngleHitbox(user, 7.6f, 0.0f, 2, 0, 0, 24, new SFX.LightHit());
@@ -310,12 +314,12 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move dSpecial() {
 		int frames = 2;
-		int frame = 16;
+		int frame = 20;
 
 		Move m = new Move(user, frames * frame);
 		m.setAnimation("sprites/fighters/bomber/dspecial.png", frames, frame);
 		m.setContinueOnLanding();
-		m.eventList.addConstantVelocity(user, 0, frame, 0, 0);
+		m.eventList.addConstantVelocity(user, 0, frame * 2, 0, -user.getGravity());
 		m.eventList.addUseSpecial(user, frame - 1, -6);
 		m.eventList.addSlow(frame, 300);
 		return m;
@@ -509,19 +513,20 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move getUpAttack() {
-		Move m = new Move(user, 33);
-		m.setAnimation("sprites/fighters/bomber/getupattack.png", 3, 11);
-		m.setHurtBox(25, 35, 0, Move.HURTBOXNOTSET);
-		m.eventList.addInvincible(user, 0, 10);
-		Hitbox front1 = new Hitbox(user, 5.0f, 0.5f, 12, Hitbox.SAMURAI,  20, -8, 16, new SFX.LightHit());
-		Hitbox front2 = new Hitbox(user, 5.0f, 0.5f, 14, Hitbox.SAMURAI,  44, -8, 12, new SFX.LightHit());
-		Hitbox back1 =  new Hitbox(user, 5.0f, 0.5f, 12, Hitbox.SAMURAI, -20, -8, 16, new SFX.LightHit());
-		Hitbox back2 =  new Hitbox(user, 5.0f, 0.5f, 14, Hitbox.SAMURAI, -44, -8, 12, new SFX.LightHit());
-		m.eventList.addActionCircle(front1, 11, 16);
-		m.eventList.addActionCircle(front2, 11, 16);
-		m.eventList.addActionCircle(back1, 22, 27);
-		m.eventList.addActionCircle(back2, 22, 27);
-		return m;
+		return dodge();
+//		Move m = new Move(user, 33);
+//		m.setAnimation("sprites/fighters/bomber/getupattack.png", 3, 11);
+//		m.setHurtBox(25, 35, 0, Move.HURTBOXNOTSET);
+//		m.eventList.addInvincible(user, 0, 10);
+//		Hitbox front1 = new Hitbox(user, 5.0f, 0.5f, 12, Hitbox.SAMURAI,  20, -8, 16, new SFX.LightHit());
+//		Hitbox front2 = new Hitbox(user, 5.0f, 0.5f, 14, Hitbox.SAMURAI,  44, -8, 12, new SFX.LightHit());
+//		Hitbox back1 =  new Hitbox(user, 5.0f, 0.5f, 12, Hitbox.SAMURAI, -20, -8, 16, new SFX.LightHit());
+//		Hitbox back2 =  new Hitbox(user, 5.0f, 0.5f, 14, Hitbox.SAMURAI, -44, -8, 12, new SFX.LightHit());
+//		m.eventList.addActionCircle(front1, 11, 16);
+//		m.eventList.addActionCircle(front2, 11, 16);
+//		m.eventList.addActionCircle(back1, 22, 27);
+//		m.eventList.addActionCircle(back2, 22, 27);
+//		return m;
 	}
 
 	private final int rollLength = 20;
@@ -562,7 +567,7 @@ public class M_Hero extends MoveList_Advanced{
 			default: break;
 			}
 		}
-		m.setAnimation("sprites/fighters/bomber/crouch.png", 1, 1);
+		m.setAnimation("sprites/fighters/bomber/land.png", 1, 1);
 		if (null != user.getPrevMove() && user.getPrevMove().id == MoveList_Advanced.IDdair){
 			m = new Move(user, 12); 
 			if (user.airActive()) m = new Move(user, 3); 
@@ -621,6 +626,7 @@ public class M_Hero extends MoveList_Advanced{
 		h1.setHitstunType(HitstunType.SUPER);
 		h1.setIgnoreArmor();
 		h1.setNoReverse();
+		m.eventList.addSound(new SFX.Explode(), 0);
 		m.eventList.addActionCircle(h1, 10, 20);
 		m.eventList.addInvincible(user, 0, 30);
 		return m;

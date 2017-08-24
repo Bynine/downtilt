@@ -71,7 +71,7 @@ public abstract class Hazard extends Entity {
 		Hitbox h1, h2, h3, h4, h5, h6, h7, h8;
 		List<Hitbox> hitboxes = new ArrayList<Hitbox>(Arrays.asList(h1, h2, h3, h4, h5, h6, h7, h8));
 		List<ActionCircle> finale =  new ArrayList<ActionCircle>();
-		DurationTimer life = new DurationTimer(25);
+		DurationTimer life = new DurationTimer(33);
 		ActionCircleGroup acg = new ActionCircleGroup();
 
 		public Lightning(float posX, float posY) {
@@ -82,7 +82,7 @@ public abstract class Hazard extends Entity {
 			
 			int inc = 64;
 			for (Hitbox h: hitboxes){
-				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 45, 0, inc, 30, new SFX.SharpHit());
+				h = new HazardHitbox(this, 4.5f, 3.0f, 20, 270, 0, inc, 30, new SFX.SharpHit());
 				h.setProperty(Property.STUN);
 				inc -= 64;
 				finale.add(h);

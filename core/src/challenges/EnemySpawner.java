@@ -149,4 +149,8 @@ public class EnemySpawner {
 		}
 
 	}
+
+	public void stop() {
+		capacity = 0;
+	}
 }

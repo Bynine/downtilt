@@ -8,9 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import challenges.Bonus;
 import challenges.Victory.Ranking;
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import entities.Basic;
 import entities.Hittable;
 import maps.Stage_Blocks;
@@ -66,6 +70,33 @@ public class GlobalRepo {
 	static final Hittable genericHittable = new Basic(0, 0, NOTEAM);
 	public static Hittable getGenericHittable(){
 		return genericHittable;
+	}
+	
+	public static void drawBonusList(int startX, int startY, List<Bonus> bonuses, SpriteBatch batch, BitmapFont font){
+		final int stringLocationX = startX;
+		final int lineHeight = 24;
+		final int maxListHeight = lineHeight * 16;
+		
+		int listHeight = lineHeight * bonuses.size();
+		int scrollDownDistance = 0;
+		if (listHeight != 0) scrollDownDistance = -DowntiltEngine.getDeltaTime()/2 % listHeight;
+		int listPosition = 1;
+
+		font.draw(batch, "-- Bonuses --", stringLocationX, startY);
+		for (Bonus b: bonuses){
+			
+			String bonusString = b.getName();
+			if (b.getMult() > 1) bonusString = b.getName() + " x" + b.getMult();
+			if (b.getScore() > 0) bonusString = bonusString.concat(": " + b.getScore());
+			
+			int stringLocationY = 0;
+			if (listHeight > maxListHeight) stringLocationY = startY + (scrollDownDistance - (listPosition * lineHeight)) % listHeight;
+			else stringLocationY = startY + - (listPosition * lineHeight);
+			if (stringLocationY < startY && stringLocationY > startY - maxListHeight) {
+				font.draw(batch, bonusString, stringLocationX, stringLocationY);
+			}
+			listPosition++;
+		}
 	}
 
 	/* MISC */

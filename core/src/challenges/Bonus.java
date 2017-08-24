@@ -74,6 +74,14 @@ public abstract class Bonus {
 		}	
 	}
 	
+	public static class NoveltyBonus extends MultBonus{
+		public NoveltyBonus(){
+			points = 1;
+			if (Math.random() < 0.5) name = "Plantain Enthusiast";
+			else name = "Ichythologist";
+		}
+	}
+	
 	public static abstract class FactorBonus extends Bonus{
 		protected float factor = 1;
 		public float getFactor(){

@@ -18,7 +18,7 @@ public class Adventure extends Mode{
 	private final Difficulty difficulty;
 	
 	List<Wave> waveDebug = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic), 1, 1, 10))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 1, 1, 10))
 			));
 
 	/**
@@ -28,7 +28,7 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss2, Difficulty.Standard));
+				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, Difficulty.Beginner));
 				//challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
 			}
 			else{
@@ -144,25 +144,24 @@ public class Adventure extends Mode{
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 6, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.heavy, EnemyRepo.basic), 5, 3, 80))
 			));
+	private List<Wave> waveSpace2 = new ArrayList<Wave>(Arrays.asList(
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 5, 3, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.fly), 5, 3, 80))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 5, 4, 20))
+			));
 	private List<Wave> waveBlocks2 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 6, 3, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatheavy), 1, 1, 120))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.bomb), 7, 4, 120))
+			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 3, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 2, 2, 120))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 7, 4, 120))
 			));
 	private List<Wave> waveMushroom2 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 7, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.heavy), 5, 2, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 16, 8, 20))
 			));
-	private List<Wave> waveSpace2 = new ArrayList<Wave>(Arrays.asList(
-			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 5, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.fly), 5, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb, EnemyRepo.shoot, EnemyRepo.basic), 5, 4, 20))
-			));
 	private List<Wave> waveSky2 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.basic, EnemyRepo.shoot), 6, 4, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.heavy), 3, 2, 80))
-			//,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 3, 60))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.shoot, EnemyRepo.heavy), 8, 8, 180))
 			));
 	private List<Wave> waveBoss2 = new ArrayList<Wave>(Arrays.asList(
@@ -262,6 +261,25 @@ public class Adventure extends Mode{
 	}
 	
 	@Override
+	protected void addPendingBonuses(){
+		List<Bonus> consolidatedBonuses = new ArrayList<Bonus>();
+		for (Bonus newBonus: pendingBonuses){
+			boolean shouldAdd = true;
+			for (Bonus bonus: consolidatedBonuses){
+				if (bonus.getClass() == newBonus.getClass()) {
+					if (newBonus instanceof Bonus.MultBonus) ((Bonus.MultBonus)bonus).increase();
+					shouldAdd = false;
+				}
+			}
+			if (shouldAdd) consolidatedBonuses.add(newBonus);
+		}
+		super.addPendingBonuses();
+		if (activeChallengeIndex < challengeList.size() - 1) {
+			DowntiltEngine.startTransition(consolidatedBonuses, Victory.getBonusScore(bonuses));
+		}
+	}
+	
+	@Override
 	public int getTime(){
 		int seconds = 0;
 		for (Challenge c: getChallengeList()){
@@ -270,6 +288,7 @@ public class Adventure extends Mode{
 		return seconds/3600;
 	}
 	
+	@Override
 	Victory getVictory(){
 		bonuses.add(new Bonus.TimeBonus(getTime()));
 		List<Integer> longestComboList = new ArrayList<Integer>();

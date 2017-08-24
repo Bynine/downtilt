@@ -26,8 +26,8 @@ public class Shoot extends Fighter {
 	public Shoot(float posX, float posY, int team) {
 		super(posX, posY, team);
 		image = new Sprite(standImage.getKeyFrame(0));
-		gravity = -0.41f;
-		baseWeight = 90;
+		gravity = -0.39f;
+		baseWeight = 96;
 		jumpAcc = 0.49f;
 		airSpeed = 1.8f;
 		walkAcc = 0.3f;

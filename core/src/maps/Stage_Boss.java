@@ -9,6 +9,7 @@ public class Stage_Boss extends Stage {
 
 	public Stage_Boss(){
 		roomMusic = Gdx.audio.newMusic(Gdx.files.internal("music/beast.mp3"));
+		dispX = GlobalRepo.TILE * 4;
 		crazy = true;
 		setup();
 	}

@@ -50,12 +50,12 @@ public abstract class Fighter extends Hittable{
 	protected TextureRegion defaultIcon = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/iconalien.png")));
 
 	private Hittable caughtTarget = null;
-	private IDMove activeMove = null, preLandMove = null; 
+	private IDMove activeMove = null, preLandMove = null;
 	private final Combo combo = new Combo();
 
 	private InputHandler inputHandler = new InputHandlerKeyboard(this);
 	private final int randomAnimationDisplacement;
-	protected MoveList moveList = new M_Basic(this);
+	protected MoveList moveList = new M_Basic(this, "basic");
 	public static String name = "UNASSIGNED NAME";
 
 	private final List<IDMove> staleMoveQueue = new ArrayList<IDMove>();
@@ -98,6 +98,12 @@ public abstract class Fighter extends Hittable{
 		}
 		prevStickX = stickX;
 		preLandMove = null;
+	}
+	
+	@Override
+	void handleFriction(){
+		if (!hitstopTimer.timeUp()) return;
+		super.handleFriction();
 	}
 
 	private boolean isTrembling(){
@@ -450,7 +456,7 @@ public abstract class Fighter extends Hittable{
 
 	protected void doubleJump(){
 		getVelocity().y = getDoubleJumpStrength();
-		MapHandler.addEntity(new Graphic.DoubleJumpRing(position.x, getCenter().y));
+		MapHandler.addEntity(new Graphic.DoubleJumpRing(position.x, position.y));
 		if (prevStickX < -unregisteredInputMax && velocity.x > 0) velocity.x = 0; 
 		if (prevStickX >  unregisteredInputMax && velocity.x < 0) velocity.x = 0; 
 		velocity.x += 1 * stickX;
@@ -680,11 +686,13 @@ public abstract class Fighter extends Hittable{
 					!attackTimer.timeUp() && attackTimer.getCounter() < minFrameBReverse && !getActiveMove().move.isNoTurn()
 					&& getActiveMove().id >= MoveList_Advanced.specialRange[0] && getActiveMove().id <= MoveList_Advanced.specialRange[1];
 					if (!bReverse) return;
+			boolean isSlide = getActiveMove().id == MoveList_Advanced.IDslide;
+			if (isSlide) return;
 		}
 		else if (!canReverseInAir()) return;
 		boolean turnLeft = stickX < -minTurn && (prevStickX > -minTurn) && getDirection() == Direction.RIGHT;
 		boolean turnRight = stickX > minTurn && (prevStickX < minTurn)  && getDirection() == Direction.LEFT;
-		if (turnLeft || turnRight) flip();
+		if ((turnLeft || turnRight)) flip();
 	}
 	private final List<State> cantTurnStates = new ArrayList<State>(Arrays.asList(State.CROUCH, State.JUMPSQUAT, State.FALLEN));
 
@@ -746,7 +754,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	@Override
-	protected void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
+	public void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
 		super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
 		if (null != caughtTarget) beginThrow();
 	}

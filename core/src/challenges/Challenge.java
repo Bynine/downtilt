@@ -76,6 +76,7 @@ public abstract class Challenge {
 
 	public void update(){
 		if (failed) startChallenge();
+		if (null == activeWave) return;
 		activeWave.update(DowntiltEngine.getDeltaTime());
 		nextWaveChecker();
 		if (inFailState()) failChallenge();
@@ -219,6 +220,14 @@ public abstract class Challenge {
 
 	public enum Difficulty{
 		Beginner, Standard, Advanced, Nightmare
+	}
+	
+	public boolean bossHurt(){
+		return false;
+	}
+	
+	public boolean postBoss(){
+		return false;
 	}
 	
 }

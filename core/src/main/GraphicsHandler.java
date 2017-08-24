@@ -56,7 +56,7 @@ public class GraphicsHandler {
 	specialempty = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialempty.png"))),
 	specialbar = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/specialbar.png"))),
 	stock = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/stock.png"))),
-	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/pauseoverlay.png"))),
+	pauseOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/overlay_pause.png"))),
 	ripplebg = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/ripplebg.png")));
 	private static ShaderProgram hitstunShader, slowShader, airShader, defenseShader, powerShader, speedShader, wavyShader;
 
@@ -130,7 +130,7 @@ public class GraphicsHandler {
 			parallaxCam.position.x = cam.position.x;
 			float parallax = 1;
 			int updateSpeed = 4;
-			float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getPosition().x;
+			float updatePosition = cam.position.x - cam.viewportWidth + DowntiltEngine.getPlayers().get(0).getCenter().x;
 			parallaxCam.position.x = 
 					(parallaxCam.position.x * (updateSpeed - 1) +
 							( (cam.position.x * (parallax - 1)) + updatePosition)/parallax)/updateSpeed;
@@ -201,9 +201,9 @@ public class GraphicsHandler {
 		renderer.setView(parallaxCam);
 		arr = new int[]{2};  // render fast parallax
 		renderer.render(arr);
-
 		renderer.getBatch().getShader().end();
 		renderer.getBatch().setShader(null);
+
 		batch.begin();  // render bg entities
 		batch.setProjectionMatrix(cam.combined);
 		for (Entity e: MapHandler.activeRoom.getEntityList()) if (e.getLayer() == Entity.Layer.MIDDLEBACK) renderEntity(e);
@@ -233,15 +233,12 @@ public class GraphicsHandler {
 		font.setColor(1, 1, 1, 1);
 
 		if (DowntiltEngine.debugOn()) debugRender();
-
-		batch.begin();
-		if (!DowntiltEngine.isWaiting()) renderGUI();
-		batch.end();
 	}
-	
+
 	private static void drawCrazyBG(){ 
 		batch.begin();
 		float time = (float) Math.sin(DowntiltEngine.getDeltaTime()/200.0f);
+		if (DowntiltEngine.getChallenge().bossHurt()) time = (float) Math.tan(Math.PI * time);
 		wavyShader.begin();
 		wavyShader.setUniformf("time", time);
 		wavyShader.setUniformf("resolutionx", SCREENWIDTH);
@@ -256,75 +253,98 @@ public class GraphicsHandler {
 	private static void renderEntity(Entity en){
 		boolean drawShield = false, drawPerfectShield = false;
 		batch.setColor(en.getColor());
+
 		if (en instanceof Fighter) {
 			Fighter fi = (Fighter) en;
-			if (fi.getCombo().getRank() > 0) drawCombo(fi);
-			if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
-			if (DowntiltEngine.debugOn()) drawPercentage(en);
-
-			
-			float colorMod = 0.5f * fi.getPercentage() / fi.getWeight();
-			float rColor = MathUtils.clamp(fi.getColor().r - colorMod / 2, 0.45f, 1);
-			float gbColor = MathUtils.clamp(fi.getColor().g - colorMod, 0.15f, 1);
-
-			if (fi.getArmor() > 1) drawAfterImage(fi, batch.getShader(), defenseShader);
-
-			if (null != fi.getPalette()) {
-				ShaderProgram palette = fi.getPalette();
-				palette.begin();
-				if (fi.isInvincible()) palette.setUniformf(GlobalRepo.alpha, 0.5f);
-				else palette.setUniformf(GlobalRepo.alpha, 1f);
-				palette.setUniformf(GlobalRepo.red, rColor);
-				palette.setUniformf(GlobalRepo.gb, gbColor);
-				palette.end();
-				batch.setShader(palette);
-			}
-			else {
-				batch.setColor(fi.getColor());
-				batch.setColor(rColor, gbColor, gbColor, 1);
-				if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
-			}
-
-			if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
-				drawRainbowAfterImage(fi, batch.getShader());
-			}
-			else {
-				if (fi.powerActive()) drawAfterImage(fi, batch.getShader(), powerShader);
-				if (fi.defenseActive()) drawAfterImage(fi, batch.getShader(), defenseShader);
-				if (fi.speedActive()) drawAfterImage(fi, batch.getShader(), speedShader);
-				if (fi.airActive()) drawAfterImage(fi,  batch.getShader(), airShader);
-			}
+			setupFighter(fi);
 			if (fi.isPerfectGuarding()) drawPerfectShield = true;
 			else if (fi.isGuarding()) drawShield = true;
 		}
-		if (en instanceof Hittable){
-			Hittable h = (Hittable) en;
-			if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(h)) batch.setShader(slowShader);
-			if (h.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) {
-				if (h instanceof Fighter) ((Fighter)en).setHitstunImage();
-				batch.setShader(hitstunShader);
-			}
-		}
+
+		if (en instanceof Hittable) setupHittable((Hittable)en);
+
 		batch.setColor(
 				MathUtils.clamp(batch.getColor().r, 0, 1),
 				MathUtils.clamp(batch.getColor().b, 0, 1),
 				MathUtils.clamp(batch.getColor().g, 0, 1),
 				batch.getColor().a);
-		
-		if (!(DowntiltEngine.entityIsPlayer(en) && DowntiltEngine.getChallenge().isFailed())) batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
-		
-		if (en.trails()){
-			batch.setColor(1, 1, 1, 0.5f);
-			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 2), en.getPosition().y - (en.getVelocity().y * 2));
-			batch.setColor(1, 1, 1, 0.25f);
-			batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 4), en.getPosition().y - (en.getVelocity().y * 4));
+
+		if (!(DowntiltEngine.entityIsPlayer(en) && DowntiltEngine.getChallenge().isFailed())) {
+			batch.draw(en.getImage(), en.getPosition().x, en.getPosition().y);
 		}
+
+		if (en.trails()) drawTrail(en);
+
+		batch.setShader(null);
+		batch.setColor(1, 1, 1, 1);
+
+		drawShields(en, drawShield, drawPerfectShield);
+	}
+
+	private static void setupFighter(Fighter fi){
+		if (fi.getCombo().getRank() > 0) drawCombo(fi);
+		if (isOffScreen(fi) && !fi.inHitstun()) drawFighterIcon(fi);
+		if (DowntiltEngine.debugOn()) drawPercentage(fi);
+
+		float colorMod = 0.5f * fi.getPercentage() / fi.getWeight();
+		float rColor = MathUtils.clamp(fi.getColor().r - colorMod / 2, 0.45f, 1);
+		float gbColor = MathUtils.clamp(fi.getColor().g - colorMod, 0.15f, 1);
+
+		if (fi.getArmor() > 1) drawAfterImage(fi, batch.getShader(), defenseShader);
+
+		if (null != fi.getPalette()) {
+			ShaderProgram palette = fi.getPalette();
+			palette.begin();
+			float alpha = 1;
+			try{
+				if (fi.isInvincible()) alpha = 0.5f;
+				palette.setUniformf(GlobalRepo.alpha, alpha);
+				palette.setUniformf(GlobalRepo.red, rColor);
+				palette.setUniformf(GlobalRepo.gb, gbColor);
+			}
+			catch(IllegalArgumentException iae){
+				System.out.println("Encountered a problem while setting palette parameters. Source:\n" + iae.getMessage());
+			}
+			palette.end();
+			batch.setShader(palette);
+		}
+		else {
+			batch.setColor(fi.getColor());
+			batch.setColor(rColor, gbColor, gbColor, 1);
+			if (fi.isInvincible()) batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.5f);
+		}
+
+		if (fi.powerActive() && fi.defenseActive() && fi.speedActive() && fi.airActive()){
+			drawRainbowAfterImage(fi, batch.getShader());
+		}
+		else {
+			if (fi.powerActive()) drawAfterImage(fi, batch.getShader(), powerShader);
+			if (fi.defenseActive()) drawAfterImage(fi, batch.getShader(), defenseShader);
+			if (fi.speedActive()) drawAfterImage(fi, batch.getShader(), speedShader);
+			if (fi.airActive()) drawAfterImage(fi,  batch.getShader(), airShader);
+		}
+	}
+
+	private static void setupHittable(Hittable hi){
+		if (DowntiltEngine.isSlowed() && !DowntiltEngine.entityIsPlayer(hi)) batch.setShader(slowShader);
+		if (hi.getHitstunTimer().getCounter() < GlobalRepo.WHITEFREEZE) {
+			if (hi instanceof Fighter) ((Fighter)hi).setHitstunImage();
+			batch.setShader(hitstunShader);
+		}
+	}
+
+	private static void drawTrail(Entity en){
+		batch.setColor(1, 1, 1, 0.5f);
+		batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 2), en.getPosition().y - (en.getVelocity().y * 2));
+		batch.setColor(1, 1, 1, 0.25f);
+		batch.draw(en.getImage(), en.getPosition().x - (en.getVelocity().x * 4), en.getPosition().y - (en.getVelocity().y * 4));
+	}
+
+	private static void drawShields(Entity en, boolean drawShield, boolean drawPerfectShield){
 		float posX = en.getCenter().x - 16 + en.direct() * 6;
 		float posY = en.getCenter().y - 8;
 		if (drawShield) batch.draw(defend, posX, posY);
 		if (drawPerfectShield) batch.draw(perfectdefend, posX, posY);
-		batch.setColor(1, 1, 1, 1);
-		batch.setShader(null);
 	}
 
 	private static void drawAfterImage(Fighter fi, ShaderProgram origSG, ShaderProgram newSG){
@@ -369,8 +389,28 @@ public class GraphicsHandler {
 		float iconY = MathUtils.clamp(fi.getPosition().y, cameraBoundaries().get(2), cameraBoundaries().get(3) - iconDimension);
 		batch.draw(fi.getIcon(), iconX, iconY);
 	}
+	
+	private static void drawCombo(Fighter fi) {
+		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2 - 8;
+		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
+		float comboColor = (fi.getCombo().getRank() - 1)/8.0f;
+		final float powMod = 0.8f;
 
-	private static void renderGUI(){
+		if (comboColor > 1) comboColor = 1;
+		comboFont.setColor((float) Math.pow(1 - comboColor, powMod), (float) Math.pow(comboColor, powMod), 0, 1);
+		comboFont.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
+		comboFont.setColor(fontColor);
+	}
+
+	private static void drawPercentage(Entity e) {
+		Fighter fi = (Fighter) e;
+		float xPos = fi.getPosition().x - 16 + fi.getImage().getWidth()/2;
+		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
+		font.draw(batch, (int)fi.getPercentage() + "%", xPos, yPos);
+	}
+
+	static void renderGUI(){
+		batch.begin();
 		float stockLocationMod = 1/4.3f;
 		batch.draw(guiBar, cameraBoundaries().get(0), cameraBoundaries().get(2));
 		float posY = cam.position.y - SCREENHEIGHT * stockLocationMod + 6;
@@ -422,10 +462,11 @@ public class GraphicsHandler {
 		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 
 		if (DowntiltEngine.isPaused()) {
-			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2));
+			batch.draw(pauseOverlay, cameraBoundaries().get(0), cameraBoundaries().get(2), SCREENWIDTH, SCREENHEIGHT);
 			comboFont.draw(batch, "PAUSED", cam.position.x - 20, cam.position.y);
 			font.draw(batch, "(Press " + DowntiltEngine.getPrimaryInputHandler().getChargeString() + " to quit)", cam.position.x - 60, cam.position.y - GlobalRepo.TILE);
 		}
+		batch.end();
 	}
 
 	private static List<Float> cameraBoundaries(){
@@ -444,25 +485,6 @@ public class GraphicsHandler {
 
 	public static Vector3 getCameraPos(){
 		return cam.position;
-	}
-
-	private static void drawCombo(Fighter fi) {
-		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2 - 8;
-		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
-		float combo = (fi.getCombo().getRank() - 1)/8.0f;
-		final float powMod = 0.8f;
-
-		if (combo > 1) combo = 1;
-		comboFont.setColor((float) Math.pow(1 - combo, powMod), (float) Math.pow(combo, powMod), 0, 1);
-		comboFont.draw(batch, fi.getCombo().getRank() + "x", xPos, yPos + 8);
-		comboFont.setColor(fontColor);
-	}
-
-	private static void drawPercentage(Entity e) {
-		Fighter fi = (Fighter) e;
-		float xPos = fi.getPosition().x - 16 + fi.getImage().getWidth()/2;
-		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
-		font.draw(batch, (int)fi.getPercentage() + "%", xPos, yPos);
 	}
 
 	public static void updateRoomGraphics() {
@@ -496,7 +518,7 @@ public class GraphicsHandler {
 		font.draw(batch, text, posX + GlobalRepo.TILE / 4, posY + 54);
 	}
 
-	public static void debugRender(){
+	private static void debugRender(){
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		debugRenderer.setProjectionMatrix(cam.combined);
@@ -523,6 +545,17 @@ public class GraphicsHandler {
 			}
 		}
 		debugRenderer.end();
+	}
+
+	public static void drawMessage(String errorMessage) {
+		batch.begin();
+		comboFont.draw(batch, 
+				  "Encountered error:\n"
+				  + errorMessage + "\n"
+				  + "Sorry!. Please email me at byninegiga@gmail.com\n"
+				  + "with a screencap of this error.",
+				cameraBoundaries().get(0), cameraBoundaries().get(3));
+		batch.end();
 	}
 
 }

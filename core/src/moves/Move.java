@@ -139,16 +139,20 @@ public class Move {
 
 	private static final Animation animUp = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspecialu.png", 1, 1, 1, PlayMode.LOOP);
 	private static final Animation animForward = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspecialf.png", 1, 1, 1, PlayMode.LOOP);
+	private static final Animation animBack = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspecialb.png", 1, 1, 1, PlayMode.LOOP);
 	private static final Animation animDown = GlobalRepo.makeAnimation("sprites/fighters/bomber/uspeciald.png", 1, 1, 1, PlayMode.LOOP);
 	public Animation getAnimation() { 
-		if (heroUSpecial && duration.getCounter() > 20){
+		if (heroUSpecial && duration.getCounter() == 22){
 			if (Math.abs(user.getVelocity().y) > Math.abs(user.getVelocity().x)){
-				if (user.getVelocity().y < 0) return animDown;
-				else return animUp;
+				if (user.getVelocity().y < 0) animation = animDown;
+				else animation = animUp;
 			}
-			else return animForward;
+			else{
+				if ((user.getVelocity().x > 0 && user.getDirection() == Direction.RIGHT) || (user.getVelocity().x < 0 && user.getDirection() == Direction.LEFT)) return animation = animForward;
+				else return animation = animBack;
+			}
 		}
-		else return animation; 
+		return animation; 
 	}
 
 	public int getFrame() { 

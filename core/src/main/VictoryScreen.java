@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import challenges.Bonus;
 import challenges.Victory;
 import challenges.Victory.Ranking;
 
@@ -44,35 +43,9 @@ public class VictoryScreen extends Menu{
 		if (DowntiltEngine.getMode().getTime() > 0) {
 			font.draw(batch, "TIME TOTAL:   " + GlobalRepo.getTimeString(DowntiltEngine.getMode().getTime()), startX, posY -= dec);
 		}
-		drawBonusList();
+		GlobalRepo.drawBonusList(startX + 600, startY, currentVictory.getBonuses(), batch, font);
 		
 		batch.end();
-	}
-	
-	private void drawBonusList(){
-		final int stringLocationX = startX + 600;
-		final int lineHeight = 24;
-		final int maxListHeight = lineHeight * 16;
-		
-		int listHeight = lineHeight * currentVictory.getBonuses().size();
-		int scrollDownDistance = 0;
-		if (listHeight != 0) scrollDownDistance = -DowntiltEngine.getDeltaTime()/2 % listHeight;
-		int listPosition = 1;
-
-		for (Bonus b: currentVictory.getBonuses()){
-			
-			String bonusString = b.getName();
-			if (b.getMult() > 1) bonusString = b.getName() + " x" + b.getMult();
-			if (b.getScore() > 0) bonusString = bonusString.concat(": " + b.getScore());
-			
-			int stringLocationY = 0;
-			if (listHeight > maxListHeight) stringLocationY = startY + (scrollDownDistance - (listPosition * lineHeight)) % listHeight;
-			else stringLocationY = startY + - (listPosition * lineHeight);
-			if (stringLocationY < startY && stringLocationY > startY - maxListHeight) {
-				font.draw(batch, bonusString, stringLocationX, stringLocationY);
-			}
-			listPosition++;
-		}
 	}
 
 	@Override

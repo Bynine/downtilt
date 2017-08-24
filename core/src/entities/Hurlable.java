@@ -76,12 +76,12 @@ public abstract class Hurlable extends Hittable {
 			MapHandler.addEntity(getExplosion());
 			setRemove();
 		}
-		
+
 		@Override
 		public boolean inHitstun(){
 			return true;
 		}
-		
+
 		@Override
 		protected boolean teamCheck(Hittable hi){
 			for (Fighter player: DowntiltEngine.getPlayers()){
@@ -124,8 +124,12 @@ public abstract class Hurlable extends Hittable {
 		}
 
 		private void shatter(){
-			new SFX.Break().play();
+			playBreakSound();
 			setRemove();
+		}
+
+		protected void playBreakSound(){
+			new SFX.Break().play();
 		}
 
 		public void takeDamage(float DAM){
@@ -136,7 +140,7 @@ public abstract class Hurlable extends Hittable {
 			if ( (DowntiltEngine.getDeltaTime() % 20 < 10) && life.getCounter() > life.getEndTime() * (5.0/6.0)) return new Color(1, 1, 1, 0.5f);
 			else return super.getColor();
 		}
-		
+
 		@Override
 		public void knockInto(){
 			health--;
@@ -160,7 +164,7 @@ public abstract class Hurlable extends Hittable {
 	}
 
 	public static class ShootBall extends Breakable {
-		
+
 		protected TextureRegion stillBadTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballbad.png")));
 		protected TextureRegion stillGoodTexture = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/ballgood.png")));
 		protected Animation moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/ballbadspin.png", 4, 1, 6, PlayMode.LOOP);
@@ -173,12 +177,12 @@ public abstract class Hurlable extends Hittable {
 			else posX += 3 * user.getImage().getWidth()/4;
 			setup(team);
 		}
-		
+
 		public ShootBall(int team, float posX, float posY) {
 			super(posX, posY);
 			setup(team);
 		}
-		
+
 		private void setup(int team){
 			this.team = team;
 			setImages(team);
@@ -192,7 +196,7 @@ public abstract class Hurlable extends Hittable {
 			baseKBG = 3.5f;
 			touchRadius = 16;
 		}
-		
+
 		protected void setImages(int team){
 			if (team == GlobalRepo.BADTEAM) {
 				normImage = stillGoodTexture;
@@ -254,7 +258,7 @@ public abstract class Hurlable extends Hittable {
 		}
 
 	}
-	
+
 	public static class Boulder extends ShootBall{
 
 		public Boulder(Fighter user, int team, float posX, float posY) {
@@ -277,9 +281,9 @@ public abstract class Hurlable extends Hittable {
 			baseHitSpeed = -0.1f;
 			health = 4;
 		}
-		
+
 	}
-	
+
 	public static class Meteor extends ShootBall{
 
 		public Meteor(int team, float posX, float posY) {
@@ -293,16 +297,18 @@ public abstract class Hurlable extends Hittable {
 			setImages(team);
 		}
 	}
-	
-	public static class Laser extends ShootBall{
 
-		public Laser(int team, float posX, float posY) {
+	public static class Laser extends ShootBall{
+		private final float speed;
+
+		public Laser(int team, float posX, float posY, float speed) {
 			super(team, posX, posY);
+			this.speed = speed;
 			new SFX.LaserFire().play();
-			hitstunDealtBonus = 6;
-			baseKnockIntoDamage = 10;
-			baseKBG = 8.0f;
-			baseBKB = 8.0f;
+			hitstunDealtBonus = 1;
+			baseKnockIntoDamage = 8;
+			baseKBG = 1.0f;
+			baseBKB = 1.0f;
 			moveBadAnim = GlobalRepo.makeAnimation("sprites/entities/laserbad.png", 1, 1, 6, PlayMode.LOOP);
 			moveGoodAnim = GlobalRepo.makeAnimation("sprites/entities/lasergood.png", 1, 1, 6, PlayMode.LOOP);
 			gravity = 0;
@@ -313,27 +319,23 @@ public abstract class Hurlable extends Hittable {
 			trails = true;
 			health = 1;
 		}
-		
+
 		@Override
 		public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
 			super.update(rectangleList, entityList, deltaTime);
 			float angle = velocity.angle();
-			velocity.setLength(8);
+			velocity.setLength(speed);
 			velocity.setAngle(angle);
 		}
-	
-//		@Override
-//		public boolean doesCollide(float x, float y){
-//			for (Rectangle r : tempRectangleList){
-//				Rectangle thisR = getCollisionBox(x, y);
-//				if (Intersector.overlaps(thisR, r) && thisR != r) {
-//					setRemove();
-//					return true;
-//				}
-//			}
-//			return false;
-//		}
-		
+
+		protected void playImpactSound(float DAM){
+			new SFX.SharpHit().play();
+		}
+
+		protected void playBreakSound(){
+			new SFX.LightHit().play();
+		}
+
 		@Override
 		public boolean inHitstun(){
 			return true;
@@ -374,7 +376,7 @@ public abstract class Hurlable extends Hittable {
 			if (!flightTime.timeUp()) return 0;
 			else return gravity; 
 		}
-		
+
 		@Override
 		public void takeDamagingKnockback(Vector2 knockback, float DAM, int hitstun, HitstunType hitboxhitstunType, Hittable user) {
 			if (DAM > 0) {
@@ -443,12 +445,12 @@ public abstract class Hurlable extends Hittable {
 		public void knockInto(){
 			cook();
 		}
-		
+
 		@Override
 		protected Explosion getExplosion(){
 			return new Explosion.GrenadeExplosion(user, this);
 		}
-		
+
 		private void cook(){
 			final int cookTime = 1;
 			velocity.x *= 0.25f;

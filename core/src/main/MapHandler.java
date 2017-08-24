@@ -240,4 +240,18 @@ public class MapHandler {
 		}
 	}
 
+	public static boolean entityNotAlive(Entity en) {
+		if (activeRoom == null) return false;
+		else return (!activeRoom.getEntityList().contains(en));
+	}
+
+	public static void removeAllNonPlayerEntities() {
+		if (activeRoom == null) return;
+		else{
+			for (Entity e: activeRoom.getEntityList()){
+				if (!DowntiltEngine.entityIsPlayer(e)) e.setRemove();
+			}
+		}
+	}
+
 }

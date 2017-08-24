@@ -16,8 +16,8 @@ public class Hero extends Fighter {
 
 	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/idle.png", 2, 1, 20, PlayMode.LOOP);
 	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/run.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation tumbleImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/tumble.png", 4, 1, 8, PlayMode.LOOP);
+	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/run.png", 6, 1, 8, PlayMode.LOOP);
+	private Animation tumbleImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/tumble.png", 4, 1, 7, PlayMode.LOOP);
 	private TextureRegion fJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fjump.png")));
 	private TextureRegion nJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/njump.png")));
 	private TextureRegion bJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/bjump.png")));
@@ -27,11 +27,11 @@ public class Hero extends Fighter {
 	private TextureRegion crouchImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/crouch.png")));
 	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dash.png")));
 	private TextureRegion dodgeImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dodgebegin.png")));
-	private TextureRegion jumpSquatImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/crouch.png")));
+	private TextureRegion jumpSquatImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/land.png")));
 	private TextureRegion slideImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/slide.png")));
 	private TextureRegion helplessImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/helpless.png")));
-	private TextureRegion grabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/grab.png")));
-	private TextureRegion airGrabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airgrab.png")));
+	private TextureRegion grabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/hold.png")));
+	private TextureRegion airGrabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airhold.png")));
 	private Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/fallen.png", 2, 1, 24, PlayMode.LOOP);
 
 	public Hero(float posX, float posY, int team) {

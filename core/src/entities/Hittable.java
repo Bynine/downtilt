@@ -147,15 +147,14 @@ public abstract class Hittable extends Entity {
 			knockIntoVector.setAngle( (h.getAngle() + 90) / 2);
 		}
 		
-		if (null == onHitSFX) {
-			SFX.proportionalHit(h.getDamage()).play();
-		}
-		else {
-			onHitSFX.play();
-		}
+		hurtler.playImpactSound(h.getDamage());
 		takeKnockIntoKnockback(hurtler, knockIntoVector, h.getDamage() / 2, (int) h.getDamage() + hitstunDealtBonus );
 		handleCollision(hurtler);
 		MapHandler.addEntity(new Graphic.HitGoodGraphic( (getCenter().x + hurtler.getCenter().x)/2, (getCenter().y + hurtler.getCenter().y)/2, (int)dam/2));
+	}
+	
+	protected void playImpactSound(float DAM){
+		SFX.proportionalHit(DAM).play();
 	}
 	
 	private void handleCollision(Hittable hurtler){
@@ -253,7 +252,7 @@ public abstract class Hittable extends Entity {
 		caughtTimer.reset();
 		
 		float newPosX = 0;
-		float dispX = 15;
+		float dispX = 6;
 		if (user.getDirection() == Direction.LEFT) newPosX = user.getCenter().x - (dispX + (target.getImage().getWidth() * 0.8f));
 		if (user.getDirection() == Direction.RIGHT) newPosX = user.getCenter().x + dispX;
 		float newPosY = user.position.y + image.getHeight()/4;

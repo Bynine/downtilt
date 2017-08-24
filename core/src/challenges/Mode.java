@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import challenges.Challenge.Difficulty;
-import entities.Fighter;
 import main.DowntiltEngine;
+import main.DowntiltEngine.GameState;
 import main.SFX;
 
 public abstract class Mode {
@@ -27,26 +27,32 @@ public abstract class Mode {
 	 * Starts a new challenge after finishing the old one.
 	 */
 	public void update(){
-		if (DowntiltEngine.musicOn()) {
-			float vol = (DowntiltEngine.getMusicVolume()) / 8.0f;
-			getActiveChallenge().getStage().getMusic().setVolume(vol);
-			getActiveChallenge().getStage().getMusic().play();
-		}
-		if (!getActiveChallenge().started) getActiveChallenge().startChallenge();
-		getActiveChallenge().update();
+		if (DowntiltEngine.musicOn() && !getActiveChallenge().postBoss()) handleMusic();
 		if (!DowntiltEngine.isWaiting() && getActiveChallenge().finished()) {
 			if (!pendingBonuses.isEmpty()) addPendingBonuses();
-			for (Fighter player: DowntiltEngine.getPlayers()) player.refresh();
 			getActiveChallenge().getStage().getMusic().stop();
 			activeChallengeIndex++;
 		}
+		boolean shouldStartChallenge = !DowntiltEngine.isWaiting() && DowntiltEngine.getGameState() != GameState.TRANSITION && !getActiveChallenge().started;
+		if (shouldStartChallenge) getActiveChallenge().startChallenge();
 		if (activeChallengeIndex > getChallengeList().size()) win();
+		getActiveChallenge().update();
+	}
+	
+	protected void handleMusic(){
+		float vol = (DowntiltEngine.getMusicVolume()) / 8.0f;
+		getActiveChallenge().getStage().getMusic().setVolume(vol);
+		getActiveChallenge().getStage().getMusic().play();
+	}
+	
+	protected void finishChallenge(){
+		
 	}
 
 	/**
 	 * Activates when all challenges are completed.
 	 */
-	void win(){
+	protected void win(){
 		new SFX.Victory().play();
 		boolean unstoppable = true;
 		boolean immortal = true;
@@ -57,11 +63,12 @@ public abstract class Mode {
 		if (unstoppable) pendValidBonus(new Bonus.UnstoppableBonus());
 		if (immortal) pendValidBonus(new Bonus.ImmortalBonus());
 		if (!usedSpecial) pendValidBonus(new Bonus.NoSpecialBonus());
+		if (Math.random() < 0.01) pendValidBonus(new Bonus.NoveltyBonus());
 		addPendingBonuses();
 		DowntiltEngine.startVictoryScreen(getVictory());
 	}
 
-	int getCombo(){
+	protected int getCombo(){
 		int longestCombo = 0;
 		for (Challenge c: getChallengeList()){
 			if (longestCombo < c.getLongestCombo()) longestCombo = c.getLongestCombo();
@@ -73,11 +80,19 @@ public abstract class Mode {
 		return Difficulty.Standard;
 	}
 	
+	public void setUsedSpecial(){
+		usedSpecial = true;
+	}
+	
+	public int getTime(){
+		return 0;
+	}
+	
 	public void pendValidBonus(Bonus newBonus){
 		pendingBonuses.add(newBonus);
 	}
 	
-	private void addPendingBonuses(){
+	protected void addPendingBonuses(){
 		for (Bonus newBonus: pendingBonuses){
 			boolean shouldAdd = true;
 			for (Bonus bonus: bonuses){
@@ -93,14 +108,6 @@ public abstract class Mode {
 	
 	private void addBonus(Bonus b){
 		bonuses.add(b);
-	}
-	
-	public void setUsedSpecial(){
-		usedSpecial = true;
-	}
-	
-	public int getTime(){
-		return 0;
 	}
 	
 	public void wipePendingBonuses(){

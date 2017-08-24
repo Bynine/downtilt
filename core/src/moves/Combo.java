@@ -105,8 +105,8 @@ public class Combo {
 		else if (rank >= 3) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboMultLow());
 		
 		if (rank >= 11) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboHigh());
-		else if (rank >= 9) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboMid());
-		else if (rank >= 7) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboLow());
+		if (rank >= 9) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboMid());
+		if (rank >= 7) DowntiltEngine.getMode().pendValidBonus(new Bonus.ComboLow());
 		
 		DowntiltEngine.getChallenge().resolveCombo(addedSpecial);
 		DowntiltEngine.getChallenge().changeSpecial(addedSpecial);

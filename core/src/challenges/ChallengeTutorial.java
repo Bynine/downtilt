@@ -24,42 +24,42 @@ public class ChallengeTutorial extends ChallengeEndless {
 						+ "the tutorial.");
 		ToolTip tt_MOVE = new ToolTip(Ping.MOVE,  
 				"Now, try moving with " + ihp.getMoveString() + ".\n"
-						+ " Hold down to crouch.");
+						+ "Hold down to crouch.");
 		ToolTip tt_NORMAL = new ToolTip(Ping.NORMAL, 
-				"Press " + ihp.getNormalString() + " to do a quick attack. \n"
-						+ "You'll do a different attack depending on the \n "
-						+ "direction you hold. This is true for every button! \n "
-						+ "You can also do a slide attack if you're running. \n");
+				"Press " + ihp.getNormalString() + " to do a quick attack.\n"
+						+ "You'll do a different attack depending on the\n"
+						+ "direction you hold. This is true for every button!\n"
+						+ "You can also do a slide attack if you're running.\n");
 		ToolTip tt_CHARGE = new ToolTip(Ping.CHARGE,  
 				"Press " + ihp.getChargeString() + " to do a charge attack. If you hold\n"
-						+ "down " + ihp.getChargeString() + ", you'll charge the move - the longer you charge\n "
+						+ "down " + ihp.getChargeString() + ", you'll charge the move - the longer you charge\n"
 						+ "the stronger it is. Wham!");
 		ToolTip tt_SPECIAL = new ToolTip(Ping.SPECIAL, 
-				"Press " + ihp.getSpecialString() + " to use a special attack. These attacks \n"
+				"Press " + ihp.getSpecialString() + " to use a special attack. These attacks\n"
 						+ "are very useful, but will use up some of your\n"
-						+ "Special Meter, so watch out! \n"
-						+ "Be sure to use Up Special (hold up and press " + ihp.getSpecialString() + ") \n"
+						+ "Special Meter (shown below), so watch out!\n"
+						+ "Be sure to use Up Special (hold up and press " + ihp.getSpecialString() + ")\n"
 						+ "if you're far off the stage.");
 		ToolTip tt_JUMP = new ToolTip(Ping.JUMP,  
-				"Press " + ihp.getJumpString() + " to jump. While you're in the air, \n"
-						+ "press " + ihp.getJumpString() + " again to double jump, \n"
-						+ "or press " + ihp.getNormalString() + " or " + ihp.getChargeString() + " to use an aerial attack. \n"
+				"Press " + ihp.getJumpString() + " to jump. While you're in the air,\n"
+						+ "press " + ihp.getJumpString() + " again to double jump,\n"
+						+ "or press " + ihp.getNormalString() + " or " + ihp.getChargeString() + " to use an aerial attack.\n"
 						+ "If you hold toward a wall and jump, you'll do "
 						+ "a wall jump!");
 		ToolTip tt_GRAB = new ToolTip(Ping.GRAB,  
-				"Press " + ihp.getGrabString() + " to grab. If you grab something you can \n"
+				"Press " + ihp.getGrabString() + " to grab. If you grab something you can\n"
 						+ "throw it by flicking the control stick in any direction.\n"
-						+ "You can also grab in the air! Throw enemies at \n"
+						+ "You can also grab in the air! Throw enemies at\n"
 						+ "each other to really lay on the hurt.");
 		ToolTip tt_GUARD = new ToolTip(Ping.GUARD,  
-				"Finally, press " + ihp.getGuardString() + " to guard. If an enemy \n"
+				"Finally, press " + ihp.getGuardString() + " to guard. If an enemy\n"
 						+ "hits you during your guard, you'll counterattack - nice!\n"
 						+ "If you flick the control stick left or right\n"
 						+ "during this guard, or press L or R in the air,\n"
 						+ "you'll perform a dodge.");
 		ToolTip tt_KNOCKBACK = new ToolTip( 
-				"Hitting enemies increases their damage\n"
-						+ "- the more damaged they are, the redder they become,\n"
+				"Hitting enemies increases their damage.\n"
+						+ "The more damaged they are, the redder they become,\n"
 						+ "and the farther they'll fly when you hit them. KAPOW!");
 		ToolTip tt_COMBO = new ToolTip( 
 				"To combo an enemy, keep them in the air while hitting\n"

@@ -29,5 +29,7 @@ public class EnemyRepo {
 	public static final EnemyType heavy = new EnemyType(Heavy.class, Brain.HeavyBrain.class);
 	public static final EnemyType zenheavy = new EnemyType(Heavy.class, Brain.Recover.class);
 	public static final EnemyType fatheavy = new EnemyType(Heavy.class, Brain.HeavyBrain.class, EnemyType.PowerUp.ALL);
+	
+	public static final EnemyType postboss = new EnemyType(Basic.PostBoss.class, Brain.PostBossBrain.class);
 
 }

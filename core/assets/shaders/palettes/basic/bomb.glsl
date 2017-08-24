@@ -13,8 +13,8 @@ uniform float gb = 1;
 void main() {
         vec3 color = texture2D(u_texture, v_texCoords).rgb * v_color;
         float grey = (color.r + color.g + color.b)/3.0;
-        float pow = 3.0;
-        float add = 80.0/255.0;
+        float pow = 2.6;
+        float add = 90.0/255.0;
 		color.r = pow(grey + add, pow);
 		color.g = pow(grey + add, pow);
 		color.b = pow(grey, 1);

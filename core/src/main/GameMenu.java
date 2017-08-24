@@ -16,6 +16,7 @@ import challenges.Mode;
 import challenges.TimeTrial;
 import challenges.Training;
 import challenges.Tutorial;
+import inputs.InputHandlerController;
 import maps.*;
 
 class GameMenu extends Menu {
@@ -87,11 +88,13 @@ class GameMenu extends Menu {
 		checkLocked(SaveHandler.MushroomUnlocked(), stages.getChoices().get(4), "Unlock by B-ranking " + Stage_Rooftop.getName() + " Time Trial!", "");
 		checkLocked(SaveHandler.SpaceUnlocked(), stages.getChoices().get(5), "Unlock by C-ranking " + Stage_Truck.getName() + " Endless!", "");
 		checkLocked(SaveHandler.SkyUnlocked(), stages.getChoices().get(6), "Unlock by B-ranking " + Stage_Blocks.getName() + " Endless!", "");
+		checkLocked(DowntiltEngine.getPrimaryInputHandler() instanceof InputHandlerController, players.getChoices().get(1), "Must have controller for co-op!", "");
 		if (!randomized) {
 			randomized = true;
 			stages.randomize();
 		}
 		if (!SaveHandler.saveFileExists()) mode.setCursor(0);
+		else if (mode.cursorPos() == 0) mode.setCursor(1);
 	}
 
 	enum MenuChoice{
@@ -133,8 +136,10 @@ class GameMenu extends Menu {
 		case 1: playerMode = "Solo"; break;
 		default: playerMode = "Co-op"; break;
 		}
+		if (!players.selected().unlocked) font.setColor(lockedColor);
 		font.draw(batch, appendCursors("PLAYERS:", players) + playerMode, posX, posY -= dec);
 		font.draw(batch, players.getDesc(), posX, posY -= dec);
+		font.setColor(fontColor);
 
 		posY -= dec * 2;
 		font.draw(batch, "P1: " + DowntiltEngine.getPrimaryInputHandler().getControllerName(), posX,  posY -= dec);
@@ -185,6 +190,7 @@ class GameMenu extends Menu {
 		} break;
 		default: break;
 		}
+		if (!players.selected().unlocked) locked = true;
 
 		if (locked) new SFX.Error().play();
 		else{

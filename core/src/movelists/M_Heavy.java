@@ -93,7 +93,7 @@ public class M_Heavy extends MoveList {
 		Move m = new Move(user, frames * frame);
 		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/heavy/ncharge.png", frames, frame);
-		m.setHurtBox(80, 80, 0, Move.HURTBOXNOTSET);
+		m.setHurtBox(80, 100, 0, Move.HURTBOXNOTSET);
 		Effect.Charge c = new Charge(6, 36, 0.01f, user, m);
 		Hitbox leftPound =  new Hitbox(user, bkb, kbg, damage, angle, -dispX, dispY, hitboxSize, new SFX.MeatyHit(), c);
 		Hitbox rightPound = new Hitbox(user, bkb, kbg, damage, angle,  dispX, dispY, hitboxSize, new SFX.MeatyHit(), c);

@@ -117,14 +117,18 @@ public class Hitbox extends ActionCircle{
 		if (perfectGuarding) finalDamage = 0;
 		else if (guarding) finalDamage *= 0.5f;
 		target.takeDamagingKnockback(knockback, finalDamage, hitstun, hitstunType, user);
-		if (property == Property.STUN) target.stun((int) (finalDamage * 6));
+		if (property == Property.STUN) {
+			int stunTime = (int) (finalDamage * 6);
+			if (DowntiltEngine.entityIsPlayer(target)) stunTime /= 2;
+			target.stun(stunTime);
+		}
 		
-		startHitlag(target);
 		if (guarding || ( knockback.x == 0 && knockback.y == 0)) {
 			sfx = new SFX.EmptyHit();
 			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
 		}
 		else{
+			startHitlag(target);
 			if (target.getTeam() == GlobalRepo.BADTEAM) 
 				MapHandler.addEntity(new Graphic.HitGoodGraphic(area.x + area.radius/2, area.y + area.radius/2, graphicLengthFormula(knockbackFormula(target))));
 			if (target.getTeam() == GlobalRepo.GOODTEAM) 
