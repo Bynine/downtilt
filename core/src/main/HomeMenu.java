@@ -29,7 +29,7 @@ public class HomeMenu extends Menu {
 		final int dec = 60;
 		
 		batch.begin();
-		batch.draw(bg, 0, 0);
+		batch.draw(bg, 0, 0, GraphicsHandler.SCREENWIDTH, GraphicsHandler.SCREENHEIGHT);
 		batch.draw(title, 350, 560);
 		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
 		batch.draw(cursor, posX + cursorMod, startY - dec - 18 - cho.cursorPos() * (dec));

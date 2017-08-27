@@ -65,7 +65,7 @@ public class Basic extends Fighter {
 	TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 	TextureRegion getWallSlideFrame(float deltaTime) { return fallImage; }
 	TextureRegion getHelplessFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
-	TextureRegion getGrabFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
+	TextureRegion getHoldFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 	TextureRegion getAscendFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }
 	TextureRegion getCrouchFrame(float deltaTime) { return crouchImage.getKeyFrame(deltaTime); }
@@ -125,7 +125,7 @@ public class Basic extends Fighter {
 		}
 
 		public void takeKnockback(Vector2 knockback, int hitstun, boolean shouldChangeKnockback, HitstunType ht){
-			if (!timerList.contains(kaboom) && hitstun > minKnockbackToCook) timerList.add(kaboom);
+			if (!timerList.contains(kaboom) && hitstun > minKnockbackToCook) setOff();
 			super.takeKnockback(knockback, hitstun, shouldChangeKnockback, ht);
 		}
 
@@ -138,13 +138,21 @@ public class Basic extends Fighter {
 			return exploded;
 		}
 		
+		private void setOff(){
+			timerList.add(kaboom);
+		}
+		
+		public void ignite() {
+			setOff();
+		}
+		
 		TextureRegion getJumpFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }
 		TextureRegion getStandFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getWalkFrame(float deltaTime) { return walkImage.getKeyFrame(deltaTime); }
 		TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 		TextureRegion getWallSlideFrame(float deltaTime) { return fallImage; }
 		TextureRegion getHelplessFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
-		TextureRegion getGrabFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
+		TextureRegion getHoldFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 		TextureRegion getAscendFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }
 		TextureRegion getCrouchFrame(float deltaTime) { return crouchImage.getKeyFrame(deltaTime); }
@@ -160,6 +168,7 @@ public class Basic extends Fighter {
 	public static class PostBoss extends Basic {
 		private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/stand.png", 1, 1, 1, PlayMode.LOOP);
 		private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/walk.png", 2, 1, 16, PlayMode.LOOP);
+		private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/basic/walk.png", 2, 1, 8, PlayMode.LOOP);
 		private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/crouch.png", 1, 1, 1, PlayMode.LOOP);
 		private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
 		private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/hitstun.png", 2, 1, 8, PlayMode.LOOP);
@@ -174,9 +183,9 @@ public class Basic extends Fighter {
 			image = new Sprite(standImage.getKeyFrame(0));
 			hitstopTimer.reset(25);
 			moveList = new M_PostBoss(this);
-			walkAcc = 0.8f;
+			walkAcc = 1.2f;
 			runAcc = walkAcc;
-			walkSpeed = 1.4f;
+			walkSpeed = 2.0f;
 			runSpeed = walkSpeed;
 			friction = 0.94f;
 			baseHitstun = GlobalRepo.ENEMYHITSTUNMOD * 1.5f;
@@ -185,10 +194,10 @@ public class Basic extends Fighter {
 		TextureRegion getJumpFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getStandFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getWalkFrame(float deltaTime) { return walkImage.getKeyFrame(deltaTime); }
-		TextureRegion getRunFrame(float deltaTime) { return walkImage.getKeyFrame(deltaTime); }
+		TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 		TextureRegion getWallSlideFrame(float deltaTime) { return fallImage; }
 		TextureRegion getHelplessFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
-		TextureRegion getGrabFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
+		TextureRegion getHoldFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 		TextureRegion getAscendFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getCrouchFrame(float deltaTime) { return crouchImage.getKeyFrame(deltaTime); }

@@ -69,13 +69,12 @@ public abstract class Fighter extends Hittable{
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
 				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer, prevMoveTimer,
 				noKillTimer));
-		state = State.FALL;
+		state = State.STAND;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
 	}
 
 	public void update(List<Rectangle> rectangleList, List<Entity> entityList, int deltaTime){
-		//if (team == GlobalRepo.BADTEAM && deltaTime % 5 == 0) return;
 		stickX = getInputHandler().getXInput();
 		stickY = getInputHandler().getYInput();
 
@@ -558,7 +557,7 @@ public abstract class Fighter extends Hittable{
 			else setImage(getHitstunFrame(deltaTime));
 		}
 		if (!grabbingTimer.timeUp()) {
-			setImage(getGrabFrame(deltaTime));
+			setImage(getHoldFrame(deltaTime));
 		}
 
 		currX = image.getWidth();
@@ -788,7 +787,7 @@ public abstract class Fighter extends Hittable{
 		percentage = 0;
 		velocity.x = 0;
 		velocity.y = 0;
-		state = State.FALL;
+		state = State.STAND;
 		refreshDoubleJumps();
 		tumbling = false;
 		if (direction == Direction.LEFT) flip();
@@ -865,7 +864,6 @@ public abstract class Fighter extends Hittable{
 	public void setActiveMove(IDMove activeMove) { 
 		this.activeMove = activeMove; 
 	}
-	public void setToFall() { state = State.FALL; }
 	public void setInputHandler(InputHandler inputHandler) { this.inputHandler = inputHandler; }
 	public void setPalette(ShaderProgram pal) { palette = pal; }
 	public void setRespawnTimer() { respawnTimer.reset(); }
@@ -911,7 +909,7 @@ public abstract class Fighter extends Hittable{
 	abstract TextureRegion getJumpFrame(float deltaTime);
 	abstract TextureRegion getWallSlideFrame(float deltaTime);
 	abstract TextureRegion getHelplessFrame(float deltaTime);
-	abstract TextureRegion getGrabFrame(float deltaTime);
+	abstract TextureRegion getHoldFrame(float deltaTime);
 	abstract TextureRegion getFallFrame(float deltaTime);
 	abstract TextureRegion getAscendFrame(float deltaTime);
 	abstract TextureRegion getCrouchFrame(float deltaTime);

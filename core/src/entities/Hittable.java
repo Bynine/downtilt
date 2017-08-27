@@ -106,13 +106,11 @@ public abstract class Hittable extends Entity {
 	protected int touchRadius = 8;
 	protected void checkHitByHurtlingObject(Hittable hurtler){
 		boolean fighterGoingFastEnough = true;
-//				knockbackIntensity(hurtler.velocity) > hurtler.baseHurtleBK;
-//		if (hurtler.hitstunType != HitstunType.NORMAL) fighterGoingFastEnough = true;
 		boolean higherVelocity = true;
-		// knockbackIntensity(hurtler.velocity) > knockbackIntensity(velocity)
 		boolean correctTeam = teamCheck(hurtler);
 		boolean angleFarEnough = (Math.abs(hurtler.getVelocity().angle() - getVelocity().angle()) > 15) || knockbackIntensity(velocity) == 0;
 		boolean knockInto = knockIntoTimer.timeUp() && fighterGoingFastEnough && higherVelocity && correctTeam && hurtler.inHitstun();
+		if (hurtler instanceof Fighter) knockInto = knockInto && hurtler.getHitstunTimer().getCounter() > 3;
 		if (angleFarEnough && knockInto && isTouching(hurtler, touchRadius) && !isInvincible()) {
 			if (isGuarding()) blockHurtlingObject(hurtler);
 			else getHitByHurtlingObject(hurtler);
@@ -169,7 +167,10 @@ public abstract class Hittable extends Entity {
 		float weightMod = 1.1f * (float) Math.pow(getWeight()/hurtler.getWeight(), 0.5);
 		final int spike = 270;
 		final int range = 30;
-		if (hurtler.velocity.angle() > (spike - range) && hurtler.velocity.angle() < (spike + range) && isGrounded()) weightMod = 2.15f;
+		if (hurtler.velocity.angle() > (spike - range) && hurtler.velocity.angle() < (spike + range) && isGrounded()) {
+			weightMod = 2.15f;
+			prevAerialHitAngle = 90;
+		}
 		hurtler.velocity.add(weightMod * hurtler.velocity.x * hurtler.baseHitSpeed, weightMod * hurtler.velocity.y * hurtler.baseHitSpeed);
 	}
 
@@ -384,6 +385,10 @@ public abstract class Hittable extends Entity {
 	}
 
 	public void perfectParry(){
+		/* */
+	}
+	
+	public void ignite() {
 		/* */
 	}
 

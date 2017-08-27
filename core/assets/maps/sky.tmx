@@ -160,9 +160,9 @@
 </data>
  </layer>
  <objectgroup name="COLLISION">
-  <object id="29" x="224" y="-192" width="224" height="1056"/>
-  <object id="33" x="544" y="480" width="288" height="384"/>
-  <object id="35" x="960" y="-192" width="576" height="1056"/>
+  <object id="29" x="224" y="-192" width="222.5" height="1056"/>
+  <object id="33" x="546" y="479.5" width="284.75" height="384.5"/>
+  <object id="35" x="961.75" y="-192" width="574.25" height="1056"/>
  </objectgroup>
  <objectgroup name="ENTITIES">
   <object id="36" name="flag" gid="36" x="608" y="384" width="32" height="32"/>

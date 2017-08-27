@@ -185,7 +185,6 @@ public abstract class Stage {
 		private Vector2 makeNewLightningPos(){
 			Vector2 newLightningPos = DowntiltEngine.getChallenge().getStage().getStartPosition();
 			newLightningPos.x += (0.5 - Math.random()) * (10 * GlobalRepo.TILE);
-			newLightningPos.y -= GlobalRepo.TILE;
 			return newLightningPos;
 		}
 		

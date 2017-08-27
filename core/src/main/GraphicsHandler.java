@@ -27,11 +27,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import challenges.Challenge;
+import challenges.ChallengeBoss;
 import challenges.ChallengeTimed;
 import challenges.ChallengeTutorial;
+import challenges.ChallengeTutorial.Ping;
 import challenges.ChallengeTutorial.ToolTip;
 import entities.Entity;
+import entities.Entity.Layer;
 import entities.Fighter;
+import entities.Graphic;
 import entities.Hittable;
 
 public class GraphicsHandler {
@@ -170,7 +174,9 @@ public class GraphicsHandler {
 		}
 
 		private int setNum(Entity o){
-			if (o instanceof Hittable && ((Hittable)o).isCaught()) return 2;
+			boolean heldObject = o instanceof Hittable && ((Hittable)o).isCaught();
+			boolean frontGraphic = o instanceof Graphic && o.getLayer() == Layer.MIDDLEFRONT;
+			if (heldObject || frontGraphic) return 2;
 			if (DowntiltEngine.entityIsPlayer(o)) return 1;
 			else return 0;
 		}
@@ -239,6 +245,7 @@ public class GraphicsHandler {
 		batch.begin();
 		float time = (float) Math.sin(DowntiltEngine.getDeltaTime()/200.0f);
 		if (DowntiltEngine.getChallenge().bossHurt()) time = (float) Math.tan(Math.PI * time);
+		if (DowntiltEngine.getChallenge().postBoss()) time = 0.5f;
 		wavyShader.begin();
 		wavyShader.setUniformf("time", time);
 		wavyShader.setUniformf("resolutionx", SCREENWIDTH);
@@ -458,7 +465,9 @@ public class GraphicsHandler {
 		else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
 
 		font.draw(batch, "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
+		if (DowntiltEngine.getChallenge() instanceof ChallengeBoss) font.setColor(Color.RED);
 		font.draw(batch, DowntiltEngine.getChallenge().getWaveCounter(), cam.position.x + SCREENWIDTH * (stockLocationMod/1.4f), posY);
+		font.setColor(fontColor);
 		if (DowntiltEngine.getChallenge() instanceof ChallengeTutorial) drawToolTip();
 
 		if (DowntiltEngine.isPaused()) {
@@ -512,7 +521,9 @@ public class GraphicsHandler {
 		float posY = cameraBoundaries().get(3) - textBar.getRegionHeight() - GlobalRepo.TILE / 2;
 		if (tt.isSatisfied()) {
 			batch.draw(textBarSatisfied, posX, posY);
-			comboFont.draw(batch, DowntiltEngine.getPrimaryInputHandler().getSelectString() + ">", posX + textBar.getRegionWidth() - 64, posY + 12);
+			if (tt.getPing() != Ping.END) {
+				comboFont.draw(batch, DowntiltEngine.getPrimaryInputHandler().getSelectString() + ">", posX + textBar.getRegionWidth() - 64, posY + 12);
+			}
 		}
 		else batch.draw(textBar, posX, posY);
 		font.draw(batch, text, posX + GlobalRepo.TILE / 4, posY + 54);

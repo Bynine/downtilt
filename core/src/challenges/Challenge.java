@@ -59,7 +59,7 @@ public abstract class Challenge {
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
 		
-		if (shouldRunTransitionGraphics())	TransitionGraphicsHandler.readyGo();
+		if (shouldRunTransitionGraphics()) TransitionGraphicsHandler.readyGo();
 		
 		float mod = 16;
 		for (Fighter player: DowntiltEngine.getPlayers()) {

@@ -102,20 +102,21 @@ public class Boss extends Hittable {
 		MapHandler.addTimedEntity(laser, x);
 	}
 
+	int easySpellModulo = 120;
 	public void set(Difficulty difficulty){
 		switch(difficulty){
 		case Beginner: {
 			health = 3;
-			spellModulo = 120;
+			spellModulo = easySpellModulo;
 			spellChance = 0.4;
 		} break;
 		case Standard: {
-			health = 8;
+			health = 6;
 			spellModulo = 75;
 			spellChance = 0.6;
 		} break;
 		case Advanced: {
-			health = 12;
+			health = 10;
 			spellModulo = 60;
 			spellChance = 0.8;
 		} break;
@@ -141,7 +142,7 @@ public class Boss extends Hittable {
 			health--;
 			hurtTimer.reset();
 			castTimer.end();
-			if (health == 1) {
+			if (health == 1 && spellModulo != easySpellModulo) {
 				castTimer.setEndTime(castTimer.getEndTime()/2);
 				spellModulo = spellModulo/2;
 			}

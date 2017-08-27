@@ -50,7 +50,7 @@ public abstract class SFX {
 	public static class Ground extends SFX{ public Ground(){ setSFX("/land.mp3"); } }
 	public static class Tech extends SFX{ public Tech(){ setSFX("/tech.mp3"); } }
 	public static class Collect extends SFX{ public Collect(){ setSFX("/powerup.wav"); } }
-	public static class Victory extends SFX{ public Victory(){ setSFX("/tada.mp3"); } }
+	public static class Victory extends SFX{ public Victory(){ setSFX("/success6.wav"); } }
 	public static class Break extends SFX{ public Break(){ setSFX("/melee/bury.wav"); } }
 	public static class Sparks extends SFX{ public Sparks(){ setSFX("/lightningstart.mp3"); } }
 	public static class Lightning extends SFX{ public Lightning(){ setSFX("/lightningstrike.mp3"); } }
@@ -70,5 +70,7 @@ public abstract class SFX {
 	public static class CastSpellLightning extends SFX{ public CastSpellLightning(){ setSFX("/castspelllightning.mp3"); } }
 	public static class Teleport extends SFX{ public Teleport(){ setSFX("/melee/vwoop.wav"); } }
 	public static class Fall extends SFX{ public Fall(){ setSFX("/fall.wav"); } }
+	public static class Tada extends SFX{ public Tada(){ setSFX("/tada.mp3"); } }
+	public static class TutorialSuccess extends SFX{ public TutorialSuccess(){ setSFX("/tutorial.wav"); } }
 	
 }

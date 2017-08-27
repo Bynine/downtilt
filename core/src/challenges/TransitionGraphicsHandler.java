@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class TransitionGraphicsHandler {
-		
+
 	private static SpriteBatch batch = null;
 	private static BitmapFont font = null;
 	private static final Timer readyGoTimer = new Timer(90), finishTimer = new Timer(90), failureTimer = new Timer(90);
@@ -36,7 +36,8 @@ public class TransitionGraphicsHandler {
 	private static TextureRegion victoryOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/overlay_victory.png")));
 	private static TextureRegion menuSlim = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menuSlim.png")));
 	private static TextureRegion border = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/border.png")));
-	
+	private static TextureRegion sceneIntro = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/scene_intro.png")));
+
 	public static void update(){
 		if (batch == null) {
 			batch = new SpriteBatch();
@@ -51,20 +52,20 @@ public class TransitionGraphicsHandler {
 			font = generator.generateFont(parameter);
 		}
 		for (Timer t: timerList) t.countUp();
-		
+
 		batch.begin();
 		if (!failureTimer.timeUp()) batch.draw(failure.getKeyFrame(failureTimer.getCounter()), 380, 500);
 		else if (!finishTimer.timeUp()) batch.draw(currentFinish, 320, 500);
 		else if (!readyGoTimer.timeUp()) batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 360, 500);
 		batch.end();
 	}
-	
+
 	static void readyGo(){
 		new SFX.ReadySetGo().play();
 		readyGoTimer.reset();
 		DowntiltEngine.wait(60);
 	}
-	
+
 	static void finish(){
 		if (Math.random() < 1.0/3.0) currentFinish = finish1;
 		else if (Math.random() < 1.0/2.0) currentFinish = finish2;
@@ -73,13 +74,13 @@ public class TransitionGraphicsHandler {
 		finishTimer.reset();
 		DowntiltEngine.wait(60);
 	}
-	
+
 	static void failure(){
 		failureTimer.reset();
 		DowntiltEngine.wait(60);
 	}
-	
-	public static void drawTransition(List<Bonus> bonuses, int totalScore){	
+
+	public static void drawRoundEnd(List<Bonus> bonuses, int totalScore){	
 		final int startX = 200;
 		final int startY = 600;
 		final int bonusListXMod = 600;
@@ -103,5 +104,11 @@ public class TransitionGraphicsHandler {
 		GlobalRepo.drawBonusList(startX + bonusListXMod, startY - dec, bonuses, batch, font);
 		batch.end();
 	}
-	
+
+	public static void drawIntro() {
+		batch.begin();
+		batch.draw(sceneIntro, 0, 0, GraphicsHandler.SCREENWIDTH, GraphicsHandler.SCREENHEIGHT);
+		batch.end();
+	}
+
 }

@@ -11,8 +11,16 @@ import challenges.Victory.Ranking;
 public class VictoryScreen extends Menu{
 
 	private Victory currentVictory;
+	private boolean drawConclusion = false;
+	private static TextureRegion sceneConclusion = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/scene_conclusion.png")));
 
 	public void start(Victory v){
+		if (v instanceof Victory.AdventureVictory) {
+			drawConclusion = true;
+		}
+		else {
+			drawConclusion = false;
+		}
 		canBack = false;
 		currentVictory = v;
 		SaveHandler.writeScore(v.getNumberX(), v.getNumberY(), v.getScore());
@@ -29,7 +37,14 @@ public class VictoryScreen extends Menu{
 		int posY = startY;
 		int dec = 50;
 
-		super.draw();
+		if (drawConclusion) {
+			batch.begin();
+			batch.draw(sceneConclusion, 0, 0, GraphicsHandler.SCREENWIDTH, GraphicsHandler.SCREENHEIGHT);
+			batch.end();
+		}
+		else drawBackground();
+		drawForeground();
+		
 		batch.begin();
 		bigFont.draw(batch, "VICTORY!", startX, posY);
 		
@@ -45,6 +60,18 @@ public class VictoryScreen extends Menu{
 		}
 		GlobalRepo.drawBonusList(startX + 600, startY, currentVictory.getBonuses(), batch, font);
 		
+		batch.end();
+	}
+	
+	@Override
+	protected void drawForeground(){
+		batch.begin();
+		if (!drawConclusion) batch.draw(menu, 0, 0);
+		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
+		batch.draw(title, 350, 560);
+		final int posY = 50;
+		if (canAdvance) navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY);
+		if (canBack) navFont.draw(batch, "BACK: " + DowntiltEngine.getPrimaryInputHandler().getSpecialString(), 200, posY);
 		batch.end();
 	}
 

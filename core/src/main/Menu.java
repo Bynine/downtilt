@@ -75,9 +75,13 @@ abstract class Menu {
 
 	protected final int logomod = 2;
 	protected void draw(){
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		drawBackground();
+		drawForeground();
+	}
+	
+	protected void drawBackground(){
 		batch.begin();
-
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		int dispX = DowntiltEngine.getDeltaTime() % tile.getRegionWidth();
 		int dispY = DowntiltEngine.getDeltaTime() % tile.getRegionHeight();
 		for (int i = 0; i < 21; ++i){
@@ -85,7 +89,11 @@ abstract class Menu {
 				batch.draw(tile, i * tile.getRegionWidth() - dispX, j * tile.getRegionHeight() - dispY) ;
 			}
 		}
-
+		batch.end();
+	}
+	
+	protected void drawForeground(){
+		batch.begin();
 		batch.draw(menu, 0, 0);
 		batch.draw(logo, 8, 0, logo.getRegionWidth() * logomod, logo.getRegionHeight() * logomod);
 		batch.draw(title, 350, 560);

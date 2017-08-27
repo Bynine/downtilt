@@ -33,7 +33,7 @@ public abstract class Mode {
 			getActiveChallenge().getStage().getMusic().stop();
 			activeChallengeIndex++;
 		}
-		boolean shouldStartChallenge = !DowntiltEngine.isWaiting() && DowntiltEngine.getGameState() != GameState.TRANSITION && !getActiveChallenge().started;
+		boolean shouldStartChallenge = !DowntiltEngine.isWaiting() && DowntiltEngine.getGameState() != GameState.ROUNDEND && !getActiveChallenge().started;
 		if (shouldStartChallenge) getActiveChallenge().startChallenge();
 		if (activeChallengeIndex > getChallengeList().size()) win();
 		getActiveChallenge().update();
@@ -43,10 +43,6 @@ public abstract class Mode {
 		float vol = (DowntiltEngine.getMusicVolume()) / 8.0f;
 		getActiveChallenge().getStage().getMusic().setVolume(vol);
 		getActiveChallenge().getStage().getMusic().play();
-	}
-	
-	protected void finishChallenge(){
-		
 	}
 
 	/**

@@ -46,17 +46,19 @@ public class ChallengeBoss extends ChallengeEndless {
 	
 	private void setPostBossMode(){
 		int xMod = 30;
-		postBoss.setPosition(new Vector2(boss.getPosition().x + xMod, boss.getPosition().y));
+		int yMod = -4;
+		postBoss.setPosition(new Vector2(boss.getPosition().x + xMod, boss.getPosition().y + yMod));
 		activeWave.stop();
 		boolean bossFacingLeft = boss.getDirection() == Direction.LEFT;
 		MapHandler.removeAllNonPlayerEntities();
-		Graphic bossSheet = new Graphic.BossSheet(postBoss.getPosition().x - xMod, postBoss.getPosition().y);
+		Graphic bossSheet = new Graphic.BossSheet(postBoss.getPosition().x - xMod, postBoss.getPosition().y - yMod);
 		if (bossFacingLeft) bossSheet.flip();
 		MapHandler.addEntity(bossSheet);
 		MapHandler.addEntity(postBoss);
 		new SFX.Fall().play();
 		postBossAdded = true;
 		getStage().getMusic().stop();
+		lives = INFINITELIVES;
 		
 		final int center = 500;
 		final float speedX = 1;

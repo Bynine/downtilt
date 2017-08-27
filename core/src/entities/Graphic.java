@@ -301,6 +301,7 @@ public abstract class Graphic extends Entity{
 			super(posX, posY, 40);
 			image = new Sprite(anim.getKeyFrame(0));
 			updatePosition();
+			layer = Layer.MIDDLEBACK;
 		}
 		void updatePosition(){
 			setImage(anim.getKeyFrame(duration.getCounter()));
@@ -351,9 +352,10 @@ public abstract class Graphic extends Entity{
 	}
 	
 	public static class BossSheet extends Graphic {
-		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/boss_sheet.png", 1, 1, 1, PlayMode.LOOP);
+		private static final int frame = 90;
+		private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/boss_sheet.png", 2, 1, (int) (frame * 1.5), PlayMode.LOOP);
 		public BossSheet(float posX, float posY){
-			super(posX, posY, 180);
+			super(posX, posY, frame * 2);
 			image = new Sprite(anim.getKeyFrame(0));
 			layer = Layer.MIDDLEFRONT;
 			updatePosition();
@@ -362,6 +364,36 @@ public abstract class Graphic extends Entity{
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
 		}
+	}
+	
+	public static class FireJet extends Graphic {
+		private static final TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/firejet.png")));
+		private final Hittable user;
+		private int dispX = 0;
+		private final int palm = 3;
+		public FireJet(Hittable user, int dur) {
+			super(user.getPosition().x, user.getPosition().y, dur);
+			this.user = user;
+			image = new Sprite(tex);
+			
+			if (user.getDirection() == Direction.RIGHT){
+				dispX = (int) (user.getImage().getWidth() + palm * 2);
+			}
+			else{
+				flip();
+				dispX = (int) -(user.getImage().getWidth() + palm * 15);
+			}
+			
+			updatePosition();
+			layer = Layer.MIDDLEFRONT;
+		}
+		
+		void updatePosition(){
+			position.x = user.getPosition().x + dispX;
+			position.y = user.getPosition().y;
+			if (duration.timeUp()) setRemove();
+		}
+
 	}
 
 }

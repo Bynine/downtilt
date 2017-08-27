@@ -66,7 +66,7 @@ public class ChallengeTutorial extends ChallengeEndless {
 						+ "them with different moves. When they touch the ground\n"
 						+ "or get KO'd, the combo finishes. Combos \n"
 						+ "replenish your Special meter, so be creative!");
-		ToolTip tt_END = new ToolTip(
+		ToolTip tt_END = new ToolTip(Ping.END,
 				"Now press " + ihp.getStartString() + " to pause the game,\n"
 						+ "then press " + ihp.getChargeString() + " to finish the tutorial!");
 		toolTipList.addAll(Arrays.asList(tt_INTRO, tt_MOVE, tt_NORMAL, tt_CHARGE, tt_SPECIAL, tt_JUMP, tt_GRAB, tt_GUARD,
@@ -93,6 +93,7 @@ public class ChallengeTutorial extends ChallengeEndless {
 		ToolTip(Ping p, String str){
 			this.p = p;
 			this.str = str;
+			if (p == Ping.END) satisfied = true;
 		}
 
 		ToolTip(String str){
@@ -103,7 +104,7 @@ public class ChallengeTutorial extends ChallengeEndless {
 
 		public void checkPing(Ping p){
 			if (p == this.p && !satisfied && !DowntiltEngine.isPaused()) {
-				new SFX.Victory().play();
+				new SFX.TutorialSuccess().play();
 				satisfied = true;
 			}
 		}
@@ -114,6 +115,10 @@ public class ChallengeTutorial extends ChallengeEndless {
 
 		public boolean isSatisfied(){
 			return satisfied;
+		}
+
+		public Ping getPing() {
+			return p;
 		}
 
 	}

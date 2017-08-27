@@ -21,6 +21,7 @@ public class EnemySpawner {
 	private float frequency;
 	private final List<Fighter> spawnedEntities = new ArrayList<Fighter>();
 	private final Vector2 spawnPointA = new Vector2(), spawnPointB = new Vector2();
+	private Spawner spawnerA, spawnerB;
 	boolean setup = false;
 
 	public static final int ENDLESS = -5;
@@ -65,18 +66,23 @@ public class EnemySpawner {
 		spawnPointA.set(DowntiltEngine.getChallenge().getStartPosition());
 		spawnPointB.set(DowntiltEngine.getChallenge().getStartPosition());
 		float dispX = DowntiltEngine.getChallenge().getStartDispX();
-		float dispY = GlobalRepo.TILE * 2;
+		float dispY = GlobalRepo.TILE * 4;
 		spawnPointA.set(spawnPointA.x - dispX, spawnPointA.y + dispY);
 		spawnPointB.set(spawnPointB.x + dispX, spawnPointB.y + dispY);
-		MapHandler.addEntity(new Spawner(spawnPointA.x, spawnPointA.y));
-		MapHandler.addEntity(new Spawner(spawnPointB.x, spawnPointB.y));
+		spawnerA = new Spawner(spawnPointA.x, spawnPointA.y);
+		spawnerB = new Spawner(spawnPointB.x, spawnPointB.y);
+		MapHandler.addEntity(spawnerA);
+		MapHandler.addEntity(spawnerB);
 	}
 
 	private void spawnNewEnemy(){
 		Fighter enemy = null;
 		EnemyType enemyType = getEnemy();
+		Vector2 spawnPoint = getSpawnPoint();
+		if (spawnPoint.equals(spawnPointA)) spawnerA.flash();
+		if (spawnPoint.equals(spawnPointB)) spawnerB.flash();
 		try {
-			enemy = enemyType.type.getDeclaredConstructor(float.class, float.class, int.class).newInstance(getSpawnPoint().x, getSpawnPoint().y, 1);
+			enemy = enemyType.type.getDeclaredConstructor(float.class, float.class, int.class).newInstance(spawnPoint.x, spawnPoint.y, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

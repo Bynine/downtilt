@@ -125,10 +125,13 @@ public class Hitbox extends ActionCircle{
 		
 		if (guarding || ( knockback.x == 0 && knockback.y == 0)) {
 			sfx = new SFX.EmptyHit();
-			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target))));
+			MapHandler.addEntity(new Graphic.HitGuardGraphic(area.x + area.radius/2, area.y + area.radius/2, hitlagFormula(knockbackFormula(target) * 3)));
 		}
 		else{
 			startHitlag(target);
+			if (property == Property.FIRE){
+				target.ignite();
+			}
 			if (target.getTeam() == GlobalRepo.BADTEAM) 
 				MapHandler.addEntity(new Graphic.HitGoodGraphic(area.x + area.radius/2, area.y + area.radius/2, graphicLengthFormula(knockbackFormula(target))));
 			if (target.getTeam() == GlobalRepo.GOODTEAM) 
@@ -255,7 +258,7 @@ public class Hitbox extends ActionCircle{
 		else return user.direct();
 	}
 
-	public enum Property { NORMAL, ELECTRIC, STUN  }
+	public enum Property { NORMAL, ELECTRIC, STUN, FIRE  }
 	public float getDamage() { return DAM; }
 	public float getAngle() { return ANG; }
 	public void setProperty(Property property) { this.property = property; }

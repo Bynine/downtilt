@@ -18,7 +18,7 @@ public class Stage_Standard extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(21.5f * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
+		return new Vector2(21.5f * GlobalRepo.TILE, 6 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){

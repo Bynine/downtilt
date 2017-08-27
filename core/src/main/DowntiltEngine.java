@@ -27,21 +27,21 @@ public class DowntiltEngine extends ApplicationAdapter {
 	/**
 	 * MUST BE ON before making a jar/releasing!
 	 */
-	private static boolean release = false;
+	private static boolean release = true;
 
 	private static boolean demoBuild = false;
 
-	private static boolean musicToggle = true;
+	private static boolean musicToggle = false;
 	private static boolean debugToggle = true;
 	private static boolean saveToggle = true;
 	private static boolean fpsLoggle = false;
 
-	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0);
-	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer));
+	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0), introTimer = new Timer(120);
+	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer, introTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
 	private static final List<Controller> controllerList = new ArrayList<Controller>();
-	private static final List<Bonus> transitionBonuses = new ArrayList<Bonus>();
-	private static int transitionTotal = 0;
+	private static final List<Bonus> roundEndBonuses = new ArrayList<Bonus>();
+	private static int roundEndTotal = 0;
 	private static int deltaTime = 0;
 	private static FPSLogger fpsLogger = new FPSLogger();
 	private static boolean paused = false;
@@ -155,7 +155,8 @@ public class DowntiltEngine extends ApplicationAdapter {
 		case OPTIONS: 	optionMenu.update();	break;
 		case RANKING:	rankingScreen.update(); break;
 		case VICTORY: 	activeVictory.update();	break;
-		case TRANSITION:updateTransition();		break;
+		case ROUNDEND:	updateRoundEnd();		break;
+		case INTRO:		updateIntro();			break;
 		} 
 		if (null != errorMessage) GraphicsHandler.drawMessage(errorMessage);
 	}
@@ -192,12 +193,22 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.renderGUI();
 		GraphicsHandler.updateCamera();
 	}
-
+	
 	private void updateTransition(){
 		MapHandler.updateInputs();
-		if (primaryInputHandler.menuAdvance()) endTransition();
 		updateGraphics();
-		TransitionGraphicsHandler.drawTransition(transitionBonuses, transitionTotal);
+	}
+
+	private void updateRoundEnd(){
+		updateTransition();
+		if (primaryInputHandler.menuAdvance()) finishRoundEnd();
+		TransitionGraphicsHandler.drawRoundEnd(roundEndBonuses, roundEndTotal);
+	}
+	
+	private void updateIntro(){
+		updateTransition();
+		if (primaryInputHandler.menuAdvance() || introTimer.timeUp()) finishIntro();
+		TransitionGraphicsHandler.drawIntro();
 	}
 
 	private void updateGraphics(){
@@ -242,7 +253,12 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static void startMode(Mode mode, int numPlayers, int initialChallenge){
 		errorMessage = null;
 		activeMode = mode;
-		gameState = GameState.GAME;
+		if (mode instanceof Adventure && !debugOn()){
+			startIntro();
+		}
+		else{
+			gameState = GameState.GAME;
+		}
 		playerList.clear();
 		paused = false;
 
@@ -288,14 +304,23 @@ public class DowntiltEngine extends ApplicationAdapter {
 		gameState = gs;
 	}
 
-	public static void startTransition(List<Bonus> bonuses, int total){
-		gameState = GameState.TRANSITION;
-		transitionBonuses.clear();
-		transitionBonuses.addAll(bonuses);
-		transitionTotal = total;
+	public static void startRoundEnd(List<Bonus> bonuses, int total){
+		gameState = GameState.ROUNDEND;
+		roundEndBonuses.clear();
+		roundEndBonuses.addAll(bonuses);
+		roundEndTotal = total;
+	}
+	
+	public static void startIntro(){
+		introTimer.reset();
+		gameState = GameState.INTRO;
 	}
 
-	private static void endTransition(){
+	private static void finishRoundEnd(){
+		gameState = GameState.GAME;
+	}
+	
+	private static void finishIntro(){
 		gameState = GameState.GAME;
 	}
 
@@ -304,7 +329,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public enum GameState{
-		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY, TRANSITION
+		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY, ROUNDEND, INTRO
 	}
 
 	public enum Palette{

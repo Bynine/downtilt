@@ -38,8 +38,8 @@ public class M_PostBoss extends M_Basic {
 	@Override
 	public Move uSpecial() {
 		int frames = 5;
-		int frame = 16;
-		float pushY = 7.6f;
+		int frame = 18;
+		float pushY = 9.6f;
 
 		Move m = new Move(user, frames * frame);
 		m.setHelpless();

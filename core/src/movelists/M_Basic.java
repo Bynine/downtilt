@@ -116,7 +116,7 @@ public class M_Basic extends MoveList {
 	public Move uSpecial() {
 		int frames = 5;
 		int frame = 16;
-		float pushY = 14.6f;
+		float pushY = 14.1f;
 
 		Move m = new Move(user, frames * frame);
 		m.setHelpless();

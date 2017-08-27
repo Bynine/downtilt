@@ -275,7 +275,7 @@ public class Adventure extends Mode{
 		}
 		super.addPendingBonuses();
 		if (activeChallengeIndex < challengeList.size() - 1) {
-			DowntiltEngine.startTransition(consolidatedBonuses, Victory.getBonusScore(bonuses));
+			DowntiltEngine.startRoundEnd(consolidatedBonuses, Victory.getBonusScore(bonuses));
 		}
 	}
 	

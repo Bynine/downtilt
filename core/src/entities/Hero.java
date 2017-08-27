@@ -15,8 +15,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 public class Hero extends Fighter {
 
 	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/idle.png", 2, 1, 20, PlayMode.LOOP);
-	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/run.png", 6, 1, 8, PlayMode.LOOP);
+	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/walk.png", 4, 1, 12, PlayMode.LOOP);
+	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/run.png", 6, 1, 6, PlayMode.LOOP);
 	private Animation tumbleImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/tumble.png", 4, 1, 7, PlayMode.LOOP);
 	private TextureRegion fJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fjump.png")));
 	private TextureRegion nJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/njump.png")));
@@ -30,8 +30,8 @@ public class Hero extends Fighter {
 	private TextureRegion jumpSquatImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/land.png")));
 	private TextureRegion slideImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/slide.png")));
 	private TextureRegion helplessImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/helpless.png")));
-	private TextureRegion grabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/hold.png")));
-	private TextureRegion airGrabImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airhold.png")));
+	private TextureRegion holdImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/hold.png")));
+	private TextureRegion airHoldImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airhold.png")));
 	private Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/bomber/fallen.png", 2, 1, 24, PlayMode.LOOP);
 
 	public Hero(float posX, float posY, int team) {
@@ -91,9 +91,9 @@ public class Hero extends Fighter {
 	TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 	TextureRegion getWallSlideFrame(float deltaTime) { return slideImage; }
 	TextureRegion getHelplessFrame(float deltaTime) { return helplessImage; }
-	TextureRegion getGrabFrame(float deltaTime) { 
-		if (isGrounded()) return grabImage; 
-		else return airGrabImage;
+	TextureRegion getHoldFrame(float deltaTime) { 
+		if (isGrounded()) return holdImage; 
+		else return airHoldImage;
 		}
 	TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 	TextureRegion getAscendFrame(float deltaTime) { return ascendImage; }

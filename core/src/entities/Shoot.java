@@ -51,7 +51,7 @@ public class Shoot extends Fighter {
 	TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
 	TextureRegion getWallSlideFrame(float deltaTime) { return fallImage; }
 	TextureRegion getHelplessFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
-	TextureRegion getGrabFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
+	TextureRegion getHoldFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getFallFrame(float deltaTime) { return fallImage; }
 	TextureRegion getAscendFrame(float deltaTime) { return jumpImage.getKeyFrame(deltaTime); }
 	TextureRegion getCrouchFrame(float deltaTime) { return crouchImage.getKeyFrame(deltaTime); }

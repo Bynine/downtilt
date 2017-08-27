@@ -20,7 +20,7 @@ public class Stage_Space extends Stage {
 	}
 
 	public Vector2 getStartPosition() {
-		return new Vector2(21.5f * GlobalRepo.TILE, 8 * GlobalRepo.TILE);
+		return new Vector2(21.5f * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
 	}
 	
 	public Vector2 getCenterPosition(){
