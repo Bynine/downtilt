@@ -50,16 +50,21 @@ public abstract class Mode {
 	 */
 	protected void win(){
 		new SFX.Victory().play();
-		boolean unstoppable = true;
-		boolean immortal = true;
+		boolean neverLostAllTries = true;
+		boolean neverLostAnyTries = true;
 		for (Challenge c: getChallengeList()){
-			if (c.everRetried) immortal = false;
-			if (c.everFailed) unstoppable = false;
+			if (c.lostATry) {
+				neverLostAnyTries = false;
+			}
+			if (c.lostAllTries) {
+				neverLostAnyTries = false;
+				neverLostAllTries = false;
+			}
 		}
-		if (unstoppable) pendValidBonus(new Bonus.UnstoppableBonus());
-		if (immortal) pendValidBonus(new Bonus.ImmortalBonus());
+		if (neverLostAllTries) pendValidBonus(new Bonus.NeverLostAllTries());
+		if (neverLostAnyTries) pendValidBonus(new Bonus.NeverLostAnyTries());
 		if (!usedSpecial) pendValidBonus(new Bonus.NoSpecialBonus());
-		if (Math.random() < 0.01) pendValidBonus(new Bonus.NoveltyBonus());
+		if (Math.random() < 0.008) pendValidBonus(new Bonus.NoveltyBonus());
 		addPendingBonuses();
 		DowntiltEngine.startVictoryScreen(getVictory());
 	}

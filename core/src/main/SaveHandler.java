@@ -24,12 +24,13 @@ public class SaveHandler {
 		if (scores[x][y] < score) scores[x][y] = score;
 	}
 	
-	static void writeOptions(int music, int sfx, int shake, int palette){
+	static void writeOptions(int music, int sfx, int shake, int palette, int stickSensitivity){
 		if (!DowntiltEngine.saveOn()) return;
 		options[0] = music;
 		options[1] = sfx;
 		options[2] = shake;
 		options[3] = palette;
+		options[4] = stickSensitivity;
 	}
 
 	static void save(){
@@ -67,6 +68,7 @@ public class SaveHandler {
 			options[1] = 2; // normal sfx volume
 			options[2] = 2; // normal screenshake
 			options[3] = 0; // normal palette
+			options[4] = 2; // normal sensitivity
 			return;
 		}
 		options = json.fromJson(int[].class, serializedOptions);

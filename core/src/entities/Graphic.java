@@ -63,9 +63,13 @@ public abstract class Graphic extends Entity{
 		}
 
 		void updatePosition(){
-			//System.out.println("Graphic is on frame " + (startFrame + duration.getCounter()) );
 			setImage(anim.getKeyFrame(startFrame + duration.getCounter()));
 			if (duration.timeUp()) setRemove();
+		}
+		
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
 		}
 		
 	}
@@ -89,9 +93,6 @@ public abstract class Graphic extends Entity{
 	}
 	
 	public static class HitGuardGraphic extends HitGraphic{
-//		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguard.png")));
-//		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/hitguardsmall.png")));
-
 		public HitGuardGraphic(float posX, float posY, int dur){
 			super(posX, posY, dur);
 			setAnimation(GlobalRepo.makeAnimation("sprites/graphics/hitguardanimation.png", 2, 1, 8, PlayMode.LOOP));
@@ -101,8 +102,8 @@ public abstract class Graphic extends Entity{
 	}
 
 	public static class SmokeTrail extends Graphic{
-		private TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/poff.png")));
-		private TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/poffsmall.png")));
+		private static TextureRegion fullSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/poff.png")));
+		private static TextureRegion halfSize = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/poffsmall.png")));
 
 		public SmokeTrail(float posX, float posY){
 			super(posX, posY, 6);
@@ -126,7 +127,7 @@ public abstract class Graphic extends Entity{
 	}
 
 	public static class DustCloud extends Graphic{
-		private TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/dustcloud.png")));
+		private static TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/dustcloud.png")));
 		public DustCloud(Entity e, float posX, float posY){
 			super(posX, posY, 4);
 			image = new Sprite(texture);
@@ -139,11 +140,12 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			if (duration.timeUp()) setRemove();
 		}
+		
 	}
 
 	public static class DoubleJumpRing extends Graphic {
-		private TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejump.png")));
-		private TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejumpsmall.png")));
+		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejump.png")));
+		private static TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/doublejumpsmall.png")));
 		public DoubleJumpRing(float posX, float posY){
 			super(posX, posY, 12);
 			image = new Sprite(tex);
@@ -157,7 +159,7 @@ public abstract class Graphic extends Entity{
 	
 	public static class Die extends Graphic {
 		private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/die.png")));
-		private TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/diesmall.png")));
+		private static TextureRegion small = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/diesmall.png")));
 		public Die(float posX, float posY){
 			super(posX - tex.getRegionWidth()/2, posY - tex.getRegionHeight()/2, 16);
 			image = new Sprite(tex);
@@ -195,6 +197,10 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
+		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
 		}
 
 	}
@@ -282,9 +288,11 @@ public abstract class Graphic extends Entity{
 	public static class BoostMessage extends Graphic {
 		final Fighter user;
 		float dispY = 0;
+		final TextureRegion tex;
 		public BoostMessage(Fighter user, TextureRegion tex){
 			super(0, 0, 30);
 			this.user = user;
+			this.tex = tex;
 			image = new Sprite(tex);
 			updatePosition();
 		}
@@ -292,6 +300,10 @@ public abstract class Graphic extends Entity{
 			dispY += 1;
 			position.set(user.getCenter().x - image.getWidth()/2, user.getPosition().y + user.getImage().getHeight() + dispY);
 			if (duration.timeUp()) setRemove();
+		}
+		public void dispose(){
+			super.dispose();
+			tex.getTexture().dispose();
 		}
 	}
 	
@@ -306,6 +318,10 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
+		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
 		}
 	}
 	
@@ -323,6 +339,10 @@ public abstract class Graphic extends Entity{
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
 		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
+		}
 	}
 	
 	public static class LowGravity extends Graphic {
@@ -336,6 +356,10 @@ public abstract class Graphic extends Entity{
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
 		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
+		}
 	}
 	
 	public static class LightningSpell extends Graphic {
@@ -348,6 +372,10 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
+		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
 		}
 	}
 	
@@ -363,6 +391,10 @@ public abstract class Graphic extends Entity{
 		void updatePosition(){
 			setImage(anim.getKeyFrame(duration.getCounter()));
 			if (duration.timeUp()) setRemove();
+		}
+		public void dispose(){
+			super.dispose();
+			GlobalRepo.disposeAnimation(anim);
 		}
 	}
 	
@@ -390,6 +422,24 @@ public abstract class Graphic extends Entity{
 		
 		void updatePosition(){
 			position.x = user.getPosition().x + dispX;
+			position.y = user.getPosition().y;
+			if (duration.timeUp()) setRemove();
+		}
+
+	}
+	
+	public static class Parry extends Graphic {
+		private static final TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/perfectparry.png")));
+		private final Hittable user;
+		public Parry(Hittable user, int dur) {
+			super(user.getPosition().x, user.getPosition().y, dur);
+			this.user = user;
+			image = new Sprite(tex);
+			updatePosition();
+		}
+		
+		void updatePosition(){
+			position.x = user.getPosition().x - 12;
 			position.y = user.getPosition().y;
 			if (duration.timeUp()) setRemove();
 		}

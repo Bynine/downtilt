@@ -128,5 +128,7 @@ public abstract class InputHandlerPlayer extends InputHandler {
 	public abstract String getGuardString();
 	public abstract String getStartString();
 	public abstract String getSelectString(); 
+	public abstract String getFlickString(); 
+	public abstract String getThrowString(); 
 
 }

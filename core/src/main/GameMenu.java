@@ -93,8 +93,7 @@ class GameMenu extends Menu {
 			randomized = true;
 			stages.randomize();
 		}
-		if (!SaveHandler.saveFileExists()) mode.setCursor(0);
-		else if (mode.cursorPos() == 0) mode.setCursor(1);
+		if (mode.cursorPos() == 0 && SaveHandler.saveFileExists()) mode.setCursor(1);
 	}
 
 	enum MenuChoice{

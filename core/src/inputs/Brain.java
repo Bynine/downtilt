@@ -323,4 +323,30 @@ public abstract class Brain{
 		}
 
 	}
+	
+	public static class CloneBrain extends Brain{
+
+		public CloneBrain(InputHandlerCPU body) {
+			super(body);
+		}
+
+		void update(InputPackage pack){
+			super.update(pack);
+			body.yInput = 0;
+			if (changeDirection.timeUp() && Math.abs(pack.distanceXFromPlayer) > 35 ) headTowardPlayer(changeDirection);
+			if (!performJump.timeUp()) performJump(performJump);
+			if (shouldGetUp(0.06)) getUp();
+			else if (pack.distanceYFromPlayer > 20 && tryJump.timeUp()) jumpAtPlayer(tryJump, performJump);
+			else if (inVerticalAttackRange()) chooseAttack();
+		}
+		
+		void chooseAttack(){
+			if (!attackTimer.timeUp()) return;
+			if		(shouldAttack(0.02, 70,  true))								performJump(performJump);
+			else if (shouldAttack(0.03, 60,  false))							attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.07, 80,  true))								attackPlayer(InputHandler.commandAttack);
+			else if (shouldAttack(0.04, 50, 80, false)) 						attackPlayer(InputHandler.commandCharge);
+		}
+
+	}
 }

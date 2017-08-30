@@ -48,14 +48,14 @@ public class ChallengeTutorial extends ChallengeEndless {
 						+ "a wall jump!");
 		ToolTip tt_GRAB = new ToolTip(Ping.GRAB,  
 				"Press " + ihp.getGrabString() + " to grab. If you grab something you can\n"
-						+ "throw it by flicking the control stick in any direction.\n"
+						+ "throw it by " + ihp.getThrowString() + " .\n"
 						+ "You can also grab in the air! Throw enemies at\n"
 						+ "each other to really lay on the hurt.");
 		ToolTip tt_GUARD = new ToolTip(Ping.GUARD,  
 				"Finally, press " + ihp.getGuardString() + " to guard. If an enemy\n"
 						+ "hits you during your guard, you'll counterattack - nice!\n"
-						+ "If you flick the control stick left or right\n"
-						+ "during this guard, or press L or R in the air,\n"
+						+ "If you " + ihp.getFlickString() + "\n"
+						+ "during this guard, or press " + ihp.getGuardString() + " in the air,\n"
 						+ "you'll perform a dodge.");
 		ToolTip tt_KNOCKBACK = new ToolTip( 
 				"Hitting enemies increases their damage.\n"

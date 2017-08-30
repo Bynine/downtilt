@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class FallingEnemy extends Entity {
 	
-	private Animation anim = GlobalRepo.makeAnimation("sprites/graphics/enemyfall.png", 4, 1, 6, PlayMode.LOOP);
+	private static Animation anim = GlobalRepo.makeAnimation("sprites/graphics/enemyfall.png", 4, 1, 6, PlayMode.LOOP);
 
 	public FallingEnemy(float posX, float posY) {
 		super(posX, posY);

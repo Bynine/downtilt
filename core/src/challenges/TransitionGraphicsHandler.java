@@ -34,7 +34,7 @@ public class TransitionGraphicsHandler {
 	private static TextureRegion finish3 = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/finish3.png")));
 	private static Animation failure = GlobalRepo.makeAnimation("sprites/graphics/ko.png", 1, 1, 60, PlayMode.LOOP);
 	private static TextureRegion victoryOverlay = new TextureRegion(new Texture(Gdx.files.internal("sprites/graphics/overlay_victory.png")));
-	private static TextureRegion menuSlim = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menuSlim.png")));
+	private static TextureRegion menuSlim = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menuslim.png")));
 	private static TextureRegion border = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/border.png")));
 	private static TextureRegion sceneIntro = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/scene_intro.png")));
 
@@ -59,10 +59,15 @@ public class TransitionGraphicsHandler {
 		else if (!readyGoTimer.timeUp()) batch.draw(readyGo.getKeyFrame(readyGoTimer.getCounter()), 360, 500);
 		batch.end();
 	}
+	
+	public static void end(){
+		for (Timer t: timerList) t.end();
+	}
 
 	static void readyGo(){
 		new SFX.ReadySetGo().play();
 		readyGoTimer.reset();
+		finishTimer.end();
 		DowntiltEngine.wait(60);
 	}
 

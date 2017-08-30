@@ -28,8 +28,8 @@ public class Adventure extends Mode{
 		switch (difficulty){
 		case Beginner:{
 			if (DowntiltEngine.debugOn()) {
-				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, Difficulty.Beginner));
-				//challengeList.add(0, new ChallengeAdventure(new Stage_Standard(), waveDebug));
+				challengeList.add(new ChallengeBoss(new Stage_Boss(), waveBoss1, Difficulty.Nightmare));
+				challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveDebug));
 			}
 			else{
 				challengeList.add(new ChallengeAdventure(new Stage_Standard(), waveStandard1));
@@ -147,7 +147,7 @@ public class Adventure extends Mode{
 	private List<Wave> waveSpace2 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.basic), 5, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.heavy, EnemyRepo.fly), 5, 3, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.shoot), 5, 4, 20))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 4, 2, 80))
 			));
 	private List<Wave> waveBlocks2 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.bomb), 6, 3, 120))
@@ -192,7 +192,7 @@ public class Adventure extends Mode{
 	private List<Wave> waveMushroom3 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic), 6, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.heavy), 5, 2, 80))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 25, 12, 20))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 20, 8, 30))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fatheavy), 1, 1, 120))
 			));
 	private List<Wave> waveSpace3 = new ArrayList<Wave>(Arrays.asList(
@@ -235,7 +235,7 @@ public class Adventure extends Mode{
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 10, 4, 30))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.fly, EnemyRepo.basic, EnemyRepo.heavy), 6, 3, 80))
 			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot), 10, 10, 90))
-			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 30, 30, 3))
+			,new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.bomb), 48, 15, 5))
 			));
 	private List<Wave> waveSpace4 = new ArrayList<Wave>(Arrays.asList(
 			new Wave(new EnemySpawner(Arrays.asList(EnemyRepo.shoot, EnemyRepo.fatbasic), 6, 4, 20))
@@ -305,7 +305,7 @@ public class Adventure extends Mode{
 	
 	@Override
 	public void pendValidBonus(Bonus newBonus){
-		if (!newBonus.singleOnly) super.pendValidBonus(newBonus);
+		if (newBonus.adventure) super.pendValidBonus(newBonus);
 	}
 
 }

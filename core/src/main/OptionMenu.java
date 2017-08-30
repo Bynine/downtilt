@@ -20,7 +20,8 @@ public class OptionMenu extends Menu {
 			new Choice<Integer>(0, "palettes"),
 			new Choice<Integer>(0, "musicvolume"),
 			new Choice<Integer>(0, "sfxvolume"),
-			new Choice<Integer>(0, "screenshake")
+			new Choice<Integer>(0, "screenshake"),
+			new Choice<Integer>(0, "stick")
 			));
 	
 	private final String str_MUSHROOMNAME = "Wild";
@@ -55,7 +56,14 @@ public class OptionMenu extends Menu {
 			new Choice<Float>(1.0f, "NORMAL"),
 			new Choice<Float>(1.5f, "YIKES!!")
 			));
-	private List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, palettes, musicVolume, sfxVolume, screenShake));
+	private MenuOption<Float> stickSensitivity = new MenuOption<Float>(Arrays.asList(
+			new Choice<Float>(1.12f, "VERY LOW"),
+			new Choice<Float>(1.06f, "LOW"),
+			new Choice<Float>(1.0f, "NORMAL"),
+			new Choice<Float>(0.85f, "HIGH"),
+			new Choice<Float>(0.6f, "VERY HIGH")
+			));
+	private List<MenuOption<?>> options = new ArrayList<MenuOption<?>>(Arrays.asList(choices, palettes, musicVolume, sfxVolume, screenShake, stickSensitivity));
 	private final TextureRegion playerImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/stand.png")));
 	private final TextureRegion background = new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/background.png")));
 
@@ -68,6 +76,7 @@ public class OptionMenu extends Menu {
 		sfxVolume.setCursor(opts[1]);
 		screenShake.setCursor(opts[2]);
 		palettes.setCursor(opts[3]);
+		stickSensitivity.setCursor(opts[4]);
 		resetPalettes();
 	}
 	
@@ -123,6 +132,7 @@ public class OptionMenu extends Menu {
 		font.draw(batch, appendCursors("Music Volume: ", musicVolume) + musicVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("SFX Volume:   ", sfxVolume) + sfxVolume.selected().desc, posX, posY -= dec);
 		font.draw(batch, appendCursors("Screen Shake: ", screenShake) + screenShake.selected().desc, posX, posY -= dec);
+		font.draw(batch, appendCursors("Stick Sensitivity: ", stickSensitivity) + stickSensitivity.selected().desc, posX, posY -= dec);
 
 		batch.end();
 	}
@@ -131,6 +141,7 @@ public class OptionMenu extends Menu {
 		DowntiltEngine.setMusicVolume(musicVolume.selected().t);
 		DowntiltEngine.setSFXVolume(sfxVolume.selected().t);
 		DowntiltEngine.setScreenShake(screenShake.selected().t);
+		DowntiltEngine.setStickSensitivity(stickSensitivity.selected().t);
 		if (palettes.selected().unlocked) DowntiltEngine.setActivePalette(palettes.selected().t);
 		else palettes.setCursor(0);
 	}
@@ -139,7 +150,7 @@ public class OptionMenu extends Menu {
 	protected void back(){
 		new SFX.Back().play();
 		setOptions();
-		SaveHandler.writeOptions(musicVolume.cursorPos(), sfxVolume.cursorPos(), screenShake.cursorPos(), palettes.cursorPos());
+		SaveHandler.writeOptions(musicVolume.cursorPos(), sfxVolume.cursorPos(), screenShake.cursorPos(), palettes.cursorPos(), stickSensitivity.cursorPos());
 		SaveHandler.save();
 		DowntiltEngine.startHomeMenu();
 	}

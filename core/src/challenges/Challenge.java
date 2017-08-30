@@ -20,16 +20,17 @@ public abstract class Challenge {
 	protected Wave activeWave = null;
 	protected final Stage stage;
 	protected long score = 0;
-	private int longestCombo = 0, timeSpent = 0;
+	private int longestCombo = 0;
+	protected int timeSpent = 0;
 	protected float specialMeter = 0;
 	public static final int SPECIALMETERMAX = 12, SPECIALMETERBEGINNING = 2, INFINITELIVES = 999;
 	protected int specialBeginning = SPECIALMETERBEGINNING;
 	protected int lives = 0;
 	protected int lifeSetting = 4;
-	
+
 	protected final Vector2 centerPosition = new Vector2(0, 0);
 	protected final Vector2 startPosition = new Vector2(0, 0);
-	protected boolean finished = false, failed = false, started = false, everRetried = false, everFailed = false;
+	protected boolean finished = false, failed = false, started = false, lostATry = false, lostAllTries = false;
 
 	Challenge(Stage stage, List<Wave> waves){
 		this.currWaves = new ArrayList<Wave>();
@@ -37,8 +38,8 @@ public abstract class Challenge {
 		initWaves.addAll(waves);
 		this.stage = stage;
 	}
-	
-	private boolean shouldRunTransitionGraphics(){
+
+	protected boolean shouldRunTransitionGraphics(){
 		return (!DowntiltEngine.debugOn() && !(this instanceof ChallengeTutorial) );
 	}
 
@@ -50,7 +51,7 @@ public abstract class Challenge {
 		DowntiltEngine.resetDeltaTime();
 		lives = lifeSetting;
 		specialMeter = specialBeginning;
-		
+
 		currWaves.clear();
 		for (Wave wave: initWaves) wave.restart();
 		currWaves.addAll(initWaves);
@@ -58,9 +59,9 @@ public abstract class Challenge {
 		DowntiltEngine.changeRoom(stage);
 		centerPosition.set(stage.getCenterPosition());
 		startPosition.set(stage.getStartPosition());
-		
+
 		if (shouldRunTransitionGraphics()) TransitionGraphicsHandler.readyGo();
-		
+
 		float mod = 16;
 		for (Fighter player: DowntiltEngine.getPlayers()) {
 			player.refresh();
@@ -69,7 +70,7 @@ public abstract class Challenge {
 		}
 		started = true;
 	}
-	
+
 	protected void setActiveWave(){
 		activeWave = currWaves.remove(0);
 	}
@@ -81,18 +82,18 @@ public abstract class Challenge {
 		nextWaveChecker();
 		if (inFailState()) failChallenge();
 	}
-	
+
 	protected void nextWaveChecker(){
 		if (activeWave.getNumEnemies() == 0 && !activeWave.isEndless()) {
 			if (currWaves.size() > 0) nextWave();
 			else if (inSuccessState()) succeedChallenge();
 		}
 	}
-	
+
 	protected boolean inSuccessState(){
 		return currWaves.size() == 0 && activeWave.getNumEnemies() == 0;
 	}
-	
+
 	protected boolean inFailState(){
 		return lives <= 0;
 	}
@@ -106,15 +107,19 @@ public abstract class Challenge {
 	 * Called if all players die
 	 */
 	public void failChallenge(){
+		failChallengeHelper();
+	}
+	
+	protected void failChallengeHelper(){
 		if (failed) return;
 		new SFX.Error().play();
 		timeSpent += DowntiltEngine.getDeltaTime();
 		DowntiltEngine.getMode().wipePendingBonuses();
 		if (shouldRunTransitionGraphics()) TransitionGraphicsHandler.failure();
 		failed = true;
-		everFailed = true;
+		lostAllTries = true;
 	}
-	
+
 	public void succeedChallenge(){
 		if (finished) return;
 		timeSpent += DowntiltEngine.getDeltaTime();
@@ -130,11 +135,11 @@ public abstract class Challenge {
 	public long getScore(){
 		return score;
 	}
-	
+
 	public boolean started() {
 		return started;
 	}
-	
+
 	public boolean finished() {
 		return finished;
 	}
@@ -142,7 +147,7 @@ public abstract class Challenge {
 	public void addScore(int i) {
 		score += i;
 	}
-	
+
 	public Wave getActiveWave(){
 		return activeWave;
 	}
@@ -150,23 +155,23 @@ public abstract class Challenge {
 	public Vector2 getCenterPosition(){
 		return centerPosition;
 	}
-	
+
 	public Vector2 getStartPosition(){
 		return startPosition;
 	}
-	
+
 	public String getWaveCounter() {
 		return "WAVES LEFT: " + (currWaves.size() + 1);
 	}
-	
+
 	public final String getTime(){
 		return getTimeString() + GlobalRepo.getTimeString(getTimeNum());
 	}
-	
+
 	protected int getTimeNum(){
 		return DowntiltEngine.getDeltaTime()/60;
 	}
-	
+
 	protected String getTimeString(){
 		return "TIME: ";
 	}
@@ -178,42 +183,41 @@ public abstract class Challenge {
 	public float getStartDispX() {
 		return stage.getDispX();
 	}
-	
+
 	public int getLongestCombo(){
 		return longestCombo;
 	}
-	
+
 	public int getSeconds(){
 		return timeSpent * 60;
 	}
-	
+
 	public int getLives(){
 		return lives;
 	}
-	
+
 	public void removeLife(){
-		if (lives < INFINITELIVES) {
-			everRetried = true;
-			lives--;
-		}
+		if (lives >= INFINITELIVES) return;
+		lostATry = true;
+		lives--;
 	}
-	
+
 	public float getSpecialMeter(){
 		return specialMeter;
 	}
-	
+
 	public void changeSpecial(float f){
 		specialMeter = MathUtils.clamp(specialMeter + f, 0, SPECIALMETERMAX);
 	}
-	
+
 	public void updateLongestCombo(int combo){
 		if (combo > longestCombo) longestCombo = combo;
 	}
-	
+
 	public void resolveCombo(float mod){
 		/* */
 	}
-	
+
 	public boolean isFailed(){
 		return failed;
 	}
@@ -221,13 +225,13 @@ public abstract class Challenge {
 	public enum Difficulty{
 		Beginner, Standard, Advanced, Nightmare
 	}
-	
+
 	public boolean bossHurt(){
 		return false;
 	}
-	
+
 	public boolean postBoss(){
 		return false;
 	}
-	
+
 }

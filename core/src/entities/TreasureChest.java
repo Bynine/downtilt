@@ -16,9 +16,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class TreasureChest extends Hurlable {
 
-	private TextureRegion closed = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestclosed.png")));
-	private TextureRegion open = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestopen.png")));
-	private Animation spin = GlobalRepo.makeAnimation("sprites/entities/chestspin.png", 4, 1, 8, PlayMode.LOOP);
+	private static TextureRegion closed = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestclosed.png")));
+	private static TextureRegion open = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/chestopen.png")));
+	private static Animation spin = GlobalRepo.makeAnimation("sprites/entities/chestspin.png", 4, 1, 8, PlayMode.LOOP);
 	boolean opened = false;
 
 	public TreasureChest(float posX, float posY) {

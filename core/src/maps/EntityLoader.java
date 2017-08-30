@@ -16,7 +16,6 @@ public class EntityLoader {
 		switch(m.getName().toLowerCase()){
 		case "trash": return new Hurlable.TrashCan(x, y);
 		case "treasure": return new TreasureChest(x, y);
-		case "spikes": return new Hazard.Spikes(x, y);
 		case "bounceleft": return new Bounce.BounceLeft(x, y);
 		case "bounceright": return new Bounce.BounceRight(x, y);
 		case "changea": return new ChangeBlock.BlockR(x, y);

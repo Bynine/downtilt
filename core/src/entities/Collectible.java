@@ -45,6 +45,10 @@ public abstract class Collectible extends Entity {
 		else return new Color(1, 1, 1, 0.5f);
 	}
 	
+	public void dispose(){
+		image.getTexture().dispose();
+	}
+	
 	/* COLLECTIBLES */
 	
 //	public static class Food extends Collectible {

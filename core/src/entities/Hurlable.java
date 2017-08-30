@@ -36,6 +36,14 @@ public abstract class Hurlable extends Hittable {
 		if (isGrounded() && !inGroundedState()) ground();
 		else if (!isGrounded()) state = State.FALL;
 	}
+	
+	@Override
+	public void dispose(){
+		normImage.getTexture().dispose();
+		for (TextureRegion t: tumbleImage.getKeyFrames()){
+			t.getTexture().dispose();
+		}
+	}
 
 	public void ground(){
 		super.ground();

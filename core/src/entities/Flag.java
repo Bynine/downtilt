@@ -10,7 +10,7 @@ import main.GlobalRepo;
 
 public class Flag extends ImmobileEntity {
 	
-	Animation anim = GlobalRepo.makeAnimation("sprites/entities/flag.png", 2, 1, 15, PlayMode.LOOP);
+	private static Animation anim = GlobalRepo.makeAnimation("sprites/entities/flag.png", 2, 1, 15, PlayMode.LOOP);
 
 	public Flag(float posX, float posY) {
 		super(posX, posY);

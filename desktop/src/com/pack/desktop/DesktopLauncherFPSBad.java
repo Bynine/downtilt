@@ -7,9 +7,9 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-public class DesktopLauncher {
+public class DesktopLauncherFPSBad {
 	
-	private static final int FPS = DowntiltEngine.FPSGood;
+	private static final int FPS = DowntiltEngine.FPSBad;
 	private static final int DONTRENDER = -1;
 	
 	public static void main (String[] arg) {
@@ -22,7 +22,7 @@ public class DesktopLauncher {
 		cfg.addIcon("sprites/graphics/icon32.png", FileType.Classpath);
 		cfg.width = GraphicsHandler.SCREENWIDTH;
 		cfg.height= GraphicsHandler.SCREENHEIGHT;
-		DowntiltEngine.FPS = DowntiltEngine.FPSGood;
+		DowntiltEngine.FPS = DowntiltEngine.FPSBad;
 		new LwjglApplication(new DowntiltEngine(), cfg);
 	}
 	

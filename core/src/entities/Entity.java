@@ -65,6 +65,10 @@ public abstract class Entity {
 			MapHandler.addEntity(new Graphic.SmokeTrail(this, knockbackPower));
 		}
 	}
+	
+	public void dispose(){
+		defaultSprite.getTexture().dispose();
+	}
 
 	void updateState() {
 		/* */

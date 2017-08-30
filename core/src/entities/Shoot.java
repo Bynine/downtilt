@@ -12,16 +12,16 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
 public class Shoot extends Fighter {
 	
-	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/stand.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/run.png", 2, 1, 8, PlayMode.LOOP);
-	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/jump.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/crouch.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/hitstun.png", 2, 1, 8, PlayMode.LOOP);
-	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fall.png")));
-	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fallen.png")));
-	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/dash.png")));
+	private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/stand.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/walk.png", 2, 1, 16, PlayMode.LOOP);
+	private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/run.png", 2, 1, 8, PlayMode.LOOP);
+	private static Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/jump.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/crouch.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
+	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fall.png")));
+	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fallen.png")));
+	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/dash.png")));
 
 	public Shoot(float posX, float posY, int team) {
 		super(posX, posY, team);

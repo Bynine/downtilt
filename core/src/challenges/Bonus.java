@@ -3,8 +3,9 @@ package challenges;
 public abstract class Bonus {
 	protected int points = 0;
 	protected String name = "DUMMY";
-	protected boolean adventureOnly = false;
-	protected boolean singleOnly = false;
+	protected boolean adventure = 	false;
+	protected boolean timetrial = 	false;
+	protected boolean endless = 	false;
 
 	public String getName(){
 		return name;
@@ -40,18 +41,24 @@ public abstract class Bonus {
 		public ComboMultLow() {
 			points = 1;
 			name = "Rad Combo";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 	public static class ComboMultMid extends MultBonus{
 		public ComboMultMid() {
 			points = 2;
 			name = "Gnarly Combo";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 	public static class ComboMultHigh extends MultBonus{
 		public ComboMultHigh() {
 			points = 4;
 			name = "Tubular Combo";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 
@@ -59,18 +66,24 @@ public abstract class Bonus {
 		public ComboLow() {
 			points = 10;
 			name = "Combo Expert";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 	public static class ComboMid extends Bonus{
 		public ComboMid() {
 			points = 25;
 			name = "Combo Legend";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 	public static class ComboHigh extends Bonus{
 		public ComboHigh() {
 			points = 50;
 			name = "Combo God";
+			adventure = true;
+			timetrial = true;
 		}	
 	}
 	
@@ -79,6 +92,9 @@ public abstract class Bonus {
 			points = 1;
 			if (Math.random() < 0.5) name = "Plantain Enthusiast";
 			else name = "Ichythologist";
+			adventure = true;
+			timetrial = true;
+			endless = true;
 		}
 	}
 	
@@ -93,6 +109,10 @@ public abstract class Bonus {
 		public NoSpecialBonus() {
 			factor = 1.5f;
 			name = "Special-Free: 1.5x";
+			
+			adventure = true;
+			timetrial = true;
+			endless = true;
 		}
 	}
 
@@ -100,32 +120,33 @@ public abstract class Bonus {
 
 	public static class TimeBonus extends Bonus{
 		public TimeBonus(int sec){
-			adventureOnly = true;
 			points = 0;
-			
 			final int minute = 60;
 			final int possibleBonus = 18;
 			for (int i = possibleBonus; i > 0; --i){
 				if (sec < minute * i) points = (possibleBonus - i) * 5;
 			}
-			
 			name = "Time Bonus";
+			
+			adventure = true;
 		}
 	}
 
-	public static class ImmortalBonus extends Bonus{
-		public ImmortalBonus(){
-			adventureOnly = true;
+	public static class NeverLostAnyTries extends Bonus{
+		public NeverLostAnyTries(){
 			points = 50;
 			name = "Immortal";
+
+			adventure = true;
 		}
 	}
 
-	public static class UnstoppableBonus extends Bonus{
-		public UnstoppableBonus(){
-			adventureOnly = true;
+	public static class NeverLostAllTries extends Bonus{
+		public NeverLostAllTries(){
 			points = 15;
 			name = "Unstoppable";
+
+			adventure = true;
 		}
 	}
 
@@ -133,9 +154,11 @@ public abstract class Bonus {
 
 	public static class KOBonus extends MultBonus{
 		public KOBonus(){
-			singleOnly = true;
 			points = 1;
 			name = "KO Bonus";
+			
+			timetrial = true;
+			endless = true;
 		}
 	}
 

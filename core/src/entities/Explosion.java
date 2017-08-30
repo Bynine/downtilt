@@ -44,6 +44,11 @@ public abstract class Explosion extends ImmobileEntity{
 		updatePosition();
 		updateImagePosition(deltaTime);
 	}
+	
+	public void dispose(){
+		super.dispose();
+		texture.getTexture().dispose();
+	}
 
 	/** texture string, lifetime, velocity x, velocity y **/
 	void setup(String texString, int lifeTime, float velX, float velY){

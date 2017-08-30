@@ -94,10 +94,10 @@ public class M_Basic extends MoveList {
 		Move m = new Move(user, length);
 		m.setStopsInAir();
 		m.setAnimation("sprites/fighters/" + name + "/nspecial.png", frames, frame);
-		Hitbox steamL = new Hitbox(user, 2.6f, 3.8f, 15, 60, -24, 0, 18, new SFX.MidHit());
-		Hitbox steamR = new Hitbox(user, 2.6f, 3.8f, 15, 60,  28, 0, 18, new SFX.MidHit());
-		Hitbox early = new Hitbox(user, 3.6f, 4.8f, 25, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.HeavyHit());
-		Hitbox late  = new Hitbox(user, 2.3f, 2.8f, 15, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.MidHit());
+		Hitbox steamL = new Hitbox(user, 2.6f, 3.4f, 12, 60, -24, 0, 18, new SFX.MidHit());
+		Hitbox steamR = new Hitbox(user, 2.6f, 3.4f, 12, 60,  28, 0, 18, new SFX.MidHit());
+		Hitbox early = new Hitbox(user, 3.6f, 4.2f, 20, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.HeavyHit());
+		Hitbox late  = new Hitbox(user, 2.3f, 2.3f, 15, Hitbox.SAMURAI, 4, 0, hitboxSize, new SFX.MidHit());
 		m.eventList.addTremble(m, 0, frame * 2);
 		if (user instanceof Basic.Bomb) {
 			m.eventList.addExplosion((Basic.Bomb)user, frame * 2);

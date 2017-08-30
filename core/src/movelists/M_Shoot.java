@@ -40,10 +40,10 @@ public class M_Shoot extends MoveList {
 		int frames = 2;
 		int frame = 30;
 
-		Move m = new Move(user, frames * frame);
+		Move m = new Move(user, (frames * frame) + 10);
 		m.setAnimation("sprites/fighters/shoot/nair.png", frames, frame);
 		m.eventList.addVelocityChange(user, 0, Action.ChangeVelocity.noChange, 3);
-		m.eventList.addVelocityChange(user, frame, -4, 6);
+		m.eventList.addVelocityChange(user, frame, -4, 4);
 		m.eventList.addNewEntity(frame, user, (new Hurlable.ShootBall(user, GlobalRepo.GOODTEAM, user.getPosition().x, user.getPosition().y)),
 				user.direct() * 3, -6
 				);

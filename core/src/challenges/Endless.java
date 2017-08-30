@@ -62,7 +62,7 @@ public class Endless extends Mode {
 	
 	@Override
 	public void pendValidBonus(Bonus newBonus){
-		if (!newBonus.adventureOnly) super.pendValidBonus(newBonus);
+		if (newBonus.endless) super.pendValidBonus(newBonus);
 	}
 
 }

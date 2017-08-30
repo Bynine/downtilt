@@ -53,6 +53,11 @@ public abstract class ChangeBlock extends ImmobileEntity {
 		setImage(this.empty);
 		rotate(null);
 	}
+	
+	public void dispose(){
+		empty.getTexture().dispose();
+		full.getTexture().dispose();
+	}
 
 	boolean isFull() {
 		return color == correctColor();

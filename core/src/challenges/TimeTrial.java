@@ -35,7 +35,7 @@ public class TimeTrial extends Mode {
 	
 	@Override
 	public void pendValidBonus(Bonus newBonus){
-		if (!newBonus.adventureOnly) super.pendValidBonus(newBonus);
+		if (newBonus.timetrial) super.pendValidBonus(newBonus);
 	}
 
 }

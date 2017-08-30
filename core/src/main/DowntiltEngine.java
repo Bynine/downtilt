@@ -5,6 +5,8 @@ import inputs.InputHandlerController.ControllerType;
 import inputs.InputHandlerKeyboard;
 import inputs.InputHandlerPlayer;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +31,16 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 */
 	private static boolean release = true;
 
-	private static boolean demoBuild = false;
+	public static int FPSBad = 27;
+	public static int FPSGood = 55;
+	public static int FPS = FPSGood;
 
 	private static boolean musicToggle = false;
 	private static boolean debugToggle = true;
 	private static boolean saveToggle = true;
 	private static boolean fpsLoggle = false;
 
-	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0), introTimer = new Timer(120);
+	private static final Timer hitlagTimer = new Timer(0), waitTimer = new Timer(0), slowTimer = new Timer(0), introTimer = new Timer(180);
 	private static final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitlagTimer, waitTimer, slowTimer, introTimer));
 	private static final List<Fighter> playerList = new ArrayList<Fighter>();
 	private static final List<Controller> controllerList = new ArrayList<Controller>();
@@ -48,7 +52,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static Mode activeMode;
 	private static GameState gameState = GameState.HOME;
 	private static InputHandlerPlayer primaryInputHandler = null, secondaryInputHandler = null;
-	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f;
+	private static float masterVolume = 1.0f, musicVolume = 1.0f, sfxVolume = 1.0f, screenShakeMod = 1.0f, stickSensitivity = 0.85f;
 	private static ShaderProgram shaderMushroom, shaderSpace, shaderSky, shaderNightmare, shaderAdventure, shaderEndless, shaderTimeTrial;
 	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
@@ -57,9 +61,9 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static RankingScreen rankingScreen;
 	private static VictoryScreen activeVictory;
 	private static Palette activePalette = Palette.NORMAL;
-	private static String errorMessage = null;
 
 	public void create () {
+		ShaderProgram.pedantic = false;
 		shaderMushroom = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/wild.glsl"));
 		shaderSpace = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/solemn.glsl"));
 		shaderSky = new ShaderProgram(Gdx.files.internal("shaders/vert.glsl"), Gdx.files.internal("shaders/palettes/hero/color.glsl"));
@@ -124,7 +128,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 		if (!coop) return;
 		Fighter p2 = new Hero(0, 0, 0);
 		beginFighter(p2, secondaryInputHandler);
-		p2.setPalette(shaderSpace);
 	}
 
 	/**
@@ -158,21 +161,24 @@ public class DowntiltEngine extends ApplicationAdapter {
 		case ROUNDEND:	updateRoundEnd();		break;
 		case INTRO:		updateIntro();			break;
 		} 
-		if (null != errorMessage) GraphicsHandler.drawMessage(errorMessage);
 	}
 
 	private void updateGame(){
-		if (debugOn()) updateGameHelper();
-		else {
-			try{
-				updateGameHelper();
-			}
-			catch (Exception e){
-				e.printStackTrace();
-				new SFX.Error().play();
-				startGameMenu();
-				errorMessage = e.getMessage();
-			}
+		try{
+			updateGameHelper();
+		}
+		catch (Exception e){
+			new SFX.Error().play();
+			startGameMenu();
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
+			ErrorHandler.makeWindow( 
+					"<html><body style='width: 200px;'>"
+							+ "Encountered error:<br>"
+							+ exceptionAsString + "<br>"
+							+ "Sorry! Please email me at byninegiga@gmail.com<br>"
+							+ "with the details of this error.<html>");
 		}
 	}
 
@@ -193,7 +199,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		GraphicsHandler.renderGUI();
 		GraphicsHandler.updateCamera();
 	}
-	
+
 	private void updateTransition(){
 		MapHandler.updateInputs();
 		updateGraphics();
@@ -204,9 +210,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 		if (primaryInputHandler.menuAdvance()) finishRoundEnd();
 		TransitionGraphicsHandler.drawRoundEnd(roundEndBonuses, roundEndTotal);
 	}
-	
+
 	private void updateIntro(){
 		updateTransition();
+		if (introTimer.getCounter() == 30) new SFX.Ominous().play();
 		if (primaryInputHandler.menuAdvance() || introTimer.timeUp()) finishIntro();
 		TransitionGraphicsHandler.drawIntro();
 	}
@@ -251,7 +258,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public static void startMode(Mode mode, int numPlayers, int initialChallenge){
-		errorMessage = null;
+		GlobalRepo.resetBlockColor();
 		activeMode = mode;
 		if (mode instanceof Adventure && !debugOn()){
 			startIntro();
@@ -310,7 +317,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		roundEndBonuses.addAll(bonuses);
 		roundEndTotal = total;
 	}
-	
+
 	public static void startIntro(){
 		introTimer.reset();
 		gameState = GameState.INTRO;
@@ -319,7 +326,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static void finishRoundEnd(){
 		gameState = GameState.GAME;
 	}
-	
+
 	private static void finishIntro(){
 		gameState = GameState.GAME;
 	}
@@ -357,11 +364,13 @@ public class DowntiltEngine extends ApplicationAdapter {
 	public static float getMusicVolume(){ return masterVolume * musicVolume; }
 	public static float getSFXVolume(){ return masterVolume * sfxVolume; }
 	public static float getScreenShakeMod(){ return screenShakeMod; }
+	public static float getStickSensitivity() { return stickSensitivity; }
 
 	public static void setMusicVolume(float v){ musicVolume = v; }
 	public static void setSFXVolume(float v){ sfxVolume = v; }
 	public static void setScreenShake(float ss) { screenShakeMod = ss; }
 	public static void setActivePalette(Palette p){ activePalette = p; }
+	public static void setStickSensitivity(float ss){ stickSensitivity = ss; }
 
 	public static int getDeltaTime(){ return deltaTime; }
 	public static boolean isPaused() { return paused; }
@@ -385,9 +394,6 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 	public static boolean saveOn(){
 		return saveToggle || release;
-	}
-	public static boolean isDemoBuild(){
-		return demoBuild;
 	}
 	public static InputHandlerPlayer getPrimaryInputHandler() { 
 		return primaryInputHandler; 

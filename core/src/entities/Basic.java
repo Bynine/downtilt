@@ -24,16 +24,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Basic extends Fighter {
 
-	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/basic/stand.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/basic/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/basic/run.png", 2, 1, 8, PlayMode.LOOP);
-	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/basic/jump.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/basic/crouch.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/basic/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/basic/hitstun.png", 2, 1, 8, PlayMode.LOOP);
-	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fall.png")));
-	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fallen.png")));
-	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/dash.png")));
+	private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/basic/stand.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/basic/walk.png", 2, 1, 16, PlayMode.LOOP);
+	private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/basic/run.png", 2, 1, 8, PlayMode.LOOP);
+	private static Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/basic/jump.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/basic/crouch.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/basic/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
+	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/basic/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fall.png")));
+	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fallen.png")));
+	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/dash.png")));
 
 	public Basic(float posX, float posY, int team) {
 		super(posX, posY, team);
@@ -78,16 +78,16 @@ public class Basic extends Fighter {
 
 	public static class Bomb extends Basic {
 		
-		private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/stand.png", 1, 1, 1, PlayMode.LOOP);
-		private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/walk.png", 2, 1, 16, PlayMode.LOOP);
-		private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/run.png", 2, 1, 8, PlayMode.LOOP);
-		private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/jump.png", 1, 1, 1, PlayMode.LOOP);
-		private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/crouch.png", 1, 1, 1, PlayMode.LOOP);
-		private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
-		private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/hitstun.png", 2, 1, 8, PlayMode.LOOP);
-		private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fall.png")));
-		private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fallen.png")));
-		private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/dash.png")));
+		private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/stand.png", 1, 1, 1, PlayMode.LOOP);
+		private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/walk.png", 2, 1, 16, PlayMode.LOOP);
+		private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/run.png", 2, 1, 8, PlayMode.LOOP);
+		private static Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/jump.png", 1, 1, 1, PlayMode.LOOP);
+		private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/crouch.png", 1, 1, 1, PlayMode.LOOP);
+		private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
+		private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+		private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fall.png")));
+		private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fallen.png")));
+		private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/dash.png")));
 
 		private final Timer kaboom = new DurationTimer(120);
 		private boolean exploded = false;
@@ -166,22 +166,21 @@ public class Basic extends Fighter {
 	}
 	
 	public static class PostBoss extends Basic {
-		private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/stand.png", 1, 1, 1, PlayMode.LOOP);
-		private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/walk.png", 2, 1, 16, PlayMode.LOOP);
-		private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/basic/walk.png", 2, 1, 8, PlayMode.LOOP);
-		private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/crouch.png", 1, 1, 1, PlayMode.LOOP);
-		private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
-		private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/hitstun.png", 2, 1, 8, PlayMode.LOOP);
-		private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fall.png")));
-		private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fallen.png")));
-		private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/dash.png")));
+		private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/stand.png", 1, 1, 1, PlayMode.LOOP);
+		private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/walk.png", 2, 1, 16, PlayMode.LOOP);
+		private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/walk.png", 2, 1, 8, PlayMode.LOOP);
+		private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/crouch.png", 1, 1, 1, PlayMode.LOOP);
+		private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
+		private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/hitstun.png", 2, 1, 8, PlayMode.LOOP);
+		private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fall.png")));
+		private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fallen.png")));
+		private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/dash.png")));
 
 		public PostBoss(float posX, float posY, int team) {
 			super(posX, posY, team);
 			setInputHandler(new InputHandlerCPU(this, PostBossBrain.class));
 			tumbling = true;
 			image = new Sprite(standImage.getKeyFrame(0));
-			hitstopTimer.reset(25);
 			moveList = new M_PostBoss(this);
 			walkAcc = 1.2f;
 			runAcc = walkAcc;

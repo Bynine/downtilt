@@ -58,6 +58,12 @@ public class GlobalRepo {
 		animation.setPlayMode(playMode);
 		return animation;
 	}
+	
+	public static void disposeAnimation(Animation anim){
+		for(TextureRegion tr: anim.getKeyFrames()){
+			tr.getTexture().dispose();
+		}
+	}
 
 	public static void log(String str){
 		System.out.println(str + " at " + DowntiltEngine.getDeltaTime());
@@ -117,6 +123,10 @@ public class GlobalRepo {
 
 	public static BlockColor getBlockColor(){
 		return blockColor;
+	}
+	
+	public static void resetBlockColor(){
+		blockColor = BlockColor.G;
 	}
 
 	public static String getTimeString(int sec){

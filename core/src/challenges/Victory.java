@@ -92,7 +92,7 @@ public abstract class Victory {
 
 		public static final int D = 12;
 		public static final int C = 20;
-		public static final int B = 35;
+		public static final int B = 30;
 		public static final int A = 40;
 		public static final int S = 60;
 		public static final int X = 80;
@@ -125,12 +125,12 @@ public abstract class Victory {
 			this.stage = stage;
 		}
 
-		public static final int D = 15;
-		public static final int C = 25;
-		public static final int B = 40;
-		public static final int A = 60;
-		public static final int S = 90;
-		public static final int X = 150;
+		public static final int D = 5;
+		public static final int C = 10;
+		public static final int B = 20;
+		public static final int A = 40;
+		public static final int S = 60;
+		public static final int X = 120;
 
 		public Ranking getRanking(float score){
 			if (score < D) return Ranking.F;

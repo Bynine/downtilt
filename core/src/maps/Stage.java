@@ -159,7 +159,6 @@ public abstract class Stage {
 		private final Timer duration = new DurationTimer(0);
 		
 		public LightningHandler(){
-			
 		}
 		
 		public LightningHandler(int dur){
@@ -170,9 +169,11 @@ public abstract class Stage {
 		
 		void update(){
 			duration.countUp();
-			if (duration.timeUp() && hasDuration) return;
+			if (duration.timeUp() && hasDuration) {
+				return;
+			}
 			lightningTimer.countUp();
-			if (lightningTimer.timeUp() && DowntiltEngine.getDeltaTime() % timing == 0 && Math.random() < chance){
+			if (lightningTimer.timeUp() && duration.getCounter() % timing == 1 && Math.random() < chance){
 				lightningTimer.reset();
 				lightningPos = makeNewLightningPos();
 				MapHandler.addEntity(new Graphic.Sparks(lightningPos.x, lightningPos.y, lightningTimer.getEndTime() ));
@@ -192,6 +193,10 @@ public abstract class Stage {
 
 	public void addLightningHandler(LightningHandler lh) {
 		activeLightningHandler = lh;
+	}
+
+	public void clearLightningHandlers() {
+		activeLightningHandler = null;
 	}
 
 }

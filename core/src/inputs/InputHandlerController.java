@@ -13,6 +13,7 @@ import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 
 import entities.Fighter;
+import main.DowntiltEngine;
 
 public class InputHandlerController extends InputHandlerPlayer implements ControllerListener {
 
@@ -60,17 +61,6 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 		control = c;
 	}
 
-//	private void writeControllersToConsole(){
-//		if (Controllers.getControllers().size > 0){
-//			System.out.println(Controllers.getControllers().size + " controller(s found:");
-//			for (Controller c: Controllers.getControllers()) {
-//				System.out.println("- " + c.getName());
-//			}
-//		}
-//		else System.out.println("No controllers found");
-//	}
-
-	private final float pushed = 0.85f;
 	public void update() {
 		pauseSelectBuffer.countUp();
 		currShoulder = control.getAxis(AXIS_SHOULDER);
@@ -197,11 +187,11 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 			lastPositions.add(control.getAxis(axis));
 			prev = lastPositions.remove(0);
 			curr = lastPositions.get(lastSize - 1);
-			if (Math.abs(curr) < pushed) curr = 0;
+			if (Math.abs(curr) < 0.85f) curr = 0;
 		}
 
 		boolean flick(int flickTo){
-			return Math.abs(curr - prev) > flick && Math.signum(curr) == flickTo;
+			return Math.abs(curr - prev) > (flick * DowntiltEngine.getStickSensitivity()) && Math.signum(curr) == flickTo;
 		}
 		
 		void clear(){
@@ -267,6 +257,16 @@ public class InputHandlerController extends InputHandlerPlayer implements Contro
 	@Override
 	public String getGuardString() {
 		return "L or R";
+	}
+	
+	@Override
+	public String getFlickString() {
+		return "flick the control stick left or right";
+	}
+	
+	@Override
+	public String getThrowString() {
+		return "flicking the control stick in any direction";
 	}
 
 	@Override

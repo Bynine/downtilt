@@ -17,16 +17,16 @@ import movelists.M_Heavy;
 
 public class Heavy extends Fighter {
 
-	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/stand.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/run.png", 2, 1, 8, PlayMode.LOOP);
-	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/jump.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/crouch.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/hitstun.png", 1, 1, 8, PlayMode.LOOP);
-	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fall.png")));
-	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fallen.png")));
-	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/dash.png")));
+	private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/stand.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/walk.png", 2, 1, 16, PlayMode.LOOP);
+	private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/run.png", 2, 1, 8, PlayMode.LOOP);
+	private static Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/jump.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/crouch.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
+	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/hitstun.png", 1, 1, 8, PlayMode.LOOP);
+	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fall.png")));
+	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fallen.png")));
+	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/dash.png")));
 	
 	public static final float HEAVY_ARMOR = 0.5f;
 

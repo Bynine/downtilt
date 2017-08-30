@@ -46,10 +46,10 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	
 	public boolean special(){
-		return Gdx.input.isKeyJustPressed(Keys.K);
+		return Gdx.input.isKeyJustPressed(Keys.L);
 	}
 	
-	private int chargeInput = Keys.L;
+	private int chargeInput = Keys.K;
 	public boolean charge(){
 		return Gdx.input.isKeyJustPressed(chargeInput);
 	}
@@ -164,12 +164,12 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 
 	@Override
 	public String getSpecialString() {
-		return "K";
+		return "L";
 	}
 
 	@Override
 	public String getChargeString() {
-		return "L";
+		return "K";
 	}
 
 	@Override
@@ -195,6 +195,16 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	@Override
 	public String getSelectString() {
 		return "]";
+	}
+	
+	@Override
+	public String getFlickString() {
+		return "press A or D";
+	}
+	
+	@Override
+	public String getThrowString() {
+		return "pressing W, A, S, or D";
 	}
 	
 	/* NOT USED */

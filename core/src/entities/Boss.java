@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,11 +20,11 @@ import timers.Timer;
 
 public class Boss extends Hittable {
 
-	private final int fireTiming = 20;
-	private Animation floatImage = GlobalRepo.makeAnimation("sprites/fighters/boss/float.png", 2, 1, 30, PlayMode.LOOP);
-	private Animation hurtImage = GlobalRepo.makeAnimation("sprites/fighters/boss/hurt.png", 1, 1, 10, PlayMode.LOOP);
-	private Animation castImage = GlobalRepo.makeAnimation("sprites/fighters/boss/cast.png", 2, 1, 10, PlayMode.LOOP);
-	private Animation fireImage = GlobalRepo.makeAnimation("sprites/fighters/boss/fire.png", 2, 1, fireTiming, PlayMode.LOOP);
+	private static final int fireTiming = 20;
+	private static Animation floatImage = GlobalRepo.makeAnimation("sprites/fighters/boss/float.png", 2, 1, 30, PlayMode.LOOP);
+	private static Animation hurtImage = GlobalRepo.makeAnimation("sprites/fighters/boss/hurt.png", 1, 1, 10, PlayMode.LOOP);
+	private static Animation castImage = GlobalRepo.makeAnimation("sprites/fighters/boss/cast.png", 2, 1, 10, PlayMode.LOOP);
+	private static Animation fireImage = GlobalRepo.makeAnimation("sprites/fighters/boss/fire.png", 2, 1, fireTiming, PlayMode.LOOP);
 	private int health = 1;
 	private int spellModulo = 180;
 	private double spellChance = 0.5;
@@ -109,11 +110,13 @@ public class Boss extends Hittable {
 			health = 3;
 			spellModulo = easySpellModulo;
 			spellChance = 0.4;
+			laserSpeed = 3;
 		} break;
 		case Standard: {
 			health = 6;
 			spellModulo = 75;
 			spellChance = 0.6;
+			laserSpeed = 5;
 		} break;
 		case Advanced: {
 			health = 10;
@@ -122,10 +125,11 @@ public class Boss extends Hittable {
 		} break;
 		case Nightmare: {
 			health = 15;
-			spellModulo = 35;
+			spellModulo = 50;
 			spellChance = 0.9;
 			laserSpeed = 9;
-			fireTimer.setEndTime(16);
+			castTimer.setEndTime(40);
+			fireTimer.setEndTime(24);
 		} break;
 		}
 
@@ -143,8 +147,7 @@ public class Boss extends Hittable {
 			hurtTimer.reset();
 			castTimer.end();
 			if (health == 1 && spellModulo != easySpellModulo) {
-				castTimer.setEndTime(castTimer.getEndTime()/2);
-				spellModulo = spellModulo/2;
+				spellModulo = MathUtils.clamp(spellModulo/2, 41, 999);
 			}
 			hurtler.setRemove();
 		}

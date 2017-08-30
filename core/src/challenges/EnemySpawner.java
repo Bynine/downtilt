@@ -61,7 +61,7 @@ public class EnemySpawner {
 		}
 	}
 	
-	private void setSpawnPoints(){
+	void setSpawnPoints(){
 		setup = true;
 		spawnPointA.set(DowntiltEngine.getChallenge().getStartPosition());
 		spawnPointB.set(DowntiltEngine.getChallenge().getStartPosition());
@@ -116,6 +116,7 @@ public class EnemySpawner {
 	public void restart() {
 		amount = initAmount;
 		spawnedEntities.clear();
+		if (setup) setSpawnPoints();
 	}
 
 	public int getNumActiveEnemies(){

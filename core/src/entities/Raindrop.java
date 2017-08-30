@@ -12,10 +12,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Raindrop extends Entity {
+	
+	private static TextureRegion tex = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindrop.png")));
 
 	public Raindrop(float posX, float posY) {
 		super(posX, posY);
-		setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindrop.png"))));
+		setImage(tex);
 		gravity = -1.5f;
 		airFrictionX = 0.999f;
 		velocity.x = MapHandler.getRoomWind() * 36;
@@ -45,10 +47,11 @@ public class Raindrop extends Entity {
 	private class Raindroplet extends Entity{
 		
 		DurationTimer life = new DurationTimer(12);
+		private TextureRegion subtex = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindroplet.png")));
 
 		public Raindroplet(float posX, float posY) {
 			super(posX, posY);
-			setImage(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/raindroplet.png"))));
+			setImage(subtex);
 			airFrictionX = 0.996f;
 			velocity.x = (float) ( 3 * (0.5 - Math.random()));
 			velocity.y = (float) (Math.random() + 2);
@@ -60,6 +63,11 @@ public class Raindrop extends Entity {
 			updatePosition();
 			life.countUp();
 			if (life.timeUp()) setRemove();
+		}
+		
+		public void dispose(){
+			super.dispose();
+			subtex.getTexture().dispose();
 		}
 		
 	}

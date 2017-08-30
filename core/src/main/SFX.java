@@ -42,7 +42,6 @@ public abstract class SFX {
 	public static class SharpHit extends SFX{ public SharpHit(){ setSFX("/melee/shika.wav"); } }
 	public static class Slow extends SFX{ public Slow(){ setSFX("/melee/vwoop.wav"); } }
 	public static class LaserFire extends SFX{ public LaserFire(){ setSFX("/melee/pew.wav"); } }
-	public static class ChargeLaserFire extends SFX{ public ChargeLaserFire(){ setSFX("/melee/vwoop.wav"); } }
 	public static class Explode extends SFX{ public Explode(){ setSFX("/melee/fire.wav"); } }
 	public static class Die extends SFX{ public Die(){ setSFX("/melee/explode.wav"); } }
 	public static class HomeRun extends SFX{ public HomeRun(){ setSFX("/melee/KRRIIIIING.wav"); } }
@@ -72,5 +71,6 @@ public abstract class SFX {
 	public static class Fall extends SFX{ public Fall(){ setSFX("/fall.wav"); } }
 	public static class Tada extends SFX{ public Tada(){ setSFX("/tada.mp3"); } }
 	public static class TutorialSuccess extends SFX{ public TutorialSuccess(){ setSFX("/tutorial.wav"); } }
+	public static class Ominous extends SFX{ public Ominous(){ setSFX("/ominous.wav"); } }
 	
 }

@@ -18,7 +18,7 @@ public class Spawner extends ImmobileEntity {
 	public static final int SPAWNTIME = 30;
 	private final Animation anim;
 	private final Timer flashTimer = new Timer(30);
-	private final TextureRegion spawn = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/spawnerflash.png")));
+	private static final TextureRegion spawn = new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/spawnerflash.png")));
 
 	public Spawner(float posX, float posY) {
 		super(posX, posY);

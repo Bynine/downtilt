@@ -37,33 +37,6 @@ public abstract class Hazard extends Entity {
 	}
 
 	/**
-	 * Ceiling mounted spikes that knock targets straight downward.
-	 */
-	public static class Spikes extends Hazard{
-
-		Hitbox h1;
-
-		public Spikes(float posX, float posY) { 
-			super(posX, posY); 
-			image = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("sprites/entities/spikes.png"))));
-			h1 = new HazardHitbox(this, 2.5f, 3.0f, 20, 270, 0, 0, 21, new SFX.SharpHit());
-			h1.setRefresh(20);
-			for (ActionCircle ac: getActionCircles()) MapHandler.addActionCircle(ac);
-			gravity = 0;
-		}
-
-		@Override
-		List<ActionCircle> getActionCircles() {
-			return new ArrayList<ActionCircle>(Arrays.asList( h1 ));
-		}
-
-		void updatePosition(){
-			/* doesn't move */
-		}
-
-	}
-
-	/**
 	 * A lightning bolt that strikes the rooftop stage periodically.
 	 */
 	public static class Lightning extends Hazard{
@@ -102,6 +75,10 @@ public abstract class Hazard extends Entity {
 				setRemove();
 			}
 		}
+		
+		public void dispose(){
+			image.getTexture().dispose();
+		}
 
 	}
 	
@@ -128,6 +105,10 @@ public abstract class Hazard extends Entity {
 
 		void updatePosition(){
 			/* doesn't move */
+		}
+		
+		public void dispose(){
+			image.getTexture().dispose();
 		}
 
 	}

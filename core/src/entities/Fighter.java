@@ -155,7 +155,9 @@ public abstract class Fighter extends Hittable{
 		if (null == getActiveMove()) return;
 		boolean endAttack = false;
 		if (getActiveMove().move.doesStopInAir() && (!isGrounded() || !inGroundedState()) ) endAttack = true;
-		if (getActiveMove().move.isAerial() && isGrounded()) getActiveMove().move.setDone();
+		if (getActiveMove().move.isAerial() && isGrounded()) {
+			getActiveMove().move.setDone();
+		}
 		if (getActiveMove().move.done()) {
 			if (getActiveMove().move.causesHelpless()){ 
 				state = State.HELPLESS;
@@ -171,6 +173,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	void updateState(){
+		if (DowntiltEngine.isWaiting()) return;
 		if (canMove() && jumpSquatTimer.timeUp() && state == State.JUMPSQUAT) {
 			state = State.JUMP;
 			jump();
@@ -704,7 +707,7 @@ public abstract class Fighter extends Hittable{
 	}
 
 	protected boolean activeMoveIsCharge(){
-		return activeMoveIsWhatever(MoveList_Advanced.chargeRange);
+		return activeMoveIsWhatever(MoveList_Advanced.chargeRange) || (null != getActiveMove() && getActiveMove().id == MoveList_Advanced.IDfair);
 	}
 
 	protected boolean activeMoveIsThrow(){
@@ -766,7 +769,7 @@ public abstract class Fighter extends Hittable{
 
 	@Override
 	public void addToCombo(int id){
-		combo.addMoveID(id);
+		if (this.team != GlobalRepo.GOODTEAM) combo.addMoveID(id);
 	}
 
 	public void respawn() {

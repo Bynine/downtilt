@@ -74,6 +74,7 @@ public class Move {
 
 	public void setDone() {
 		duration.end();
+		eventList.clearActionCircles();
 	}
 
 	public void dontTurn() { 

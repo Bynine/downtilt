@@ -35,7 +35,7 @@ public class MapHandler {
 		activeMap = activeRoom.getMap();
 		DowntiltEngine.changeRoom(activeRoom);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		
+
 	}
 
 	static void updateInputs(){
@@ -52,7 +52,7 @@ public class MapHandler {
 	private static final List<Entity> entityToRemoveList = new ArrayList<Entity>();
 	static void updateEntities(){
 		for (Timer t: timerList) t.countUp();
-		
+
 		timedEntityIter = timedEntityList.iterator();
 		while (timedEntityIter.hasNext()){
 			TimedEntity te = timedEntityIter.next();
@@ -62,7 +62,7 @@ public class MapHandler {
 				timedEntityIter.remove();
 			}
 		}
-		
+
 		entityIter = activeRoom.getEntityList().iterator();
 		while (entityIter.hasNext()) {
 			Entity en = entityIter.next();
@@ -81,12 +81,13 @@ public class MapHandler {
 				}
 			}
 		}
-		
+
 		for (Entity en: entityToRemoveList){
 			activeRoom.getEntityList().remove(en);
+			en.dispose();
 		}
 		entityToRemoveList.clear();
-		
+
 	}
 
 	private static boolean shouldUpdate(Entity en){
@@ -103,7 +104,7 @@ public class MapHandler {
 		Rectangle cameraBoundary = GraphicsHandler.getCameraBoundary();
 		if (fi.noKill()) return false;
 		fi.setNoKill();
-		
+
 		if (fi.isOOB(cameraBoundary)) drawOOBDieGraphic(fi);
 		else drawDisappearGraphic(fi);
 		new SFX.Die().play();
@@ -116,7 +117,7 @@ public class MapHandler {
 		if (fi.getPosition().y > cameraBoundary.y + cameraBoundary.height) {
 			addEntity(new FallingEnemy(fi.getPosition().x, cameraBoundary.y + cameraBoundary.height));
 		}
-		
+
 		if (fi.getTeam() == GlobalRepo.BADTEAM) DowntiltEngine.getMode().pendValidBonus(new Bonus.KOBonus());
 		entityToRemoveList.add(fi);
 		return true;
@@ -129,7 +130,7 @@ public class MapHandler {
 				(fi.getCenter().y * (mod - 1) + GraphicsHandler.getCameraPos().y) / mod
 				));
 	}
-	
+
 	private static void drawDisappearGraphic(Fighter fi){
 		addEntity(new Graphic.Disappear(fi.getCenter().x + fi.getVelocity().x, fi.getCenter().y + fi.getVelocity().y));
 	}
@@ -167,6 +168,7 @@ public class MapHandler {
 	}
 
 	public static void updateRoomMap(Stage room) {
+		clearRoom();
 		activeRoom = room;
 		activeMap = activeRoom.getMap();
 		activeRoom.initEntities();
@@ -176,6 +178,19 @@ public class MapHandler {
 		mapWidth  = activeMap.getProperties().get("width",  Integer.class)*GlobalRepo.TILE;
 		mapHeight = activeMap.getProperties().get("height", Integer.class)*GlobalRepo.TILE;
 	}
+	
+	public static void clearRoom(){
+		if (null != activeRoom){
+			Iterator<Entity> entityIter = activeRoom.getEntityList().iterator();
+			while(entityIter.hasNext()){
+				Entity en = entityIter.next();
+				if (!DowntiltEngine.entityIsPlayer(en)){
+					en.dispose();
+					entityIter.remove();
+				}
+			}
+		}
+	}
 
 	public static void resetRoom() {
 		DowntiltEngine.changeRoom(activeRoom); 
@@ -184,11 +199,11 @@ public class MapHandler {
 	public static void addEntity(Entity e){ 
 		activeRoom.addEntity(e); 
 	}
-	
+
 	public static void addTimedEntity(Entity e, int x){ 
 		timedEntityList.add(new TimedEntity(e, x));
 	}
-	
+
 	public static ActionCircle addActionCircle(ActionCircle ac){ 
 		return activeRoom.addActionCircle(ac); 
 	}
@@ -215,22 +230,22 @@ public class MapHandler {
 		if (activeRoom == null) return new ArrayList<ActionCircle>();
 		else return activeRoom.getActionCircleList();
 	}
-	
+
 	public static void setLowGravity(){
 		lowGTimer.reset();
 		highGTimer.end();
 	}
-	
+
 	public static void setHighGravity(){
 		highGTimer.reset();
 		lowGTimer.end();
 	}
-	
+
 	public static void addLightningHandler(LightningHandler lh){
 		if (activeRoom == null) return;
 		else activeRoom.addLightningHandler(lh);
 	}
-	
+
 	private static class TimedEntity{
 		final Timer timeBeforeSpawn;
 		final Entity entity;
@@ -251,6 +266,12 @@ public class MapHandler {
 			for (Entity e: activeRoom.getEntityList()){
 				if (!DowntiltEngine.entityIsPlayer(e)) e.setRemove();
 			}
+			for (ActionCircle ac: activeRoom.getActionCircleList()){
+				ac.remove();
+			}
+			activeRoom.clearLightningHandlers();
+			highGTimer.end();
+			lowGTimer.end();
 		}
 	}
 

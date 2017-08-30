@@ -19,7 +19,7 @@ public class CreditScreen extends Menu {
 		font.draw(batch, ""
 				+ spacing + "DIRECTOR, PROGRAMMER, ARTIST: TYLER \"BYNINE\" MCMASTER"
 				+ spacing + "DESIGNER: JARROD \"DOCNINJ\" ROBERTS"
-				+ spacing + "STAGE MUSIC: RUNBOW"
+				+ spacing + "STAGE MUSIC: RUNBOW, CRYPT OF THE NECRODANCER"
 				+ spacing + "SFX: BFXR, NINTENDO"
 				+ "", 200, 550);
 		batch.end();

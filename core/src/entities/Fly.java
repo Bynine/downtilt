@@ -14,16 +14,16 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Fly extends Fighter {
 
-	private Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/fly/stand.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 16, PlayMode.LOOP);
-	private Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 10, PlayMode.LOOP);
-	private Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/fly/jump.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/fly/crouch.png", 1, 1, 1, PlayMode.LOOP);
-	private Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/fly/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
-	private Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 4, 1, 6, PlayMode.LOOP);
-	private TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fall.png")));
-	private TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fallen.png")));
-	private TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/jump.png")));
+	private static Animation standImage = GlobalRepo.makeAnimation("sprites/fighters/fly/stand.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation walkImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 16, PlayMode.LOOP);
+	private static Animation runImage = GlobalRepo.makeAnimation("sprites/fighters/fly/walk.png", 2, 1, 10, PlayMode.LOOP);
+	private static Animation jumpImage = GlobalRepo.makeAnimation("sprites/fighters/fly/jump.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation crouchImage = GlobalRepo.makeAnimation("sprites/fighters/fly/crouch.png", 1, 1, 1, PlayMode.LOOP);
+	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/fly/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
+	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 4, 1, 6, PlayMode.LOOP);
+	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fall.png")));
+	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fallen.png")));
+	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/jump.png")));
 
 	public Fly(float posX, float posY, int team) {
 		super(posX, posY, team);

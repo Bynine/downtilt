@@ -24,7 +24,7 @@ public class Stage_Sky extends Stage {
 	}
 	
 	public Vector2 getStartPosition() {
-		return new Vector2(21 * GlobalRepo.TILE, 7 * GlobalRepo.TILE);
+		return new Vector2(21 * GlobalRepo.TILE, (6.1f * GlobalRepo.TILE));
 	}
 	
 	public Vector2 getCenterPosition(){

@@ -396,7 +396,7 @@ public class GraphicsHandler {
 		float iconY = MathUtils.clamp(fi.getPosition().y, cameraBoundaries().get(2), cameraBoundaries().get(3) - iconDimension);
 		batch.draw(fi.getIcon(), iconX, iconY);
 	}
-	
+
 	private static void drawCombo(Fighter fi) {
 		float xPos = fi.getPosition().x + fi.getImage().getWidth()/2 - 8;
 		float yPos = fi.getPosition().y + fi.getImage().getHeight() + font.getLineHeight();
@@ -450,19 +450,21 @@ public class GraphicsHandler {
 			spaceMod += spacing;
 		}
 
-		if (DowntiltEngine.getChallenge() instanceof ChallengeTimed) {
-			int timeLeft = ((ChallengeTimed)DowntiltEngine.getChallenge()).getTimeLeftInSeconds();
-			int limitRed = 10;
-			int limitOrange = 30;
-			int limitYellow = 60;
-			if (timeLeft == limitRed || timeLeft == limitOrange || timeLeft == limitYellow) timeLimitFont.setColor(Color.WHITE);
-			else if (timeLeft < limitRed) timeLimitFont.setColor(Color.RED);
-			else if (timeLeft < limitOrange) timeLimitFont.setColor(Color.ORANGE);
-			else if (timeLeft < limitYellow) timeLimitFont.setColor(Color.YELLOW);
-			else timeLimitFont.setColor(Color.GREEN);
-			timeLimitFont.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x - 32, posY);
+		if (!DowntiltEngine.isWaiting()){
+			if (DowntiltEngine.getChallenge() instanceof ChallengeTimed) {
+				int timeLeft = ((ChallengeTimed)DowntiltEngine.getChallenge()).getTimeLeftInSeconds();
+				int limitRed = 10;
+				int limitOrange = 30;
+				int limitYellow = 60;
+				if (timeLeft == limitRed || timeLeft == limitOrange || timeLeft == limitYellow) timeLimitFont.setColor(Color.WHITE);
+				else if (timeLeft < limitRed) timeLimitFont.setColor(Color.RED);
+				else if (timeLeft < limitOrange) timeLimitFont.setColor(Color.ORANGE);
+				else if (timeLeft < limitYellow) timeLimitFont.setColor(Color.YELLOW);
+				else timeLimitFont.setColor(Color.GREEN);
+				timeLimitFont.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x - 32, posY);
+			}
+			else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
 		}
-		else font.draw(batch, DowntiltEngine.getChallenge().getTime(), cam.position.x, posY);
 
 		font.draw(batch, "BEST COMBO: " + DowntiltEngine.getChallenge().getLongestCombo(), cam.position.x + SCREENWIDTH * (stockLocationMod/3.0f), posY);
 		if (DowntiltEngine.getChallenge() instanceof ChallengeBoss) font.setColor(Color.RED);
@@ -556,17 +558,6 @@ public class GraphicsHandler {
 			}
 		}
 		debugRenderer.end();
-	}
-
-	public static void drawMessage(String errorMessage) {
-		batch.begin();
-		comboFont.draw(batch, 
-				  "Encountered error:\n"
-				  + errorMessage + "\n"
-				  + "Sorry!. Please email me at byninegiga@gmail.com\n"
-				  + "with a screencap of this error.",
-				cameraBoundaries().get(0), cameraBoundaries().get(3));
-		batch.end();
 	}
 
 }

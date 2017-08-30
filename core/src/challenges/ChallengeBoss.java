@@ -48,6 +48,7 @@ public class ChallengeBoss extends ChallengeEndless {
 		int xMod = 30;
 		int yMod = -4;
 		postBoss.setPosition(new Vector2(boss.getPosition().x + xMod, boss.getPosition().y + yMod));
+		postBoss.setStun(30);
 		activeWave.stop();
 		boolean bossFacingLeft = boss.getDirection() == Direction.LEFT;
 		MapHandler.removeAllNonPlayerEntities();
@@ -75,8 +76,7 @@ public class ChallengeBoss extends ChallengeEndless {
 
 	@Override
 	public void failChallenge(){
-		new SFX.Error().play();
-		startChallenge();
+		failChallengeHelper();
 	}
 	
 	@Override
