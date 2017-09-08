@@ -105,11 +105,11 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 	}
 	
 	public boolean pause(){
-		return Gdx.input.isKeyJustPressed(Keys.LEFT_BRACKET);
+		return Gdx.input.isKeyJustPressed(Keys.T);
 	}
 	
 	public boolean select(){
-		return Gdx.input.isKeyJustPressed(Keys.RIGHT_BRACKET);
+		return Gdx.input.isKeyJustPressed(Keys.Y);
 	}
 	
 	public boolean flickCLeft(){
@@ -189,12 +189,12 @@ public class InputHandlerKeyboard extends InputHandlerPlayer implements InputPro
 
 	@Override
 	public String getStartString() {
-		return "[";
+		return "T";
 	}
 
 	@Override
 	public String getSelectString() {
-		return "]";
+		return "Y";
 	}
 	
 	@Override

@@ -59,7 +59,7 @@ public class M_Hero extends MoveList_Advanced{
 		int frames = 3;
 
 		Move m = new Move(user, frame * frames);
-		m.setAnimation("sprites/fighters/bomber/dweak.png", frames, frame);
+		m.setAnimation("sprites/fighters/bomber/dweakstretch.png", frames, frame);
 		m.setHurtBox(30, 40, -8, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
 		Hitbox inner = new Hitbox(user, 5.2f, 0.7f, 6, 82,  2, -8, 12, new SFX.MidHit());
@@ -103,7 +103,7 @@ public class M_Hero extends MoveList_Advanced{
 		if (user.speedActive()) m = new Move(user, 20);
 		m.dontTurn();
 		m.setHurtBox(40, 25, -8, Move.HURTBOXNOTSET);
-		m.setAnimation("sprites/fighters/bomber/slideattack.png", 2, 16);
+		m.setAnimation("sprites/fighters/bomber/slideattackstretch.png", 2, 16);
 
 		Hitbox early1 = new Hitbox(user, 6.6f, 1.7f, 10,  75, -4, -4, 16, new SFX.MidHit());
 		Hitbox early2 = new Hitbox(user, 6.6f, 1.7f, 10,  75, 24, -6, 12, new SFX.MidHit());
@@ -111,6 +111,7 @@ public class M_Hero extends MoveList_Advanced{
 		Hitbox late2  = new Hitbox(user, 5.0f, 1.0f,  7, 100, 24, -4,  8, new SFX.LightHit());
 		new ActionCircleGroup(Arrays.asList(early1, early2, late1, late2));
 		m.eventList.addConstantVelocity(user, 4, 16, user.getSpeedMod() * 9, Action.ChangeVelocity.noChange);
+		m.eventList.addGenerateGraphic(0, 16, 4, user, Graphic.SmokeTrail.class);
 		m.eventList.addActionCircle(early1, 3, 10);
 		m.eventList.addActionCircle(early2, 3, 10);
 		m.eventList.addActionCircle(late1, 11, 20);
@@ -125,12 +126,12 @@ public class M_Hero extends MoveList_Advanced{
 		int frames = 6;
 
 		Move m = new Move(user, frame * frames);
-		m.setAnimation("sprites/fighters/bomber/scharge.png", 3, frame * 2);
+		m.setAnimation("sprites/fighters/bomber/scharge.png", frames, frame);
 		m.setHurtBox(25, 50, -8, Move.HURTBOXNOTSET);
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
 		if (user.powerActive()) c = new Charge(3, 33, 0.03f, user, m);
-		Hitbox early = new Hitbox(user, 4.0f, 3.3f, 18, Hitbox.SAMURAI, 18, 2, 22, new SFX.MeatyHit(), c);
-		Hitbox late  = new Hitbox(user, 3.0f, 2.0f, 12, Hitbox.SAMURAI, 19, 2, 20, new SFX.MidHit(), c);
+		Hitbox early = new Hitbox(user, 4.0f, 3.3f, 18, Hitbox.SAMURAI, 18, 2, 20, new SFX.MeatyHit(), c);
+		Hitbox late  = new Hitbox(user, 3.0f, 2.0f, 12, Hitbox.SAMURAI, 19, 2, 18, new SFX.MidHit(), c);
 		new ActionCircleGroup(Arrays.asList(early, late));
 		m.eventList.addCharge(user, c);
 		m.eventList.addTremble(m, 0, 4);
@@ -143,11 +144,11 @@ public class M_Hero extends MoveList_Advanced{
 	}
 
 	public Move uCharge() {
-		int frame = 15;
-		int frames = 3;
+		int frame = 7;
+		int frames = 6;
 
 		Move m = new Move(user, frame * frames);
-		m.setAnimation("sprites/fighters/bomber/ucharge.png", frames, frame);
+		m.setAnimation("sprites/fighters/bomber/uchargestretch.png", frames, frame);
 		m.setHurtBox(25, 50, 0, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
@@ -160,11 +161,11 @@ public class M_Hero extends MoveList_Advanced{
 		new ActionCircleGroup(Arrays.asList(h1, h2, h3, h4, h5));
 		m.eventList.addCharge(user, c);
 		m.eventList.addTremble(m, 0, 4);
-		m.eventList.addActionCircle(h1, frame + 0, frame + 2);
-		m.eventList.addActionCircle(h2, frame + 2, frame + 4);
-		m.eventList.addActionCircle(h3, frame + 4, frame + 6);
-		m.eventList.addActionCircle(h4, frame + 6, frame + 8);
-		m.eventList.addActionCircle(h5, frame + 8, frame +10);
+		m.eventList.addActionCircle(h1, (frame*2) + 0, (frame*2) + 2);
+		m.eventList.addActionCircle(h2, (frame*2) + 2, (frame*2) + 4);
+		m.eventList.addActionCircle(h3, (frame*2) + 4, (frame*2) + 7);
+		m.eventList.addActionCircle(h4, (frame*2) + 7, (frame*2) + 9);
+		m.eventList.addActionCircle(h5, (frame*2) + 9, (frame*2) +11);
 		return m;
 	}
 
@@ -173,7 +174,7 @@ public class M_Hero extends MoveList_Advanced{
 		int frames = 4;
 
 		Move m = new Move(user, frame * frames);
-		m.setAnimation("sprites/fighters/bomber/dcharge.png", frames, frame);
+		m.setAnimation("sprites/fighters/bomber/dchargestretch.png", frames, frame);
 		m.setHurtBox(20, 50, 0, Move.HURTBOXNOTSET);
 		m.setStopsInAir();
 		Effect.Charge c = new Charge(3, 33, 0.02f, user, m);
@@ -218,7 +219,7 @@ public class M_Hero extends MoveList_Advanced{
 
 	public Move uAir() {
 		Move m = new Move(user, 27);
-		m.setAnimation("sprites/fighters/bomber/uair.png", 3, 8);
+		m.setAnimation("sprites/fighters/bomber/uairstretch.png", 3, 9);
 		Hitbox h1top =	new Hitbox(user, 0.5f, 0.0f, 3,270, 0, 20, 15, new SFX.LightHit());
 		Hitbox h1bott =	new Hitbox(user, 2.8f, 0.0f, 3, 90, 0,  0, 16, new SFX.LightHit());
 		Hitbox h2top = 	new Hitbox(user, 2.2f, 4.1f, 8, 90, 2, 24, 21, new SFX.MidHit());
@@ -282,7 +283,7 @@ public class M_Hero extends MoveList_Advanced{
 
 		Move m = new Move(user, frame * frames);
 		m.setHurtBox(25, 50, 10, Move.HURTBOXNOTSET);
-		m.setAnimation("sprites/fighters/bomber/bair.png", frames, frame);
+		m.setAnimation("sprites/fighters/bomber/bairstretch.png", frames, frame);
 		Hitbox fist1 = new Hitbox(user, 3.1f, 2.6f,  13, 62, -20, 10, 18, new SFX.HeavyHit());
 		Hitbox body1 = new Hitbox(user, 2.5f, 1.5f,  11, 78,  -4,  4, 20, new SFX.MidHit());
 		Hitbox fist2 = new Hitbox(user, 2.0f, 0.5f, 10,  30, -18, 11, 12, new SFX.MidHit());
@@ -301,15 +302,16 @@ public class M_Hero extends MoveList_Advanced{
 		int start = 20;
 		int end = start + 16;
 		Move m = new Move(user, end + 1);
-		m.setAnimation("sprites/fighters/bomber/uspecialu.png", 1, 1);
+		m.setAnimation("sprites/fighters/bomber/uspecialbeginning.png", 1, 1);
 		m.setHeroUSpecial();
 
-		Hitbox push = new Hitbox.AngleHitbox(user, 7.9f, 0.0f, 2, 0, 0, 24, new SFX.LightHit());
+		Hitbox push = new Hitbox.AngleHitbox(user, 8.6f, 0.0f, 2, 0, 0, 24, new SFX.LightHit());
 		push.setMovesAheadMod(1);
 		push.setRefresh(2);
 		push.setNoReverse();
+		push.setProperty(Property.WEAK);
 
-		Hitbox fini = new Hitbox.AngleHitbox(user, 3.0f, 3.2f, 10, 0, 0, 28, new SFX.MidHit());
+		Hitbox fini = new Hitbox.AngleHitbox(user, 4.6f, 3.2f, 10, 0, 0, 28, new SFX.MidHit());
 		fini.setMovesAheadMod(1);
 		fini.setNoReverse();
 		fini.setProperty(Property.ELECTRIC);
@@ -588,7 +590,7 @@ public class M_Hero extends MoveList_Advanced{
 			default: break;
 			}
 		}
-		m.setAnimation("sprites/fighters/bomber/land.png", 1, 1);
+		m.setAnimationNoLoop("sprites/fighters/bomber/landsquash.png", 2, 3);
 		if (null != user.getPrevMove() && user.getPrevMove().id == MoveList_Advanced.IDdair){
 			m = new Move(user, 12); 
 			if (user.airActive()) m = new Move(user, 3); 
@@ -604,7 +606,7 @@ public class M_Hero extends MoveList_Advanced{
 		if (user.speedActive()) return new Move(user, 0);
 		Move m = new Move(user, 15);
 		m.dontTurn();
-		m.setAnimation("sprites/fighters/bomber/skid.png", 1, 1);
+		m.setAnimation("sprites/fighters/bomber/skidstretch.png", 2, 8);
 		m.setStopsInAir();
 		return m;
 	}

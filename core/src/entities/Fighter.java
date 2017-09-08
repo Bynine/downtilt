@@ -36,7 +36,7 @@ public abstract class Fighter extends Hittable{
 	protected final Timer inputQueueTimer = new Timer(8), wallJumpTimer = new Timer(10), attackTimer = new Timer(0), grabbingTimer = new Timer(0), 
 			dashTimer = new Timer(20), invincibleTimer = new Timer(0), guardHoldTimer = new Timer(1), footStoolTimer = new Timer(20), slowedTimer = new Timer(0),
 			doubleJumpGraphicTimer = new Timer (12), doubleJumpUseTimer = new Timer (20), respawnTimer = new Timer(3), prevMoveTimer = new Timer(5),
-			noKillTimer = new Timer(5);
+			noKillTimer = new Timer(5), fallenTimer = new Timer(0);
 	protected float prevStickX = 0;
 	public float stickX = 0, stickY = 0;
 
@@ -68,7 +68,7 @@ public abstract class Fighter extends Hittable{
 		this.setInputHandler(inputHandler);
 		timerList.addAll(Arrays.asList(inputQueueTimer, wallJumpTimer, attackTimer, grabbingTimer, dashTimer, invincibleTimer,
 				guardHoldTimer, footStoolTimer, slowedTimer, doubleJumpGraphicTimer, doubleJumpUseTimer, guardTimer, respawnTimer, prevMoveTimer,
-				noKillTimer));
+				noKillTimer, fallenTimer));
 		state = State.STAND;
 		randomAnimationDisplacement = (int) (8 * Math.random());
 		baseHurtleBK = 8;
@@ -106,7 +106,8 @@ public abstract class Fighter extends Hittable{
 	}
 
 	private boolean isTrembling(){
-		return (!stunTimer.timeUp() || getActiveMove() != null && getActiveMove().move.doesTremble());
+		return ((isCaught() && (caughtTimer.getEndTime() - caughtTimer.getCounter()) < 20) 
+				|| !stunTimer.timeUp() || getActiveMove() != null && getActiveMove().move.doesTremble());
 	}
 
 	private void handleThrow(){
@@ -521,6 +522,32 @@ public abstract class Fighter extends Hittable{
 		return super.getHurtBox();
 	}
 
+	private float prevX = 0, currX = 0, prevY = 0, currY = 0;
+	void updateImage(float deltaTime){
+		prevX = image.getWidth();
+		prevY = image.getHeight();
+		TextureRegion prevImage = image;
+		selectImage(deltaTime);
+		if (!jumpSquatTimer.timeUp()) setImage(getJumpSquatFrame(deltaTime));
+		if (!attackTimer.timeUp() && null != getActiveMove() && null != getActiveMove().move.getAnimation()){
+			setImage(getActiveMove().move.getAnimation().getKeyFrame(getActiveMove().move.getFrame()));
+		}
+		if (!caughtTimer.timeUp() || !stunTimer.timeUp()) setImage(getHitstunFrame(0));
+		if (inHitstun()) {
+			if (hitstunType == HitstunType.SUPER) setImage(getTumbleFrame(deltaTime));
+			else setImage(getHitstunFrame(deltaTime));
+		}
+		if (!grabbingTimer.timeUp()) {
+			setImage(getHoldFrame(deltaTime));
+		}
+		if (!wallBounceTimer.timeUp()) setImage(getWallBounceFrame(deltaTime));
+		if (!ceilingBounceTimer.timeUp()) setImage(getCeilingBounceFrame(deltaTime));
+
+		currX = image.getWidth();
+		currY = image.getHeight();
+		if (!prevImage.equals(image)) adjustImage(deltaTime, prevImage);
+	}
+
 	private void selectImage(float deltaTime){
 		switch(state){
 		case STAND: setImage(getStandFrame(deltaTime)); break;
@@ -542,30 +569,6 @@ public abstract class Fighter extends Hittable{
 		case FALLEN: setImage(getFallenFrame(deltaTime)); break;
 		default: break;
 		}
-	}
-
-	private float prevX = 0, currX = 0, prevY = 0, currY = 0;
-	void updateImage(float deltaTime){
-		prevX = image.getWidth();
-		prevY = image.getHeight();
-		TextureRegion prevImage = image;
-		selectImage(deltaTime);
-		if (!jumpSquatTimer.timeUp()) setImage(getJumpSquatFrame(deltaTime));
-		if (!attackTimer.timeUp() && null != getActiveMove() && null != getActiveMove().move.getAnimation()){
-			setImage(getActiveMove().move.getAnimation().getKeyFrame(getActiveMove().move.getFrame()));
-		}
-		if (!caughtTimer.timeUp() || !stunTimer.timeUp()) setImage(getHitstunFrame(0));
-		if (inHitstun()) {
-			if (hitstunType == HitstunType.SUPER) setImage(getTumbleFrame(deltaTime));
-			else setImage(getHitstunFrame(deltaTime));
-		}
-		if (!grabbingTimer.timeUp()) {
-			setImage(getHoldFrame(deltaTime));
-		}
-
-		currX = image.getWidth();
-		currY = image.getHeight();
-		if (!prevImage.equals(image)) adjustImage(deltaTime, prevImage);
 	}
 
 	private void adjustImage(float deltaTime, TextureRegion prevImage){
@@ -658,15 +661,17 @@ public abstract class Fighter extends Hittable{
 			else {
 				SFX.proportionalHit(knockbackIntensity(velocity)).play();
 				state = State.FALLEN;
+				fallenTimer.reset();
 			}
 		}
 		hitstunTimer.end();
 	}
 
 	protected void resolveCombo(){
-		int comboStunMod = 24;
-		int stunTime = (int) (combo.finish() * comboStunMod);
-		setStun(stunTime);
+//		int comboStunMod = 24;
+//		int stunTime = (int) (combo.finish() * comboStunMod);
+//		setStun(stunTime);
+		combo.finish();
 		combo.end();
 	}
 
@@ -921,5 +926,12 @@ public abstract class Fighter extends Hittable{
 	abstract TextureRegion getJumpSquatFrame(float deltaTime);
 	abstract TextureRegion getHitstunFrame(float deltaTime);
 	abstract TextureRegion getFallenFrame(float deltaTime);
+	
+	TextureRegion getWallBounceFrame(float deltaTime){
+		return getHitstunFrame(deltaTime);
+	}
+	TextureRegion getCeilingBounceFrame(float deltaTime){
+		return getHitstunFrame(deltaTime);
+	}
 
 }

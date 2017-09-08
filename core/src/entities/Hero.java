@@ -26,12 +26,14 @@ public class Hero extends Fighter {
 	private static TextureRegion bJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/bjump.png")));
 	private static TextureRegion dJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/doublejump.png")));
 	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fall.png")));
+	private static TextureRegion fastFallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fastfall.png")));
 	private static TextureRegion ascendImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/fall.png")));
 	private static TextureRegion crouchImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/crouch.png")));
 	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dash.png")));
 	private static TextureRegion dodgeImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/dodgebegin.png")));
 	private static TextureRegion jumpSquatImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/land.png")));
 	private static TextureRegion slideImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/slide.png")));
+	private static TextureRegion wallJumpImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/walljump.png")));
 	private static TextureRegion helplessImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/helpless.png")));
 	private static TextureRegion holdImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/hold.png")));
 	private static TextureRegion airHoldImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomber/airhold.png")));
@@ -99,13 +101,19 @@ public class Hero extends Fighter {
 	TextureRegion getStandFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getWalkFrame(float deltaTime) { return walkImage.getKeyFrame(deltaTime); }
 	TextureRegion getRunFrame(float deltaTime) { return runImage.getKeyFrame(deltaTime); }
-	TextureRegion getWallSlideFrame(float deltaTime) { return slideImage; }
+	TextureRegion getWallSlideFrame(float deltaTime) { 
+		if (!wallJumpTimer.timeUp() || !hitstopTimer.timeUp()) return wallJumpImage;
+		return slideImage; 
+		}
 	TextureRegion getHelplessFrame(float deltaTime) { return helplessImage; }
 	TextureRegion getHoldFrame(float deltaTime) { 
 		if (isGrounded()) return holdImage; 
 		else return airHoldImage;
 		}
-	TextureRegion getFallFrame(float deltaTime) { return fallImage; }
+	TextureRegion getFallFrame(float deltaTime) { 
+		if (velocity.y < -7) return fastFallImage;
+		return fallImage; 
+		}
 	TextureRegion getAscendFrame(float deltaTime) { return ascendImage; }
 	TextureRegion getCrouchFrame(float deltaTime) { return crouchImage; }
 	TextureRegion getDashFrame(float deltaTime) { return dashImage; }

@@ -362,7 +362,7 @@ public abstract class Hittable extends Entity {
 	}
 
 	public boolean canMove(){
-		return !inHitStop() && stunTimer.timeUp() && caughtTimer.timeUp();
+		return !inHitStop() && stunTimer.timeUp() && !isCaught();
 	}
 
 	public boolean inHitStop(){

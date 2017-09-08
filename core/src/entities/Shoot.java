@@ -20,7 +20,7 @@ public class Shoot extends Fighter {
 	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
 	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/hitstun.png", 2, 1, 8, PlayMode.LOOP);
 	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fall.png")));
-	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/fallen.png")));
+	private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/shoot/fallen.png", 2, 1, 8, PlayMode.NORMAL);
 	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/shoot/dash.png")));
 
 	public Shoot(float posX, float posY, int team) {
@@ -60,6 +60,6 @@ public class Shoot extends Fighter {
 	TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
 
 }

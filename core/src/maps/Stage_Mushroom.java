@@ -22,7 +22,7 @@ public class Stage_Mushroom extends Stage {
 	
 	public void update(int deltaTime){
 		super.update(deltaTime);
-		if (Math.random() < 0.03 && deltaTime % 15 == 0){
+		if (Math.random() < 0.02 && deltaTime % 15 == 0){
 			if (Math.random() < 0.5) MapHandler.addEntity(new Hurlable.Nut(13 * GlobalRepo.TILE, 12 * GlobalRepo.TILE));
 			else 					 MapHandler.addEntity(new Hurlable.Nut(30 * GlobalRepo.TILE, 12 * GlobalRepo.TILE));
 		}

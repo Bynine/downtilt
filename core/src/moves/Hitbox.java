@@ -105,6 +105,7 @@ public class Hitbox extends ActionCircle{
 		knockback.x *= applyReverseHitbox(target);
 		if (knockbackFormula(target) > 8 && null != user) user.takeRecoil(recoilFormula(knockback, target));
 		int hitstun = hitstunFormula( target, knockbackFormula(target) * staleness );
+		if (property == Property.WEAK) hitstun /= 3.0f;
 
 		// Checks if the move hits downward and the target is on the ground.
 		boolean groundedMeteor = target.isGrounded() && ((downAngle + meteorAngleSize) > knockback.angle() && knockback.angle() > (downAngle - meteorAngleSize));
@@ -198,6 +199,7 @@ public class Hitbox extends ActionCircle{
 		if (perfectGuarding) hitlag = (int) (DAM / 2);
 		else if (guarding) hitlag = (int) (DAM / 2);
 		else hitlag = hitlagFormula(hit);
+		if (property == Property.WEAK) hitlag /= 3.0f;
 		DowntiltEngine.causeHitlag(hitlag);
 	}
 
@@ -258,7 +260,7 @@ public class Hitbox extends ActionCircle{
 		else return user.direct();
 	}
 
-	public enum Property { NORMAL, ELECTRIC, STUN, FIRE  }
+	public enum Property { NORMAL, ELECTRIC, STUN, FIRE, WEAK  }
 	public float getDamage() { return DAM; }
 	public float getAngle() { return ANG; }
 	public void setProperty(Property property) { this.property = property; }

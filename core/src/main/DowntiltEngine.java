@@ -30,6 +30,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 * MUST BE ON before making a jar/releasing!
 	 */
 	private static boolean release = true;
+	public static final String version = "1.3";
 
 	public static int FPSBad = 27;
 	public static int FPSGood = 55;

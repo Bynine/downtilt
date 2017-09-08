@@ -32,8 +32,10 @@ public class Basic extends Fighter {
 	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/basic/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
 	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/basic/hitstun.png", 2, 1, 8, PlayMode.LOOP);
 	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fall.png")));
-	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/fallen.png")));
+	private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/basic/fallen.png", 2, 1, 8, PlayMode.NORMAL);
 	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/dash.png")));
+	private static TextureRegion bounceWallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/bouncewall.png")));
+	private static TextureRegion bounceCeilingImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/basic/bounceceiling.png")));
 
 	public Basic(float posX, float posY, int team) {
 		super(posX, posY, team);
@@ -74,7 +76,9 @@ public class Basic extends Fighter {
 	TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
+	TextureRegion getWallBounceFrame(float deltaTime){ return bounceWallImage; }
+	TextureRegion getCeilingBounceFrame(float deltaTime){ return bounceCeilingImage; }	
 
 	public static class Bomb extends Basic {
 		
@@ -86,7 +90,7 @@ public class Basic extends Fighter {
 		private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
 		private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/hitstun.png", 2, 1, 8, PlayMode.LOOP);
 		private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fall.png")));
-		private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/fallen.png")));
+		private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/bomb/fallen.png", 2, 1, 8, PlayMode.NORMAL);
 		private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/bomb/dash.png")));
 
 		private final Timer kaboom = new DurationTimer(120);
@@ -161,7 +165,7 @@ public class Basic extends Fighter {
 		TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 		TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-		TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+		TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
 
 	}
 	
@@ -173,7 +177,7 @@ public class Basic extends Fighter {
 		private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/tumble.png", 4, 1, 6, PlayMode.LOOP_REVERSED);
 		private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/hitstun.png", 2, 1, 8, PlayMode.LOOP);
 		private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fall.png")));
-		private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/fallen.png")));
+		private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/postboss/fallen.png", 2, 1, 8, PlayMode.NORMAL);
 		private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/postboss/dash.png")));
 
 		public PostBoss(float posX, float posY, int team) {
@@ -205,7 +209,7 @@ public class Basic extends Fighter {
 		TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 		TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 		TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-		TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+		TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
 	}
 
 }

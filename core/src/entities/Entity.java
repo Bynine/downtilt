@@ -36,7 +36,9 @@ public abstract class Entity {
 	protected final List<Rectangle> tempRectangleList = new ArrayList<Rectangle>();
 	final Timer jumpTimer = new Timer(8), inActionTimer = new Timer(0);
 	final Timer jumpSquatTimer = new Timer(6), bounceTimer = new Timer(10);
-	final List<Timer> timerList = new ArrayList<Timer>(Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer, bounceTimer));
+	final Timer wallBounceTimer = new Timer(0), ceilingBounceTimer = new Timer(0);
+	final List<Timer> timerList = new ArrayList<Timer>(
+			Arrays.asList(hitstunTimer, jumpTimer, inActionTimer, jumpSquatTimer, bounceTimer, wallBounceTimer, ceilingBounceTimer));
 
 	public Entity(float posX, float posY){
 		image = defaultSprite;
@@ -178,6 +180,7 @@ public abstract class Entity {
 		velocity.x *= bounce;
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth()/2, position.y));
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth()/2, position.y + image.getHeight()));
+		wallBounceTimer.reset(getBounceTime());
 		bounceOff();
 	}
 
@@ -185,12 +188,17 @@ public abstract class Entity {
 		velocity.y *= bounce;
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x, position.y + image.getHeight()/2));
 		MapHandler.addEntity(new Graphic.SmokeTrail(position.x + image.getWidth(), position.y + image.getHeight()/2));
+		ceilingBounceTimer.reset(getBounceTime());
 		bounceOff();
 	}
 
 	void bounceOff(){
-		DowntiltEngine.causeHitlag((int)(knockbackIntensity(velocity) / 4));
+		DowntiltEngine.causeHitlag(getBounceTime());
 		SFX.proportionalHit(knockbackIntensity(velocity)).play();
+	}
+	
+	private int getBounceTime(){
+		return (int)(knockbackIntensity(velocity) / 4);
 	}
 
 	void checkFloor(){

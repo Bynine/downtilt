@@ -22,7 +22,7 @@ public class Fly extends Fighter {
 	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/fly/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
 	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/fly/hitstun.png", 4, 1, 6, PlayMode.LOOP);
 	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fall.png")));
-	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/fallen.png")));
+	private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/fly/fallen.png", 2, 1, 8, PlayMode.NORMAL);
 	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/fly/jump.png")));
 
 	public Fly(float posX, float posY, int team) {
@@ -102,6 +102,6 @@ public class Fly extends Fighter {
 	TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
 	
 }

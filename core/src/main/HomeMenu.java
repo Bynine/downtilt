@@ -37,7 +37,8 @@ public class HomeMenu extends Menu {
 		font.draw(batch, "Customize/Options", posX, posY -= dec);
 		font.draw(batch, "Records", posX, posY -= dec);
 		font.draw(batch, "Credits", posX, posY -= dec);
-		font.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY - dec * 2);
+		navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY - dec * 3);
+		font.draw(batch, "Version: " + DowntiltEngine.version, 1000, posY - dec * 4);
 		
 		batch.end();
 	}

@@ -25,7 +25,7 @@ public class Heavy extends Fighter {
 	private static Animation helplessImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/tumble.png", 4, 1, 8, PlayMode.LOOP_REVERSED);
 	private static Animation hitstunImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/hitstun.png", 1, 1, 8, PlayMode.LOOP);
 	private static TextureRegion fallImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fall.png")));
-	private static TextureRegion fallenImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/fallen.png")));
+	private static Animation fallenImage = GlobalRepo.makeAnimation("sprites/fighters/heavy/fallen.png", 2, 1, 12, PlayMode.NORMAL);
 	private static TextureRegion dashImage = new TextureRegion(new Texture(Gdx.files.internal("sprites/fighters/heavy/dash.png")));
 	
 	public static final float HEAVY_ARMOR = 0.5f;
@@ -83,6 +83,6 @@ public class Heavy extends Fighter {
 	TextureRegion getJumpSquatFrame(float deltaTime) { return standImage.getKeyFrame(deltaTime); }
 	TextureRegion getTumbleFrame(float deltaTime) { return helplessImage.getKeyFrame(deltaTime); }
 	TextureRegion getHitstunFrame(float deltaTime) { return hitstunImage.getKeyFrame(deltaTime); }
-	TextureRegion getFallenFrame(float deltaTime) { return fallenImage; }
+	TextureRegion getFallenFrame(float deltaTime) { return fallenImage.getKeyFrame(fallenTimer.getCounter()); }
 
 }
