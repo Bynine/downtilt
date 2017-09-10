@@ -30,7 +30,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	 * MUST BE ON before making a jar/releasing!
 	 */
 	private static boolean release = true;
-	public static final String version = "1.3";
+	public static final String version = "1.4";
 
 	public static int FPSBad = 27;
 	public static int FPSGood = 55;
@@ -58,6 +58,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	private static HomeMenu homeMenu;
 	private static GameMenu gameMenu;
 	private static OptionMenu optionMenu;
+	private static KeyBindingMenu keyBindingMenu;
 	private static CreditScreen creditScreen;
 	private static RankingScreen rankingScreen;
 	private static VictoryScreen activeVictory;
@@ -89,6 +90,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 
 		int[] options = SaveHandler.getOptions();
 		optionMenu = new OptionMenu(options);
+		keyBindingMenu = new KeyBindingMenu();
 		optionMenu.setOptions(); 
 
 		homeMenu = new HomeMenu();
@@ -157,6 +159,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 		case GAMEMENU:	gameMenu.update();		break;
 		case CREDIT: 	creditScreen.update();	break;
 		case OPTIONS: 	optionMenu.update();	break;
+		case KEYBINDING:keyBindingMenu.update();break;
 		case RANKING:	rankingScreen.update(); break;
 		case VICTORY: 	activeVictory.update();	break;
 		case ROUNDEND:	updateRoundEnd();		break;
@@ -289,6 +292,10 @@ public class DowntiltEngine extends ApplicationAdapter {
 		optionMenu.begin();
 		toMenu(GameState.OPTIONS);
 	}
+	
+	public static void startKeyBindingMenu() {
+		toMenu(GameState.KEYBINDING);
+	}
 
 	public static void startRankingScreen(){
 		toMenu(GameState.RANKING);
@@ -337,7 +344,7 @@ public class DowntiltEngine extends ApplicationAdapter {
 	}
 
 	public enum GameState{
-		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, RANKING, VICTORY, ROUNDEND, INTRO
+		GAME, HOME, GAMEMENU, CREDIT, OPTIONS, KEYBINDING, RANKING, VICTORY, ROUNDEND, INTRO
 	}
 
 	public enum Palette{

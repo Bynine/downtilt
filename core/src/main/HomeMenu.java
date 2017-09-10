@@ -13,7 +13,8 @@ public class HomeMenu extends Menu {
 			new Choice<Integer>(0, "gamemenu"),
 			new Choice<Integer>(0, "options"),
 			new Choice<Integer>(0, "rankings"),
-			new Choice<Integer>(0, "credits")
+			new Choice<Integer>(0, "credits"),
+			new Choice<Integer>(0, "keybinding")
 			));
 	
 	HomeMenu(){
@@ -37,6 +38,7 @@ public class HomeMenu extends Menu {
 		font.draw(batch, "Customize/Options", posX, posY -= dec);
 		font.draw(batch, "Records", posX, posY -= dec);
 		font.draw(batch, "Credits", posX, posY -= dec);
+		font.draw(batch, "Key Binding", posX, posY -= dec);
 		navFont.draw(batch, "ADVANCE: " + DowntiltEngine.getPrimaryInputHandler().getNormalString(), 1000, posY - dec * 3);
 		font.draw(batch, "Version: " + DowntiltEngine.version, 1000, posY - dec * 4);
 		
@@ -51,6 +53,7 @@ public class HomeMenu extends Menu {
 		case 1: DowntiltEngine.startOptionMenu(); break;
 		case 2: DowntiltEngine.startRankingScreen(); break;
 		case 3: DowntiltEngine.startCreditScreen(); break;
+		case 4: DowntiltEngine.startKeyBindingMenu(); break;
 		default: break;
 		}
 	}
